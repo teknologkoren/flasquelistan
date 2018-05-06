@@ -1,0 +1,13 @@
+{% extends "layout.html" %}
+
+{% from "quotes.html" import quote_card %}
+
+{% block body %}
+<div class="quotes">
+  <h1>Citat</h1>
+  <div class="cards">
+    {{ quote_card(quote) }}
+  </div>
+  <a href="{{ url_for('quotes.index') }}">Alla citat</a>
+</div>
+{% endblock %}

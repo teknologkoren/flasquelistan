@@ -1,0 +1,17 @@
+{% extends "layout.html" %}
+
+{% block body %}
+<h1>Lägg till citat</h1>
+<form method="POST">
+  {{ form.csrf_token }}
+  <div class="form-field">
+    {{ form.text.label }}
+    {{ form.text() }}
+  </div>
+  <div class="form-field">
+    {{ form.who.label }}
+    {{ form.who() }}
+  </div>
+  <button type="submit">Lägg till</button>
+</form>
+{% endblock %}

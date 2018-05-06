@@ -1,0 +1,13 @@
+__pycache__/
+venv/
+
+*.db
+*.sqlite
+
+instance/*
+
+flasquelistan/static/uploads/*
+flasquelistan/static/gen/*
+flasquelistan/static/.webassets-cache*
+
+*pytest_cache*

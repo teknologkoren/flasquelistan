@@ -1,0 +1,36 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+<div class="transactions">
+  <h1>Historik</h1>
+  {% if transactions %}
+  <ol>
+    {% for transaction in transactions %}
+    <li id="{{ transaction.id }}" class="card transactioncard">
+      <span class="username">
+        {% if transaction.user.nickname %}
+        {{ transaction.user.nickname }}
+        {% else %}
+        {{ transaction.user.first_name }} {{ transaction.user.last_name }}
+        {% endif %}
+        <div class="timestamp">
+          {{ format_datetime(transaction.timestamp, "dd MMMM yyyy, HH:mm") }}
+        </div>
+      </span>
+      <span class="amount">
+        {{ "I" * transaction.amount }}
+      </span>
+      <button class="void-button" data-transactionid="{{ transaction.id }}">Void</button>
+    </li>
+    {% endfor %}
+  </ol>
+  {% else %}
+  <p>Inga transaktioner de senaste 15 minuterna!</p>
+  {% endif %}
+</div>
+
+{% assets "js_streque" %}
+<script src="{{ ASSET_URL }}"></script>
+{% endassets %}
+
+{% endblock %}

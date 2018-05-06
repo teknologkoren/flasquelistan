@@ -1,0 +1,69 @@
+.usercards {
+    padding: 0 1rem;
+    max-width: 50rem;
+    width: 100%;
+}
+
+.usercard .username {
+    display: flex;
+    align-items: center;
+    margin-right: 1rem;
+    flex: 2;
+}
+
+.streque-buttons {
+    display: flex;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    flex: 3;
+}
+
+.streque-button {
+    margin: 0.2rem;
+}
+
+.transactions {
+    padding: 0 1rem;
+    max-width: 30rem;
+    width: 100%;
+}
+
+.transactions ol {
+    list-style: none;
+    padding: 0;
+}
+
+.transactioncard {
+    display: flex;
+    align-items: center;
+}
+
+.transactioncard .username {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-items: center;
+}
+
+.transactioncard .timestamp {
+    margin-top: .2rem;
+    font-size: .8em;
+    font-style: italic;
+    color: #444;
+}
+
+.transactioncard .amount {
+    justify-self: flex-end;
+    display: flex;
+    align-items: center;
+    margin: 0 2rem 0 1rem;
+}
+
+#emma {
+    position: fixed;
+    display: none;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+

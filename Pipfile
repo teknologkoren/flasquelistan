@@ -1,0 +1,19 @@
+[[source]]
+url = "https://pypi.python.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+flask = "*"
+flask-sqlalchemy = "*"
+flask-admin = "*"
+flask-login = "*"
+pytest = "*"
+flask-assets = "*"
+webassets = {git = "https://github.com/miracle2k/webassets.git", editable = true}
+flask-babel = "*"
+flask-bcrypt = "*"
+flask-wtf = "*"
+wtforms-alchemy = "*"
+
+[dev-packages]

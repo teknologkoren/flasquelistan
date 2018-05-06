@@ -1,0 +1,22 @@
+{% extends "layout.html" %}
+
+{% block body %}
+<div class="profile">
+  <h2>
+    {{ user.first_name }}
+    {% if user.nickname %}"{{ user.nickname }}"{% endif %}
+    {{ user.last_name }}
+  </h2>
+
+  <dl>
+    <dt>E-postadress</dt>
+    <dd>{{ user.email }}</dd>
+    <dt>Telefonnummer</dt>
+    <dd>{{ user.phone }}</dd>
+    {% if user == current_user %}
+    <dt>Saldo</dt>
+    <dd>{{ user.balance }}</dd>
+    {% endif %}
+  </dl>
+</div>
+{% endblock %}

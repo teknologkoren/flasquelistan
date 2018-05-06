@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Strequelistan</title>
+
+    {% assets "css_all" %}
+    <link rel="stylesheet" href="{{ ASSET_URL }}">
+    {% endassets %}
+
+    {% block head %}
+    {% endblock %}
+  </head>
+  <body>
+    <div class="top-bar">
+      <header>
+        <h1>
+          <a href="{{ url_for('strequelistan.index') }}">Strequelistan</a>
+        </h1>
+      </header>
+      <nav>
+        <ul>
+          <li><a href="{{ url_for('strequelistan.history') }}">Historik</a></li>
+          <li><a href="{{ url_for('quotes.index') }}">Citat</a></li>
+        </ul>
+      </nav>
+    </div>
+    <main>
+      {% include "flashes.html" %}
+      {% block body %}
+      {% endblock %}
+    </main>
+  </body>
+</html>

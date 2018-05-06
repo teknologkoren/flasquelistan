@@ -1,0 +1,39 @@
+{% extends "layout.html" %}
+
+{% macro usercard(user) %}
+<div class="card usercard">
+  <div class="username">
+    <a href="{{ url_for('strequelistan.show_profile', user_id=user.id) }}">
+      {% if user.nickname %}
+      {{ user.nickname }}
+      {% else %}
+      {{ user.first_name }} {{ user.last_name }}
+      {% endif %}
+    </a>
+  </div>
+  <div class="streque-buttons">
+    {% for i in range(1, 5) %}
+    <button class="streque-button" data-userid="{{ user.id }}" data-amount="{{ i }}" type="submit">
+      {{ 'I'*i }}
+    </button>
+    {% endfor %}
+  </div>
+</div>
+{% endmacro %}
+
+{% block head %}
+{% endblock %}
+
+{% block body %}
+
+<div class="usercards">
+  {% for user in users %}
+  {{ usercard(user) }}
+  {% endfor %}
+</div>
+
+{% assets "js_streque" %}
+<script src="{{ ASSET_URL }}"></script>
+{% endassets %}
+
+{% endblock %}

@@ -1,0 +1,159 @@
+* {
+    box-sizing: border-box;
+}
+
+img {
+    max-width: 100%;
+    max-height: 100%;
+    vertical-align: middle;
+}
+
+body {
+    font-family: sans-serif;
+}
+
+.top-bar {
+    display: flex;
+    position: static;
+    top: 0;
+    width: 100%;
+    height: auto;
+    flex-direction: column;
+    align-items: stretch;
+    border-bottom: 1px solid #ddd;
+}
+
+.top-bar header {
+    display: flex;
+    justify-content: center;
+}
+
+.top-bar h1 {
+    margin: 0;
+}
+
+.top-bar a {
+    color: #555;
+    text-decoration: none;
+}
+
+.top-bar a:hover {
+    color: #000;
+}
+
+nav ul {
+    padding: 0;
+    margin: .5rem 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+nav li {
+    margin: .2rem 1rem;
+    font-size: 1.2rem;
+}
+
+main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 2rem;
+    justify-items: center;
+}
+
+.card {
+    display: flex;
+    justify-content: space-between;
+    padding: 1rem;
+    margin: 1rem 0;
+    border: solid 1px #ddd;
+    border-radius: 7px;
+}
+
+.tabs {
+    position: fixed;
+    bottom: 0;
+    width: 100vw;
+    border-top: 1px solid #ddd;
+    background: #eee;
+}
+
+.tabs ul {
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+.flashes {
+    align-self: center;
+    text-align: center;
+    list-style: none;
+    margin: .5rem 1rem;
+    padding: 0;
+}
+.flash {
+    min-width: 15em;
+    padding: .5rem 1rem;
+    margin: .5rem auto;
+    border-radius: 7px;
+}
+.success {
+    background-color: #C9F7DD;
+    border: 1px solid #62D895;
+    color: #004D21;
+}
+.info {
+    background-color: #CBDEF5;
+    border: 1px solid #6797D0;
+    color: #042246;
+}
+.error {
+    background-color: #FFD9D0;
+    border: 1px solid #FF9073;
+    color: #6C1600;
+}
+
+dt {
+    font-weight: bold;
+    margin-top: 1rem;
+    margin-bottom: .5rem;
+}
+
+dd {
+    margin: 0;
+    margin-bottom: 1.5rem;
+}
+
+.form-field {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+
+.form-field label+input {
+    display: block;
+}
+
+@media screen and (min-width: 40rem) {
+    .top-bar {
+        flex-direction: row;
+        height: 4rem;
+    }
+
+    .top-bar header {
+        margin-left: 2rem;
+        align-items: center;
+    }
+
+    nav {
+        width: 100%;
+        margin: 0 2rem 0 2rem;
+    }
+
+    nav ul {
+        flex-direction: row;
+        justify-content: flex-end;
+        margin: 0;
+        height: 100%;
+    }
+}
