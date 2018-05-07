@@ -1,7 +1,7 @@
 # flasquelistan
 
 ## Setting up a development environment
-If you have not already (why not!?), install
+If you haven't already (why not!?), install
 [Pipenv](https://docs.pipenv.org/). ✨🍰✨
 
 Clone the repo and `cd` to the root folder. Run
