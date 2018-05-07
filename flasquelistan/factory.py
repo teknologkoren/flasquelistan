@@ -28,7 +28,6 @@ def create_app(config=None, instance_config=None):
     setup_flask_admin(app, models.db)
     setup_flask_assets(app)
     setup_flask_babel(app)
-    setup_flask_bcrypt(app)
 
     return app
 
@@ -132,11 +131,3 @@ def setup_flask_babel(app):
     app.jinja_env.globals['format_date'] = flask_babel.format_date
 
     return babel
-
-
-def setup_flask_bcrypt(app):
-    import flask_bcrypt
-
-    bcrypt = flask_bcrypt.Bcrypt(app)
-
-    return bcrypt
