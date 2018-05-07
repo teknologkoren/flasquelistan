@@ -60,10 +60,17 @@
 }
 
 #emma {
-    position: fixed;
     display: none;
+    position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-}
+    object-fit: cover;
+    border-radius: 50%;
 
+    /* NOTE: This is a bit weird, but it works. */
+    max-width: 75vh;
+    max-height: 75vw;
+    width: 75vw;
+    height: 75vh;
+}

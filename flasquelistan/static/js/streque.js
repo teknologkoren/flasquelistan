@@ -14,7 +14,7 @@ function displayEmma() {
   setTimeout(function () {
     emma.style.display = 'none';
     emma.pause();
-  }, 1000);
+  }, 1200);
 }
 
 function postData(uri, data, onsuccess) {
