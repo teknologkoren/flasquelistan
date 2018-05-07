@@ -61,6 +61,9 @@ class User(flask_login.UserMixin, db.Model):
 
         return transaction
 
+    def __str__(self):
+        return "{} {} <{}>".format(self.first_name, self.last_name, self.email)
+
 
 class Streque(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -96,6 +99,9 @@ class Transaction(db.Model):
         db.session.commit()
         return self.sum
 
+    def __str__(self):
+        return "{} @ {}".format(self.value, self.user)
+
 
 class Quote(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -103,3 +109,6 @@ class Quote(db.Model):
     who = db.Column(db.String(150))
     timestamp = db.Column(db.DateTime, nullable=False,
                           default=datetime.datetime.utcnow)
+
+    def __str__(self):
+        return "{}... — {}".format(self.text[:20], self.who[:10] or "<None>")
