@@ -21,19 +21,16 @@
 </div>
 {% endmacro %}
 
-{% block head %}
-{% endblock %}
-
 {% block body %}
-
 <div class="usercards">
   {% for user in users %}
   {{ usercard(user) }}
   {% endfor %}
 </div>
+{% endblock %}
 
+{% block scripts %}
 {% assets "js_streque" %}
 <script src="{{ ASSET_URL }}"></script>
 {% endassets %}
-
 {% endblock %}

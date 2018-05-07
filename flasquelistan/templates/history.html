@@ -28,9 +28,10 @@
   <p>Inga transaktioner de senaste 15 minuterna!</p>
   {% endif %}
 </div>
+{% endblock %}
 
+{% block scripts %}
 {% assets "js_streque" %}
 <script src="{{ ASSET_URL }}"></script>
 {% endassets %}
-
 {% endblock %}
