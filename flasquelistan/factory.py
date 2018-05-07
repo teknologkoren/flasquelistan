@@ -66,7 +66,14 @@ def register_cli(app):
 
         streque = models.Streque(value=400)
 
-        models.db.session.add_all([monty, rick, streque])
+        quote1 = models.Quote(
+            text="Kom igen, testa citaten, det blir kul!",
+            who="Någon, om Strequelistan",
+        )
+
+        quote2 = models.Quote(text="Ett citat utan upphovsman, spännade!")
+
+        models.db.session.add_all([monty, rick, streque, quote1, quote2])
         models.db.session.commit()
 
 
