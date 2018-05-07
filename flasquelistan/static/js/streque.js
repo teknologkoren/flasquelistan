@@ -6,12 +6,19 @@ function downloadEmma() {
   document.body.appendChild(video)
 }
 
+var timeout;
+
 function displayEmma() {
+  if (typeof timeout !== 'undefined') {
+    clearTimeout(timeout);
+  }
+
   emma = document.getElementById('emma');
   emma.currentTime = 0;
   emma.style.display = 'block';
   emma.play();
-  setTimeout(function () {
+
+  timeout = setTimeout(function () {
     emma.style.display = 'none';
     emma.pause();
   }, 1200);
