@@ -10,9 +10,11 @@ function initVoidTransactionButtons () {
 
       onsuccess = function (data) {
         card = document.getElementById(data['transaction_id'])
-        card.style.display = "none";
+        card.style.opacity = '0';
+        setTimeout(function () {
+          card.parentNode.removeChild(card);
+        }, 800);
       }
-
       var request = postData('/void', data, onsuccess);
     });
   }

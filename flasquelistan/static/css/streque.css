@@ -36,6 +36,10 @@
 .transactioncard {
     display: flex;
     align-items: center;
+
+    /* For fade out, see js */
+    opacity: 1;
+    transition: opacity 500ms linear;
 }
 
 .transactioncard .username {
