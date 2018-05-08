@@ -1,0 +1,18 @@
+{% extends "auth/auth_layout.html" %}
+
+{% from "macros.html" import text_field %}
+
+{% set title = "Återställ lösenord" %}
+
+{% block body %}
+<form class="reset-password" method="POST">
+  {{ form.csrf_token }}
+  <h2>Begär återställningslänk</h2>
+
+  {{ text_field(form.email, description=False) }}
+
+  <div class="field">
+    <button>Skicka</button>
+  </div>
+</form>
+{% endblock %}

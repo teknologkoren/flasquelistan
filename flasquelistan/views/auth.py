@@ -1,17 +1,36 @@
+import functools
 import flask
 import flask_login
+from flask_login import current_user
 from itsdangerous import SignatureExpired, URLSafeTimedSerializer
 from flasquelistan import forms, models, util
 
 mod = flask.Blueprint('auth', __name__)
 
 login_manager = flask_login.LoginManager()
+login_manager.login_view = 'auth.login'
+login_manager.login_message_category = 'info'
 
 
 @login_manager.user_loader
 def load_user(user_id):
     """Tell flask-login how to get logged in user."""
     return models.User.query.get(user_id)
+
+
+def admin_required():
+    def decorator(func):
+        @functools.wraps(func)
+        def decorated_function(*args, **kwargs):
+            if current_user.is_admin:
+                return func(*args, **kwargs)
+
+            flask.flash("Du måste vara admin för att komma åt den sidan.",
+                        'error')
+            return flask.redirect(flask.request.referrer
+                                  or flask.url_for('strequelistan.index'))
+        return decorated_function
+    return decorator
 
 
 @mod.route('/login', methods=['GET', 'POST'])
@@ -24,15 +43,15 @@ def login():
     """
     form = forms.LoginForm(flask.request.form)
 
-    if flask.current_user.is_authenticated:
-        return form.redirect('intranet.index')
+    if current_user.is_authenticated:
+        return form.redirect('strequelistan.index')
 
     if form.validate_on_submit():
         user = form.user
         flask_login.login_user(user, remember=form.remember.data)
-        return form.redirect('intranet.index')
+        return form.redirect('strequelistan.index')
     elif form.is_submitted():
-        flask.flash("Sorry, your email address or password was incorrect.",
+        flask.flash("E-postadressen eller lösenordet du angav stämmer ej.",
                     'error')
 
     return flask.render_template('auth/login.html', form=form)
@@ -41,7 +60,7 @@ def login():
 @mod.route('/logout')
 def logout():
     """Logout user (if logged in) and redirect to main page."""
-    if flask.current_user.is_authenticated:
+    if current_user.is_authenticated:
         flask_login.logout_user()
     return flask.redirect(flask.url_for('auth.login'))
 
@@ -65,7 +84,7 @@ def verify_email(user, email):
     email_body = flask.render_template('auth/email_verification.jinja2',
                                        link=verify_link)
 
-    subject = "Verify your email at teknologkoren.se"
+    subject = "Verifiera din e-postaddress på Strequelistan"
 
     util.send_email(email, subject, email_body)
 
@@ -82,7 +101,7 @@ def verify_token(token):
     try:
         user_id, email = ts.loads(token, salt='verify-email', max_age=900)
     except SignatureExpired:
-        flask.flash("Sorry, the link has expired. Please try again.", 'error')
+        flask.flash("Länken har gått ut, var vänlig försök igen.", 'error')
         return flask.redirect(flask.url_for('auth.login'))
     except:
         flask.abort(404)
@@ -91,7 +110,7 @@ def verify_token(token):
     user.email = email
     models.db.session.commit()
 
-    flask.flash("{} is now verified!".format(email), 'success')
+    flask.flash("{} är nu verifierad!".format(email), 'success')
     return flask.redirect(flask.url_for('auth.login'))
 
 
@@ -120,14 +139,16 @@ def reset():
     * Tokens are not stored anywhere other than in the email sent to
         user.
     """
-    reset_flash = ("If {} exists in our system, we've sent a password reset "
-                   "link to it.")
+    reset_flash = ("Om {} är en registrerad adress så har vi skickat en "
+                   "återställningslänk till den.")
+
+    ts = URLSafeTimedSerializer(flask.current_app.config["SECRET_KEY"])
 
     form = forms.ExistingEmailForm()
 
     if form.validate_on_submit():
         user = models.User.query.filter_by(email=form.email.data).first()
-        token = flask.ts.dumps(user.id, salt='recover-key')
+        token = ts.dumps(user.id, salt='recover-key')
 
         recover_url = flask.url_for('.reset_token', token=token,
                                     _external=True)
@@ -137,7 +158,7 @@ def reset():
             name=user.first_name,
             link=recover_url)
 
-        subject = "Reset your password at teknologkoren.se"
+        subject = "Återställ ditt lösenord hos Strequelistan"
 
         util.send_email(user.email, subject, email_body)
 
@@ -166,8 +187,9 @@ def reset_token(token):
 
     Note: itsdangerous saves the timestamp in tokens in UTC!
     """
-    expired = "Sorry, the link has expired. Please try again."
-    invalid = "Sorry, the link appears to be broken. Please try again."
+    expired = "Länken har gått ut, var vänlig försök igen."
+    invalid = "Länken verkar vara trasig eller felaktig,\
+               var vänlig försök igen."
 
     ts = URLSafeTimedSerializer(flask.current_app.config["SECRET_KEY"])
 
@@ -191,7 +213,7 @@ def reset_token(token):
     if form.validate_on_submit():
         user.password = form.new_password.data
         models.db.session.commit()
-        flask.flash("Your password has been reset!", 'success')
+        flask.flash("Ditt lösenord har återställts!", 'success')
         return flask.redirect(flask.url_for('.login'))
     else:
         forms.flash_errors(form)

@@ -31,23 +31,28 @@ def send_email(toaddr, subject, body):
     msg['From'] = flask.current_app.config['SMTP_SENDADDR']
     msg['To'] = toaddr
 
+    @flask.copy_current_request_context
     def thread_func():
         if flask.current_app.debug:
-            print(msg)
+            print(msg.as_bytes().decode())
             return
 
-        with smtplib.SMTP(
-                flask.current_app.config['SMTP_MAILSERVER'],
-                port=flask.current_app.config['SMTP_STARTTLS_PORT']
-                ) as smtp:
+        with smtplib.SMTP(flask.current_app.config['SMTP_MAILSERVER'],
+                          port=flask.current_app.config['SMTP_STARTTLS_PORT']
+                          ) as smtp:
+
             context = ssl.create_default_context()
             smtp.starttls(context=context)
+
             smtp.login(flask.current_app.config['SMTP_USERNAME'],
                        flask.current_app.config['SMTP_PASSWORD'])
+
             smtp.send_message(msg)
 
     thread = threading.Thread(target=thread_func)
-    thread.start()
+
+    with flask.current_app.app_context():
+        thread.start()
 
 
 def is_safe_url(target):

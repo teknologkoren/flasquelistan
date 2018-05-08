@@ -118,16 +118,40 @@ def init_db(app):
 
 def setup_flask_admin(app, db):
     import flask_admin
-    from flasquelistan import models
+    from flask_admin import AdminIndexView
     from flask_admin.contrib.sqla import ModelView
+    from flask_login import current_user
+    from flasquelistan import models
+    from flasquelistan.views import auth
 
-    admin = flask_admin.Admin(app, name='Flasquelistan')
-    admin.add_view(ModelView(models.User, db.session, name='User'))
-    admin.add_view(ModelView(models.Group, db.session, name='Group'))
-    admin.add_view(
-            ModelView(models.Transaction, db.session, name='Transaction'))
-    admin.add_view(ModelView(models.Streque, db.session, name='Streque'))
-    admin.add_view(ModelView(models.Quote, db.session, name='Quote'))
+    class AdminLoginMixin:
+        def is_accessible(self):
+            if current_user.is_authenticated:
+                return current_user.is_admin
+            return False
+
+        def inaccessible_callback(self, name, **kwargs):
+            if current_user.is_authenticated:
+                flask.flash("Du måste vara admin för att komma åt den sidan.",
+                            'error')
+                return flask.redirect(flask.url_for('strequelistan.index'))
+            else:
+                return auth.login_manager.unauthorized()
+
+    class LoginIndexView(AdminLoginMixin, AdminIndexView):
+        pass
+
+    class LoginModelView(AdminLoginMixin, ModelView):
+        pass
+
+    admin = flask_admin.Admin(app, name='Flasquelistan',
+                              index_view=LoginIndexView())
+    admin.add_view(LoginModelView(models.User, db.session, name='User'))
+    admin.add_view(LoginModelView(models.Group, db.session, name='Group'))
+    admin.add_view(LoginModelView(models.Streque, db.session, name='Streque'))
+    admin.add_view(LoginModelView(models.Quote, db.session, name='Quote'))
+    admin.add_view(LoginModelView(models.Transaction, db.session,
+                                  name='Transaction'))
 
     return admin
 

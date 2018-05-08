@@ -1,0 +1,13 @@
+{% macro text_field(field, description=True) %}
+<div class="form-field">
+  {{ field.label }}
+  <div class="text-field">
+    <span>{{ field(*varargs, **kwargs) }}</span>
+    {% if description and field.description %}
+    <span class="field-description">
+      {{ field.description }}
+    </span>
+    {% endif %}
+  </div>
+</div>
+{% endmacro %}

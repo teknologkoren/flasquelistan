@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Strequelistan</title>
+
+    {% assets "css_all" %}
+    <link rel="stylesheet" href="{{ ASSET_URL }}">
+    {% endassets %}
+
+    {% block head %}
+    {% endblock %}
+  </head>
+  <body>
+    <div class="top-bar">
+      <header>
+        <h1>
+          <a href="{{ url_for('strequelistan.index') }}">Strequelistan</a>
+        </h1>
+      </header>
+      <nav>
+        {% block nav %}
+        {% endblock %}
+      </nav>
+    </div>
+    {% block base_body %}
+    {% endblock %}
+  </body>
+</html>

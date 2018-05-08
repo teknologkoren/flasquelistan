@@ -1,0 +1,25 @@
+{% extends "auth/auth_layout.html" %}
+
+{% from "macros.html" import text_field %}
+
+{% set title = "Logga in" %}
+
+{% block body %}
+<form class="login" method="POST">
+  {{ form.csrf_token }}
+  <h2>Sign in</h2>
+
+  {{ text_field(form.email, description=False) }}
+
+  {{ text_field(form.password, description=False) }}
+
+  <p><a href="/reset/">Glömt lösenord?</a></p>
+  <div class="form-field">
+    {{ form.remember() }}
+    {{ form.remember.label() }}
+  </div>
+  <div class="form-field">
+    <button>Logga in</button>
+  </div>
+</form>
+{% endblock %}

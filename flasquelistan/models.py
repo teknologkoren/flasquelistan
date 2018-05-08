@@ -53,6 +53,24 @@ class User(flask_login.UserMixin, db.Model):
         """Return True if plaintext matches password, else return False."""
         return util.bcrypt.check_password_hash(self._password, plaintext)
 
+    @staticmethod
+    def authenticate(email, password):
+        """Check email and password and return user if matching.
+
+        It might be tempting to return the user that mathes the email
+        and a boolean representing if the password was correct, but
+        please don't. The email alone does not identify a user, only
+        the email toghether with a matching password is enough to
+        identify which user we want! No matching email and password ->
+        no user.
+        """
+        user = User.query.filter_by(email=email).first()
+
+        if user and user.verify_password(password):
+            return user
+
+        return None
+
     def strequa(self, amount):
         value = Streque.get().value
 
