@@ -22,6 +22,10 @@
     margin: 0.2rem;
 }
 
+.user-filter {
+    margin-bottom: 2.5rem;
+}
+
 .transactions {
     padding: 0 1rem;
     max-width: 30rem;

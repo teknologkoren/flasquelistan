@@ -1,14 +1,15 @@
 import flask
 from sqlalchemy.sql.expression import not_
-from flasquelistan import models, forms
+from flasquelistan import models
 
 mod = flask.Blueprint('strequelistan', __name__)
 
 
 @mod.route('/')
 def index():
-    users = models.User.query.all()
-    return flask.render_template('strequelistan.html', users=users)
+    groups = models.Group.query.filter(models.Group.users.any())\
+                .order_by(models.Group.weight).all()  # Only groups with users
+    return flask.render_template('strequelistan.html', groups=groups)
 
 
 @mod.route('/strequa', methods=['POST'])

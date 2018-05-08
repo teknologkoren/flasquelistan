@@ -19,6 +19,9 @@ class User(flask_login.UserMixin, db.Model):
     balance = db.Column(db.Integer, default=0)  # Ören (1/100kr)
     is_admin = db.Column(db.Boolean, nullable=False, default=False)
 
+    group_id = db.Column(db.Integer, db.ForeignKey('group.id'))
+    group = db.relationship('Group')
+
     transactions = db.relationship("Transaction", back_populates="user")
 
     # Do not change the following directly, use User.password
@@ -63,6 +66,16 @@ class User(flask_login.UserMixin, db.Model):
 
     def __str__(self):
         return "{} {} <{}>".format(self.first_name, self.last_name, self.email)
+
+
+class Group(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.Integer, nullable=False)
+    weight = db.Column(db.Integer)
+    users = db.relationship('User', back_populates='group')
+
+    def __str__(self):
+        return self.name
 
 
 class Streque(db.Model):

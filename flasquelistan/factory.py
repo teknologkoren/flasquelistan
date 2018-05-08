@@ -1,3 +1,4 @@
+import click
 import flask
 
 
@@ -44,6 +45,14 @@ def register_cli(app):
     def initdb_command():
         init_db(app)
 
+    @app.cli.command('dropdb')
+    def dropdb_command():
+        from flasquelistan import models
+
+        if click.confirm(('You are about to DROP all tables, are you sure you '
+                          'want to do this?'), abort=True):
+            models.db.drop_all()
+
     @app.cli.command('populatetestdb')
     def populatetestdb_command():
         from flasquelistan import models
@@ -63,6 +72,26 @@ def register_cli(app):
             phone='0703322110',
         )
 
+        soprano = models.Group(
+            name='Sopran',
+            weight='10',
+        )
+
+        alto = models.Group(
+            name='Alt',
+            weight='20',
+        )
+
+        tenor = models.Group(
+            name='Tenor',
+            weight='30',
+        )
+
+        bass = models.Group(
+            name='Bas',
+            weight='40',
+        )
+
         streque = models.Streque(value=400)
 
         quote1 = models.Quote(
@@ -72,7 +101,13 @@ def register_cli(app):
 
         quote2 = models.Quote(text="Ett citat utan upphovsman, spännade!")
 
-        models.db.session.add_all([monty, rick, streque, quote1, quote2])
+        models.db.session.add_all([monty, rick, soprano, alto, tenor, bass,
+                                   streque, quote1, quote2])
+        models.db.session.commit()
+
+        monty.group = tenor
+        rick.group = bass
+
         models.db.session.commit()
 
 
@@ -88,6 +123,7 @@ def setup_flask_admin(app, db):
 
     admin = flask_admin.Admin(app, name='Flasquelistan')
     admin.add_view(ModelView(models.User, db.session, name='User'))
+    admin.add_view(ModelView(models.Group, db.session, name='Group'))
     admin.add_view(
             ModelView(models.Transaction, db.session, name='Transaction'))
     admin.add_view(ModelView(models.Streque, db.session, name='Streque'))
@@ -106,6 +142,7 @@ def setup_flask_assets(app):
             'js/streque.js',
             'js/addStreque.js',
             'js/voidTransaction.js',
+            'js/userFilter.js',
             output='gen/streque.js'
         ),
         'css_all': Bundle(
