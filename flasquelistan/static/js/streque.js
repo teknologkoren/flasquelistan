@@ -1,8 +1,19 @@
 function downloadEmma() {
   var video = document.createElement('video');
   video.id = 'emma';
-  video.src = '/static/images/emma.webm';
+
+  var webm = document.createElement('source');
+  webm.src = '/static/images/emma.webm';
+  webm.type = 'video/webm';
+
+  var mp4 = document.createElement('source');
+  mp4.src = '/static/images/emma.mp4';
+  mp4.type = 'video/mp4';
+
   video.pause();
+
+  video.appendChild(webm);
+  video.appendChild(mp4);
   document.body.appendChild(video)
 }
 
