@@ -13,7 +13,7 @@ function initVoidTransactionButtons () {
         card.style.opacity = '0';
         setTimeout(function () {
           card.parentNode.removeChild(card);
-        }, 800);
+        }, 500);
       }
       var request = postData('/void', data, onsuccess);
     });

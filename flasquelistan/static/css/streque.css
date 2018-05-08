@@ -39,7 +39,7 @@
 
     /* For fade out, see js */
     opacity: 1;
-    transition: opacity 500ms linear;
+    transition: opacity 300ms linear;
 }
 
 .transactioncard .username {
