@@ -138,12 +138,18 @@ def setup_flask_assets(app):
     assets = Environment(app)
 
     bundles = {
+        'js_common': Bundle(
+            'js/common.js',
+            output='gen/common.js'
+        ),
         'js_streque': Bundle(
-            'js/streque.js',
             'js/addStreque.js',
-            'js/voidTransaction.js',
             'js/userFilter.js',
             output='gen/streque.js'
+        ),
+        'js_history': Bundle(
+            'js/history.js',
+            output='gen/history.js'
         ),
         'css_all': Bundle(
             'css/lib/normalize.css',

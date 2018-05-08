@@ -3,8 +3,8 @@
 {% block body %}
 <div class="transactions">
   <h1>Historik</h1>
-  {% if transactions %}
-  <ol>
+  <p class="no-transactions-notice">Inga transaktioner de senaste 15 minuterna!</p>
+  <ol class="transaction-list">
     {% for transaction in transactions %}
     <li id="{{ transaction.id }}" class="card transactioncard">
       <span class="username">
@@ -24,14 +24,11 @@
     </li>
     {% endfor %}
   </ol>
-  {% else %}
-  <p>Inga transaktioner de senaste 15 minuterna!</p>
-  {% endif %}
 </div>
 {% endblock %}
 
 {% block scripts %}
-{% assets "js_streque" %}
+{% assets "js_common", "js_history" %}
 <script src="{{ ASSET_URL }}"></script>
 {% endassets %}
 {% endblock %}
