@@ -1,6 +1,6 @@
 {% macro text_field(field, description=True) %}
 <div class="form-field">
-  {{ field.label }}
+  {{ field.label }} {% if field.flags.required %}<span class="required">*</span>{% endif %}
   <div class="text-field">
     <span>{{ field(*varargs, **kwargs) }}</span>
     {% if description and field.description %}

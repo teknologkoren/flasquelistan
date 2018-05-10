@@ -14,14 +14,14 @@ def before_request():
     pass
 
 
-@mod.route('/citat', methods=['GET', 'POST'])
+@mod.route('/quotes/', methods=['GET', 'POST'])
 def index():
     quotes = models.Quote.query.order_by(models.Quote.timestamp.desc()).all()
 
     return flask.render_template('quotes.html', quotes=quotes)
 
 
-@mod.route('/citat/nytt', methods=['GET', 'POST'])
+@mod.route('/quotes/new', methods=['GET', 'POST'])
 def add_quote():
     form = forms.QuoteForm()
     if form.validate_on_submit():
@@ -36,7 +36,7 @@ def add_quote():
     return flask.render_template('add_quote.html', form=form)
 
 
-@mod.route('/citat/<int:quote_id>')
+@mod.route('/quotes/<int:quote_id>')
 def quote(quote_id):
     quote = models.Quote.query.get_or_404(quote_id)
 

@@ -8,6 +8,10 @@ from flasquelistan import models, util
 def flash_errors(form):
     """Flash all errors in a form."""
     for field in form:
+        if isinstance(field, (fields.FormField, fields.FieldList)):
+            flash_errors(field)
+            continue
+
         for error in field.errors:
             flask.flash(("Fel i fältet \"{}\": {}"
                         .format(field.label.text, error)),
@@ -19,7 +23,7 @@ class QuoteForm(flask_wtf.FlaskForm):
         validators.InputRequired(),
         validators.Length(max=150)
     ])
-    who = fields.StringField('Upphovsman (frivilligt)', validators=[
+    who = fields.StringField('Upphovsman', validators=[
         validators.Length(max=150)
     ])
 
@@ -83,10 +87,9 @@ class ExistingEmailForm(flask_wtf.FlaskForm):
     email = LowercaseEmailField('E-post', validators=[
         validators.InputRequired(),
         validators.Email(),
-        Exists(
-            models.User,
-            models.User.email,
-            message='Okänd e-postadress.')
+        Exists(models.User,
+               models.User.email,
+               message='Okänd e-postadress.')
         ])
 
 
@@ -94,37 +97,19 @@ class PasswordForm(flask_wtf.FlaskForm):
     password = fields.PasswordField(
         'Lösenord',
         validators=[validators.InputRequired()],
-        description="Obligatoriskt: ditt nuvarande lösenord."
+        description="Ditt nuvarande lösenord."
         )
 
 
 class NewPasswordForm(flask_wtf.FlaskForm):
     new_password = fields.PasswordField(
-        'New password',
+        'Nytt lösenord',
         validators=[validators.InputRequired(), validators.Length(min=8)],
-        description=("Obligatoriskt: ditt nya lösenord. "
-                     "Åtminstone 8 karaktärer långt.")
+        description="Ditt nya lösenord. Åtminstone 8 karaktärer långt."
         )
 
 
-class ChangePasswordForm(PasswordForm, NewPasswordForm):
-    def __init__(self, user, *args, **kwargs):
-        self.user = user
-        super().__init__(*args, **kwargs)
-
-    def validate(self):
-        if not flask_wtf.FlaskForm.validate(self):
-            return False
-
-        if not self.user.verify_password(self.password.data):
-            self.password.errors.append("Fel lösenord.")
-            return False
-
-        return True
-
-
 class LoginForm(RedirectForm, EmailForm, PasswordForm):
-    """Get login details."""
     remember = fields.BooleanField("Håll mig inloggad")
 
     def __init__(self, *args, **kwargs):
@@ -168,14 +153,40 @@ class AddUserForm(flask_wtf.FlaskForm):
     group = fields.SelectField('Grupp')
 
 
-class EditUserForm(flask_wtf.FlaskForm):
+class ChangePasswordForm(PasswordForm, NewPasswordForm):
+    def __init__(self, user, optional=False, *args, **kwargs):
+        # User has to be a kwarg, won't pick up otherwise
+        self.user = user
+        self.optional = optional
+        super().__init__(*args, **kwargs)
+
+    def validate(self):
+        if self.optional and not (self.password.data
+                                  or self.new_password.data):
+            # If no input in either field, stop validation.
+            # The _form_ is optional, though the fields are not.
+            return True
+
+        if not flask_wtf.FlaskForm.validate(self):
+            return False
+
+        if not self.user.verify_password(self.password.data):
+            self.password.errors.append("Fel lösenord.")
+            return False
+
+        return True
+
+
+class EditUserForm(ChangePasswordForm):
+    nick_name = fields.StringField('Smeknamn', description="Något roligt.")
+
     email = LowercaseEmailField(
         'E-post',
         validators=[
             validators.InputRequired(),
             validators.Email()
         ],
-        description="Obligatoriskt: en giltig e-postadress."
+        description="En giltig e-postadress."
         )
 
     phone = html5_fields.TelField(
@@ -184,15 +195,11 @@ class EditUserForm(flask_wtf.FlaskForm):
             validators.InputRequired(),
             validators.Regexp(r'^\+?[0-9]*$')
         ],
-        description="Obligatoriskt: ett telefonnummer, med eller utan landskod"
+        description="Ett telefonnummer, med eller utan landskod"
         )
 
-    def __init__(self, user, *args, **kwargs):
-        self.user = user
-        super().__init__(obj=user, *args, **kwargs)
-
     def validate(self):
-        if not flask_wtf.FlaskForm.validate(self):
+        if not super().validate():
             return False
 
         if (models.db.session.query(models.User.id)
@@ -208,11 +215,11 @@ class FullEditUserForm(EditUserForm):
     first_name = fields.StringField(
         'Förnamn',
         validators=[validators.InputRequired()],
-        description="Obligatoriskt: användarens förnamn."
+        description="Användarens förnamn."
         )
 
     last_name = fields.StringField(
         'Efternamn',
         validators=[validators.InputRequired()],
-        description="Obligatoriskt: användarens efternamn/familjenamn."
+        description="Användarens efternamn/familjenamn."
         )

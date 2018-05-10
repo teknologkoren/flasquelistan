@@ -13,9 +13,12 @@
     <dd>{{ user.email }}</dd>
     <dt>Telefonnummer</dt>
     <dd>{{ user.phone }}</dd>
-    {% if user == current_user %}
+
+    {% if user == current_user or current_user.is_admin %}
     <dt>Saldo</dt>
-    <dd>{{ user.balance }}</dd>
+    <dd>{{ user.formatted_balance }}</dd>
+
+    <a href="{{ url_for('strequelistan.edit_profile', user_id=user.id) }}">Redigera profil</a>
     {% endif %}
   </dl>
 </div>

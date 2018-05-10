@@ -1,8 +1,9 @@
 import datetime
 import random
 import string
-import flask_sqlalchemy
+import flask_babel
 import flask_login
+import flask_sqlalchemy
 from sqlalchemy.ext.hybrid import hybrid_method, hybrid_property
 from flasquelistan import util
 
@@ -81,6 +82,10 @@ class User(flask_login.UserMixin, db.Model):
         db.session.commit()
 
         return transaction
+
+    @property
+    def formatted_balance(self):
+        return flask_babel.format_currency(self.balance/100, 'SEK')
 
     def __str__(self):
         return "{} {} <{}>".format(self.first_name, self.last_name, self.email)

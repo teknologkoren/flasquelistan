@@ -1,7 +1,8 @@
 import flask
 import flask_login
 from sqlalchemy.sql.expression import not_
-from flasquelistan import models
+from flasquelistan import forms, models
+from flasquelistan.views import auth
 
 mod = flask.Blueprint('strequelistan', __name__)
 
@@ -44,7 +45,7 @@ def add_streque():
     )
 
 
-@mod.route('/historik')
+@mod.route('/history')
 def history():
     transactions = models.Transaction.query\
         .filter(not_(models.Transaction.too_old()))\
@@ -83,8 +84,49 @@ def void_transaction():
     )
 
 
-@mod.route('/profil/<int:user_id>')
+@mod.route('/profile/<int:user_id>/')
 def show_profile(user_id):
     user = models.User.query.get_or_404(user_id)
 
     return flask.render_template('show_profile.html', user=user)
+
+
+@mod.route('/profile/<int:user_id>/edit', methods=['GET', 'POST'])
+def edit_profile(user_id):
+    user = models.User.query.get_or_404(user_id)
+    current_user = flask_login.current_user
+
+    if current_user is not user and not current_user.is_admin:
+        flask.flash("Du får bara redigera din egen profil! ಠ_ಠ", 'error')
+        return flask.redirect(flask.url_for('.profile', user_id=user_id))
+
+    if current_user.is_admin:
+        form = forms.FullEditUserForm(obj=user, user=user, optional=True)
+    else:
+        form = forms.EditUserForm(obj=user, user=user, optional=True)
+
+    if form.validate_on_submit():
+        if isinstance(form, forms.FullEditUserForm):
+            user.first_name = form.first_name.data
+            user.last_name = form.last_name.data
+
+        if form.email.data != user.email:
+            auth.verify_email(user, form.email.data)
+            flask.flash(("En länk för att verifiera e-postadressen har "
+                         "skickats till {}.").format(form.email.data), 'info')
+
+        if form.new_password.data:
+            user.password = form.new_password.data
+            flask.flash("Lösenordet har ändrats!", 'success')
+
+        user.phone = form.phone.data
+
+        models.db.session.commit()
+
+        flask.flash("Ändringarna har sparats!", 'success')
+        return flask.redirect(flask.url_for('strequelistan.show_profile',
+                                            user_id=user.id))
+    else:
+        forms.flash_errors(form)
+
+    return flask.render_template('edit_profile.html', form=form, user=user)
