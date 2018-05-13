@@ -17,16 +17,13 @@
     {{ text_field(form.last_name) }}
     {% endif %}
 
-    {{ text_field(form.email) }}
+    {{ text_field(form.nickname) }}
     {{ text_field(form.phone) }}
 
-    <fieldset>
-      <legend>Byt lösenord</legend>
-      {{ text_field(form.password) }}
-      {{ text_field(form.new_password) }}
-    </fieldset>
+    <a href="{{ url_for('strequelistan.change_email_or_password', user_id=user.id) }}">Byt e-postadress eller lösenord</a>
+
     <div class="form-field">
-      <button>Spara ändringar</button>
+      <button>Spara</button> | <a href="{{ url_for('strequelistan.show_profile', user_id=user.id) }}">Avbryt</a>
     </div>
   </form>
 </div>

@@ -11,8 +11,11 @@
   <dl>
     <dt>E-postadress</dt>
     <dd>{{ user.email }}</dd>
+
+    {% if user.phone %}
     <dt>Telefonnummer</dt>
     <dd>{{ user.phone }}</dd>
+    {% endif %}
 
     {% if user == current_user or current_user.is_admin %}
     <dt>Saldo</dt>

@@ -47,11 +47,11 @@ def login():
         return form.redirect('strequelistan.index')
 
     if form.validate_on_submit():
-        user = form.user
+        user = models.User.authenticate(form.email.data, form.password.data)
         flask_login.login_user(user, remember=form.remember.data)
         return form.redirect('strequelistan.index')
     elif form.is_submitted():
-        flask.flash("E-postadressen eller lösenordet du angav stämmer ej.",
+        flask.flash("E-postadressen eller lösenordet du angav stämmer inte.",
                     'error')
 
     return flask.render_template('auth/login.html', form=form)

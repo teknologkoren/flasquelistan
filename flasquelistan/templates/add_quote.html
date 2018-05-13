@@ -8,6 +8,8 @@
   {{ form.csrf_token }}
   {{ text_field(form.text) }}
   {{ text_field(form.who) }}
-  <button type="submit">Lägg till</button>
+  <div class="form-field">
+    <button>Lägg till</button> | <a href="{{ url_for('quotes.index') }}">Avbryt</a>
+  </div>
 </form>
 {% endblock %}
