@@ -48,67 +48,89 @@ def register_cli(app):
     @app.cli.command('dropdb')
     def dropdb_command():
         from flasquelistan import models
-
         if click.confirm(('You are about to DROP all tables, are you sure you '
                           'want to do this?'), abort=True):
             models.db.drop_all()
 
     @app.cli.command('populatetestdb')
     def populatetestdb_command():
+        populate_testdb()
+
+    @app.cli.command('createadmin')
+    def createadmin_command():
         from flasquelistan import models
-        monty = models.User(
-            email='monty@python.tld',
-            first_name='Monty',
-            last_name='Python',
-            phone='0700011223',
-            balance=10000,
+        print("Creating a new admin user...")
+        first_name = click.prompt("First name")
+        last_name = click.prompt("Last name")
+        email = click.prompt("Email address")
+        password = click.prompt("Password", hide_input=True)
+        user = models.User(
+            first_name=first_name,
+            last_name=last_name,
+            email=email,
+            password=password,
+            is_admin=True,
         )
 
-        rick = models.User(
-            email='rick_astley@example.com',
-            first_name='Rick',
-            nickname='The Roll',
-            last_name='Astley',
-            phone='0703322110',
-        )
-
-        soprano = models.Group(
-            name='Sopran',
-            weight='10',
-        )
-
-        alto = models.Group(
-            name='Alt',
-            weight='20',
-        )
-
-        tenor = models.Group(
-            name='Tenor',
-            weight='30',
-        )
-
-        bass = models.Group(
-            name='Bas',
-            weight='40',
-        )
-
-        streque = models.Streque(value=400)
-
-        quote1 = models.Quote(
-            text="Kom igen, testa citaten, det blir kul!",
-            who="Någon, om Strequelistan",
-        )
-
-        quote2 = models.Quote(text="Ett citat utan upphovsman, spännade!")
-
-        models.db.session.add_all([monty, rick, soprano, alto, tenor, bass,
-                                   streque, quote1, quote2])
+        models.db.session.add(user)
         models.db.session.commit()
 
-        monty.group = tenor
-        rick.group = bass
 
-        models.db.session.commit()
+def populate_testdb():
+    from flasquelistan import models
+    monty = models.User(
+        email='monty@python.tld',
+        first_name='Monty',
+        last_name='Python',
+        phone='0700011223',
+        balance=10000,
+    )
+
+    rick = models.User(
+        email='rick_astley@example.com',
+        first_name='Rick',
+        nickname='The Roll',
+        last_name='Astley',
+        phone='0703322110',
+    )
+
+    soprano = models.Group(
+        name='Sopran',
+        weight='10',
+    )
+
+    alto = models.Group(
+        name='Alt',
+        weight='20',
+    )
+
+    tenor = models.Group(
+        name='Tenor',
+        weight='30',
+    )
+
+    bass = models.Group(
+        name='Bas',
+        weight='40',
+    )
+
+    streque = models.Streque(value=400)
+
+    quote1 = models.Quote(
+        text="Kom igen, testa citaten, det blir kul!",
+        who="Någon, om Strequelistan",
+    )
+
+    quote2 = models.Quote(text="Ett citat utan upphovsman, spännade!")
+
+    models.db.session.add_all([monty, rick, soprano, alto, tenor, bass,
+                               streque, quote1, quote2])
+    models.db.session.commit()
+
+    monty.group = tenor
+    rick.group = bass
+
+    models.db.session.commit()
 
 
 def init_db(app):

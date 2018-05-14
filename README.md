@@ -24,6 +24,11 @@ $ flask initdb
 $ flask populatetestdb
 ```
 
+Create a user with admin privileges with which you can log in:
+```sh
+$ flask createadmin
+```
+
 Run the development server with helpful debug pages when exceptions occur:
 ```sh
 $ FLASK_DEBUG=1 flask run
