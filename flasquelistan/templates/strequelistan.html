@@ -26,6 +26,7 @@
 {% block body %}
 
 <div class="usercards">
+  {{ usercard(current_user) }}
   <h2>Filtrera användare</h2>
   <div class="user-filter">
     <input type="text" id="user-filter" placeholder="Namn" autocomplete="off">
