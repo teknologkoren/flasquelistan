@@ -138,9 +138,7 @@ class AddUserForm(UniqueEmailForm):
         validators.InputRequired()
     ])
 
-    phone = html5_fields.TelField('Telefon', validators=[
-        validators.Regexp(r'^\+?[0-9]*$')
-    ])
+    phone = html5_fields.TelField('Telefon')
 
     group = fields.SelectField('Grupp')
 
@@ -175,9 +173,6 @@ class EditUserForm(flask_wtf.FlaskForm):
 
     phone = html5_fields.TelField(
         'Telefon',
-        validators=[
-            validators.Regexp(r'^\+?[0-9]*$')
-        ],
         description="Ett telefonnummer, med eller utan landskod"
     )
 

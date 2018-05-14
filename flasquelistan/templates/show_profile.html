@@ -14,7 +14,13 @@
 
     {% if user.phone %}
     <dt>Telefonnummer</dt>
-    <dd>{{ user.phone }}</dd>
+    <dd>
+    {% if user.formatted_phone %}
+    <a href="tel:{{ user.formatted_phone }}">{{ user.formatted_phone }}</a>
+    {% else %}
+    {{ user.phone }}
+    {% endif %}
+    </dd>
     {% endif %}
 
     {% if user == current_user or current_user.is_admin %}

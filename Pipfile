@@ -4,16 +4,17 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-flask = "*"
-flask-sqlalchemy = "*"
-flask-admin = "*"
-flask-login = "*"
+Flask = "*"
+Flask-SQLAlchemy = "*"
+Flask-Admin = "*"
+Flask-Login = "*"
 pytest = "*"
-flask-assets = "*"
+Flask-Assets = "*"
 webassets = {git = "https://github.com/miracle2k/webassets.git", editable = true}
-flask-babel = "*"
-flask-bcrypt = "*"
-flask-wtf = "*"
-wtforms-alchemy = "*"
+Flask-Babel = "*"
+Flask-Bcrypt = "*"
+Flask-WTF = "*"
+Flask-Uploads = "*"
+phonenumbers = "*"
 
 [dev-packages]

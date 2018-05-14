@@ -4,6 +4,7 @@ import string
 import flask_babel
 import flask_login
 import flask_sqlalchemy
+import phonenumbers
 from sqlalchemy.ext.hybrid import hybrid_method, hybrid_property
 from flasquelistan import util
 
@@ -86,6 +87,26 @@ class User(flask_login.UserMixin, db.Model):
     @property
     def formatted_balance(self):
         return flask_babel.format_currency(self.balance/100, 'SEK')
+
+    @property
+    def formatted_phone(self):
+        """Returns formatted number or False if not a valid number."""
+        try:
+            # If no country code, assume Swedish
+            parsed = phonenumbers.parse(self.phone, 'SE')
+        except phonenumbers.phonenumberutil.NumberParseException:
+            return False
+
+        if not (phonenumbers.is_possible_number(parsed) and
+                phonenumbers.is_valid_number(parsed)):
+            return False
+
+        formatted = phonenumbers.format_number(
+            parsed,
+            phonenumbers.PhoneNumberFormat.INTERNATIONAL
+        )
+
+        return formatted
 
     def __str__(self):
         return "{} {} <{}>".format(self.first_name, self.last_name, self.email)

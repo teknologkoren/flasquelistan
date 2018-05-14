@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "befef4053265d6d3048615e07d178814e211a8711c82febc834780dbc0405488"
+            "sha256": "303a3dc7e21ff0a63d73579dd2db760a5f1ca4175f203f745356acba001a7790"
         },
         "pipfile-spec": 6,
         "requires": {},
@@ -101,13 +101,6 @@
             ],
             "version": "==6.7"
         },
-        "decorator": {
-            "hashes": [
-                "sha256:2c51dff8ef3c447388fe5e4453d24a2bf128d3a4c32af3fabef1f01c6851ab82",
-                "sha256:c39efa13fbdeb4506c476c9b3babf6a718da943dab7811c206005a4a956c080c"
-            ],
-            "version": "==4.3.0"
-        },
         "flask": {
             "hashes": [
                 "sha256:2271c0070dbcb5275fad4a82e29f23ab92682dc45f9dfbc22c02ba9b9322ce48",
@@ -160,6 +153,13 @@
             "index": "pypi",
             "version": "==2.3.2"
         },
+        "flask-uploads": {
+            "hashes": [
+                "sha256:53ecbd6033667d50ae02b63adebbaa33c7fc56c09e5293025810cf9d841ecb02"
+            ],
+            "index": "pypi",
+            "version": "==0.2.1"
+        },
         "flask-wtf": {
             "hashes": [
                 "sha256:5d14d55cfd35f613d99ee7cba0fc3fbbe63ba02f544d349158c14ca15561cc36",
@@ -167,18 +167,6 @@
             ],
             "index": "pypi",
             "version": "==0.14.2"
-        },
-        "infinity": {
-            "hashes": [
-                "sha256:dc4aa138d7e366fc00d2e741e32c78a0fecd16b74f8daeb3f7408b459668005c"
-            ],
-            "version": "==1.4"
-        },
-        "intervals": {
-            "hashes": [
-                "sha256:37921da1407a5e9384e8e1350cfb8500f8d0d69fc43d03d01a4fdc6e7a7c7166"
-            ],
-            "version": "==0.8.1"
         },
         "itsdangerous": {
             "hashes": [
@@ -206,6 +194,14 @@
                 "sha256:c9ce7eccdcb901a2c75d326ea134e0886abfbea5f93e91cc95de9507c0816c44"
             ],
             "version": "==4.1.0"
+        },
+        "phonenumbers": {
+            "hashes": [
+                "sha256:1d75a7f78c5cb6fb676982b81fab82d6a52a0218e9aaf9bdc7bbe9e4866b5c27",
+                "sha256:6451ec08a9342166a33c864c1b62e9780f3e4bd4246f2f489b4647e0269ff72e"
+            ],
+            "index": "pypi",
+            "version": "==8.9.5"
         },
         "pluggy": {
             "hashes": [
@@ -256,18 +252,6 @@
             ],
             "version": "==1.2.7"
         },
-        "sqlalchemy-utils": {
-            "hashes": [
-                "sha256:4119204ff302906015516992b7481e5aabeeaa61c7b04329f9113e42c097b855"
-            ],
-            "version": "==0.33.3"
-        },
-        "validators": {
-            "hashes": [
-                "sha256:79855e18710be5d8ba5e0c16086d76f230af11df2b8341b64995b42153c7f204"
-            ],
-            "version": "==0.12.1"
-        },
         "webassets": {
             "editable": true,
             "git": "https://github.com/miracle2k/webassets.git",
@@ -285,19 +269,6 @@
                 "sha256:ffdf10bd1fa565b8233380cb77a304cd36fd55c73023e91d4b803c96bc11d46f"
             ],
             "version": "==2.1"
-        },
-        "wtforms-alchemy": {
-            "hashes": [
-                "sha256:1e65ab91d9a137c396526ba41663f7ade57f3935d458386d08b5c23df2bd25c2"
-            ],
-            "index": "pypi",
-            "version": "==0.16.6"
-        },
-        "wtforms-components": {
-            "hashes": [
-                "sha256:e66cd8fa8269bfb75b40453ade387a55d55ba33aac534264043d6d283285d2e4"
-            ],
-            "version": "==0.10.3"
         }
     },
     "develop": {}
