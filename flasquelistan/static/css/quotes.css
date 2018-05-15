@@ -1,9 +1,3 @@
-.quotes {
-    padding: 0 1rem;
-    max-width: 50rem;
-    width: 100%;
-}
-
 .quote.card {
     flex-direction: column;
 }

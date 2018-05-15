@@ -66,6 +66,12 @@ main {
     justify-items: center;
 }
 
+.cards {
+    padding: 0 1rem;
+    max-width: 50rem;
+    width: 100%;
+}
+
 .card {
     display: flex;
     justify-content: space-between;

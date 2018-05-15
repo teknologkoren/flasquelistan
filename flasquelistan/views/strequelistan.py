@@ -1,6 +1,6 @@
 import flask
 import flask_login
-from sqlalchemy.sql.expression import not_
+from sqlalchemy.sql.expression import func, not_
 from flasquelistan import forms, models
 from flasquelistan.views import auth
 
@@ -20,7 +20,11 @@ def before_request():
 def index():
     groups = models.Group.query.filter(models.Group.users.any())\
                 .order_by(models.Group.weight).all()  # Only groups with users
-    return flask.render_template('strequelistan.html', groups=groups)
+
+    random_quote = models.Quote.query.order_by(func.random()).first()
+
+    return flask.render_template('strequelistan.html', groups=groups,
+                                 quote=random_quote)
 
 
 @mod.route('/strequa', methods=['POST'])

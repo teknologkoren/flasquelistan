@@ -1,5 +1,7 @@
 {% extends "layout.html" %}
 
+{% from "quotes.html" import quote_inner %}
+
 {% macro usercard(user) %}
 <div class="card usercard">
   <div class="username" data-firstname="{{ user.first_name }}"
@@ -24,8 +26,11 @@
 {% endmacro %}
 
 {% block body %}
+<div class="cards">
+  <blockquote class="quote quote-display">
+    {{ quote_inner(quote) }}
+  </blockquote>
 
-<div class="usercards">
   {{ usercard(current_user) }}
   <h2>Filtrera användare</h2>
   <div class="user-filter">
