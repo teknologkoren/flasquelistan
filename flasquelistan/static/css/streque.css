@@ -20,6 +20,14 @@
     margin-bottom: 2.5rem;
 }
 
+.hidden {
+    display: none;
+}
+
+.transaction-history td {
+    min-width: 5rem;
+}
+
 .transactions {
     padding: 0 1rem;
     max-width: 30rem;
@@ -40,6 +48,11 @@
     transition: opacity 300ms linear;
 }
 
+.timestamp {
+    font-style: italic;
+    color: #444;
+}
+
 .transactioncard .username {
     flex: 1;
     display: flex;
@@ -48,10 +61,8 @@
 }
 
 .transactioncard .timestamp {
-    margin-top: .2rem;
     font-size: .8em;
-    font-style: italic;
-    color: #444;
+    margin-top: .2rem;
 }
 
 .transactioncard .amount {
@@ -65,7 +76,7 @@
     border-left: 5px solid #ddd;
     width: 100%;
     padding-left: 1rem;
-    margin: 0 0 3rem 0;
+    margin: 2rem 0 3rem 0;
 }
 
 #emma {

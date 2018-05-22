@@ -17,9 +17,16 @@
   </div>
   <div class="streque-buttons">
     {% for i in range(1, 5) %}
-    <button class="streque-button" data-userid="{{ user.id }}" data-amount="{{ i }}" type="submit">
-      {{ 'I'*i }}
-    </button>
+    <form class="streque-form"
+          method="POST"
+          action="{{ url_for('strequelistan.add_streque', user_id=user.id, amount=i) }}"
+          data-userid="{{ user.id }}" data-amount="{{ i }}">
+
+      <button class="streque-button" type="submit">
+        {{ 'I'*i }}
+      </button>
+
+    </form>
     {% endfor %}
   </div>
 </div>

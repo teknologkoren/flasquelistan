@@ -24,6 +24,7 @@ body {
     flex-direction: column;
     align-items: stretch;
     border-bottom: 1px solid #ddd;
+    margin-bottom: 1rem;
 }
 
 .top-bar header {
@@ -62,7 +63,6 @@ main {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-top: 2rem;
     justify-items: center;
 }
 
@@ -98,7 +98,7 @@ main {
     align-self: center;
     text-align: center;
     list-style: none;
-    margin: .5rem 1rem;
+    margin: 1rem 1rem;
     padding: 0;
 }
 .flash {
@@ -129,7 +129,7 @@ main {
 
 dt {
     font-weight: bold;
-    margin-top: 1rem;
+    margin-top: 1.5rem;
     margin-bottom: .5rem;
 }
 

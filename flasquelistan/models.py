@@ -20,11 +20,13 @@ class User(flask_login.UserMixin, db.Model):
     phone = db.Column(db.String(20), nullable=True)
     balance = db.Column(db.Integer, default=0)  # Ören (1/100kr)
     is_admin = db.Column(db.Boolean, nullable=False, default=False)
+    active = db.Column(db.Boolean, nullable=False, default=False)
 
     group_id = db.Column(db.Integer, db.ForeignKey('group.id'))
     group = db.relationship('Group')
 
-    transactions = db.relationship("Transaction", back_populates="user")
+    transactions = db.relationship("Transaction", back_populates="user",
+                                   lazy="dynamic")
 
     # Do not change the following directly, use User.password
     _password = db.Column(db.String(128))
@@ -108,6 +110,10 @@ class User(flask_login.UserMixin, db.Model):
 
         return formatted
 
+    @property
+    def full_name(self):
+        return f"{self.first_name} {self.last_name}"
+
     def __str__(self):
         return "{} {} <{}>".format(self.first_name, self.last_name, self.email)
 
@@ -157,7 +163,7 @@ class Transaction(db.Model):
         return self.sum
 
     def __str__(self):
-        return "{} @ {}".format(self.value, self.user)
+        return "{} @ {}".format(self.sum, self.user)
 
 
 class Quote(db.Model):
@@ -169,3 +175,8 @@ class Quote(db.Model):
 
     def __str__(self):
         return "{}... — {}".format(self.text[:20], self.who[:10] or "<None>")
+
+
+class File(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    file_name = db.Column(db.String(256), nullable=False)

@@ -10,11 +10,13 @@ function maybeDisplayNotice() {
 }
 
 function initVoidTransactionButtons() {
-  var voidButtons = document.getElementsByClassName('void-button');
+  var voidForms = document.getElementsByClassName('void-form');
 
-  for (var i = 0; i < voidButtons.length; i++) {
-    voidButton = voidButtons[i];
-    voidButton.addEventListener('click', function () {
+  for (var i = 0; i < voidForms.length; i++) {
+    voidForm = voidForms[i];
+    voidForm.addEventListener('click', function(event) {
+      event.preventDefault();
+
       data = {
         transaction_id: this.dataset.transactionid
       }

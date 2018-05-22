@@ -7,29 +7,11 @@
     {% if user.nickname %}"{{ user.nickname }}"{% endif %}
     {{ user.last_name }}
   </h2>
-
   <dl>
-    <dt>E-postadress</dt>
-    <dd>{{ user.email }}</dd>
-
-    {% if user.phone %}
-    <dt>Telefonnummer</dt>
-    <dd>
-    {% if user.formatted_phone %}
-    <a href="tel:{{ user.formatted_phone }}">{{ user.formatted_phone }}</a>
-    {% else %}
-    {{ user.phone }}
-    {% endif %}
-    </dd>
-    {% endif %}
-
-    {% if user == current_user or current_user.is_admin %}
     <dt>Saldo</dt>
     <dd>{{ user.formatted_balance }}</dd>
 
-    <a href="{{ url_for('strequelistan.edit_profile', user_id=user.id) }}">Redigera profil</a>
-
-    <dt>Historik</a></dt>
+    <dt>Historik</dt>
     {% if not transactions %}
     <p>Det är tomt här, strequa mer!</p>
     {% else %}
@@ -50,9 +32,6 @@
       </tr>
       {% endfor %}
     </table>
-    <p><a href="{{ url_for('strequelistan.user_history', user_id=user.id) }}">All historik</a></p>
-    </dd>
-    {% endif %}
     {% endif %}
   </dl>
 </div>

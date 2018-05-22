@@ -1,27 +1,40 @@
 {% extends 'layout.html' %}
 
+{% macro transaction_card(transaction, void_button=True) %}
+<li id="{{ transaction.id }}" class="card transactioncard">
+  <span class="username">
+    {% if transaction.user.nickname %}
+    {{ transaction.user.nickname }}
+    {% else %}
+    {{ transaction.user.first_name }} {{ transaction.user.last_name }}
+    {% endif %}
+    <div class="timestamp">
+      {{ format_datetime(transaction.timestamp, "dd MMMM yyyy, HH:mm") }}
+    </div>
+  </span>
+  <span class="amount">
+    {{ "I" * transaction.amount }}
+  </span>
+  {% if void_button %}
+  <form class="void-form"
+        method="POST"
+        action="{{ url_for('strequelistan.void_transaction', transaction_id=transaction.id) }}"
+        data-transactionid="{{ transaction.id }}">
+
+    <button class="void-button" >Ångra</button>
+
+  </form>
+  {% endif %}
+</li>
+{% endmacro %}
+
 {% block body %}
 <div class="transactions">
   <h1>Historik</h1>
-  <p class="no-transactions-notice">Inga transaktioner de senaste 15 minuterna!</p>
+  <p class="no-transactions-notice {% if transactions %}hidden{% endif %}">Inga transaktioner de senaste 15 minuterna!</p>
   <ol class="transaction-list">
     {% for transaction in transactions %}
-    <li id="{{ transaction.id }}" class="card transactioncard">
-      <span class="username">
-        {% if transaction.user.nickname %}
-        {{ transaction.user.nickname }}
-        {% else %}
-        {{ transaction.user.first_name }} {{ transaction.user.last_name }}
-        {% endif %}
-        <div class="timestamp">
-          {{ format_datetime(transaction.timestamp, "dd MMMM yyyy, HH:mm") }}
-        </div>
-      </span>
-      <span class="amount">
-        {{ "I" * transaction.amount }}
-      </span>
-      <button class="void-button" data-transactionid="{{ transaction.id }}">Ångra</button>
-    </li>
+    {{ transaction_card(transaction) }}
     {% endfor %}
   </ol>
 </div>

@@ -30,10 +30,17 @@ def index():
 @mod.route('/strequa', methods=['POST'])
 def add_streque():
     data = flask.request.get_json()
+
+    if data:
+        is_ajax = True
+    else:
+        data = flask.request.args
+        is_ajax = False
+
     try:
         user = models.User.query.get(data['user_id'])
         amount = int(data['amount'])
-    except (KeyError, ValueError):
+    except (KeyError, ValueError, TypeError):
         flask.abort(400)
 
     if user and 1 <= amount <= 4:
@@ -41,12 +48,18 @@ def add_streque():
     else:
         flask.abort(400)
 
-    return flask.jsonify(
-        user_id=user.id,
-        amount=amount,
-        sum=transaction.sum,
-        balance=user.balance
-    )
+    if is_ajax:
+        return flask.jsonify(
+            user_id=user.id,
+            amount=amount,
+            sum=transaction.sum,
+            balance=user.balance
+        )
+
+    else:
+        flask.flash("{} streque på {} tillagt.".format(amount, user.full_name),
+                    'success')
+        return flask.redirect(flask.url_for('strequelistan.index'))
 
 
 @mod.route('/history')
@@ -62,6 +75,13 @@ def history():
 @mod.route('/void', methods=['POST'])
 def void_transaction():
     data = flask.request.get_json()
+
+    if data:
+        is_ajax = True
+    else:
+        data = flask.request.args
+        is_ajax = False
+
     try:
         transaction_id = data['transaction_id']
     except (KeyError, ValueError):
@@ -79,20 +99,45 @@ def void_transaction():
     amount = transaction.amount
     sum = transaction.void_and_refund()
 
-    return flask.jsonify(
-        transaction_id=transaction_id,
-        user_id=user.id,
-        amount=amount,
-        sum=sum,
-        balance=user.balance
-    )
+    if is_ajax:
+        return flask.jsonify(
+            transaction_id=transaction_id,
+            user_id=user.id,
+            amount=amount,
+            sum=sum,
+            balance=user.balance
+        )
+
+    else:
+        flask.flash("{} streque på {} ångrat.".format(amount, user.full_name),
+                    'success')
+        return flask.redirect(flask.url_for('strequelistan.history'))
 
 
 @mod.route('/profile/<int:user_id>/')
 def show_profile(user_id):
     user = models.User.query.get_or_404(user_id)
 
-    return flask.render_template('show_profile.html', user=user)
+    transactions = user.transactions\
+        .order_by(models.Transaction.timestamp.desc()).limit(10)
+
+    return flask.render_template('show_profile.html', user=user,
+                                 transactions=transactions)
+
+
+@mod.route('/profile/<int:user_id>/history')
+def user_history(user_id):
+    user = models.User.query.get_or_404(user_id)
+    current_user = flask_login.current_user
+
+    if current_user.id != user.id and not current_user.is_admin:
+        return flask.redirect(flask.url_for('.show_profile', user_id=user_id))
+
+    transactions = user.transactions\
+        .order_by(models.Transaction.timestamp.desc())
+
+    return flask.render_template('user_history.html', user=user,
+                                 transactions=transactions)
 
 
 @mod.route('/profile/<int:user_id>/edit/', methods=['GET', 'POST'])

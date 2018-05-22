@@ -1,15 +1,17 @@
 function initStrequeButtons () {
-  var strequeButtons = document.getElementsByClassName('streque-button');
+  var strequeForms = document.getElementsByClassName('streque-form');
 
-  for (var i = 0; i < strequeButtons.length; i++) {
-    strequeButton = strequeButtons[i];
-    strequeButton.addEventListener('click', function () {
+  for (var i = 0; i < strequeForms.length; i++) {
+    strequeForm = strequeForms[i];
+    strequeForm.addEventListener('submit', function(event) {
+      event.preventDefault();
+
       data = {
         user_id: this.dataset.userid,
         amount: this.dataset.amount
       }
 
-      var onsuccess = function (data) {
+      var onsuccess = function(data) {
         displayEmma();
       }
 
