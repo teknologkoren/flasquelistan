@@ -13,16 +13,21 @@
     {% endblock %}
   </head>
   <body>
-    <div class="top-bar">
-      <header>
-        <h1>
-          <a href="{{ url_for('strequelistan.index') }}">Strequelistan</a>
-        </h1>
-      </header>
-      <nav>
-        {% block nav %}
-        {% endblock %}
-      </nav>
+    <div class="top-bar outside">
+      <div class="top-bar inside">
+        <header>
+          <div class="logo">
+            <img src="{{ url_for('static', filename='images/cuteladypoursadrink.png') }}">
+            <a href="{{ url_for('strequelistan.index') }}">
+              <h1>Strequelistan</h1>
+            </a>
+          </div>
+        </header>
+        <nav>
+          {% block nav %}
+          {% endblock %}
+        </nav>
+      </div>
     </div>
     {% block base_body %}
     {% endblock %}

@@ -15,21 +15,15 @@ body {
     font-family: sans-serif;
 }
 
-.top-bar {
-    display: flex;
+.top-bar.outside {
     position: static;
-    top: 0;
     width: 100%;
-    height: auto;
-    flex-direction: column;
-    align-items: stretch;
     border-bottom: 1px solid #ddd;
-    margin-bottom: 1rem;
+    margin: .5rem 0 1rem 0;
 }
 
 .top-bar header {
-    display: flex;
-    justify-content: center;
+    height: 4rem;
 }
 
 .top-bar h1 {
@@ -44,6 +38,22 @@ body {
 .top-bar a:hover {
     color: #000;
 }
+
+.logo {
+    height: 100%;
+    text-align: center;
+}
+
+.logo img {
+    margin-right: .5rem;
+    display: inline-block;
+}
+
+.logo a {
+    display: inline-block;
+    vertical-align: middle;
+}
+
 
 nav ul {
     padding: 0;
@@ -182,19 +192,22 @@ dd {
 }
 
 @media screen and (min-width: 40rem) {
-    .top-bar {
-        flex-direction: row;
-        height: 4rem;
+    .top-bar.outside {
+        margin-top: 0;
     }
 
-    .top-bar header {
-        margin-left: 2rem;
-        align-items: center;
-    }
-
-    nav {
+    .top-bar .inside {
+        display: flex;
+        justify-content: space-between;
         width: 100%;
-        margin: 0 2rem 0 2rem;
+        max-width: 50rem;
+        margin-left: auto;
+        margin-right: auto;
+        padding: 0 1rem;
+    }
+
+    .logo {
+        padding: .2rem 0;
     }
 
     nav ul {
