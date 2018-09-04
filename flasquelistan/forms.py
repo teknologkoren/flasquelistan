@@ -62,7 +62,9 @@ class RedirectForm(flask_wtf.FlaskForm):
 class LowercaseEmailField(html5_fields.EmailField):
     """Custom field that lowercases input."""
     def process_formdata(self, valuelist):
-        valuelist[0] = valuelist[0].lower()
+        if valuelist:
+            valuelist[0] = valuelist[0].lower()
+
         super().process_formdata(valuelist)
 
 
@@ -111,10 +113,6 @@ class NewPasswordForm(flask_wtf.FlaskForm):
 
 class LoginForm(RedirectForm, EmailForm, PasswordForm):
     remember = fields.BooleanField("Håll mig inloggad")
-
-    def __init__(self, *args, **kwargs):
-        self.user = None
-        super().__init__(*args, **kwargs)
 
     def validate(self):
         if not flask_wtf.FlaskForm.validate(self):
