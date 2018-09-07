@@ -19,10 +19,6 @@
     font-size: small;
 }
 
-.quote-who:before {
-    content: "\2014\0020"; /* Em-dash+space */
-}
-
 .quote-who {
     margin-bottom: .5rem;
     font-style: italic;

@@ -5,7 +5,7 @@
 <div class="quote-meta">
   <div class="right">
     {% if quote.who %}
-    <div class="quote-who">{{ quote.who }}</div>
+    <div class="quote-who">&mdash; {{ quote.who }}</div>
     {% endif %}
     <div class="quote-when">{{ format_datetime(quote.timestamp, "dd MMMM yyyy, HH:mm") }}</div>
   </div>
