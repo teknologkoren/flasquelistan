@@ -25,8 +25,8 @@ class User(flask_login.UserMixin, db.Model):
     group_id = db.Column(db.Integer, db.ForeignKey('group.id'))
     group = db.relationship('Group')
 
-    transactions = db.relationship("Transaction", back_populates="user",
-                                   lazy="dynamic")
+    transactions = db.relationship('Transaction', back_populates='user',
+                                   lazy='dynamic')
 
     # Do not change the following directly, use User.password
     _password = db.Column(db.String(128))
