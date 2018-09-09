@@ -1,30 +1,36 @@
 {% extends "layout.html" %}
 
-{% from "macros.html" import text_field %}
+{% from "macros.html" import text_field, profile_picture %}
 
 {% block body %}
 <div class="profile">
-  <h2>
-    {{ user.first_name }}
-    {% if user.nickname %}"{{ user.nickname }}"{% endif %}
-    {{ user.last_name }}
-  </h2>
+  {{ profile_picture(user) }}
 
-  <form method="POST">
-    {{ form.csrf_token }}
-    {% if current_user.is_admin %}
-    {{ text_field(form.first_name) }}
-    {{ text_field(form.last_name) }}
-    {% endif %}
+  <div>
+    <h2>
+      {{ user.first_name }}
+      {% if user.nickname %}"{{ user.nickname }}"{% endif %}
+      {{ user.last_name }}
+    </h2>
 
-    {{ text_field(form.nickname) }}
-    {{ text_field(form.phone) }}
+    <form method="POST">
+      {{ form.csrf_token }}
+      {% if current_user.is_admin %}
+      {{ text_field(form.first_name) }}
+      {{ text_field(form.last_name) }}
+      {% endif %}
 
-    <a href="{{ url_for('strequelistan.change_email_or_password', user_id=user.id) }}">Byt e-postadress eller lösenord</a>
+      {{ text_field(form.nickname) }}
+      {{ text_field(form.phone) }}
 
-    <div class="form-field">
-      <button>Spara</button> | <a href="{{ url_for('strequelistan.show_profile', user_id=user.id) }}">Avbryt</a>
-    </div>
-  </form>
+      <p><a href="{{ url_for('strequelistan.change_profile_picture', user_id=user.id) }}">Ändra profilbild</a></p>
+
+      <p><a href="{{ url_for('strequelistan.change_email_or_password', user_id=user.id) }}">Byt e-postadress eller lösenord</a></p>
+
+      <div class="form-field">
+        <button>Spara</button> | <a href="{{ url_for('strequelistan.show_profile', user_id=user.id) }}">Avbryt</a>
+      </div>
+    </form>
+  </div>
 </div>
 {% endblock %}

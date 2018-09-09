@@ -14,6 +14,8 @@ SQLALCHEMY_TRACK_MODIFICATIONS = False
 BABEL_DEFAULT_LOCALE = 'sv_SE'
 BABEL_DEFAULT_TIMEZONE = 'CET'
 
+UPLOADS_DEFAULT_DEST = os.path.join(BASEDIR, 'flasquelistan/static/uploads')
+
 # Email settings
 SMTP_MAILSERVER = 'smtp.example.com'
 SMTP_STARTTLS_PORT = 587

@@ -1,59 +1,65 @@
 {% extends "layout.html" %}
 
+{% from "macros.html" import profile_picture %}
+
 {% block body %}
 <div class="profile">
-  <h2>
-    {{ user.first_name }}
-    {% if user.nickname %}"{{ user.nickname }}"{% endif %}
-    {{ user.last_name }}
-  </h2>
+  {{ profile_picture(user) }}
 
-  <dl>
-    <dt>E-postadress</dt>
-    <dd>{{ user.email }}</dd>
+  <div>
+    <h2>
+      {{ user.first_name }}
+      {% if user.nickname %}"{{ user.nickname }}"{% endif %}
+      {{ user.last_name }}
+    </h2>
 
-    {% if user.phone %}
-    <dt>Telefonnummer</dt>
-    <dd>
-    {% if user.formatted_phone %}
-    <a href="tel:{{ user.formatted_phone }}">{{ user.formatted_phone }}</a>
-    {% else %}
-    {{ user.phone }}
-    {% endif %}
-    </dd>
-    {% endif %}
+    <dl>
+      <dt>E-postadress</dt>
+      <dd>{{ user.email }}</dd>
 
-    {% if user == current_user or current_user.is_admin %}
-    <dt>Saldo</dt>
-    <dd>{{ user.formatted_balance }}</dd>
+      {% if user.phone %}
+      <dt>Telefonnummer</dt>
+      <dd>
+      {% if user.formatted_phone %}
+      <a href="tel:{{ user.formatted_phone }}">{{ user.formatted_phone }}</a>
+      {% else %}
+      {{ user.phone }}
+      {% endif %}
+      </dd>
+      {% endif %}
 
-    <a href="{{ url_for('strequelistan.edit_profile', user_id=user.id) }}">Redigera profil</a>
+      {% if user == current_user or current_user.is_admin %}
+      <dt>Saldo</dt>
+      <dd>{{ user.formatted_balance }}</dd>
 
-    <dt>Historik</a></dt>
-    {% if not transactions %}
-    <p>Det är tomt här, strequa mer!</p>
-    {% else %}
-    <dd>
-    <table class="transaction-history">
-      {% for transaction in transactions %}
-      <tr>
-        <td>
-          <span class="amount">
-            {{ "I" * transaction.amount }}
-          </span>
-        </td>
-        <td>
-          <span class="timestamp">
-            {{ format_datetime(transaction.timestamp, "dd MMMM yyyy, HH:mm") }}
-          </span>
-        </td>
-      </tr>
-      {% endfor %}
-    </table>
-    <p><a href="{{ url_for('strequelistan.user_history', user_id=user.id) }}">All historik</a></p>
-    </dd>
-    {% endif %}
-    {% endif %}
-  </dl>
+      <a href="{{ url_for('strequelistan.edit_profile', user_id=user.id) }}">Redigera profil</a>
+
+      <dt>Historik</a></dt>
+      {% if not transactions %}
+      <p>Det är tomt här, strequa mer!</p>
+      {% else %}
+      <dd>
+      <table class="transaction-history">
+        {% for transaction in transactions %}
+        <tr>
+          <td>
+            <span class="amount">
+              {{ "I" * transaction.amount }}
+            </span>
+          </td>
+          <td>
+            <span class="timestamp">
+              {{ format_datetime(transaction.timestamp, "dd MMMM yyyy, HH:mm") }}
+            </span>
+          </td>
+        </tr>
+        {% endfor %}
+      </table>
+      <p><a href="{{ url_for('strequelistan.user_history', user_id=user.id) }}">All historik</a></p>
+      </dd>
+      {% endif %}
+      {% endif %}
+    </dl>
+  </div>
 </div>
 {% endblock %}

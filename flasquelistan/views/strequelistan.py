@@ -1,7 +1,7 @@
 import flask
 import flask_login
 from sqlalchemy.sql.expression import func, not_
-from flasquelistan import forms, models
+from flasquelistan import forms, models, util
 from flasquelistan.views import auth
 
 mod = flask.Blueprint('strequelistan', __name__)
@@ -171,6 +171,69 @@ def edit_profile(user_id):
         forms.flash_errors(form)
 
     return flask.render_template('edit_profile.html', form=form, user=user)
+
+
+@mod.route('/profile/<int:user_id>/edit/profile-picture',
+           methods=['GET', 'POST'])
+def change_profile_picture(user_id):
+    user = models.User.query.get_or_404(user_id)
+    current_user = flask_login.current_user
+
+    if current_user.id != user.id and not current_user.is_admin:
+        flask.flash("Du får bara redigera din egen profil! ಠ_ಠ", 'error')
+        return flask.redirect(flask.url_for('.show_profile', user_id=user_id))
+
+    form = forms.ChangeProfilePictureFormFactory(user)
+
+    if form.validate_on_submit():
+        # The "none" choice seems to work. Not sure why.
+        user.profile_picture_id = form.profile_picture.data
+        models.db.session.commit()
+
+        flask.flash("Din profilbild har ändrats!", 'success')
+
+        return flask.redirect(flask.url_for('strequelistan.edit_profile',
+                                            user_id=user.id))
+
+    elif form.is_submitted():
+        forms.flash_errors(form)
+
+    return flask.render_template('change_profile_picture.html', form=form,
+                                 user=user)
+
+
+@mod.route('/profile/<int:user_id>/edit/profile-picture/upload',
+           methods=['GET', 'POST'])
+def upload_profile_picture(user_id):
+    user = models.User.query.get_or_404(user_id)
+    current_user = flask_login.current_user
+
+    if current_user.id != user.id and not current_user.is_admin:
+        flask.flash("Du får bara redigera din egen profil! ಠ_ಠ", 'error')
+        return flask.redirect(flask.url_for('.show_profile', user_id=user_id))
+
+    form = forms.UploadProfilePictureForm()
+
+    if form.validate_on_submit():
+        if form.upload.data:
+            filename = util.image_uploads.save(form.upload.data)
+            profile_picture = models.ProfilePicture(filename=filename,
+                                                    user_id=user.id)
+            models.db.session.add(profile_picture)
+            models.db.session.commit()
+
+            flask.flash("Din nya profilbild har laddats upp!", 'success')
+
+        return flask.redirect(
+            flask.url_for('strequelistan.change_profile_picture',
+                          user_id=user.id)
+        )
+
+    elif form.is_submitted():
+        forms.flash_errors(form)
+
+    return flask.render_template('upload_profile_picture.html', form=form,
+                                 user=user)
 
 
 @mod.route('/profile/<int:user_id>/edit/password', methods=['GET', 'POST'])

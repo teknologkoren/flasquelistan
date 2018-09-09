@@ -29,6 +29,7 @@ def create_app(config=None, instance_config=None):
     setup_flask_admin(app, models.db)
     setup_flask_assets(app)
     setup_flask_babel(app)
+    setup_flask_uploads(app)
 
     return app
 
@@ -123,8 +124,18 @@ def populate_testdb():
 
     quote2 = models.Quote(text="Ett citat utan upphovsman, spännade!")
 
+    quote3 = models.Quote(
+        text=("Explicabo possimus dolorem voluptate. "
+              "Aut perferendis mollitia dolor nulla. "
+              "Perferendis at consequuntur ea aliquam "
+              "aut inventore quis neque."),
+        who="Godtycklig medietekniker",
+    )
+
+    quote4 = models.Quote(text="much quote, such fun", who="shibe")
+
     models.db.session.add_all([monty, rick, soprano, alto, tenor, bass,
-                               streque, quote1, quote2])
+                               streque, quote1, quote2, quote3, quote4])
     models.db.session.commit()
 
     monty.group = tenor
@@ -174,6 +185,8 @@ def setup_flask_admin(app, db):
     admin.add_view(LoginModelView(models.Quote, db.session, name='Quote'))
     admin.add_view(LoginModelView(models.Transaction, db.session,
                                   name='Transaction'))
+    admin.add_view(LoginModelView(models.ProfilePicture, db.session,
+                                  name='Profile Picture'))
 
     return admin
 
@@ -220,3 +233,14 @@ def setup_flask_babel(app):
     app.jinja_env.globals['format_date'] = flask_babel.format_date
 
     return babel
+
+
+def setup_flask_uploads(app):
+    import flask_uploads
+    from flasquelistan import util
+
+    flask_uploads.configure_uploads(app, util.image_uploads)
+
+    app.jinja_env.globals['image_uploads_url'] = util.image_uploads.url
+    app.jinja_env.globals['image_uploads_dest'] = \
+        lambda: util.image_uploads.config.base_url

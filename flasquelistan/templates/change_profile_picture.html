@@ -1,0 +1,47 @@
+{% extends "layout.html" %}
+
+{% from "macros.html" import profile_picture %}
+
+{% block body %}
+<div class="profile">
+  {{ profile_picture(user) }}
+
+  <div>
+    <h2>
+      {{ user.first_name }}
+      {% if user.nickname %}"{{ user.nickname }}"{% endif %}
+      {{ user.last_name }}
+    </h2>
+
+    <h3>Ändra profilbild</h3>
+
+    <form method="POST" enctype="multipart/form-data">
+      {{ form.csrf_token }}
+
+      <div class="form-field">
+        <fieldset class="change-profile-picture">
+          <legend>Uppladdade profilbilder</legend>
+          {% for subfield in form.profile_picture %}
+          <div class="form-field">
+            {{ subfield }}
+            {% if loop.first %}
+            {{subfield.label }}
+            {% else %}
+            <label for="{{ subfield.id }}">
+              <img src="{{ image_uploads_url(subfield.label.text) }}">
+            </label>
+            {% endif %}
+          </div>
+          {% endfor %}
+        </fieldset>
+
+        <p><a href="{{ url_for('strequelistan.upload_profile_picture', user_id=user.id) }}">Ladda upp ny profilbild</a></p>
+      </div>
+
+      <div class="form-field">
+        <button>Spara</button> | <a href="{{ url_for('strequelistan.edit_profile', user_id=user.id) }}">Avbryt</a>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

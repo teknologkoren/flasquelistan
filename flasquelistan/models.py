@@ -21,12 +21,20 @@ class User(flask_login.UserMixin, db.Model):
     balance = db.Column(db.Integer, default=0)  # Ören (1/100kr)
     is_admin = db.Column(db.Boolean, nullable=False, default=False)
     active = db.Column(db.Boolean, nullable=False, default=False)
-
     group_id = db.Column(db.Integer, db.ForeignKey('group.id'))
-    group = db.relationship('Group')
 
-    transactions = db.relationship('Transaction', back_populates='user',
+    # use_alter=True adds fk after ProfilePicture has been created to avoid
+    # circular dependency
+    profile_picture_id = db.Column(db.Integer,
+                                   db.ForeignKey('profile_picture.id',
+                                                 use_alter=True))
+
+    group = db.relationship('Group')
+    transactions = db.relationship('Transaction',
+                                   back_populates='user',
                                    lazy='dynamic')
+    profile_picture = db.relationship('ProfilePicture',
+                                      foreign_keys=profile_picture_id)
 
     # Do not change the following directly, use User.password
     _password = db.Column(db.String(128))
@@ -122,6 +130,7 @@ class Group(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.Integer, nullable=False)
     weight = db.Column(db.Integer)
+
     users = db.relationship('User', back_populates='group')
 
     def __str__(self):
@@ -142,9 +151,10 @@ class Transaction(db.Model):
     value = db.Column(db.Integer, nullable=False)  # Ören
     amount = db.Column(db.Integer, nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    user = db.relationship("User", back_populates="transactions")
     timestamp = db.Column(db.DateTime, nullable=False,
                           default=datetime.datetime.utcnow)
+
+    user = db.relationship('User', back_populates='transactions')
 
     @property
     def sum(self):
@@ -177,6 +187,10 @@ class Quote(db.Model):
         return "{}... — {}".format(self.text[:20], self.who[:10] or "<None>")
 
 
-class File(db.Model):
+class ProfilePicture(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    file_name = db.Column(db.String(256), nullable=False)
+    filename = db.Column(db.String(256), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+
+    user = db.relationship('User', foreign_keys=user_id,
+                           backref='profile_pictures')

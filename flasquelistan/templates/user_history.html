@@ -2,37 +2,39 @@
 
 {% block body %}
 <div class="profile">
-  <h2>
-    {{ user.first_name }}
-    {% if user.nickname %}"{{ user.nickname }}"{% endif %}
-    {{ user.last_name }}
-  </h2>
-  <dl>
-    <dt>Saldo</dt>
-    <dd>{{ user.formatted_balance }}</dd>
+  <div>
+    <h2>
+      {{ user.first_name }}
+      {% if user.nickname %}"{{ user.nickname }}"{% endif %}
+      {{ user.last_name }}
+    </h2>
+    <dl>
+      <dt>Saldo</dt>
+      <dd>{{ user.formatted_balance }}</dd>
 
-    <dt>Historik</dt>
-    {% if not transactions %}
-    <p>Det är tomt här, strequa mer!</p>
-    {% else %}
-    <dd>
-    <table class="transaction-history">
-      {% for transaction in transactions %}
-      <tr>
-        <td>
-          <span class="amount">
-            {{ "I" * transaction.amount }}
-          </span>
-        </td>
-        <td>
-          <span class="timestamp">
-            {{ format_datetime(transaction.timestamp, "dd MMMM yyyy, HH:mm") }}
-          </span>
-        </td>
-      </tr>
-      {% endfor %}
-    </table>
-    {% endif %}
-  </dl>
+      <dt>Historik</dt>
+      {% if not transactions %}
+      <p>Det är tomt här, strequa mer!</p>
+      {% else %}
+      <dd>
+      <table class="transaction-history">
+        {% for transaction in transactions %}
+        <tr>
+          <td>
+            <span class="amount">
+              {{ "I" * transaction.amount }}
+            </span>
+          </td>
+          <td>
+            <span class="timestamp">
+              {{ format_datetime(transaction.timestamp, "dd MMMM yyyy, HH:mm") }}
+            </span>
+          </td>
+        </tr>
+        {% endfor %}
+      </table>
+      {% endif %}
+    </dl>
+  </div>
 </div>
 {% endblock %}

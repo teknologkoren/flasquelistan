@@ -1,5 +1,6 @@
 import flask
 import flask_wtf
+from flask_wtf.file import FileAllowed
 from wtforms import fields, validators
 import wtforms.fields.html5 as html5_fields
 from flasquelistan import models, util
@@ -107,7 +108,7 @@ class NewPasswordForm(flask_wtf.FlaskForm):
     new_password = fields.PasswordField(
         'Nytt lösenord',
         validators=[validators.InputRequired(), validators.Length(min=8)],
-        description="Ditt nya lösenord. Åtminstone 8 karaktärer långt."
+        description="Ditt nya lösenord. Åtminstone 8 tecken långt."
     )
 
 
@@ -145,7 +146,7 @@ class ChangeEmailOrPasswordForm(EmailForm, PasswordForm):
     new_password = fields.PasswordField(
         'Nytt lösenord',
         validators=[validators.Optional(), validators.Length(min=8)],
-        description="Ditt nya lösenord. Åtminstone 8 karaktärer långt."
+        description="Ditt nya lösenord. Åtminstone 8 tecken långt."
     )
 
     def __init__(self, user, *args, **kwargs):
@@ -196,4 +197,27 @@ class QuoteForm(flask_wtf.FlaskForm):
     ])
     who = fields.StringField('Upphovsman', validators=[
         validators.Length(max=150)
+    ])
+
+
+def ChangeProfilePictureFormFactory(user):
+    class ChangeProfilePictureForm(flask_wtf.FlaskForm):
+        choices = [('none', 'Ingen')]
+        default = None
+
+        for pic in user.profile_pictures:
+            if pic == user.profile_picture:
+                default = str(pic.id)
+
+            choices.append((str(pic.id), pic.filename))
+
+        profile_picture = fields.RadioField(choices=choices,
+                                            default=default or 'none')
+
+    return ChangeProfilePictureForm()
+
+
+class UploadProfilePictureForm(flask_wtf.FlaskForm):
+    upload = fields.FileField('Profilbild', validators=[
+        FileAllowed(util.image_uploads, 'Endast bilder!')
     ])

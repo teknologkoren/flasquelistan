@@ -4,12 +4,15 @@ import threading
 import email
 import flask
 import flask_bcrypt
+import flask_uploads
 from urllib.parse import urlparse, urljoin
 
 # Note that if a module imports this as only "bcrypt", it will override
 # the actual `bcrypt` library if imported. To avoid namespace issues,
 # do instead: `from flasquelistan import util; util.bcrypt(...)`
 bcrypt = flask_bcrypt.Bcrypt()
+
+image_uploads = flask_uploads.UploadSet('images', flask_uploads.IMAGES)
 
 
 def send_email(toaddr, subject, body):

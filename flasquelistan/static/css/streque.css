@@ -1,8 +1,22 @@
+.usercard {
+    align-items: center;
+}
+
 .usercard .username {
     display: flex;
     align-items: center;
     margin-right: 1rem;
     flex: 2;
+}
+
+.usercard .profile-picture {
+    object-fit: contain;
+    width: 4rem;
+    height: 3rem;
+    margin-right: .5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .streque-buttons {
@@ -77,6 +91,16 @@
     width: 100%;
     padding-left: 1rem;
     margin: 2rem 0 3rem 0;
+}
+
+.change-profile-picture {
+    max-height: 30rem;
+    overflow-y: scroll;
+}
+
+.change-profile-picture img {
+    max-width: 10rem;
+    max-height: 10rem;
 }
 
 #emma {
