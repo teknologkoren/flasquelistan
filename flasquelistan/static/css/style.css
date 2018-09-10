@@ -23,6 +23,15 @@ h1, h2, h3 {
     margin-top: 2rem;
 }
 
+a {
+    text-decoration: none;
+    color: #436cb3;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
 .logo {
     height: 100%;
     text-align: center;
@@ -38,7 +47,7 @@ h1, h2, h3 {
     display: inline-block;
     vertical-align: middle;
     text-decoration: none;
-    color: #333;
+    color: #000;
 }
 
 .logo h1 {
@@ -68,9 +77,10 @@ nav ul {
     width: 100%;
 }
 
-nav a {
+nav a,
+nav a:hover {
     text-decoration: none;
-    color: #333;
+    color: #000;
     font-size: 0.9em;
     display: flex;
     flex-direction: column;
@@ -83,11 +93,11 @@ nav svg {
 }
 
 nav li.active a {
-    color: #337dfe;
+    color: #5c81c2;
 }
 
 nav li.active path {
-    fill: #337dfe;
+    fill: #5c81c2;
 }
 
 main {
@@ -98,8 +108,12 @@ main {
     padding: 0 1rem 4rem 1rem;
 }
 
-.cards,
 .misc {
+    max-width: 30rem;
+    width: 100%;
+}
+
+.cards {
     max-width: 50rem;
     width: 100%;
 }

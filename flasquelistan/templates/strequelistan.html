@@ -5,32 +5,32 @@
 {% from "quotes.html" import quote_inner %}
 {% from "macros.html" import profile_picture %}
 
-{% macro usercard(user) %}
+{% macro usercard(user, articles) %}
 <div class="card usercard">
-  {{ profile_picture(user) }}
-
-  <div class="username" data-firstname="{{ user.first_name }}"
-                        data-lastname="{{ user.last_name }}"
-                        data-nickname="{{ user.nickname }}">
-    <a href="{{ url_for('strequelistan.show_profile', user_id=user.id) }}">
-      {% if user.nickname %}
-      {{ user.nickname }}
-      {% else %}
-      {{ user.first_name }} {{ user.last_name }}
-      {% endif %}
-    </a>
-  </div>
+  <a href="{{ url_for('strequelistan.show_profile', user_id=user.id) }}">
+    <div class="picture-and-name">
+      {{ profile_picture(user) }}
+      <div class="username" data-firstname="{{ user.first_name }}"
+                            data-lastname="{{ user.last_name }}"
+                            data-nickname="{{ user.nickname }}">
+        {% if user.nickname %}
+        {{ user.nickname }}
+        {% else %}
+        {{ user.first_name }} {{ user.last_name }}
+        {% endif %}
+      </div>
+    </div>
+  </a>
   <div class="streque-buttons">
-    {% for i in range(1, 5) %}
+    {% for article in articles %}
     <form class="streque-form"
           method="POST"
-          action="{{ url_for('strequelistan.add_streque', user_id=user.id, amount=i) }}"
-          data-userid="{{ user.id }}" data-amount="{{ i }}">
+          action="{{ url_for('strequelistan.add_streque', user_id=user.id, article_id=article.id) }}"
+          data-userid="{{ user.id }}" data-articleid="{{ article.id }}">
 
       <button class="streque-button" type="submit">
-        {{ 'I'*i }}
+        {{ article.name }}
       </button>
-
     </form>
     {% endfor %}
   </div>
@@ -44,7 +44,7 @@
   </blockquote>
 
   <h2>Inloggad användare</h2>
-  {{ usercard(current_user) }}
+  {{ usercard(current_user, articles) }}
 
   <h2>Filtrera användare</h2>
   <div class="user-filter">
@@ -56,7 +56,7 @@
   <div class="group">
     <h2>{{ group.name }}</h2>
     {% for user in group.users %}
-    {{ usercard(user) }}
+    {{ usercard(user, articles) }}
     {% endfor %}
   </div>
   {% endfor %}

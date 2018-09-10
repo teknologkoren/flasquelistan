@@ -25,6 +25,8 @@ def index():
 
     current_user = flask_login.current_user
 
+    articles = models.Article.query.all()
+
     if current_user.balance <= 0:
         flask.flash("Det finns inga pengar på kontot. Dags att fylla på!",
                     'error')
@@ -33,7 +35,7 @@ def index():
                     'warning')
 
     return flask.render_template('strequelistan.html', groups=groups,
-                                 quote=random_quote)
+                                 quote=random_quote, articles=articles)
 
 
 @mod.route('/strequa', methods=['POST'])
@@ -48,41 +50,33 @@ def add_streque():
 
     try:
         user = models.User.query.get(data['user_id'])
-        amount = int(data['amount'])
+        article_id = int(data['article_id'])
     except (KeyError, ValueError, TypeError):
         flask.abort(400)
 
-    if user and 1 <= amount <= 4:
-        transaction = user.strequa(amount)
+    article = models.Article.query.get(article_id)
+
+    if article:
+        streque = user.strequa(article)
     else:
         flask.abort(400)
 
     if is_ajax:
         return flask.jsonify(
             user_id=user.id,
-            amount=amount,
-            sum=transaction.sum,
+            value=streque.value,
             balance=user.balance
         )
 
     else:
-        flask.flash("{} streque på {} tillagt.".format(amount, user.full_name),
+        flask.flash("{} streque på {} tillagt.".format(streque.value,
+                                                       user.full_name),
                     'success')
         return flask.redirect(flask.url_for('strequelistan.index'))
 
 
-@mod.route('/history')
-def history():
-    transactions = models.Transaction.query\
-        .filter(not_(models.Transaction.too_old()))\
-        .order_by(models.Transaction.timestamp.desc())\
-        .all()
-
-    return flask.render_template('history.html', transactions=transactions)
-
-
 @mod.route('/void', methods=['POST'])
-def void_transaction():
+def void_streque():
     data = flask.request.get_json()
 
     if data:
@@ -92,35 +86,47 @@ def void_transaction():
         is_ajax = False
 
     try:
-        transaction_id = data['transaction_id']
+        streque_id = data['streque_id']
     except (KeyError, ValueError):
         flask.abort(400)
 
-    transaction = models.Transaction.query.get(transaction_id)
+    streque = models.Streque.query.get(streque_id)
 
-    if not transaction:
+    if not streque:
         flask.abort(400)
 
-    if transaction.too_old():
+    if streque.too_old():
         flask.abort(400)
 
-    user = transaction.user
-    amount = transaction.amount
-    sum = transaction.void_and_refund()
+    if streque.voided:
+        flask.abort(400)
+
+    streque.void_and_refund()
 
     if is_ajax:
         return flask.jsonify(
-            transaction_id=transaction_id,
-            user_id=user.id,
-            amount=amount,
-            sum=sum,
-            balance=user.balance
+            streque_id=streque.id,
+            user_id=streque.user.id,
+            value=streque.value,
+            balance=streque.user.balance
         )
 
     else:
-        flask.flash("{} streque på {} ångrat.".format(amount, user.full_name),
+        flask.flash("Ångrade {}-streque på {}.".format(streque.text,
+                                                       streque.user.full_name),
                     'success')
         return flask.redirect(flask.url_for('strequelistan.history'))
+
+
+@mod.route('/history')
+def history():
+    streques = models.Streque.query\
+        .filter(not_(models.Streque.too_old()),
+                models.Streque.voided == False)\
+        .order_by(models.Streque.timestamp.desc())\
+        .all()
+
+    return flask.render_template('history.html', streques=streques)
 
 
 @mod.route('/profile/<int:user_id>/')
@@ -128,6 +134,7 @@ def show_profile(user_id):
     user = models.User.query.get_or_404(user_id)
 
     transactions = user.transactions\
+        .filter(models.Streque.voided == False)\
         .order_by(models.Transaction.timestamp.desc()).limit(10)
 
     return flask.render_template('show_profile.html', user=user,
@@ -143,6 +150,7 @@ def user_history(user_id):
         return flask.redirect(flask.url_for('.show_profile', user_id=user_id))
 
     transactions = user.transactions\
+        .filter(models.Streque.voided == False)\
         .order_by(models.Transaction.timestamp.desc()).all()
 
     return flask.render_template('user_history.html', user=user,

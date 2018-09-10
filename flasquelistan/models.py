@@ -83,16 +83,26 @@ class User(flask_login.UserMixin, db.Model):
 
         return None
 
-    def strequa(self, amount):
-        value = Streque.get().value
+    def strequa(self, article):
+        value = article.value
 
-        transaction = Transaction(value=value, amount=amount, user_id=self.id)
-        self.balance -= transaction.sum
+        streque = Streque(value=value, text=article.name, user_id=self.id)
+        self.balance -= value
 
-        db.session.add(transaction)
+        db.session.add(streque)
         db.session.commit()
 
-        return transaction
+        return streque
+
+    def deposit(self, value, message):
+        deposit_ = Deposit(value=value, text=message, user_id=self.id)
+
+        self.balance += value
+
+        db.session.add(deposit_)
+        db.session.commit()
+
+        return deposit_
 
     @property
     def formatted_balance(self):
@@ -137,28 +147,45 @@ class Group(db.Model):
         return self.name
 
 
-class Streque(db.Model):
+class Article(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(15), nullable=False)
     value = db.Column(db.Integer, nullable=False)  # Ören
-
-    @classmethod
-    def get(cls):
-        return cls.query.first()
+    weight = db.Column(db.Integer)
 
 
 class Transaction(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    text = db.Column(db.String(50))
     value = db.Column(db.Integer, nullable=False)  # Ören
-    amount = db.Column(db.Integer, nullable=False)
+    voided = db.Column(db.Boolean, default=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     timestamp = db.Column(db.DateTime, nullable=False,
                           default=datetime.datetime.utcnow)
+    type = db.Column(db.String(50))
 
     user = db.relationship('User', back_populates='transactions')
 
     @property
-    def sum(self):
-        return self.value * self.amount
+    def formatted_value(self):
+        return flask_babel.format_currency(self.value/100, 'SEK')
+
+    __mapper_args__ = {
+        'polymorphic_identity': 'transaction',
+        'polymorphic_on': type
+    }
+
+    def __str__(self):
+        return "{}: {} @ {}".format(self.__name__, self.value, self.user)
+
+
+class Streque(Transaction):
+    id = db.Column(db.Integer, db.ForeignKey('transaction.id'),
+                   primary_key=True)
+
+    __mapper_args__ = {
+        'polymorphic_identity': 'streque',
+    }
 
     @hybrid_method
     def too_old(self, old=15):
@@ -167,13 +194,35 @@ class Transaction(db.Model):
         return self.timestamp < too_old
 
     def void_and_refund(self):
-        self.user.balance += self.sum
-        db.session.delete(self)
-        db.session.commit()
-        return self.sum
+        if self.voided:
+            return False
 
-    def __str__(self):
-        return "{} @ {}".format(self.sum, self.user)
+        self.user.balance += self.value
+
+        self.voided = True
+        db.session.commit()
+
+        return True
+
+
+class Deposit(Transaction):
+    id = db.Column(db.Integer, db.ForeignKey('transaction.id'),
+                   primary_key=True)
+
+    __mapper_args__ = {
+        'polymorphic_identity': 'deposit',
+    }
+
+    def void_and_refund(self):
+        if self.voided:
+            return False
+
+        self.user.balance -= self.value
+
+        self.voided = True
+        db.session.commit()
+
+        return True
 
 
 class Quote(db.Model):

@@ -2,18 +2,22 @@
     align-items: center;
 }
 
-.usercard .username {
+.usercard .picture-and-name {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
-    margin-right: 1rem;
-    flex: 2;
+    margin-right: .7rem;
+}
+
+.usercard .username {
+    margin: .2rem;
 }
 
 .usercard .profile-picture {
     object-fit: contain;
     width: 4rem;
     height: 3rem;
-    margin-right: .5rem;
+    margin: .2rem;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -23,11 +27,14 @@
     display: flex;
     justify-content: flex-end;
     flex-wrap: wrap;
-    flex: 3;
 }
 
-.streque-button {
-    margin: 0.2rem;
+.streque-button,
+.void-button {
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    padding: 0.3rem;
+    margin: 0.3rem;
 }
 
 .user-filter {
@@ -42,17 +49,17 @@
     min-width: 5rem;
 }
 
-.transactions {
+.streques {
     max-width: 30rem;
     width: 100%;
 }
 
-.transactions ol {
+.streques ol {
     list-style: none;
     padding: 0;
 }
 
-.transactioncard {
+.strequecard {
     display: flex;
     align-items: center;
 
@@ -66,19 +73,19 @@
     color: #444;
 }
 
-.transactioncard .username {
+.strequecard .username {
     flex: 1;
     display: flex;
     flex-direction: column;
     justify-items: center;
 }
 
-.transactioncard .timestamp {
+.strequecard .timestamp {
     font-size: .8em;
     margin-top: .2rem;
 }
 
-.transactioncard .amount {
+.strequecard .text {
     justify-self: flex-end;
     display: flex;
     align-items: center;

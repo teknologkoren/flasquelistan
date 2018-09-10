@@ -96,27 +96,16 @@ def populate_testdb():
         phone='0703322110',
     )
 
-    soprano = models.Group(
-        name='Sopran',
-        weight='10',
-    )
+    soprano = models.Group(name='Sopran', weight='10')
+    alto = models.Group(name='Alt', weight='20')
+    tenor = models.Group(name='Tenor', weight='30')
+    bass = models.Group(name='Bas', weight='40')
 
-    alto = models.Group(
-        name='Alt',
-        weight='20',
-    )
-
-    tenor = models.Group(
-        name='Tenor',
-        weight='30',
-    )
-
-    bass = models.Group(
-        name='Bas',
-        weight='40',
-    )
-
-    streque = models.Streque(value=400)
+    beer = models.Article(name='Öl', value=1200, weight=10)
+    cider = models.Article(name='Cider', value=1200, weight=20)
+    wine = models.Article(name='Vin', value=1500, weight=30)
+    shot = models.Article(name='4 cl', value=1600, weight=40)
+    soft = models.Article(name='Alkfritt', value=1000, weight=50)
 
     quote1 = models.Quote(
         text="Kom igen, testa citaten, det blir kul!",
@@ -135,8 +124,10 @@ def populate_testdb():
 
     quote4 = models.Quote(text="much quote, such fun", who="shibe")
 
-    models.db.session.add_all([monty, rick, soprano, alto, tenor, bass,
-                               streque, quote1, quote2, quote3, quote4])
+    models.db.session.add_all([monty, rick,
+                               soprano, alto, tenor, bass,
+                               beer, cider, wine, shot, soft,
+                               quote1, quote2, quote3, quote4])
     models.db.session.commit()
 
     monty.group = tenor
@@ -179,13 +170,15 @@ def setup_flask_admin(app, db):
         pass
 
     admin = flask_admin.Admin(app, name='Flasquelistan',
-                              index_view=LoginIndexView())
+                              index_view=LoginIndexView(url='/flask-admin'))
     admin.add_view(LoginModelView(models.User, db.session, name='User'))
     admin.add_view(LoginModelView(models.Group, db.session, name='Group'))
-    admin.add_view(LoginModelView(models.Streque, db.session, name='Streque'))
     admin.add_view(LoginModelView(models.Quote, db.session, name='Quote'))
+    admin.add_view(LoginModelView(models.Article, db.session, name='Article'))
     admin.add_view(LoginModelView(models.Transaction, db.session,
                                   name='Transaction'))
+    admin.add_view(LoginModelView(models.Streque, db.session, name='Streque'))
+    admin.add_view(LoginModelView(models.Deposit, db.session, name='Deposit'))
     admin.add_view(LoginModelView(models.ProfilePicture, db.session,
                                   name='Profile Picture'))
 

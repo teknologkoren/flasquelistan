@@ -47,8 +47,13 @@
         {% for transaction in transactions %}
         <tr>
           <td>
-            <span class="amount">
-              {{ "I" * transaction.amount }}
+            <span class="text">
+              {{ transaction.text }}
+            </span>
+          </td>
+          <td>
+            <span class="value">
+              {{ transaction.formatted_value }}
             </span>
           </td>
           <td>

@@ -8,7 +8,7 @@ function initStrequeButtons () {
 
       data = {
         user_id: this.dataset.userid,
-        amount: this.dataset.amount
+        article_id: this.dataset.articleid
       }
 
       var onsuccess = function(data) {

@@ -1,14 +1,3 @@
-function maybeDisplayNotice() {
-  list = document.getElementsByClassName('transaction-list');
-  notice = document.getElementsByClassName('no-transactions-notice');
-
-  if (list[0].children.length > 0) {
-    notice[0].style.display = 'none';
-  } else {
-    notice[0].style.display = 'block';
-  }
-}
-
 function initVoidTransactionButtons() {
   var voidForms = document.getElementsByClassName('void-form');
 
@@ -18,21 +7,23 @@ function initVoidTransactionButtons() {
       event.preventDefault();
 
       data = {
-        transaction_id: this.dataset.transactionid
+        streque_id: this.dataset.strequeid
       }
 
       onsuccess = function (data) {
-        card = document.getElementById(data['transaction_id'])
-        card.style.opacity = '0';
-        setTimeout(function () {
-          card.parentNode.removeChild(card);
-          maybeDisplayNotice();
-        }, 500);
+        card = document.getElementById(data['streque_id']);
+
+        voidedSpan = document.createElement('span');
+        voidedSpan.innerHTML = "Ångrad!";
+
+        form = card.getElementsByClassName('void-form')[0];
+        form.parentNode.replaceChild(voidedSpan, form);
+
+        card.style.opacity = '0.5';
       }
       var request = postData('/void', data, onsuccess);
     });
   }
 }
 
-maybeDisplayNotice();
 initVoidTransactionButtons();
