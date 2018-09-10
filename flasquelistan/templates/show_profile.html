@@ -34,7 +34,9 @@
       <dt>Saldo</dt>
       <dd>{{ user.formatted_balance }}</dd>
 
-      <a href="{{ url_for('strequelistan.edit_profile', user_id=user.id) }}">Redigera profil</a>
+      <p>
+        <a href="{{ url_for('strequelistan.edit_profile', user_id=user.id) }}">Redigera profil</a>
+      </p>
 
       <dt>Historik</a></dt>
       {% if not transactions %}
