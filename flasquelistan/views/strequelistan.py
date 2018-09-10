@@ -23,6 +23,15 @@ def index():
 
     random_quote = models.Quote.query.order_by(func.random()).first()
 
+    current_user = flask_login.current_user
+
+    if current_user.balance <= 0:
+        flask.flash("Det finns inga pengar på kontot. Dags att fylla på!",
+                    'error')
+    elif current_user.balance < 10000:
+        flask.flash("Det är ont om pengar på kontot. Dags att fylla på?",
+                    'warning')
+
     return flask.render_template('strequelistan.html', groups=groups,
                                  quote=random_quote)
 

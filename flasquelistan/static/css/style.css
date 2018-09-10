@@ -149,6 +149,11 @@ main {
     border: 1px solid #6797D0;
     color: #042246;
 }
+.warning {
+    background-color: #FFF3CC;
+    border: 1px solid #FFCF32;
+    color: #332700;
+}
 .error {
     background-color: #FFD9D0;
     border: 1px solid #FF9073;
