@@ -172,7 +172,7 @@ class EditUserForm(flask_wtf.FlaskForm):
 
     phone = html5_fields.TelField(
         'Telefon',
-        description="Ett telefonnummer, med eller utan landskod"
+        description="Ett telefonnummer, med eller utan landskod."
     )
 
 

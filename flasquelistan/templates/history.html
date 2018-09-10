@@ -1,5 +1,7 @@
 {% extends 'layout.html' %}
 
+{% set active_page = "history" %}
+
 {% macro transaction_card(transaction, void_button=True) %}
 <li id="{{ transaction.id }}" class="card transactioncard">
   <span class="username">
@@ -30,7 +32,7 @@
 
 {% block body %}
 <div class="transactions">
-  <h1>Historik</h1>
+  <h2>Historik</h2>
   <p class="no-transactions-notice {% if transactions %}hidden{% endif %}">Inga transaktioner de senaste 15 minuterna!</p>
   <ol class="transaction-list">
     {% for transaction in transactions %}

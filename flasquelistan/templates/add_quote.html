@@ -1,9 +1,11 @@
 {% extends "layout.html" %}
 
+{% set active_page = "quotes" %}
+
 {% from "macros.html" import text_field %}
 
 {% block body %}
-<h1>Lägg till citat</h1>
+<h2>Lägg till citat</h2>
 <form method="POST">
   {{ form.csrf_token }}
   {{ text_field(form.text) }}

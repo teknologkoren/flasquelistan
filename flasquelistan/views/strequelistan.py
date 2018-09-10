@@ -134,7 +134,7 @@ def user_history(user_id):
         return flask.redirect(flask.url_for('.show_profile', user_id=user_id))
 
     transactions = user.transactions\
-        .order_by(models.Transaction.timestamp.desc())
+        .order_by(models.Transaction.timestamp.desc()).all()
 
     return flask.render_template('user_history.html', user=user,
                                  transactions=transactions)

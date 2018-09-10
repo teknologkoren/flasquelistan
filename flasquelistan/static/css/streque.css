@@ -43,7 +43,6 @@
 }
 
 .transactions {
-    padding: 0 1rem;
     max-width: 30rem;
     width: 100%;
 }
@@ -90,7 +89,7 @@
     border-left: 5px solid #ddd;
     width: 100%;
     padding-left: 1rem;
-    margin: 2rem 0 3rem 0;
+    margin: 2rem 0;
 }
 
 .change-profile-picture {

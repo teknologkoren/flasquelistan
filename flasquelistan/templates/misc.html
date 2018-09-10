@@ -1,0 +1,13 @@
+{% extends 'layout.html' %}
+
+{% set active_page = "misc" %}
+
+{% block body %}
+<div class="misc">
+  <h2>Mer</h2>
+  <ul>
+    <li><a href="{{ url_for("auth.logout") }}">Logga ut</a></li>
+    <li><a href="https://www.systembolaget.se">Systembolaget</a></li>
+  </ul>
+</div>
+{% endblock %}

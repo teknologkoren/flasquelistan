@@ -1,5 +1,7 @@
 {% extends "layout.html" %}
 
+{% set active_page = "streque" %}
+
 {% from "quotes.html" import quote_inner %}
 {% from "macros.html" import profile_picture %}
 
@@ -41,7 +43,9 @@
     {{ quote_inner(quote) }}
   </blockquote>
 
+  <h2>Inloggad användare</h2>
   {{ usercard(current_user) }}
+
   <h2>Filtrera användare</h2>
   <div class="user-filter">
     <input type="text" id="user-filter" placeholder="Namn" autocomplete="off">

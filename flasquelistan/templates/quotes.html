@@ -1,5 +1,7 @@
 {% extends "layout.html" %}
 
+{% set active_page = "quotes" %}
+
 {% macro quote_inner(quote) %}
 <div class="quote-text">{{ quote.text }}</div>
 <div class="quote-meta">
@@ -21,7 +23,7 @@
 
 {% block body %}
 <div class="cards">
-  <h1>Citat</h1>
+  <h2>Citat</h2>
   <a href="{{ url_for('quotes.add_quote') }}">Lägg till citat</a>
   {% if not quotes %}
   <p>No quotes yet!</p>

@@ -15,33 +15,18 @@ body {
     font-family: sans-serif;
 }
 
-.top-bar.outside {
-    position: static;
-    width: 100%;
-    border-bottom: 1px solid #ddd;
-    margin: .5rem 0 1rem 0;
-}
-
-.top-bar header {
+header {
     height: 4rem;
 }
 
-.top-bar h1 {
-    margin: 0;
-}
-
-.top-bar a {
-    color: #555;
-    text-decoration: none;
-}
-
-.top-bar a:hover {
-    color: #000;
+h1, h2, h3 {
+    margin-top: 2rem;
 }
 
 .logo {
     height: 100%;
     text-align: center;
+    padding: .5rem;
 }
 
 .logo img {
@@ -52,22 +37,57 @@ body {
 .logo a {
     display: inline-block;
     vertical-align: middle;
+    text-decoration: none;
+    color: #333;
 }
 
+.logo h1 {
+    margin: 0;
+}
+
+nav {
+    position: fixed;
+    bottom: 0;
+    padding: .2rem 1.5rem;
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    background: #eee;
+    height: 3rem;
+    border-top: 1px solid #ddd;
+}
 
 nav ul {
     padding: 0;
-    margin: .5rem 0;
+    margin: 0;
     list-style: none;
     display: flex;
-    /*flex-direction: column;*/
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
+    max-width: 30rem;
+    width: 100%;
 }
 
-nav li {
-    margin: .2rem 1rem;
-    font-size: 1.2rem;
+nav a {
+    text-decoration: none;
+    color: #333;
+    font-size: 0.9em;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+nav svg {
+    height: 1.1rem;
+    margin-bottom: 0.2rem;
+}
+
+nav li.active a {
+    color: #337dfe;
+}
+
+nav li.active path {
+    fill: #337dfe;
 }
 
 main {
@@ -75,10 +95,11 @@ main {
     flex-direction: column;
     align-items: center;
     justify-items: center;
-    padding: 0 1rem;
+    padding: 0 1rem 4rem 1rem;
 }
 
-.cards {
+.cards,
+.misc {
     max-width: 50rem;
     width: 100%;
 }
@@ -146,7 +167,7 @@ main {
 }
 
 .profile .profile-picture {
-    margin-top: 1rem;
+    margin-top: 2rem;
     max-width: 300px;
     height: 200px;
     display: flex;
@@ -196,6 +217,19 @@ dd {
 
 .text-field {
     display: flex;
+    flex-direction: column-reverse;
+}
+
+.field-description {
+    font-size: 0.7em;
+    align-self: flex-start;
+    padding-left: 0;
+    margin-top: 0.2rem;
+    max-width: 16rem;
+}
+
+.field-description:before {
+    content: "- ";
 }
 
 .text-field input,
@@ -203,53 +237,6 @@ dd {
     margin-top: 0.3rem;
 }
 
-.field-description {
-    align-self: center;
-    font-size: 0.7em;
-    padding-left: 10px;
-}
-
 .required {
     color: red;
-}
-
-@media screen and (max-width: 28em) {
-    .text-field {
-        flex-direction: column-reverse;
-    }
-
-    .field-description {
-        align-self: flex-start;
-        padding-left: 0;
-    }
-    .field-description:before {
-        content: "- ";
-    }
-}
-
-@media screen and (min-width: 40rem) {
-    .top-bar.outside {
-        margin-top: 0;
-    }
-
-    .top-bar .inside {
-        display: flex;
-        justify-content: space-between;
-        width: 100%;
-        max-width: 50rem;
-        margin-left: auto;
-        margin-right: auto;
-        padding: 0 1rem;
-    }
-
-    .logo {
-        padding: .2rem 0;
-    }
-
-    nav ul {
-        flex-direction: row;
-        justify-content: flex-end;
-        margin: 0;
-        height: 100%;
-    }
 }
