@@ -12,7 +12,7 @@
       {{ profile_picture(user) }}
       <div class="username" data-firstname="{{ user.first_name }}"
                             data-lastname="{{ user.last_name }}"
-                            data-nickname="{{ user.nickname }}">
+                            data-nickname="{{ user.nickname or '' }}">
         {% if user.nickname %}
         {{ user.nickname }}
         {% else %}
