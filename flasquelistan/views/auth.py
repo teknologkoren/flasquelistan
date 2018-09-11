@@ -25,6 +25,10 @@ def admin_required():
             if current_user.is_admin:
                 return func(*args, **kwargs)
 
+            if flask.request.get_json():
+                # Request is AJAX
+                return flask.abort(403)
+
             flask.flash("Du måste vara admin för att komma åt den sidan.",
                         'error')
             return flask.redirect(flask.request.referrer

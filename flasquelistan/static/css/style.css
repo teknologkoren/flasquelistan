@@ -3,6 +3,12 @@
     overflow-wrap: break-word;
     word-wrap: break-word; /* legacy */
     word-break: break-word; /* for WebKit/Chrome */
+
+    /* Fixes overflowing content in flex and grid (anything other than
+     * "overflow: visible"). Won't overflow without this.
+     * Also makes wrapping inter-word if very little space left. */
+    min-width: auto;
+    max-width: 100%;
 }
 
 img {
@@ -259,3 +265,23 @@ dd {
 .required {
     color: red;
 }
+
+.table-wrap {
+    overflow-x: auto;
+    border-radius: 7px;
+    background-color: #f3f3f3;
+    border: 1px solid #ddd;
+}
+
+.table-wrap table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.table-wrap th,
+.table-wrap td {
+    white-space: nowrap;
+    height: 2rem;
+    padding: 0 10px 0 10px;
+}
+

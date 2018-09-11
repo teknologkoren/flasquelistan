@@ -1,0 +1,79 @@
+{% extends 'layout.html' %}
+
+{% set active_page = "misc" %}
+
+{% from "macros.html" import text_field %}
+
+{% block body %}
+<div class="transactions">
+  <h2>Transaktioner</h2>
+  <form class="date-range-form" method="POST">
+    {{ form.csrf_token }}
+    {{ text_field(form.start) }}
+    {{ text_field(form.end) }}
+    <button>Sök</button>
+  </form>
+  {% if transactions.all() %}
+  <div class="table-wrap">
+    <table class="transaction-history">
+      {% for transaction in transactions %}
+      <tr>
+        <td>
+          <span class="user">
+            {{ transaction.user.full_name }}
+          </span>
+        </td>
+        <td>
+          <span class="text">
+            {% if transaction.type == 'streque' %}
+            Streque
+            {% elif transaction.type == 'deposit' %}
+            Insättning
+            {% else %}
+            ???
+            {% endif %}
+          </span>
+        </td>
+        <td>
+          <span class="text">
+            {{ transaction.text }}
+          </span>
+        </td>
+        <td>
+          <span class="value">
+            {{ transaction.formatted_value }}
+          </span>
+        </td>
+        <td>
+          <span class="timestamp">
+            {{ format_datetime(transaction.timestamp, "dd MMMM yyyy, HH:mm") }}
+          </span>
+        </td>
+        <td>
+          {% if not transaction.voided %}
+          <form id="void-transaction-{{ transaction.id }}"
+                class="transaction void-form"
+                method="POST"
+                action="{{ url_for('strequeadmin.void_transaction', transaction_id=transaction.id) }}"
+                data-transactionid="{{ transaction.id }}">
+            <button class="void-button">Ångra</button>
+          </form>
+          {% else %}
+          Ångrad
+          {% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+    </table>
+  </div>
+  {% else %}
+  <p>Inga transaktioner funna.</p>
+  {% endif %}
+</div>
+{% endblock %}
+
+{% block scripts %}
+{% assets "js_common", "js_admin" %}
+<script src="{{ ASSET_URL }}"></script>
+{% endassets %}
+{% endblock %}

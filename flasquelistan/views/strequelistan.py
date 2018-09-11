@@ -184,7 +184,7 @@ def edit_profile(user_id):
         flask.flash("Ändringarna har sparats!", 'success')
         return flask.redirect(flask.url_for('strequelistan.show_profile',
                                             user_id=user.id))
-    else:
+    elif form.is_submitted():
         forms.flash_errors(form)
 
     return flask.render_template('edit_profile.html', form=form, user=user)

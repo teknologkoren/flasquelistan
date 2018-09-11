@@ -1,4 +1,4 @@
-function initVoidTransactionButtons() {
+function initVoidStrequeButtons() {
   var voidForms = document.getElementsByClassName('void-form');
 
   for (var i = 0; i < voidForms.length; i++) {
@@ -26,4 +26,4 @@ function initVoidTransactionButtons() {
   }
 }
 
-initVoidTransactionButtons();
+initVoidStrequeButtons();

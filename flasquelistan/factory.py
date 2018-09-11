@@ -35,8 +35,9 @@ def create_app(config=None, instance_config=None):
 
 
 def register_blueprints(app):
-    from flasquelistan.views import auth, misc, quotes, strequelistan
+    from flasquelistan.views import auth, admin, misc, quotes, strequelistan
     app.register_blueprint(auth.mod)
+    app.register_blueprint(admin.mod)
     app.register_blueprint(misc.mod)
     app.register_blueprint(strequelistan.mod)
     app.register_blueprint(quotes.mod)
@@ -204,11 +205,16 @@ def setup_flask_assets(app):
             'js/history.js',
             output='gen/history.js'
         ),
+        'js_admin': Bundle(
+            'js/admin.js',
+            output='gen/admin.js'
+        ),
         'css_all': Bundle(
             'css/lib/normalize.css',
             'css/style.css',
             'css/streque.css',
             'css/quotes.css',
+            'css/admin.css',
             output='gen/style.css'
         )
     }

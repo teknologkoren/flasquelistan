@@ -221,3 +221,12 @@ class UploadProfilePictureForm(flask_wtf.FlaskForm):
     upload = fields.FileField('Profilbild', validators=[
         FileAllowed(util.image_uploads, 'Endast bilder!')
     ])
+
+
+class DateRangeForm(flask_wtf.FlaskForm):
+    start = html5_fields.DateField('Från', validators=[
+        validators.InputRequired()
+    ])
+    end = html5_fields.DateField('Till', validators=[
+        validators.InputRequired()
+    ])

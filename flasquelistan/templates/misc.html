@@ -4,10 +4,16 @@
 
 {% block body %}
 <div class="misc">
-  <h2>Mer</h2>
+  <h2>Mer…</h2>
   <ul>
     <li><a href="{{ url_for("auth.logout") }}">Logga ut</a></li>
-    <li><a href="https://www.systembolaget.se">Systembolaget</a></li>
+  </ul>
+  {% if current_user.is_admin %}
+  <h3>Admin</h3>
+  <ul>
+    <li><a href="{{ url_for("strequeadmin.transactions") }}">Transaktionshistorik</a></li>
+  </ul>
+  {% endif %}
   </ul>
 </div>
 {% endblock %}

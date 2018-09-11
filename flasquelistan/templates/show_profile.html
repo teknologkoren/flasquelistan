@@ -39,34 +39,36 @@
       </p>
 
       <dt>Historik</a></dt>
-      {% if not transactions %}
-      <p>Det är tomt här, strequa mer!</p>
-      {% else %}
+      {% if transactions.all() %}
       <dd>
-      <table class="transaction-history">
-        {% for transaction in transactions %}
-        <tr>
-          <td>
-            <span class="text">
-              {{ transaction.text }}
-            </span>
-          </td>
-          <td>
-            <span class="value">
-              {{ transaction.formatted_value }}
-            </span>
-          </td>
-          <td>
-            <span class="timestamp">
-              {{ format_datetime(transaction.timestamp, "dd MMMM yyyy, HH:mm") }}
-            </span>
-          </td>
-        </tr>
-        {% endfor %}
-      </table>
+      <div class="table-wrap">
+        <table class="transaction-history">
+          {% for transaction in transactions %}
+          <tr>
+            <td>
+              <span class="text">
+                {{ transaction.text }}
+              </span>
+            </td>
+            <td>
+              <span class="value">
+                {{ transaction.formatted_value }}
+              </span>
+            </td>
+            <td>
+              <span class="timestamp">
+                {{ format_datetime(transaction.timestamp, "dd MMMM yyyy, HH:mm") }}
+              </span>
+            </td>
+          </tr>
+          {% endfor %}
+        </table>
+      </div>
+      {% else %}
+      <p>Det är tomt här, strequa mer!</p>
+      {% endif %}
       <p><a href="{{ url_for('strequelistan.user_history', user_id=user.id) }}">All historik</a></p>
       </dd>
-      {% endif %}
       {% endif %}
     </dl>
   </div>

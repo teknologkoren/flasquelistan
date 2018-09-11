@@ -45,10 +45,6 @@
     display: none;
 }
 
-.transaction-history td {
-    min-width: 5rem;
-}
-
 .streques {
     max-width: 30rem;
     width: 100%;

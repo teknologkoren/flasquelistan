@@ -176,7 +176,8 @@ class Transaction(db.Model):
     }
 
     def __str__(self):
-        return "{}: {} @ {}".format(self.__name__, self.value, self.user)
+        return "{}: {} @ {}".format(self.__class__.__name__,
+                                    self.value, self.user)
 
 
 class Streque(Transaction):
