@@ -1,10 +1,11 @@
-import os
+from pathlib import Path
 
 DEBUG = True
 SECRET_KEY = 'super secret secret'
 
-BASEDIR = os.path.abspath(os.path.dirname(__file__))
-SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(BASEDIR, 'db.sqlite')
+BASEDIR = Path(__file__).parent.resolve()
+
+SQLALCHEMY_DATABASE_URI = 'sqlite:///' + str(BASEDIR.joinpath('db.sqlite'))
 
 # FSADeprecationWarning: SQLALCHEMY_TRACK_MODIFICATIONS adds significant
 # overhead and will be disabled by default in the future. Set it to
@@ -14,7 +15,7 @@ SQLALCHEMY_TRACK_MODIFICATIONS = False
 BABEL_DEFAULT_LOCALE = 'sv_SE'
 BABEL_DEFAULT_TIMEZONE = 'CET'
 
-UPLOADS_DEFAULT_DEST = os.path.join(BASEDIR, 'flasquelistan/static/uploads')
+UPLOADS_DEFAULT_DEST = BASEDIR.joinpath('flasquelistan/static/uploads')
 
 # Email settings
 SMTP_MAILSERVER = 'smtp.example.com'

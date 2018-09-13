@@ -35,6 +35,11 @@ $ FLASK_DEBUG=1 flask run
 ```
 The server is now live on [http://localhost:5000](http://localhost:5000).
 
+If you haven't already created `/instance/config.py`, one is generated for you
+with some sane defaults. The config in `/instance` overrides the default config
+and is not checked in to git. The generated config sets the database file to be
+created in `/instance`.
+
 ## Testing
 [Pytest](https://docs.pytest.org/en/latest/) is used for testing, tests are
 located in `tests/`. Run the tests with
