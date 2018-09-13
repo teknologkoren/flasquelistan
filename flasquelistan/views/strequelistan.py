@@ -69,7 +69,7 @@ def add_streque():
         )
 
     else:
-        flask.flash("{} streque på {} tillagt.".format(streque.value,
+        flask.flash("{}-streque på {} tillagt.".format(streque.text,
                                                        user.full_name),
                     'success')
         return flask.redirect(flask.url_for('strequelistan.index'))

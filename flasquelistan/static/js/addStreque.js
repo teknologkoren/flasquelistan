@@ -1,9 +1,9 @@
 function initStrequeButtons () {
-  var strequeForms = document.getElementsByClassName('streque-form');
+  var strequeButtons = document.getElementsByClassName('streque-button');
 
-  for (var i = 0; i < strequeForms.length; i++) {
-    strequeForm = strequeForms[i];
-    strequeForm.addEventListener('submit', function(event) {
+  for (var i = 0; i < strequeButtons.length; i++) {
+    strequeButton = strequeButtons[i];
+    strequeButton.addEventListener('click', function(event) {
       event.preventDefault();
 
       data = {
@@ -11,11 +11,13 @@ function initStrequeButtons () {
         article_id: this.dataset.articleid
       }
 
+      csrftoken = this.dataset.csrftoken;
+
       var onsuccess = function(data) {
         displayEmma();
       }
 
-      postData('/strequa', data, onsuccess);
+      postData('/strequa', data, onsuccess, csrftoken);
     });
   }
 }

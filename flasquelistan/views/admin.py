@@ -1,6 +1,7 @@
 import datetime
 import flask
 import flask_login
+import flask_babel
 import sqlalchemy as sqla
 from flasquelistan import models, forms
 from flasquelistan.views import auth
@@ -97,7 +98,12 @@ def void_transaction():
         )
 
     else:
-        flask.flash("Ångrade {} på {}.".format(transaction.text,
-                                               transaction.user.full_name),
-                    'success')
+        flask.flash("Ångrade {} \"{}\", {} den {} på {}.".format(
+            transaction.type,
+            transaction.text,
+            transaction.formatted_value,
+            flask_babel.format_datetime(transaction.timestamp,
+                                        "dd MMMM yyyy, HH:mm"),
+            transaction.user.full_name,
+        ), 'success')
         return flask.redirect(flask.url_for('strequeadmin.transactions'))

@@ -30,6 +30,7 @@ def create_app(config=None, instance_config=None):
     setup_flask_assets(app)
     setup_flask_babel(app)
     setup_flask_uploads(app)
+    setup_csrf_protection(app)
 
     return app
 
@@ -244,3 +245,8 @@ def setup_flask_uploads(app):
     app.jinja_env.globals['image_uploads_url'] = util.image_uploads.url
     app.jinja_env.globals['image_uploads_dest'] = \
         lambda: util.image_uploads.config.base_url
+
+
+def setup_csrf_protection(app):
+    from flask_wtf.csrf import CSRFProtect
+    return CSRFProtect(app)

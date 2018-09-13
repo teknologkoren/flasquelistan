@@ -53,10 +53,16 @@
           {% if not transaction.voided %}
           <form id="void-transaction-{{ transaction.id }}"
                 class="transaction void-form"
-                method="POST"
-                action="{{ url_for('strequeadmin.void_transaction', transaction_id=transaction.id) }}"
-                data-transactionid="{{ transaction.id }}">
-            <button class="void-button">Ångra</button>
+                method="POST">
+
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+
+            <button class="transaction void-button"
+                    formaction="{{ url_for('strequeadmin.void_transaction', transaction_id=transaction.id) }}"
+                    data-transactionid="{{ transaction.id }}"
+                    data-csrftoken="{{ csrf_token() }}">
+              Ångra
+            </button>
           </form>
           {% else %}
           Ångrad

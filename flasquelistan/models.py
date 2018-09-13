@@ -5,6 +5,7 @@ import flask_babel
 import flask_login
 import flask_sqlalchemy
 import phonenumbers
+import sqlalchemy as sqla
 from sqlalchemy.ext.hybrid import hybrid_method, hybrid_property
 from flasquelistan import util
 

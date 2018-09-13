@@ -35,10 +35,11 @@ function displayEmma() {
   }, 1200);
 }
 
-function postData(uri, data, onsuccess) {
+function postData(uri, data, onsuccess, csrftoken) {
   request = new XMLHttpRequest();
   request.open('POST', uri, true);
   request.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
+  request.setRequestHeader("X-CSRFToken", csrftoken);
 
   request.onload = function () {
     if (request.status >= 200 && request.status < 400) {
