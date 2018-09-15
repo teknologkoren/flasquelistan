@@ -6,7 +6,7 @@
 
 {% block body %}
 <div class="transactions">
-  <h2>Transaktioner</h2>
+  <h2>Transaktionshistorik</h2>
   <form class="date-range-form" method="POST">
     {{ form.csrf_token }}
     {{ text_field(form.start) }}
@@ -16,6 +16,13 @@
   {% if transactions.all() %}
   <div class="table-wrap">
     <table class="transaction-history">
+      <tr>
+        <th>Användare</th>
+        <th>Transaktionstyp</th>
+        <th>Meddelande</th>
+        <th>Värde</th>
+        <th>Datum</th>
+      </tr>
       {% for transaction in transactions %}
       <tr>
         <td>
@@ -27,8 +34,8 @@
           <span class="text">
             {% if transaction.type == 'streque' %}
             Streque
-            {% elif transaction.type == 'deposit' %}
-            Insättning
+            {% elif transaction.type == 'admin_transaction' %}
+            Admin
             {% else %}
             ???
             {% endif %}

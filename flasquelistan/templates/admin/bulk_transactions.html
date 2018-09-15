@@ -1,0 +1,52 @@
+{% extends 'layout.html' %}
+
+{% set active_page = "misc" %}
+
+{% from "macros.html" import text_field %}
+
+{% block body %}
+<div class="transactions">
+  <h2>Gör transaktioner i bulk</h2>
+  <p>Positivt transaktionsvärde innebär en insättning till användarens konto, negativt innebär ett uttag.</p>
+  <form method="POST">
+    {{ form.csrf_token }}
+    <div class="table-wrap bulk-transactions">
+      <table>
+        <tr>
+          <th>Användare</th>
+          <th>Transaktionsvärde</th>
+          <th>Meddelande</th>
+        </tr>
+        {% for field in form if field.name != "csrf_token" %}
+        <tr>
+          <td>
+            <span class="user">
+              {{ field.user_id }}
+              {{ field.user_name }}
+              {{ field.user_name.data }}
+            </span>
+          </td>
+          <td>
+            <span class="value">
+              {{ field.value }} kr
+            </span>
+          </td>
+          <td>
+            <span class="text">
+              {{ field.text }}
+            </span>
+          </td>
+        </tr>
+        {% endfor %}
+      </table>
+    </div>
+    <button>Skicka</button>
+  </form>
+</div>
+{% endblock %}
+
+{% block scripts %}
+{% assets "js_common", "js_admin" %}
+<script src="{{ ASSET_URL }}"></script>
+{% endassets %}
+{% endblock %}

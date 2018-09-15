@@ -230,3 +230,34 @@ class DateRangeForm(flask_wtf.FlaskForm):
     end = html5_fields.DateField('Till', validators=[
         validators.InputRequired()
     ])
+
+
+def BulkTransactionFormFactory(active=True):
+    class BulkTransactionForm(flask_wtf.FlaskForm):
+        pass
+
+    users = models.User.query.filter_by(active=active)
+
+    for user in users:
+        class UserTransactionForm(flask_wtf.FlaskForm):
+            user_name = fields.HiddenField('Name of user',
+                                           default=user.full_name)
+            user_id = fields.HiddenField('User id', default=user.id)
+
+            value = html5_fields.DecimalField(
+                'Transaktionsvärde',
+                default=0,
+                render_kw={'step': .01, 'min': -10000, 'max': 10000},
+                validators=[
+                    validators.NumberRange(min=-10000, max=10000)
+                ])
+
+            text = fields.StringField('Meddelande')
+
+        transaction_form = fields.FormField(UserTransactionForm)
+
+        setattr(BulkTransactionForm,
+                "user-{}".format(user.id),
+                transaction_form)
+
+    return BulkTransactionForm()

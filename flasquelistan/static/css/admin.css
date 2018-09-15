@@ -1,3 +1,11 @@
 .date-range-form {
     margin-bottom: 1rem;
 }
+
+.bulk-transactions {
+    margin: 1rem 0;
+}
+
+.transactions p {
+    max-width: 40rem;
+}

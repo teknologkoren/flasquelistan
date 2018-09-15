@@ -95,15 +95,17 @@ class User(flask_login.UserMixin, db.Model):
 
         return streque
 
-    def deposit(self, value, message):
-        deposit_ = Deposit(value=value, text=message, user_id=self.id)
+    def admin_transaction(self, value, message):
+        transaction = AdminTransaction(value=value,
+                                       text=message,
+                                       user_id=self.id)
 
-        self.balance += value
+        self.balance += value  # Value can be negative!
 
-        db.session.add(deposit_)
+        db.session.add(transaction)
         db.session.commit()
 
-        return deposit_
+        return transaction
 
     @property
     def formatted_balance(self):
@@ -167,14 +169,14 @@ class Transaction(db.Model):
 
     user = db.relationship('User', back_populates='transactions')
 
-    @property
-    def formatted_value(self):
-        return flask_babel.format_currency(self.value/100, 'SEK')
-
     __mapper_args__ = {
         'polymorphic_identity': 'transaction',
         'polymorphic_on': type
     }
+
+    @property
+    def formatted_value(self):
+        return flask_babel.format_currency(self.value/100, 'SEK')
 
     def __str__(self):
         return "{}: {} @ {}".format(self.__class__.__name__,
@@ -182,9 +184,6 @@ class Transaction(db.Model):
 
 
 class Streque(Transaction):
-    id = db.Column(db.Integer, db.ForeignKey('transaction.id'),
-                   primary_key=True)
-
     __mapper_args__ = {
         'polymorphic_identity': 'streque',
     }
@@ -207,12 +206,9 @@ class Streque(Transaction):
         return True
 
 
-class Deposit(Transaction):
-    id = db.Column(db.Integer, db.ForeignKey('transaction.id'),
-                   primary_key=True)
-
+class AdminTransaction(Transaction):
     __mapper_args__ = {
-        'polymorphic_identity': 'deposit',
+        'polymorphic_identity': 'admin_transaction',
     }
 
     def void_and_refund(self):

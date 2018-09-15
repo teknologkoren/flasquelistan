@@ -31,7 +31,7 @@ def transactions():
                                             from_date=from_date,
                                             to_date=to_date))
     elif form.is_submitted():
-            forms.flash_errors(form)
+        forms.flash_errors(form)
 
     from_date = flask.request.args.get('from_date', None)
     to_date = flask.request.args.get('to_date', None)
@@ -73,18 +73,15 @@ def void_transaction():
 
     try:
         transaction_id = data['transaction_id']
-    except (KeyError, ValueError):
-        print(0)
+    except (KeyError, TypeError):
         flask.abort(400)
 
     transaction = models.Transaction.query.get(transaction_id)
 
     if not transaction:
-        print(1)
         flask.abort(400)
 
     if transaction.voided:
-        print(2)
         flask.abort(400)
 
     transaction.void_and_refund()
@@ -98,12 +95,72 @@ def void_transaction():
         )
 
     else:
-        flask.flash("Ångrade {} \"{}\", {} den {} på {}.".format(
-            transaction.type,
-            transaction.text,
-            transaction.formatted_value,
-            flask_babel.format_datetime(transaction.timestamp,
-                                        "dd MMMM yyyy, HH:mm"),
-            transaction.user.full_name,
-        ), 'success')
+        flask.flash("Ångrade {type} \"{text}\", {value} den {date} på {user}."
+                    .format(
+                        type=transaction.type,
+                        text=transaction.text,
+                        value=transaction.formatted_value,
+                        date=flask_babel.format_datetime(
+                            transaction.timestamp,
+                            "dd MMMM yyyy, HH:mm"
+                        ),
+                        user=transaction.user.full_name,
+                    ), 'success')
         return flask.redirect(flask.url_for('strequeadmin.transactions'))
+
+
+@mod.route('/admin/transaktioner/bulk', methods=['GET', 'POST'])
+def bulk_transactions():
+    form = forms.BulkTransactionFormFactory(active=False)
+
+    if form.validate_on_submit():
+        transactions = []
+
+        for form_field in form:
+            if form_field.name == 'csrf_token':
+                continue
+
+            if form_field.value.data != 0:
+                user = models.User.query.get(form_field.user_id.data)
+                if user:
+                    transactions.append(
+                        {'user_id': user.id,
+                         'user_name': user.full_name,
+                         'value': int(form_field.value.data*100),
+                         'text': form_field.text.data}
+                    )
+
+            print(form_field.data)
+            flask.session[form.csrf_token.data] = transactions
+
+        if transactions:
+            return flask.render_template(
+                'admin/confirm_bulk_transactions.html',
+                transactions=transactions,
+                token=form.csrf_token.data)
+        else:
+            flask.flash("Inga transaktioner utförda. "
+                        "Väl spenderade klockcykler, bra jobbat!", 'success')
+
+    elif form.is_submitted():
+        forms.flash_errors(form)
+
+    return flask.render_template('admin/bulk_transactions.html', form=form)
+
+
+@mod.route('/admin/transaktioner/bulk/confirm', methods=['POST'])
+def confirm_bulk_transactions():
+    token = flask.request.args.get('token')
+    if not token:
+        flask.abort(404)
+
+    transactions = flask.session.get(token)
+    if transactions is None:
+        flask.abort(400)
+
+    for transaction in transactions:
+        user = models.User.query.get(transaction['user_id'])
+        user.admin_transaction(transaction['value'], transaction['text'])
+
+    flask.flash("Transaktionerna utfördes!", 'success')
+    return flask.redirect(flask.url_for('strequeadmin.bulk_transactions'))

@@ -180,7 +180,7 @@ def setup_flask_admin(app, db):
     admin.add_view(LoginModelView(models.Transaction, db.session,
                                   name='Transaction'))
     admin.add_view(LoginModelView(models.Streque, db.session, name='Streque'))
-    admin.add_view(LoginModelView(models.Deposit, db.session, name='Deposit'))
+    admin.add_view(LoginModelView(models.AdminTransaction, db.session, name='AdminTransaction'))
     admin.add_view(LoginModelView(models.ProfilePicture, db.session,
                                   name='Profile Picture'))
 

@@ -282,6 +282,9 @@ dd {
 .table-wrap td {
     white-space: nowrap;
     height: 2rem;
-    padding: 0 10px 0 10px;
+    padding: 5px 10px;
 }
 
+.table-wrap th {
+    text-align: start;
+}
