@@ -4,29 +4,31 @@
 
 .usercard .picture-and-name {
     display: flex;
-    flex-wrap: wrap;
+    flex-direction: column;
     align-items: center;
-    margin-right: .7rem;
+    margin-right: .5rem;
+    max-width: 12rem;
+    min-width: 0;
+    flex: 1;
 }
 
 .usercard .username {
-    margin: .2rem;
+    text-align: center;
 }
 
 .usercard .profile-picture {
-    object-fit: contain;
-    width: 4rem;
-    height: 3rem;
-    margin: .2rem;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    object-fit: cover;
+    width: 5rem;
+    height: 5rem;
+    border-radius: 7px;
+    margin-bottom: .5rem;
 }
 
 .streque-buttons {
     display: flex;
     justify-content: flex-end;
     flex-wrap: wrap;
+    flex: 1;
 }
 
 .streque-button,

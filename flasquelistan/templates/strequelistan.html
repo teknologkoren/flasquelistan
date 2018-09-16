@@ -7,18 +7,16 @@
 
 {% macro usercard(user, articles) %}
 <div class="card usercard">
-  <a href="{{ url_for('strequelistan.show_profile', user_id=user.id) }}">
-    <div class="picture-and-name">
-      {{ profile_picture(user) }}
-      <div class="username" data-firstname="{{ user.first_name }}"
-                            data-lastname="{{ user.last_name }}"
-                            data-nickname="{{ user.nickname or '' }}">
-        {% if user.nickname %}
-        {{ user.nickname }}
-        {% else %}
-        {{ user.first_name }} {{ user.last_name }}
-        {% endif %}
-      </div>
+  <a class="picture-and-name" href="{{ url_for('strequelistan.show_profile', user_id=user.id) }}">
+    {{ profile_picture(user) }}
+    <div class="username" data-firstname="{{ user.first_name }}"
+                          data-lastname="{{ user.last_name }}"
+                          data-nickname="{{ user.nickname or '' }}">
+      {% if user.nickname %}
+      {{ user.nickname }}
+      {% else %}
+      {{ user.first_name }} {{ user.last_name }}
+      {% endif %}
     </div>
   </a>
   <form class="streque-form streque-buttons" method="POST">
