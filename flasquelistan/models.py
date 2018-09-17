@@ -4,8 +4,8 @@ import string
 import flask_babel
 import flask_login
 import flask_sqlalchemy
+import markdown
 import phonenumbers
-import sqlalchemy as sqla
 from sqlalchemy.ext.hybrid import hybrid_method, hybrid_property
 from flasquelistan import util
 
@@ -152,9 +152,18 @@ class Group(db.Model):
 
 class Article(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    weight = db.Column(db.Integer)
     name = db.Column(db.String(15), nullable=False)
     value = db.Column(db.Integer, nullable=False)  # Ören
-    weight = db.Column(db.Integer)
+    description = db.Column(db.Text)
+
+    @property
+    def formatted_value(self):
+        return flask_babel.format_currency(self.value/100, 'SEK')
+
+    @property
+    def html_description(self):
+        return markdown.markdown(self.description)
 
 
 class Transaction(db.Model):

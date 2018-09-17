@@ -9,3 +9,9 @@
 .transactions p {
     max-width: 40rem;
 }
+
+.articles td.article-description {
+    max-width: 30rem;
+    min-width: 15rem;
+    white-space: normal;
+}

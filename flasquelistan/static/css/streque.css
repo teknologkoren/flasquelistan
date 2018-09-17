@@ -108,6 +108,11 @@
     max-height: 10rem;
 }
 
+.article-descriptions {
+    max-width: 30rem;
+    width: 100%;
+}
+
 #emma {
     display: none;
     position: fixed;

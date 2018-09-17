@@ -16,5 +16,6 @@ Flask-Bcrypt = "*"
 Flask-WTF = "*"
 Flask-Uploads = "*"
 phonenumbers = "*"
+markdown = "*"
 
 [dev-packages]

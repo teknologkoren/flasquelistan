@@ -1,0 +1,42 @@
+{% extends 'layout.html' %}
+
+{% set active_page = "misc" %}
+
+{% block body %}
+<div>
+  <h2>Produkter</h2>
+  {% if articles %}
+  <div class="table-wrap">
+    <table class="articles">
+      <tr>
+        <th>Namn</th>
+        <th>Pris</th>
+        <th>Beskrivning</th>
+        <th>Sorteringsvikt</th>
+      </tr>
+      {% for article in articles %}
+      <tr>
+        <td>
+          <a href="{{ url_for('strequeadmin.edit_article', article_id=article.id) }}">
+            {{ article.name }}
+          </a>
+        </td>
+        <td>
+          {{ article.formatted_value }}
+        </td>
+        <td class="article-description">
+          {{ article.description }}
+        </td>
+        <td>
+          {{ article.weight }}
+        </td>
+      </tr>
+      {% endfor %}
+    </table>
+  </div>
+  {% else %}
+  <p>Inga produkter funna.</p>
+  {% endif %}
+  <p><a href="{{ url_for('strequeadmin.edit_article') }}">Ny produkt</a></p>
+</div>
+{% endblock %}

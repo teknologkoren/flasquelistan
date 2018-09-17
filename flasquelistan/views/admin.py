@@ -164,3 +164,55 @@ def confirm_bulk_transactions():
 
     flask.flash("Transaktionerna utfördes!", 'success')
     return flask.redirect(flask.url_for('strequeadmin.bulk_transactions'))
+
+
+@mod.route('/admin/produkter/')
+def articles():
+    articles = models.Article.query.all()
+    return flask.render_template('admin/articles.html', articles=articles)
+
+
+@mod.route('/admin/produkter/new', methods=['GET', 'POST'])
+@mod.route('/admin/produkter/edit/<int:article_id>', methods=['GET', 'POST'])
+def edit_article(article_id=None):
+    if article_id:
+        article = models.Article.query.get_or_404(article_id)
+        form = forms.EditArticleForm(obj=article)
+    else:
+        article = None
+        form = forms.EditArticleForm()
+
+    if form.validate_on_submit():
+        if not article:
+            article = models.Article()
+
+        article.name = form.name.data
+        article.value = form.value.data
+        article.description = form.description.data
+        article.weight = form.weight.data
+
+        if not article_id:
+            models.db.session.add(article)
+
+        models.db.session.commit()
+
+        flask.flash("Produkt \"{}\" skapad.".format(article.name), 'success')
+
+        return flask.redirect(flask.url_for('strequeadmin.articles'))
+
+    elif form.is_submitted():
+        forms.flash_errors(form)
+
+    return flask.render_template('admin/edit_article.html', form=form,
+                                 article=article)
+
+
+@mod.route('/admin/produkter/ta-bort/<int:article_id>', methods=['POST'])
+def remove_article(article_id):
+    article = models.Article.query.get_or_404(article_id)
+
+    models.db.session.delete(article)
+    models.db.session.commit()
+
+    flask.flash("Produkt \"{}\" borttagen.".format(article.name), 'success')
+    return flask.redirect(flask.url_for('strequeadmin.articles'))

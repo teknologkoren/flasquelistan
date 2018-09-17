@@ -240,9 +240,9 @@ def BulkTransactionFormFactory(active=True):
 
     for user in users:
         class UserTransactionForm(flask_wtf.FlaskForm):
-            user_name = fields.HiddenField('Name of user',
+            user_name = fields.HiddenField('Namn',
                                            default=user.full_name)
-            user_id = fields.HiddenField('User id', default=user.id)
+            user_id = fields.HiddenField('ID', default=user.id)
 
             value = html5_fields.DecimalField(
                 'Transaktionsvärde',
@@ -261,3 +261,18 @@ def BulkTransactionFormFactory(active=True):
                 transaction_form)
 
     return BulkTransactionForm()
+
+
+class EditArticleForm(flask_wtf.FlaskForm):
+    name = fields.StringField('Namn', validators=[
+        validators.InputRequired(),
+        validators.Length(max=15)
+    ])
+    value = fields.IntegerField('Pris', validators=[
+        validators.InputRequired()
+    ])
+    description = fields.TextAreaField('Beskrivning')
+    weight = fields.IntegerField(
+        'Sorteringsvikt',
+        description="Heltal. En högre vikt sjunker."
+    )

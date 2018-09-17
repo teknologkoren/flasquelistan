@@ -1,0 +1,19 @@
+{% extends 'layout.html' %}
+
+{% set active_page = "streque" %}
+
+{% block body %}
+<div class="article-descriptions">
+  <h2>Produkter</h2>
+  <p>Priserna kan variera beroende på ditt saldo.</p>
+  <dl>
+    {% for article in articles %}
+    <dt class="article-name">{{ article.name }}</dt>
+    <dd class="article-price">{{ article.formatted_value }}</dd>
+    <dd class="article-description">
+      {{ article.html_description|safe or "Ingen beskrivning." }}
+    </dd>
+    {% endfor %}
+  </dl>
+</div>
+{% endblock %}

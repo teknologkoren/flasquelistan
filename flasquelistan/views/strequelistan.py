@@ -118,6 +118,12 @@ def void_streque():
         return flask.redirect(flask.url_for('strequelistan.history'))
 
 
+@mod.route('/produkter')
+def article_description():
+    articles = models.Article.query.all()
+    return flask.render_template('article_description.html', articles=articles)
+
+
 @mod.route('/history')
 def history():
     streques = models.Streque.query\

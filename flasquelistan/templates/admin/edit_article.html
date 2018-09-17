@@ -1,0 +1,30 @@
+{% extends "layout.html" %}
+
+{% set active_page = "misc" %}
+
+{% from "macros.html" import text_field %}
+
+{% block body %}
+<div>
+  <h2>{% if article %}Redigera{% else %}Skapa{% endif %} produkt</h2>
+  <form method="POST">
+    {{ form.csrf_token }}
+
+    {{ text_field(form.name) }}
+    {{ text_field(form.value) }}
+    {{ text_field(form.description) }}
+    {{ text_field(form.weight) }}
+
+    {% if article %}
+    <div class="form-field">
+      <button formaction="{{ url_for('strequeadmin.remove_article', article_id=article.id) }}">Ta bort produkt</button>
+    </div>
+    {% endif %}
+
+    <div class="form-field">
+      <button>Spara</button> | <a href="{{ url_for('strequeadmin.articles') }}">Avbryt</a>
+    </div>
+  </form>
+</div>
+</div>
+{% endblock %}
