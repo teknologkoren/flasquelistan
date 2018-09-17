@@ -6,7 +6,7 @@ If you haven't already (why not!?), install
 
 Clone the repo and `cd` to the root folder. Run
 ```sh
-$ pipenv install
+$ pipenv sync
 ```
 then activate the environment with
 ```sh
