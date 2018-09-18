@@ -1,6 +1,6 @@
 {% extends "auth/auth_layout.html" %}
 
-{% from "macros.html" import text_field %}
+{% from "macros.html" import form_entry %}
 
 {% set title = "Logga in" %}
 
@@ -9,9 +9,9 @@
   {{ form.csrf_token }}
   <h2>Logga in</h2>
 
-  {{ text_field(form.email, description=False) }}
+  {{ form_entry(form.email, description=False) }}
 
-  {{ text_field(form.password, description=False) }}
+  {{ form_entry(form.password, description=False) }}
 
   <p><a href="/reset/">Glömt lösenord?</a></p>
   <div class="form-field">

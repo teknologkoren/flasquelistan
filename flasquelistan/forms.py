@@ -180,13 +180,14 @@ class FullEditUserForm(EditUserForm):
     first_name = fields.StringField(
         'Förnamn',
         validators=[validators.InputRequired()],
-        description="Användarens förnamn."
     )
-
     last_name = fields.StringField(
         'Efternamn',
         validators=[validators.InputRequired()],
-        description="Användarens efternamn/familjenamn."
+    )
+    active = fields.BooleanField(
+        'Aktiv',
+        description="Om medlemmen är en aktiv medlem i kören."
     )
 
 

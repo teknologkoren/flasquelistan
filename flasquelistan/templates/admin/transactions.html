@@ -2,15 +2,15 @@
 
 {% set active_page = "misc" %}
 
-{% from "macros.html" import text_field %}
+{% from "macros.html" import form_entry %}
 
 {% block body %}
 <div class="transactions">
   <h2>Transaktionshistorik</h2>
   <form class="date-range-form" method="POST">
     {{ form.csrf_token }}
-    {{ text_field(form.start) }}
-    {{ text_field(form.end) }}
+    {{ form_entry(form.start) }}
+    {{ form_entry(form.end) }}
     <button>Sök</button>
   </form>
   {% if transactions.all() %}

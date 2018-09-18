@@ -230,19 +230,16 @@ dd {
     margin: 0;
 }
 
-.form-field {
+.form-entry {
     margin-top: 1rem;
     margin-bottom: 1rem;
+    display: flex;
+    flex-direction: column;
 }
 
 .form-field label+input,
 .form-field label+textarea {
     display: block;
-}
-
-.text-field {
-    display: flex;
-    flex-direction: column-reverse;
 }
 
 .field-description {
@@ -257,8 +254,8 @@ dd {
     content: "- ";
 }
 
-.text-field input,
-.text-field textarea {
+.form-field input,
+.form-field textarea {
     margin-top: 0.3rem;
 }
 

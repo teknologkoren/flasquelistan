@@ -181,14 +181,15 @@ def edit_profile(user_id):
         return flask.redirect(flask.url_for('.show_profile', user_id=user_id))
 
     if current_user.is_admin:
-        form = forms.FullEditUserForm(obj=user, user=user)
+        form = forms.FullEditUserForm(obj=user)
     else:
-        form = forms.EditUserForm(obj=user, user=user)
+        form = forms.EditUserForm(obj=user)
 
     if form.validate_on_submit():
         if isinstance(form, forms.FullEditUserForm):
             user.first_name = form.first_name.data
             user.last_name = form.last_name.data
+            user.active = form.active.data
 
         user.nickname = form.nickname.data
         user.phone = form.phone.data

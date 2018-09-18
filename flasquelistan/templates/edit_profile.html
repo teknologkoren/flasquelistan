@@ -2,7 +2,7 @@
 
 {% set active_page = "streque" %}
 
-{% from "macros.html" import text_field, profile_picture %}
+{% from "macros.html" import form_entry, profile_picture %}
 
 {% block body %}
 <div class="profile">
@@ -18,12 +18,13 @@
     <form method="POST">
       {{ form.csrf_token }}
       {% if current_user.is_admin %}
-      {{ text_field(form.first_name) }}
-      {{ text_field(form.last_name) }}
+      {{ form_entry(form.first_name) }}
+      {{ form_entry(form.last_name) }}
+      {{ form_entry(form.active) }}
       {% endif %}
 
-      {{ text_field(form.nickname) }}
-      {{ text_field(form.phone) }}
+      {{ form_entry(form.nickname) }}
+      {{ form_entry(form.phone) }}
 
       <p><a href="{{ url_for('strequelistan.change_profile_picture', user_id=user.id) }}">Ändra profilbild</a></p>
 

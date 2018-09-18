@@ -2,7 +2,7 @@
 
 {% set active_page = "misc" %}
 
-{% from "macros.html" import text_field %}
+{% from "macros.html" import form_entry %}
 
 {% block body %}
 <div>
@@ -10,10 +10,10 @@
   <form method="POST">
     {{ form.csrf_token }}
 
-    {{ text_field(form.name) }}
-    {{ text_field(form.value) }}
-    {{ text_field(form.description, cols=30, rows=5) }}
-    {{ text_field(form.weight) }}
+    {{ form_entry(form.name) }}
+    {{ form_entry(form.value) }}
+    {{ form_entry(form.description, cols=30, rows=5) }}
+    {{ form_entry(form.weight) }}
 
     {% if article %}
     <div class="form-field">

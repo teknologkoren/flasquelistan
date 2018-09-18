@@ -1,6 +1,6 @@
 {% extends "auth/auth_layout.html" %}
 
-{% from "macros.html" import text_field %}
+{% from "macros.html" import form_entry %}
 
 {% set title = "Återställ lösenord" %}
 
@@ -9,7 +9,7 @@
   {{ form.csrf_token }}
   <h2>Begär återställningslänk</h2>
 
-  {{ text_field(form.email, description=False) }}
+  {{ form_entry(form.email, description=False) }}
 
   <div class="field">
     <button>Skicka</button>
