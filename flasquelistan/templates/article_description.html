@@ -11,7 +11,7 @@
     <dt class="article-name">{{ article.name }}</dt>
     <dd class="article-price">{{ article.formatted_value }}</dd>
     <dd class="article-description">
-      {{ article.html_description|safe or "Ingen beskrivning." }}
+      {{ article.html_description|safe or "" }}
     </dd>
     {% endfor %}
   </dl>
