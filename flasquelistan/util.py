@@ -37,7 +37,12 @@ def send_email(toaddr, subject, body):
     @flask.copy_current_request_context
     def thread_func():
         if flask.current_app.debug:
-            print(msg.as_bytes().decode())
+            print("\n===== DEBUG: Did not send the "
+                  "following email message: =====\n")
+            print(msg)
+            print("===== DEBUG: Content is: =====\n")
+            print(msg.get_content())
+            print("===== END DEBUG =====\n")
             return
 
         with smtplib.SMTP(flask.current_app.config['SMTP_MAILSERVER'],
