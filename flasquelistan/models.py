@@ -192,10 +192,7 @@ class Transaction(db.Model):
 
     __mapper_args__ = {
         'polymorphic_identity': 'transaction',
-        'polymorphic_on': type
-    }
-
-    __mapper_args__ = {
+        'polymorphic_on': type,
         "order_by": timestamp.desc()
     }
 
