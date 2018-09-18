@@ -26,11 +26,13 @@
           {% for subfield in form.profile_picture %}
           <div class="form-field">
             {{ subfield }}
-            {% if loop.first %}
-            {{subfield.label }}
-            {% else %}
             <label for="{{ subfield.id }}">
-              <img src="{{ image_uploads_url(subfield.label.text) }}">
+              {% if loop.first %}
+              <div class="label">
+                {{ subfield.label.text }}
+              </div>
+              {% else %}
+              <img class="label" src="{{ image_uploads_url(subfield.label.text) }}">
             </label>
             {% endif %}
           </div>

@@ -191,10 +191,13 @@ class FullEditUserForm(EditUserForm):
 
 
 class QuoteForm(flask_wtf.FlaskForm):
-    text = fields.TextAreaField('Citat', validators=[
-        validators.InputRequired(),
-        validators.Length(max=150)
-    ])
+    text = fields.TextAreaField(
+        'Citat',
+        description="Max 150 tecken.",
+        validators=[
+            validators.InputRequired(),
+            validators.Length(max=150)
+        ])
     who = fields.StringField('Upphovsman', validators=[
         validators.Length(max=150)
     ])
@@ -274,7 +277,10 @@ class EditArticleForm(flask_wtf.FlaskForm):
     value = fields.IntegerField('Pris', validators=[
         validators.InputRequired()
     ])
-    description = fields.TextAreaField('Beskrivning')
+    description = fields.TextAreaField(
+        'Beskrivning',
+        description="Vilka produkter som ingår och/eller beskrivning. "
+                    "Markdown.")
     weight = fields.IntegerField(
         'Sorteringsvikt',
         description="Heltal. En högre vikt sjunker."

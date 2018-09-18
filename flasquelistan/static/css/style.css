@@ -257,7 +257,7 @@ dd {
 }
 
 .text-field input,
-.text-field text-area {
+.text-field textarea {
     margin-top: 0.3rem;
 }
 

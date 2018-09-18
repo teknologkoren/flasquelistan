@@ -232,6 +232,7 @@ def setup_flask_babel(app):
 
     app.jinja_env.globals['format_datetime'] = flask_babel.format_datetime
     app.jinja_env.globals['format_date'] = flask_babel.format_date
+    app.jinja_env.globals['format_currency'] = flask_babel.format_currency
 
     return babel
 

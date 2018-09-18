@@ -25,13 +25,13 @@
       </tr>
       {% for transaction in transactions %}
       <tr>
-        <td>
-          <span class="user">
+        <td class="user">
+          <span>
             {{ transaction.user.full_name }}
           </span>
         </td>
-        <td>
-          <span class="text">
+        <td class="type">
+          <span>
             {% if transaction.type == 'streque' %}
             Streque
             {% elif transaction.type == 'admin_transaction' %}
@@ -41,18 +41,18 @@
             {% endif %}
           </span>
         </td>
-        <td>
-          <span class="text">
+        <td class="text">
+          <span>
             {{ transaction.text }}
           </span>
         </td>
-        <td>
-          <span class="value">
+        <td class="value">
+          <span>
             {{ transaction.formatted_value }}
           </span>
         </td>
-        <td>
-          <span class="timestamp">
+        <td class="timestamp">
+          <span>
             {{ format_datetime(transaction.timestamp, "dd MMMM yyyy, HH:mm") }}
           </span>
         </td>

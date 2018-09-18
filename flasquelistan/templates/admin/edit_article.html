@@ -12,7 +12,7 @@
 
     {{ text_field(form.name) }}
     {{ text_field(form.value) }}
-    {{ text_field(form.description) }}
+    {{ text_field(form.description, cols=30, rows=5) }}
     {{ text_field(form.weight) }}
 
     {% if article %}

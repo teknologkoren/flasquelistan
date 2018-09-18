@@ -6,6 +6,23 @@
     margin: 1rem 0;
 }
 
+.bulk-transactions .value input {
+    max-width: 8rem;
+}
+
+.bulk-transactions td.user,
+.transactions td.user {
+    min-width: 10rem;
+    max-width: 10rem;
+    white-space: normal;
+}
+
+.transactions td.text {
+    min-width: 12rem;
+    max-width: 14rem;
+    white-space: normal;
+}
+
 .transactions p {
     max-width: 40rem;
 }

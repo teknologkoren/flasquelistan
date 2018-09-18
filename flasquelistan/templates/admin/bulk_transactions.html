@@ -19,7 +19,7 @@
         </tr>
         {% for field in form if field.name != "csrf_token" %}
         <tr>
-          <td>
+          <td class="user">
             <span class="user">
               {{ field.user_id }}
               {{ field.user_name }}
