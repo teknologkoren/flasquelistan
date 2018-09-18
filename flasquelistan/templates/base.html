@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Strequelistan</title>
 
-    {% assets "css_all" %}
+    {% assets "css_common" %}
     <link rel="stylesheet" href="{{ ASSET_URL }}">
     {% endassets %}
 
@@ -21,10 +21,8 @@
         </a>
       </div>
     </header>
-    <nav>
-      {% block nav %}
-      {% endblock %}
-    </nav>
+    {% block nav %}
+    {% endblock %}
     {% block base_body %}
     {% endblock %}
   </body>

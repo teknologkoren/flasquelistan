@@ -1,0 +1,32 @@
+.paperlist {
+    margin-top: 1.5rem;
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+    max-width: 190mm; /* 210mm - 1cm*2 margins */
+    table-layout: fixed;
+}
+
+table,
+th,
+td {
+    border: 1px solid black;
+}
+
+th,
+td {
+    text-align: start;
+    padding: 5px;
+}
+
+th:nth-child(1),
+td:nth-child(1) {
+    width: 10rem;
+}
+
+@page {
+    size: A4;
+    margin: 1cm;
+}

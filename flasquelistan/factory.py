@@ -74,6 +74,7 @@ def register_cli(app):
             email=email,
             password=password,
             is_admin=True,
+            active=True,
         )
 
         models.db.session.add(user)
@@ -88,6 +89,7 @@ def populate_testdb():
         last_name='Python',
         phone='0700011223',
         balance=10000,
+        active=True,
     )
 
     rick = models.User(
@@ -96,6 +98,7 @@ def populate_testdb():
         nickname='The Roll',
         last_name='Astley',
         phone='0703322110',
+        active=True
     )
 
     soprano = models.Group(name='Sopran', weight='10')
@@ -180,7 +183,8 @@ def setup_flask_admin(app, db):
     admin.add_view(LoginModelView(models.Transaction, db.session,
                                   name='Transaction'))
     admin.add_view(LoginModelView(models.Streque, db.session, name='Streque'))
-    admin.add_view(LoginModelView(models.AdminTransaction, db.session, name='AdminTransaction'))
+    admin.add_view(LoginModelView(models.AdminTransaction, db.session,
+                                  name='AdminTransaction'))
     admin.add_view(LoginModelView(models.ProfilePicture, db.session,
                                   name='Profile Picture'))
 
@@ -210,14 +214,18 @@ def setup_flask_assets(app):
             'js/admin.js',
             output='gen/admin.js'
         ),
-        'css_all': Bundle(
+        'css_common': Bundle(
             'css/lib/normalize.css',
             'css/style.css',
             'css/streque.css',
             'css/quotes.css',
             'css/admin.css',
             output='gen/style.css'
-        )
+        ),
+        'css_paperlist': Bundle(
+            'css/paperlist.css',
+            output='gen/paperlist.css'
+        ),
     }
 
     assets.register(bundles)

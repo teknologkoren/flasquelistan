@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block head %}
+{% assets "css_all" %}
+<link rel="stylesheet" href="{{ ASSET_URL }}">
+{% endassets %}
+{% assets "css_paperlist" %}
+<link rel="stylesheet" href="{{ ASSET_URL }}">
+{% endassets %}
+{% endblock %}
+
+{% block base_body %}
+<main>
+  <div class="paperlist">
+    <table>
+      {% for group in groups %}
+      <tr>
+        <th>{{ group.name }}</th>
+        {% for article in articles %}
+        <th>{{ article.name }}</th>
+        {% endfor %}
+      </tr>
+
+      {% for user in group.users if user.active %}
+      <tr>
+        <td>{{ user.nickname or user.full_name }}</td>
+        {{ "<td></td>"|safe*articles|length }}
+      </tr>
+      {% endfor %}
+      {% endfor %}
+    </table>
+  </div>
+</main>
+{% endblock %}
