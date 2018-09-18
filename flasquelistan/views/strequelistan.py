@@ -182,6 +182,7 @@ def edit_profile(user_id):
 
     if current_user.is_admin:
         form = forms.FullEditUserForm(obj=user)
+        form.group_id.choices = [(g.id, g.name) for g in models.Group.query]
     else:
         form = forms.EditUserForm(obj=user)
 
@@ -190,6 +191,7 @@ def edit_profile(user_id):
             user.first_name = form.first_name.data
             user.last_name = form.last_name.data
             user.active = form.active.data
+            user.group_id = form.group_id.data
 
         user.nickname = form.nickname.data
         user.phone = form.phone.data

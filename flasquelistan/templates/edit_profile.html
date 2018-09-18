@@ -20,6 +20,7 @@
       {% if current_user.is_admin %}
       {{ form_entry(form.first_name) }}
       {{ form_entry(form.last_name) }}
+      {{ form_entry(form.group_id) }}
       {{ form_entry(form.active) }}
       {% endif %}
 

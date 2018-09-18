@@ -255,6 +255,7 @@ dd {
 }
 
 .form-field input,
+.form-field select,
 .form-field textarea {
     margin-top: 0.3rem;
 }

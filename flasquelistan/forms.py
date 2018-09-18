@@ -128,20 +128,6 @@ class LoginForm(RedirectForm, EmailForm, PasswordForm):
         return True
 
 
-class AddUserForm(UniqueEmailForm):
-    first_name = fields.StringField('Förnamn', validators=[
-        validators.InputRequired()
-    ])
-
-    last_name = fields.StringField('Efternamn', validators=[
-        validators.InputRequired()
-    ])
-
-    phone = html5_fields.TelField('Telefon')
-
-    group = fields.SelectField('Grupp')
-
-
 class ChangeEmailOrPasswordForm(EmailForm, PasswordForm):
     new_password = fields.PasswordField(
         'Nytt lösenord',
@@ -189,6 +175,8 @@ class FullEditUserForm(EditUserForm):
         'Aktiv',
         description="Om medlemmen är en aktiv medlem i kören."
     )
+    group_id = fields.SelectField('Grupp', coerce=int)
+    # Populate .choices in view!
 
 
 class QuoteForm(flask_wtf.FlaskForm):
