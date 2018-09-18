@@ -41,13 +41,37 @@ class User(flask_login.UserMixin, db.Model):
     _password = db.Column(db.String(128))
     _password_timestamp = db.Column(db.DateTime)
 
-    def __init__(self, *args, **kwargs):
-        if 'password' not in kwargs:
-            password = ''.join(random.choice(string.ascii_letters +
-                                             string.digits) for _ in range(30))
-            kwargs['password'] = password
+    __mapper_args__ = {
+        "order_by": first_name
+    }
 
-        super().__init__(*args, **kwargs)
+    @property
+    def full_name(self):
+        return f"{self.first_name} {self.last_name}"
+
+    @property
+    def formatted_balance(self):
+        return flask_babel.format_currency(self.balance/100, 'SEK')
+
+    @property
+    def formatted_phone(self):
+        """Returns formatted number or False if not a valid number."""
+        try:
+            # If no country code, assume Swedish
+            parsed = phonenumbers.parse(self.phone, 'SE')
+        except phonenumbers.phonenumberutil.NumberParseException:
+            return False
+
+        if not (phonenumbers.is_possible_number(parsed) and
+                phonenumbers.is_valid_number(parsed)):
+            return False
+
+        formatted = phonenumbers.format_number(
+            parsed,
+            phonenumbers.PhoneNumberFormat.INTERNATIONAL
+        )
+
+        return formatted
 
     @hybrid_property
     def password(self):
@@ -61,6 +85,14 @@ class User(flask_login.UserMixin, db.Model):
 
         # Save in UTC, password resets compare this to UTC time!
         self._password_timestamp = datetime.datetime.utcnow()
+
+    def __init__(self, *args, **kwargs):
+        if 'password' not in kwargs:
+            password = ''.join(random.choice(string.ascii_letters +
+                                             string.digits) for _ in range(30))
+            kwargs['password'] = password
+
+        super().__init__(*args, **kwargs)
 
     def verify_password(self, plaintext):
         """Return True if plaintext matches password, else return False."""
@@ -107,34 +139,6 @@ class User(flask_login.UserMixin, db.Model):
 
         return transaction
 
-    @property
-    def formatted_balance(self):
-        return flask_babel.format_currency(self.balance/100, 'SEK')
-
-    @property
-    def formatted_phone(self):
-        """Returns formatted number or False if not a valid number."""
-        try:
-            # If no country code, assume Swedish
-            parsed = phonenumbers.parse(self.phone, 'SE')
-        except phonenumbers.phonenumberutil.NumberParseException:
-            return False
-
-        if not (phonenumbers.is_possible_number(parsed) and
-                phonenumbers.is_valid_number(parsed)):
-            return False
-
-        formatted = phonenumbers.format_number(
-            parsed,
-            phonenumbers.PhoneNumberFormat.INTERNATIONAL
-        )
-
-        return formatted
-
-    @property
-    def full_name(self):
-        return f"{self.first_name} {self.last_name}"
-
     def __str__(self):
         return "{} {} <{}>".format(self.first_name, self.last_name, self.email)
 
@@ -146,6 +150,10 @@ class Group(db.Model):
 
     users = db.relationship('User', back_populates='group')
 
+    __mapper_args__ = {
+        "order_by": weight
+    }
+
     def __str__(self):
         return self.name
 
@@ -156,6 +164,10 @@ class Article(db.Model):
     name = db.Column(db.String(15), nullable=False)
     value = db.Column(db.Integer, nullable=False)  # Ören
     description = db.Column(db.Text)
+
+    __mapper_args__ = {
+        "order_by": weight
+    }
 
     @property
     def formatted_value(self):
@@ -181,6 +193,10 @@ class Transaction(db.Model):
     __mapper_args__ = {
         'polymorphic_identity': 'transaction',
         'polymorphic_on': type
+    }
+
+    __mapper_args__ = {
+        "order_by": timestamp.desc()
     }
 
     @property
@@ -238,6 +254,10 @@ class Quote(db.Model):
     who = db.Column(db.String(150))
     timestamp = db.Column(db.DateTime, nullable=False,
                           default=datetime.datetime.utcnow)
+
+    __mapper_args__ = {
+        "order_by": timestamp.desc()
+    }
 
     def __str__(self):
         return "{}... — {}".format(self.text[:20], self.who[:10] or "<None>")
