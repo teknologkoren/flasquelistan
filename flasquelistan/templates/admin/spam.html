@@ -1,0 +1,40 @@
+{% extends 'layout.html' %}
+
+{% set active_page = "misc" %}
+
+{% block body %}
+<div>
+  <h2>Spamma kören</h2>
+  <p>Spamma medlemmar med negativt saldo.</p>
+  <div class="table-wrap">
+    <table>
+      <tr>
+        <th>Användare</th>
+        <th>Saldo</th>
+      </tr>
+      {% for user in users %}
+      <tr>
+        <td class="user">
+          <span>
+            {{ user.full_name }}
+          </span>
+        </td>
+        <td class="balance">
+          <span>
+            {{ user.formatted_balance }}
+          </span>
+        </td>
+      </tr>
+      {% endfor %}
+    </table>
+  </div>
+  <form method="POST" action="{{ url_for('strequeadmin.spam') }}">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+    <div class="form-entry">
+      <div class="form-field">
+        <button>Spamma</button>
+      </div>
+    </div>
+  </form>
+</div>
+{% endblock %}

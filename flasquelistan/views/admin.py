@@ -3,7 +3,7 @@ import flask
 import flask_login
 import flask_babel
 import sqlalchemy as sqla
-from flasquelistan import models, forms
+from flasquelistan import models, forms, util
 from flasquelistan.views import auth
 
 mod = flask.Blueprint('strequeadmin', __name__)
@@ -216,3 +216,19 @@ def remove_article(article_id):
 
     flask.flash("Produkt \"{}\" borttagen.".format(article.name), 'success')
     return flask.redirect(flask.url_for('strequeadmin.articles'))
+
+
+@mod.route('/admin/spam', methods=['GET', 'POST'])
+def spam():
+    users = models.User.query.filter(models.User.balance <= 0)
+
+    if flask.request.method == 'POST':
+        subject = "Hälsning från QM"
+        for user in users:
+            mail = flask.render_template('admin/negative_balance_mail.jinja',
+                                         user=user)
+            util.send_email(user.email, subject, mail)
+
+        flask.flash("E-postmeddelanden skickade!", 'success')
+
+    return flask.render_template('admin/spam.html', users=users)
