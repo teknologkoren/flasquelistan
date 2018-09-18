@@ -130,7 +130,6 @@ def bulk_transactions():
                          'text': form_field.text.data}
                     )
 
-            print(form_field.data)
             flask.session[form.csrf_token.data] = transactions
 
         if transactions:
@@ -178,6 +177,8 @@ def edit_article(article_id=None):
     if article_id:
         article = models.Article.query.get_or_404(article_id)
         form = forms.EditArticleForm(obj=article)
+        if not form.is_submitted():
+            form.value.data = form.value.data / 100
     else:
         article = None
         form = forms.EditArticleForm()
@@ -187,7 +188,7 @@ def edit_article(article_id=None):
             article = models.Article()
 
         article.name = form.name.data
-        article.value = form.value.data
+        article.value = int(form.value.data * 100)
         article.description = form.description.data
         article.weight = form.weight.data
 

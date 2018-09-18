@@ -266,11 +266,21 @@ class EditArticleForm(flask_wtf.FlaskForm):
     value = fields.IntegerField('Pris', validators=[
         validators.InputRequired()
     ])
+    value = html5_fields.DecimalField(
+        'Pris',
+        default=0,
+        render_kw={'step': .01, 'min': -1000, 'max': 1000},
+        validators=[
+            validators.NumberRange(min=-1000, max=1000)
+        ])
     description = fields.TextAreaField(
         'Beskrivning',
         description="Vilka produkter som ingår och/eller beskrivning. "
                     "Markdown.")
     weight = fields.IntegerField(
         'Sorteringsvikt',
-        description="Heltal. En högre vikt sjunker."
+        description="Heltal. En högre vikt sjunker.",
+        validators=[
+            validators.InputRequired()
+        ]
     )

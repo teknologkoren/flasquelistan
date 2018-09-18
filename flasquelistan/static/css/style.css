@@ -230,6 +230,10 @@ dd {
     margin: 0;
 }
 
+input[type=number] {
+    height: 1rem;
+}
+
 .form-entry {
     margin-top: 1rem;
     margin-bottom: 1rem;
