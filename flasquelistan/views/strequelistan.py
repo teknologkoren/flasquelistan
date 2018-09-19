@@ -126,7 +126,8 @@ def article_description():
 
 @mod.route('/papperslista')
 def paperlist():
-    groups = models.Group.query.join(models.User).filter(models.User.active == True)
+    groups = models.Group.query.join(models.User).filter(models.User.active
+                                                         == True)
     articles = models.Article.query.all()
     return flask.render_template('paperlist.html', groups=groups,
                                  articles=articles)
@@ -183,6 +184,7 @@ def edit_profile(user_id):
     if current_user.is_admin:
         form = forms.FullEditUserForm(obj=user)
         form.group_id.choices = [(g.id, g.name) for g in models.Group.query]
+        form.group_id.choices.insert(0, (-1, 'Ingen'))
     else:
         form = forms.EditUserForm(obj=user)
 
@@ -191,7 +193,8 @@ def edit_profile(user_id):
             user.first_name = form.first_name.data
             user.last_name = form.last_name.data
             user.active = form.active.data
-            user.group_id = form.group_id.data
+            user.group_id = form.group_id.data if (form.group_id.data
+                                                   != -1) else None
 
         user.nickname = form.nickname.data
         user.phone = form.phone.data

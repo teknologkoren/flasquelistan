@@ -221,24 +221,25 @@ def remove_article(article_id):
 
 @mod.route('/admin/spam', methods=['GET', 'POST'])
 def spam():
-    users = models.User.query.filter(models.User.balance <= 0)
+    users = models.User.query.filter(models.User.balance < 0)
 
     if flask.request.method == 'POST':
         subject = "Hälsning från QM"
         for user in users:
-            mail = flask.render_template('admin/negative_balance_mail.jinja',
+            mail = flask.render_template('admin/negative_balance_mail.jinja2',
                                          user=user)
             util.send_email(user.email, subject, mail)
 
-        flask.flash("E-postmeddelanden skickade!", 'success')
+        flask.flash("Spammade {} personer!".format(users.count()), 'success')
 
     return flask.render_template('admin/spam.html', users=users)
 
 
 @mod.route('/admin/add-user', methods=['GET', 'POST'])
 def add_user():
-    form = forms.AddUserForm()
+    form = forms.AddUserForm(group_id=-1)
     form.group_id.choices = [(g.id, g.name) for g in models.Group.query]
+    form.group_id.choices.insert(0, (-1, 'Ingen'))
 
     if form.validate_on_submit():
         user = models.User(
@@ -248,7 +249,7 @@ def add_user():
             email=form.email.data,
             phone=form.phone.data,
             active=form.active.data,
-            group_id=form.group_id.data,
+            group_id=form.group_id.data if form.group_id.data != -1 else None,
         )
 
         models.db.session.add(user)

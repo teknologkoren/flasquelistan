@@ -52,8 +52,8 @@ def register_cli(app):
     @app.cli.command('dropdb')
     def dropdb_command():
         from flasquelistan import models
-        if click.confirm(('You are about to DROP all tables, are you sure you '
-                          'want to do this?'), abort=True):
+        if click.confirm("You are about to DROP *ALL* tables, are you sure "
+                         "you want to do this?", abort=True):
             models.db.drop_all()
 
     @app.cli.command('populatetestdb')
@@ -87,7 +87,7 @@ def populate_testdb():
         email='monty@python.tld',
         first_name='Monty',
         last_name='Python',
-        phone='0700011223',
+        phone='0710001122',
         balance=10000,
         active=True,
     )
@@ -97,8 +97,39 @@ def populate_testdb():
         first_name='Rick',
         nickname='The Roll',
         last_name='Astley',
-        phone='0703322110',
-        active=True
+        phone='0713322110',
+        balance=20050,
+        active=True,
+    )
+
+    barack = models.User(
+        email='no.44@hotmail.tld',
+        first_name='Barack',
+        last_name='Obama',
+        nickname='Barry',
+        phone='+1 (808) 555-2643',
+        balance=100000,
+        active=True,
+    )
+
+    kor = models.User(
+        email='kor.ist@example.se',
+        first_name='Kor',
+        last_name='Ist',
+        nickname="Party-'pranen",
+        phone='074 876 54 32',
+        balance=-1000,
+        active=True,
+    )
+
+    malvina = models.User(
+        email='maltek@kth.tld',
+        first_name='Malvina',
+        last_name='Teknolog',
+        nickname='Osqulda',
+        phone='074-345 32 10',
+        balance=-10000,
+        active=True,
     )
 
     soprano = models.Group(name='Sopran', weight='10')
@@ -129,14 +160,17 @@ def populate_testdb():
 
     quote4 = models.Quote(text="much quote, such fun", who="shibe")
 
-    models.db.session.add_all([monty, rick,
+    models.db.session.add_all([monty, rick, barack, kor, malvina,
                                soprano, alto, tenor, bass,
                                beer, cider, wine, shot, soft,
                                quote1, quote2, quote3, quote4])
     models.db.session.commit()
 
+    kor.group = soprano
+    malvina.group = alto
     monty.group = tenor
     rick.group = bass
+    barack.group = bass
 
     models.db.session.commit()
 
