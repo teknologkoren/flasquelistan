@@ -16,12 +16,12 @@
     {{ form_entry(form.weight) }}
 
     {% if article %}
-    <div class="form-field">
+    <div class="form-entry">
       <button formaction="{{ url_for('strequeadmin.remove_article', article_id=article.id) }}">Ta bort produkt</button>
     </div>
     {% endif %}
 
-    <div class="form-field">
+    <div class="form-entry">
       <button>Spara</button> | <a href="{{ url_for('strequeadmin.articles') }}">Avbryt</a>
     </div>
   </form>

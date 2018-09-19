@@ -2,7 +2,7 @@
 
 {% set active_page = "streque" %}
 
-{% from "macros.html" import form_entry, profile_picture %}
+{% from "macros.html" import form_entry, form_entry_row, profile_picture %}
 
 {% block body %}
 <div class="profile">
@@ -21,7 +21,7 @@
       {{ form_entry(form.first_name) }}
       {{ form_entry(form.last_name) }}
       {{ form_entry(form.group_id) }}
-      {{ form_entry(form.active) }}
+      {{ form_entry_row(form.active) }}
       {% endif %}
 
       {{ form_entry(form.nickname) }}

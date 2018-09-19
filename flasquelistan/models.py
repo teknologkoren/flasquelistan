@@ -143,6 +143,19 @@ class User(flask_login.UserMixin, db.Model):
         return "{} {} <{}>".format(self.first_name, self.last_name, self.email)
 
 
+class RegistrationRequest(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    email = db.Column(db.String(254))
+    first_name = db.Column(db.String(50))
+    last_name = db.Column(db.String(50))
+    message = db.Column(db.Text)
+
+    def __str__(self):
+        return "Registration request {} {} <{}>".format(self.first_name,
+                                                        self.last_name,
+                                                        self.email)
+
+
 class Group(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.Integer, nullable=False)

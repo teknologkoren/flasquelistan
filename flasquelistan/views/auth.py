@@ -45,7 +45,7 @@ def login():
     and passwords only represent anything when used in combination
     (http://ux.stackexchange.com/a/13523).
     """
-    form = forms.LoginForm(flask.request.form)
+    form = forms.LoginForm()
 
     if current_user.is_authenticated:
         return form.redirect('strequelistan.index')
@@ -67,6 +67,38 @@ def logout():
     if current_user.is_authenticated:
         flask_login.logout_user()
     return flask.redirect(flask.url_for('auth.login'))
+
+
+@mod.route('/register', methods=['GET', 'POST'])
+def register():
+    """Request an account"""
+    form = forms.RegistrationRequestForm()
+
+    if form.validate_on_submit():
+        request = models.RegistrationRequest(
+            first_name=form.first_name.data,
+            last_name=form.last_name.data,
+            email=form.email.data,
+            message=form.message.data,
+        )
+
+        models.db.session.add(request)
+        models.db.session.commit()
+
+        util.send_email('qm@teknologkoren.se',
+                        "Förfrågan om nytt konto på Strequelistan",
+                        flask.render_template('auth/register_email.jinja2',
+                                              request=request)
+                        )
+
+        flask.flash("QM har uppmärksammats om din förfrågan.", 'info')
+
+        return flask.redirect(flask.url_for('auth.login'))
+
+    elif form.is_submitted():
+        forms.flash_errors(form)
+
+    return flask.render_template('auth/register.html', form=form)
 
 
 def verify_email(user, email):

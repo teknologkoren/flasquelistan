@@ -32,3 +32,15 @@
     min-width: 15rem;
     white-space: normal;
 }
+
+.requests {
+    max-width: 30rem;
+}
+
+.requests dl + dl {
+    border-top: 1px solid #ddd;
+}
+
+.requests dl {
+    margin-bottom: 1.5rem;
+}

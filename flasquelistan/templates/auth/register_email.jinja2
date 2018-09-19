@@ -1,0 +1,21 @@
+Var hälsad, o store QM.
+
+En person har begärt att få ett konto på Strequelistan.
+
+Förnamn: {{ request.first_name }}
+Efternamn: {{ request.last_name }}
+E-postaddress: {{ request.email }}
+
+{% if request.message -%}
+Meddelande:
+{{ request.message }}
+{% else -%}
+Personen lämnade inget meddelande.
+{%- endif %}
+
+Du kan lägga till användaren på följande länk:
+{{ url_for('strequeadmin.add_user', request_id=request.id, _external=True) }}
+
+-- 
+Vänliga hälsningar
+Strequelistan

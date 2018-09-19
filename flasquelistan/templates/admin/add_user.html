@@ -2,7 +2,7 @@
 
 {% set active_page = "misc" %}
 
-{% from "macros.html" import form_entry %}
+{% from "macros.html" import form_entry, form_entry_row %}
 
 {% block body %}
 <div>
@@ -15,9 +15,9 @@
     {{ form_entry(form.email) }}
     {{ form_entry(form.phone) }}
     {{ form_entry(form.group_id) }}
-    {{ form_entry(form.active) }}
+    {{ form_entry_row(form.active) }}
 
-    <div class="form-field">
+    <div class="form-entry">
       <button>Spara</button> | <a href="{{ url_for('misc.index') }}">Avbryt</a>
     </div>
   </form>

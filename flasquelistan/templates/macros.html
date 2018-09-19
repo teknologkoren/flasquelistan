@@ -1,14 +1,28 @@
 {% macro form_entry(field, description=True) %}
 <div class="form-entry">
-  <span>{{ field.label }} {% if field.flags.required %}<span class="required">*</span>{% endif %}</span>
+  <div>{{ field.label }} {% if field.flags.required %}<span class="required">*</span>{% endif %}</div>
   {% if description and field.description %}
-  <span class="field-description">
+  <div class="field-description">
     {{ field.description }}
-  </span>
+  </div>
   {% endif %}
   <div class="form-field">
     <span>{{ field(*varargs, **kwargs) }}</span>
   </div>
+</div>
+{% endmacro %}
+
+{% macro form_entry_row(field, description=True) %}
+<div class="form-entry">
+  <span class="form-field">
+    <span>{{ field(*varargs, **kwargs) }}</span>
+  </span>
+  <span>{{ field.label }} {% if field.flags.required %}<span class="required">*</span>{% endif %}</span>
+  {% if description and field.description %}
+  <div class="field-description">
+    {{ field.description }}
+  </div>
+  {% endif %}
 </div>
 {% endmacro %}
 

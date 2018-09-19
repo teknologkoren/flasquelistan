@@ -1,0 +1,21 @@
+{% extends "auth/auth_layout.html" %}
+
+{% from "macros.html" import form_entry %}
+
+{% set title = "Begär ett konto" %}
+
+{% block body %}
+<form method="POST">
+  {{ form.csrf_token }}
+  <h2>Begär ett konto</h2>
+
+  {{ form_entry(form.first_name, description=False) }}
+  {{ form_entry(form.last_name, description=False) }}
+  {{ form_entry(form.email, description=False) }}
+  {{ form_entry(form.message, cols=30, rows=7) }}
+
+  <div class="form-entry">
+    <button>Skicka</button>
+  </div>
+</form>
+{% endblock %}

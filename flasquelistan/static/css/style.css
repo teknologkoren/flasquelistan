@@ -237,8 +237,6 @@ input[type=number] {
 .form-entry {
     margin-top: 1rem;
     margin-bottom: 1rem;
-    display: flex;
-    flex-direction: column;
 }
 
 .form-field label+input,

@@ -1,6 +1,6 @@
 {% extends "auth/auth_layout.html" %}
 
-{% from "macros.html" import form_entry %}
+{% from "macros.html" import form_entry, form_entry_row %}
 
 {% set title = "Logga in" %}
 
@@ -14,10 +14,9 @@
   {{ form_entry(form.password, description=False) }}
 
   <p><a href="/reset/">Glömt lösenord?</a></p>
-  <div class="form-field">
-    {{ form.remember() }}
-    {{ form.remember.label() }}
-  </div>
+
+  {{ form_entry_row(form.remember) }}
+
   <div class="form-field">
     <button>Logga in</button>
   </div>

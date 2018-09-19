@@ -235,9 +235,14 @@ def spam():
     return flask.render_template('admin/spam.html', users=users)
 
 
-@mod.route('/admin/add-user', methods=['GET', 'POST'])
-def add_user():
-    form = forms.AddUserForm(group_id=-1)
+@mod.route('/admin/add-user/', methods=['GET', 'POST'])
+@mod.route('/admin/add-user/request/<int:request_id>', methods=['GET', 'POST'])
+def add_user(request_id=None):
+    request = (models.RegistrationRequest.query.get(request_id)
+               if request_id else None)
+
+    form = forms.AddUserForm(obj=request, group_id=-1)
+
     form.group_id.choices = [(g.id, g.name) for g in models.Group.query]
     form.group_id.choices.insert(0, (-1, 'Ingen'))
 
@@ -255,12 +260,39 @@ def add_user():
         models.db.session.add(user)
         models.db.session.commit()
 
-        flask.flash("{} skapad!".format(user), 'success')
+        if request:
+            models.db.session.delete(request)
+            models.db.session.commit()
+            flask.flash("{} skapad och förfrågan borttagen!".format(user),
+                        'success')
+            return flask.redirect(flask.url_for('strequeadmin.requests'))
 
-        # Redirect to clear form
-        return flask.redirect(flask.url_for('strequeadmin.add_user'))
+        else:
+            flask.flash("{} skapad!".format(user), 'success')
+            # Redirect to clear form
+            return flask.redirect(flask.url_for('strequeadmin.add_user'))
 
     elif form.is_submitted():
         forms.flash_errors(form)
 
     return flask.render_template('admin/add_user.html', form=form)
+
+
+@mod.route('/admin/requests/')
+def requests():
+    requests = models.RegistrationRequest.query
+
+    return flask.render_template('admin/requests.html', requests=requests)
+
+
+@mod.route('/admin/requests/remove/<int:request_id>', methods=['POST'])
+def remove_request(request_id):
+    request = models.RegistrationRequest.query.get_or_404(request_id)
+    models.db.session.delete(request)
+    models.db.session.commit()
+
+    flask.flash("Förfrågan från {} {} borttagen.".format(request.first_name,
+                                                         request.last_name),
+                'success')
+
+    return flask.redirect(flask.url_for('strequeadmin.requests'))

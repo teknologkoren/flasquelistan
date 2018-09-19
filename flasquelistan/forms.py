@@ -183,6 +183,18 @@ class AddUserForm(UniqueEmailForm, FullEditUserForm):
     pass
 
 
+class RegistrationRequestForm(UniqueEmailForm):
+    first_name = fields.StringField(
+        'Förnamn',
+        validators=[validators.InputRequired()],
+    )
+    last_name = fields.StringField(
+        'Efternamn',
+        validators=[validators.InputRequired()],
+    )
+    message = fields.TextAreaField('Meddelande till QM')
+
+
 class QuoteForm(flask_wtf.FlaskForm):
     text = fields.TextAreaField(
         'Citat',
