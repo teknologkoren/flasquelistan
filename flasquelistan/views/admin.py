@@ -233,3 +233,33 @@ def spam():
         flask.flash("E-postmeddelanden skickade!", 'success')
 
     return flask.render_template('admin/spam.html', users=users)
+
+
+@mod.route('/admin/add-user', methods=['GET', 'POST'])
+def add_user():
+    form = forms.AddUserForm()
+    form.group_id.choices = [(g.id, g.name) for g in models.Group.query]
+
+    if form.validate_on_submit():
+        user = models.User(
+            first_name=form.first_name.data,
+            last_name=form.last_name.data,
+            nickname=form.nickname.data,
+            email=form.email.data,
+            phone=form.phone.data,
+            active=form.active.data,
+            group_id=form.group_id.data,
+        )
+
+        models.db.session.add(user)
+        models.db.session.commit()
+
+        flask.flash("{} skapad!".format(user), 'success')
+
+        # Redirect to clear form
+        return flask.redirect(flask.url_for('strequeadmin.add_user'))
+
+    elif form.is_submitted():
+        forms.flash_errors(form)
+
+    return flask.render_template('admin/add_user.html', form=form)

@@ -1,0 +1,25 @@
+{% extends "layout.html" %}
+
+{% set active_page = "misc" %}
+
+{% from "macros.html" import form_entry %}
+
+{% block body %}
+<div>
+  <h2>Skapa användare</h2>
+  <form method="POST">
+    {{ form.csrf_token }}
+    {{ form_entry(form.first_name) }}
+    {{ form_entry(form.last_name) }}
+    {{ form_entry(form.nickname) }}
+    {{ form_entry(form.email) }}
+    {{ form_entry(form.phone) }}
+    {{ form_entry(form.group_id) }}
+    {{ form_entry(form.active) }}
+
+    <div class="form-field">
+      <button>Spara</button> | <a href="{{ url_for('misc.index') }}">Avbryt</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

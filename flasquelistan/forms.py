@@ -179,6 +179,10 @@ class FullEditUserForm(EditUserForm):
     # Populate .choices in view!
 
 
+class AddUserForm(UniqueEmailForm, FullEditUserForm):
+    pass
+
+
 class QuoteForm(flask_wtf.FlaskForm):
     text = fields.TextAreaField(
         'Citat',

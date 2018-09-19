@@ -12,11 +12,12 @@
   {% if current_user.is_admin %}
   <h3>Admin</h3>
   <ul>
+    <li><a href="{{ url_for("strequeadmin.add_user") }}">Skapa användare</a></li>
+    <li><a href="{{ url_for("strequeadmin.articles") }}">Produkter</a></li>
     <li><a href="{{ url_for("strequeadmin.transactions") }}">Transaktionshistorik</a></li>
     <li><a href="{{ url_for("strequeadmin.bulk_transactions") }}">Gör bulktransaktioner</a></li>
-    <li><a href="{{ url_for("strequeadmin.articles") }}">Produkter</a></li>
-    <li><a href="{{ url_for("strequelistan.paperlist") }}">Papperslista</a></li>
     <li><a href="{{ url_for("strequeadmin.spam") }}">Spamma kören</a></li>
+    <li><a href="{{ url_for("strequelistan.paperlist") }}">Papperslista</a></li>
   </ul>
   {% endif %}
   </ul>
