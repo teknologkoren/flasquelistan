@@ -275,7 +275,8 @@ def add_user(request_id=None):
     elif form.is_submitted():
         forms.flash_errors(form)
 
-    return flask.render_template('admin/add_user.html', form=form)
+    return flask.render_template('admin/add_user.html', form=form,
+                                 is_request=bool(request_id))
 
 
 @mod.route('/admin/requests/')

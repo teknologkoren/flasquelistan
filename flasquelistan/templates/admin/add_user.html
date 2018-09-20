@@ -18,7 +18,8 @@
     {{ form_entry_row(form.active) }}
 
     <div class="form-entry">
-      <button>Spara</button> | <a href="{{ url_for('misc.index') }}">Avbryt</a>
+      <button>Spara</button> | <a href="{% if is_request %}{{ url_for('strequeadmin.requests') }}
+                                        {%- else %}{{ url_for('misc.index') }}{% endif %}">Avbryt</a>
     </div>
   </form>
 </div>
