@@ -5,20 +5,26 @@
 {% set title = "Logga in" %}
 
 {% block body %}
-<form class="login" method="POST">
-  {{ form.csrf_token }}
-  <h2>Logga in</h2>
+<div class="login">
+  <form method="POST">
+    {{ form.csrf_token }}
+    <h2>Logga in</h2>
 
-  {{ form_entry(form.email, description=False) }}
+    {{ form_entry(form.email, description=False) }}
 
-  {{ form_entry(form.password, description=False) }}
+    {{ form_entry(form.password, description=False) }}
 
-  <p><a href="/reset/">Glömt lösenord?</a></p>
+    {{ form_entry_row(form.remember) }}
 
-  {{ form_entry_row(form.remember) }}
-
-  <div class="form-field">
-    <button>Logga in</button>
-  </div>
-</form>
+    <div class="form-field">
+      <button>Logga in</button>
+    </div>
+  </form>
+  <dl>
+    <dt>Glömt ditt lösenord?</dt>
+    <dd><a href="{{ url_for('auth.reset') }}">Återställ lösenord</a></dd>
+    <dt>Har du inget konto?</dt>
+    <dd><a href="{{ url_for('auth.register') }}">Begär ett konto</a></dd>
+  </dl>
+</div>
 {% endblock %}

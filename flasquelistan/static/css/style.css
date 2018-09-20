@@ -115,6 +115,10 @@ main {
     padding: 0 1rem 4rem 1rem;
 }
 
+.login {
+    max-width: 30rem;
+}
+
 .misc {
     max-width: 30rem;
     width: 100%;
@@ -148,6 +152,7 @@ main {
 }
 
 .flashes {
+    max-width: 40rem;
     align-self: center;
     text-align: center;
     list-style: none;
