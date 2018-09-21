@@ -238,7 +238,7 @@ def spam():
 @mod.route('/admin/add-user/', methods=['GET', 'POST'])
 @mod.route('/admin/add-user/request/<int:request_id>', methods=['GET', 'POST'])
 def add_user(request_id=None):
-    request = (models.RegistrationRequest.query.get(request_id)
+    request = (models.RegistrationRequest.query.get_or_404(request_id)
                if request_id else None)
 
     form = forms.AddUserForm(obj=request, group_id=-1)

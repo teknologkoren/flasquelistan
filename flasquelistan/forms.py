@@ -192,6 +192,10 @@ class RegistrationRequestForm(UniqueEmailForm):
         'Efternamn',
         validators=[validators.InputRequired()],
     )
+    phone = html5_fields.TelField(
+        'Telefon',
+        description="Ett telefonnummer, med eller utan landskod."
+    )
     message = fields.TextAreaField('Meddelande till QM')
 
 

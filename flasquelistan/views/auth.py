@@ -79,6 +79,7 @@ def register():
             first_name=form.first_name.data,
             last_name=form.last_name.data,
             email=form.email.data,
+            phone=form.phone.data,
             message=form.message.data,
         )
 

@@ -148,6 +148,7 @@ class RegistrationRequest(db.Model):
     email = db.Column(db.String(254))
     first_name = db.Column(db.String(50))
     last_name = db.Column(db.String(50))
+    phone = db.Column(db.String(20))
     message = db.Column(db.Text)
 
     def __str__(self):
