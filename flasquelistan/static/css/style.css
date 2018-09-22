@@ -299,3 +299,8 @@ input[type=number] {
         display: none;
     }
 }
+
+@page {
+    size: A4;
+    margin: 1cm;
+}
