@@ -293,3 +293,9 @@ input[type=number] {
 .table-wrap th {
     text-align: start;
 }
+
+@media print {
+    nav {
+        display: none;
+    }
+}
