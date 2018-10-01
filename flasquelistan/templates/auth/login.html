@@ -2,13 +2,13 @@
 
 {% from "macros.html" import form_entry, form_entry_row %}
 
-{% set title = "{{_(login_title)}}" %}
+{% set title = _("login_title") %}
 
 {% block body %}
 <div class="login">
   <form method="POST">
     {{ form.csrf_token }}
-    <h2>{{_(login_header)}}</h2>
+    <h2>{{_("login_header")}}</h2>
 
     {{ form_entry(form.email, description=False) }}
 
