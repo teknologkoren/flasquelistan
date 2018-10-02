@@ -63,13 +63,10 @@ def transactions():
 
 @mod.route('/admin/transaktioner/void', methods=['POST'])
 def void_transaction():
-    data = flask.request.get_json()
-
-    if data:
-        is_ajax = True
+    if flask.request.is_json:
+        data = flask.request.get_json()
     else:
         data = flask.request.args
-        is_ajax = False
 
     try:
         transaction_id = data['transaction_id']
@@ -78,15 +75,12 @@ def void_transaction():
 
     transaction = models.Transaction.query.get(transaction_id)
 
-    if not transaction:
-        flask.abort(400)
-
-    if transaction.voided:
+    if not transaction or transaction.voided:
         flask.abort(400)
 
     transaction.void_and_refund()
 
-    if is_ajax:
+    if flask.request.is_json:
         return flask.jsonify(
             transaction_id=transaction.id,
             user_id=transaction.user.id,

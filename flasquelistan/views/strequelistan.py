@@ -40,13 +40,10 @@ def index():
 
 @mod.route('/strequa', methods=['POST'])
 def add_streque():
-    data = flask.request.get_json()
-
-    if data:
-        is_ajax = True
+    if flask.request.is_json:
+        data = flask.request.get_json()
     else:
         data = flask.request.args
-        is_ajax = False
 
     try:
         user = models.User.query.get(data['user_id'])
@@ -56,12 +53,12 @@ def add_streque():
 
     article = models.Article.query.get(article_id)
 
-    if article:
-        streque = user.strequa(article)
-    else:
+    if not article:
         flask.abort(400)
 
-    if is_ajax:
+    streque = user.strequa(article)
+
+    if flask.request.is_json:
         return flask.jsonify(
             user_id=user.id,
             value=streque.value,
@@ -77,13 +74,10 @@ def add_streque():
 
 @mod.route('/void', methods=['POST'])
 def void_streque():
-    data = flask.request.get_json()
-
-    if data:
-        is_ajax = True
+    if flask.request.is_json:
+        data = flask.request.get_json()
     else:
         data = flask.request.args
-        is_ajax = False
 
     try:
         streque_id = data['streque_id']
@@ -92,18 +86,12 @@ def void_streque():
 
     streque = models.Streque.query.get(streque_id)
 
-    if not streque:
-        flask.abort(400)
-
-    if streque.too_old():
-        flask.abort(400)
-
-    if streque.voided:
+    if not streque or streque.too_old() or streque.voided():
         flask.abort(400)
 
     streque.void_and_refund()
 
-    if is_ajax:
+    if flask.request.is_json:
         return flask.jsonify(
             streque_id=streque.id,
             user_id=streque.user.id,
