@@ -24,32 +24,32 @@ function displayEmma() {
     clearTimeout(timeout);
   }
 
-  emma = document.getElementById('emma');
+  var emma = document.getElementById('emma');
   emma.currentTime = 0;
   emma.style.display = 'block';
   emma.play();
 
-  timeout = setTimeout(function () {
+  var timeout = setTimeout(function () {
     emma.style.display = 'none';
     emma.pause();
   }, 1200);
 }
 
-function postData(uri, data, onsuccess, csrftoken) {
-  request = new XMLHttpRequest();
+function postData(uri, data, onsuccess, onfailure, csrftoken) {
+  var request = new XMLHttpRequest();
   request.open('POST', uri, true);
   request.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
-  request.setRequestHeader("X-CSRFToken", csrftoken);
+  request.setRequestHeader('X-CSRFToken', csrftoken);
 
   request.onload = function () {
     if (request.status >= 200 && request.status < 400) {
       // Success!
       var data = JSON.parse(request.responseText);
-      console.log(data);
       onsuccess(data);
     } else {
       // Server returned error code
-      alert('Error: ' + request.status);
+      var data = request.responseText;
+      onfailure(data);
     }
   };
 

@@ -2,28 +2,33 @@ function initVoidStrequeButtons() {
   var voidButtons = document.getElementsByClassName('void-button');
 
   for (var i = 0; i < voidButtons.length; i++) {
-    voidButton = voidButtons[i];
+    var voidButton = voidButtons[i];
     voidButton.addEventListener('click', function(event) {
       event.preventDefault();
 
-      data = {
+      var data = {
         streque_id: this.dataset.strequeid
       }
 
-      csrftoken = this.dataset.csrftoken
+      var csrftoken = document.getElementById('ajax-csrf_token').value;
 
-      onsuccess = function (data) {
-        card = document.getElementById(data['streque_id']);
+      var onsuccess = function(data) {
+        var card = document.getElementById(data['streque_id']);
 
-        voidedSpan = document.createElement('span');
+        var voidedSpan = document.createElement('span');
         voidedSpan.innerHTML = "Ångrad!";
 
-        form = card.getElementsByClassName('void-button')[0];
+        var form = card.getElementsByClassName('void-button')[0];
         form.parentNode.replaceChild(voidedSpan, form);
 
         card.style.opacity = '0.5';
       }
-      var request = postData('/void', data, onsuccess, csrftoken);
+
+      var onfailure = function(data) {
+        alert('Something went wrong, reload the page and try again.');
+      }
+
+      var request = postData('/void', data, onsuccess, onfailure, csrftoken);
     });
   }
 }
