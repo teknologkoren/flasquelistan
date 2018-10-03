@@ -164,7 +164,7 @@ main {
     padding: 0;
 }
 .flash {
-    min-width: 15em;
+    min-width: 10rem;
     padding: .5rem 1rem;
     margin: .5rem auto;
     border-radius: 7px;
