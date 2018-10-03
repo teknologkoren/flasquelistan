@@ -86,7 +86,7 @@ def void_streque():
 
     streque = models.Streque.query.get(streque_id)
 
-    if not streque or streque.too_old() or streque.voided():
+    if not streque or streque.too_old() or streque.voided:
         flask.abort(400)
 
     streque.void_and_refund()
