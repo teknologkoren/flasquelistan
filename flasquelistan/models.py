@@ -41,10 +41,6 @@ class User(flask_login.UserMixin, db.Model):
     _password = db.Column(db.String(128))
     _password_timestamp = db.Column(db.DateTime)
 
-    __mapper_args__ = {
-        "order_by": first_name
-    }
-
     @property
     def full_name(self):
         return f"{self.first_name} {self.last_name}"
@@ -164,10 +160,6 @@ class Group(db.Model):
 
     users = db.relationship('User', back_populates='group')
 
-    __mapper_args__ = {
-        "order_by": weight
-    }
-
     def __str__(self):
         return self.name
 
@@ -178,10 +170,6 @@ class Article(db.Model):
     name = db.Column(db.String(15), nullable=False)
     value = db.Column(db.Integer, nullable=False)  # Ören
     description = db.Column(db.Text)
-
-    __mapper_args__ = {
-        "order_by": weight
-    }
 
     @property
     def formatted_value(self):
@@ -207,7 +195,6 @@ class Transaction(db.Model):
     __mapper_args__ = {
         'polymorphic_identity': 'transaction',
         'polymorphic_on': type,
-        "order_by": timestamp.desc()
     }
 
     @property
@@ -265,10 +252,6 @@ class Quote(db.Model):
     who = db.Column(db.String(150))
     timestamp = db.Column(db.DateTime, nullable=False,
                           default=datetime.datetime.utcnow)
-
-    __mapper_args__ = {
-        "order_by": timestamp.desc()
-    }
 
     def __str__(self):
         return "{}... — {}".format(self.text[:20], self.who[:10] or "<None>")

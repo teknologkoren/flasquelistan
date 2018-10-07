@@ -108,16 +108,22 @@ def void_streque():
 
 @mod.route('/produkter')
 def article_description():
-    articles = models.Article.query.all()
+    articles = models.Article.query.order_by(models.Article.weight).all()
     return flask.render_template('article_description.html', articles=articles)
 
 
 @mod.route('/papperslista')
 def paperlist():
-    groups = models.Group.query.join(models.User).filter(models.User.active
-                                                         == True)
-    articles = models.Article.query.all()
-    return flask.render_template('paperlist.html', groups=groups,
+    users = (models.User.query
+             .order_by(models.User.first_name))
+
+    groups = models.Group.query.all()
+
+    articles = models.Article.query.order_by(models.Article.weight).all()
+
+    return flask.render_template('paperlist.html',
+                                 users=users,
+                                 groups=groups,
                                  articles=articles)
 
 

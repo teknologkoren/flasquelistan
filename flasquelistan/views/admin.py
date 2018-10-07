@@ -161,7 +161,7 @@ def confirm_bulk_transactions():
 
 @mod.route('/admin/produkter/')
 def articles():
-    articles = models.Article.query.all()
+    articles = models.Article.query.order_by(models.Article.weight).all()
     return flask.render_template('admin/articles.html', articles=articles)
 
 
@@ -215,7 +215,9 @@ def remove_article(article_id):
 
 @mod.route('/admin/spam', methods=['GET', 'POST'])
 def spam():
-    users = models.User.query.filter(models.User.balance < 0)
+    users = (models.User.query
+             .order_by(models.User.first_name)
+             .filter(models.User.balance < 0))
 
     if flask.request.method == 'POST':
         subject = "Hälsning från QM"
