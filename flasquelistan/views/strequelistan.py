@@ -18,8 +18,10 @@ def before_request():
 
 @mod.route('/')
 def index():
-    groups = models.Group.query.filter(models.Group.users.any())\
-                .order_by(models.Group.weight).all()  # Only groups with users
+    groups = (models.Group.query
+              .filter(models.Group.users.any())  # Only groups with users
+              .order_by(models.Group.weight)
+              .all())
 
     random_quote = models.Quote.query.order_by(func.random()).first()
 
@@ -129,11 +131,11 @@ def paperlist():
 
 @mod.route('/history')
 def history():
-    streques = models.Streque.query\
-        .filter(not_(models.Streque.too_old()),
-                models.Streque.voided == False)\
-        .order_by(models.Streque.timestamp.desc())\
-        .all()
+    streques = (models.Streque.query
+                .filter(not_(models.Streque.too_old()),
+                        models.Streque.voided.is_(False))
+                .order_by(models.Streque.timestamp.desc())
+                .all())
 
     return flask.render_template('history.html', streques=streques)
 
@@ -142,9 +144,10 @@ def history():
 def show_profile(user_id):
     user = models.User.query.get_or_404(user_id)
 
-    transactions = user.transactions\
-        .filter(models.Streque.voided == False)\
-        .order_by(models.Transaction.timestamp.desc()).limit(10)
+    transactions = (user.transactions
+                    .filter(models.Streque.voided.is_(False))
+                    .order_by(models.Transaction.timestamp.desc())
+                    .limit(10))
 
     return flask.render_template('show_profile.html', user=user,
                                  transactions=transactions)
@@ -158,9 +161,10 @@ def user_history(user_id):
     if current_user.id != user.id and not current_user.is_admin:
         return flask.redirect(flask.url_for('.show_profile', user_id=user_id))
 
-    transactions = user.transactions\
-        .filter(models.Streque.voided == False)\
-        .order_by(models.Transaction.timestamp.desc()).all()
+    transactions = (user.transactions
+                    .filter(models.Streque.voided.is_(False))
+                    .order_by(models.Transaction.timestamp.desc())
+                    .all())
 
     return flask.render_template('user_history.html', user=user,
                                  transactions=transactions)
