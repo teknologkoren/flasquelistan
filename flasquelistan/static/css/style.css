@@ -19,6 +19,7 @@ img {
 
 body {
     font-family: sans-serif;
+    overflow-y: scroll;  /* Always show scrollbar to prevent jumping */
 }
 
 header {
