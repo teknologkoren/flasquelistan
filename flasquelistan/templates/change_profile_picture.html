@@ -23,20 +23,22 @@
       <div class="form-field">
         <fieldset class="change-profile-picture">
           <legend>Uppladdade profilbilder</legend>
-          {% for subfield in form.profile_picture %}
-          <div class="form-field">
-            {{ subfield }}
-            <label for="{{ subfield.id }}">
-              {% if loop.first %}
-              <div class="label">
-                {{ subfield.label.text }}
-              </div>
-              {% else %}
-              <img class="label" src="{{ image_uploads_url(subfield.label.text) }}">
-            </label>
-            {% endif %}
+          <div class="grid-wrapper">
+            {% for subfield in form.profile_picture %}
+            <div class="form-field">
+              {{ subfield }}
+              <label for="{{ subfield.id }}">
+                {% if loop.first %}
+                <div class="label">
+                  {{ subfield.label.text }}
+                </div>
+                {% else %}
+                <img class="label" src="{{ image_uploads_url(subfield.label.text) }}">
+              </label>
+              {% endif %}
+            </div>
+            {% endfor %}
           </div>
-          {% endfor %}
         </fieldset>
 
         <p><a href="{{ url_for('strequelistan.upload_profile_picture', user_id=user.id) }}">Ladda upp ny profilbild</a></p>

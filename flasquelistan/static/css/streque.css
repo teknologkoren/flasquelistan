@@ -101,6 +101,9 @@
 .change-profile-picture {
     max-height: 30rem;
     overflow-y: scroll;
+}
+
+.change-profile-picture .grid-wrapper {
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-gap: 1rem;
