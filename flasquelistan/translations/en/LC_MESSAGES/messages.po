@@ -1,0 +1,146 @@
+# English translations for PROJECT.
+# Copyright (C) 2018 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2018.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2018-10-16 08:27+0200\n"
+"PO-Revision-Date: 2018-09-25 18:59+0200\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: en\n"
+"Language-Team: en <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.6.0\n"
+
+#: flasquelistan/forms.py:161
+msgid "Telephone number"
+msgstr ""
+
+#: flasquelistan/templates/auth/login.html:5
+#: flasquelistan/templates/auth/login.html:11
+#: flasquelistan/templates/auth/login.html:20
+msgid "Log in"
+msgstr ""
+
+#: flasquelistan/templates/auth/login.html:24
+msgid "Have you lost your password?"
+msgstr ""
+
+#: flasquelistan/templates/auth/login.html:25
+msgid "Reset password"
+msgstr ""
+
+#: flasquelistan/templates/auth/login.html:26
+msgid "Do you need an account?"
+msgstr ""
+
+#: flasquelistan/templates/auth/login.html:27
+msgid "Register an account"
+msgstr ""
+
+#: flasquelistan/views/quotes.py:32
+msgid "Quote added"
+msgstr ""
+
+#~ msgid "Invalid data in field: %(field) : %(error)"
+#~ msgstr ""
+
+#~ msgid "Invalid data in field"
+#~ msgstr ""
+
+#~ msgid "Invalid data in field: %(field)s : %(error)s"
+#~ msgstr ""
+
+#~ msgid "Yout new password. At least 8 characters long."
+#~ msgstr ""
+
+#~ msgid "Invalid data in field: %(field)s, %(error)s"
+#~ msgstr ""
+
+#~ msgid "This element does not exist"
+#~ msgstr ""
+
+#~ msgid "Email"
+#~ msgstr ""
+
+#~ msgid "Unknown email address"
+#~ msgstr ""
+
+#~ msgid "This email address already exists"
+#~ msgstr ""
+
+#~ msgid "password"
+#~ msgstr ""
+
+#~ msgid "Your current password"
+#~ msgstr ""
+
+#~ msgid "New password"
+#~ msgstr ""
+
+#~ msgid "Your new password. At least 8 characters long."
+#~ msgstr ""
+
+#~ msgid "Keep me logged in"
+#~ msgstr ""
+
+#~ msgid "Wrong password"
+#~ msgstr ""
+
+#~ msgid "Nickname"
+#~ msgstr ""
+
+#~ msgid "Something funny"
+#~ msgstr ""
+
+#~ msgid "Telephone"
+#~ msgstr ""
+
+#~ msgid "A telephone number, with or without country code"
+#~ msgstr ""
+
+#~ msgid "First name"
+#~ msgstr ""
+
+#~ msgid "Last name"
+#~ msgstr ""
+
+#~ msgid "Active"
+#~ msgstr ""
+
+#~ msgid "If the user is an active member of the choir"
+#~ msgstr ""
+
+#~ msgid "Group"
+#~ msgstr ""
+
+#~ msgid "login_title"
+#~ msgstr ""
+
+#~ msgid "login_header"
+#~ msgstr ""
+
+#~ msgid "login_login-button"
+#~ msgstr ""
+
+#~ msgid "login_forgotten-password-header"
+#~ msgstr ""
+
+#~ msgid "login_restore-password"
+#~ msgstr ""
+
+#~ msgid "login_no-account-header"
+#~ msgstr ""
+
+#~ msgid "login_register-account"
+#~ msgstr ""
+
+#~ msgid "Login"
+#~ msgstr ""
+
