@@ -20,14 +20,15 @@
     </div>
   </a>
   <form class="streque-form streque-buttons" method="POST">
+    {# CSRF token is cached during the request, all calls to csrf_token() will
+    return the same one #}
     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
     {% for article in articles %}
     <button class="streque-button"
             type="submit"
             formaction="{{ url_for('strequelistan.add_streque', user_id=user.id, article_id=article.id) }}"
             data-userid="{{ user.id }}"
-            data-articleid="{{ article.id }}"
-            data-csrftoken="{{ csrf_token() }}">
+            data-articleid="{{ article.id }}">
       {{ article.name }}
     </button>
     {% endfor %}
@@ -40,6 +41,8 @@
   <blockquote class="quote quote-display">
     {{ quote_inner(quote) }}
   </blockquote>
+
+  <input id="ajax-csrf_token" type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
 
   <h2>Inloggad användare</h2>
   {{ usercard(current_user, articles) }}

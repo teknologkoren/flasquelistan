@@ -17,6 +17,8 @@ BABEL_DEFAULT_TIMEZONE = 'CET'
 
 UPLOADS_DEFAULT_DEST = BASEDIR.joinpath('flasquelistan/static/uploads')
 
+WTF_CSRF_TIME_LIMIT = 21600  # 6 hours
+
 # Email settings
 SMTP_MAILSERVER = 'smtp.example.com'
 SMTP_STARTTLS_PORT = 587

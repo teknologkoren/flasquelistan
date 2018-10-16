@@ -18,8 +18,10 @@ def before_request():
 
 @mod.route('/')
 def index():
-    groups = models.Group.query.filter(models.Group.users.any())\
-                .order_by(models.Group.weight).all()  # Only groups with users
+    groups = (models.Group.query
+              .filter(models.Group.users.any())  # Only groups with users
+              .order_by(models.Group.weight)
+              .all())
 
     random_quote = models.Quote.query.order_by(func.random()).first()
 
@@ -40,13 +42,10 @@ def index():
 
 @mod.route('/strequa', methods=['POST'])
 def add_streque():
-    data = flask.request.get_json()
-
-    if data:
-        is_ajax = True
+    if flask.request.is_json:
+        data = flask.request.get_json()
     else:
         data = flask.request.args
-        is_ajax = False
 
     try:
         user = models.User.query.get(data['user_id'])
@@ -56,12 +55,12 @@ def add_streque():
 
     article = models.Article.query.get(article_id)
 
-    if article:
-        streque = user.strequa(article)
-    else:
+    if not article:
         flask.abort(400)
 
-    if is_ajax:
+    streque = user.strequa(article)
+
+    if flask.request.is_json:
         return flask.jsonify(
             user_id=user.id,
             value=streque.value,
@@ -77,13 +76,10 @@ def add_streque():
 
 @mod.route('/void', methods=['POST'])
 def void_streque():
-    data = flask.request.get_json()
-
-    if data:
-        is_ajax = True
+    if flask.request.is_json:
+        data = flask.request.get_json()
     else:
         data = flask.request.args
-        is_ajax = False
 
     try:
         streque_id = data['streque_id']
@@ -92,18 +88,12 @@ def void_streque():
 
     streque = models.Streque.query.get(streque_id)
 
-    if not streque:
-        flask.abort(400)
-
-    if streque.too_old():
-        flask.abort(400)
-
-    if streque.voided:
+    if not streque or streque.too_old() or streque.voided:
         flask.abort(400)
 
     streque.void_and_refund()
 
-    if is_ajax:
+    if flask.request.is_json:
         return flask.jsonify(
             streque_id=streque.id,
             user_id=streque.user.id,
@@ -120,26 +110,32 @@ def void_streque():
 
 @mod.route('/produkter')
 def article_description():
-    articles = models.Article.query.all()
+    articles = models.Article.query.order_by(models.Article.weight).all()
     return flask.render_template('article_description.html', articles=articles)
 
 
 @mod.route('/papperslista')
 def paperlist():
-    groups = models.Group.query.join(models.User).filter(models.User.active
-                                                         == True)
-    articles = models.Article.query.all()
-    return flask.render_template('paperlist.html', groups=groups,
+    users = (models.User.query
+             .order_by(models.User.first_name))
+
+    groups = models.Group.query.all()
+
+    articles = models.Article.query.order_by(models.Article.weight).all()
+
+    return flask.render_template('paperlist.html',
+                                 users=users,
+                                 groups=groups,
                                  articles=articles)
 
 
 @mod.route('/history')
 def history():
-    streques = models.Streque.query\
-        .filter(not_(models.Streque.too_old()),
-                models.Streque.voided == False)\
-        .order_by(models.Streque.timestamp.desc())\
-        .all()
+    streques = (models.Streque.query
+                .filter(not_(models.Streque.too_old()),
+                        models.Streque.voided.is_(False))
+                .order_by(models.Streque.timestamp.desc())
+                .all())
 
     return flask.render_template('history.html', streques=streques)
 
@@ -148,9 +144,10 @@ def history():
 def show_profile(user_id):
     user = models.User.query.get_or_404(user_id)
 
-    transactions = user.transactions\
-        .filter(models.Streque.voided == False)\
-        .order_by(models.Transaction.timestamp.desc()).limit(10)
+    transactions = (user.transactions
+                    .filter(models.Streque.voided.is_(False))
+                    .order_by(models.Transaction.timestamp.desc())
+                    .limit(10))
 
     return flask.render_template('show_profile.html', user=user,
                                  transactions=transactions)
@@ -164,9 +161,10 @@ def user_history(user_id):
     if current_user.id != user.id and not current_user.is_admin:
         return flask.redirect(flask.url_for('.show_profile', user_id=user_id))
 
-    transactions = user.transactions\
-        .filter(models.Streque.voided == False)\
-        .order_by(models.Transaction.timestamp.desc()).all()
+    transactions = (user.transactions
+                    .filter(models.Streque.voided.is_(False))
+                    .order_by(models.Transaction.timestamp.desc())
+                    .all())
 
     return flask.render_template('user_history.html', user=user,
                                  transactions=transactions)

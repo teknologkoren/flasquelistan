@@ -14,6 +14,8 @@
   <div class="paperlist">
     <table>
       {% for group in groups %}
+      {% set group_users = users.filter_by(group_id=group.id) %}
+      {% if group_users.first() %}
       <tr>
         <th>{{ group.name }}</th>
         {% for article in articles %}
@@ -21,12 +23,13 @@
         {% endfor %}
       </tr>
 
-      {% for user in group.users if user.active %}
+      {% for user in group_users %}
       <tr>
         <td>{{ user.nickname or user.full_name }}</td>
-        {{ "<td></td>"|safe*articles|length }}
+        {{ "<td></td>"|safe * articles|length }}
       </tr>
       {% endfor %}
+      {% endif %}
       {% endfor %}
     </table>
   </div>

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2018-10-01 07:44+0200\n"
+"POT-Creation-Date: 2018-10-16 08:27+0200\n"
 "PO-Revision-Date: 2018-09-25 18:59+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: se\n"
@@ -23,32 +23,26 @@ msgid "Telephone number"
 msgstr "Telefonnummer"
 
 #: flasquelistan/templates/auth/login.html:5
-msgid "login_title"
-msgstr ""
-
 #: flasquelistan/templates/auth/login.html:11
-msgid "login_header"
-msgstr "Logga in"
-
 #: flasquelistan/templates/auth/login.html:20
-msgid "login_login-button"
+msgid "Log in"
 msgstr "Logga in"
 
 #: flasquelistan/templates/auth/login.html:24
-msgid "login_forgotten-password-header"
+msgid "Have you lost your password?"
 msgstr "Har du glömt ditt lösenord?"
 
 #: flasquelistan/templates/auth/login.html:25
-msgid "login_restore-password"
-msgstr "Återställ lösenordet"
+msgid "Reset password"
+msgstr "Återställ lösenord"
 
 #: flasquelistan/templates/auth/login.html:26
-msgid "login_no-account-header"
-msgstr "Har du inget konto?"
+msgid "Do you need an account?"
+msgstr "Benöver du ett konto?"
 
 #: flasquelistan/templates/auth/login.html:27
-msgid "login_register-account"
-msgstr "Registrera ett nytt konto"
+msgid "Register an account"
+msgstr "Registrera nytt konto"
 
 #: flasquelistan/views/quotes.py:32
 msgid "Quote added"

@@ -2,13 +2,13 @@
 
 {% from "macros.html" import form_entry, form_entry_row %}
 
-{% set title = _("login_title") %}
+{% set title = _("Log in") %}
 
 {% block body %}
 <div class="login">
   <form method="POST">
     {{ form.csrf_token }}
-    <h2>{{_("login_header")}}</h2>
+    <h2>{{_("Log in")}}</h2>
 
     {{ form_entry(form.email, description=False) }}
 
@@ -17,14 +17,14 @@
     {{ form_entry_row(form.remember) }}
 
     <div class="form-field">
-      <button>{{ _("login_login-button")}}</button>
+      <button>{{ _("Log in")}}</button>
     </div>
   </form>
   <dl>
-    <dt>{{ _("login_forgotten-password-header")}}</dt>
-    <dd><a href="{{ url_for('auth.reset') }}">{{ _("login_restore-password")}}</a></dd>
-    <dt>{{_("login_no-account-header")}}</dt>
-    <dd><a href="{{ url_for('auth.register') }}">{{ _("login_register-account")}}</a></dd>
+    <dt>{{ _("Have you lost your password?")}}</dt>
+    <dd><a href="{{ url_for('auth.reset') }}">{{ _("Reset password")}}</a></dd>
+    <dt>{{_("Do you need an account?")}}</dt>
+    <dd><a href="{{ url_for('auth.register') }}">{{ _("Register an account")}}</a></dd>
   </dl>
 </div>
 {% endblock %}

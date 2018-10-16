@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2018-10-01 07:44+0200\n"
+"POT-Creation-Date: 2018-10-16 08:27+0200\n"
 "PO-Revision-Date: 2018-09-25 18:59+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: en\n"
@@ -23,31 +23,25 @@ msgid "Telephone number"
 msgstr ""
 
 #: flasquelistan/templates/auth/login.html:5
-msgid "login_title"
-msgstr ""
-
 #: flasquelistan/templates/auth/login.html:11
-msgid "login_header"
-msgstr ""
-
 #: flasquelistan/templates/auth/login.html:20
-msgid "login_login-button"
+msgid "Log in"
 msgstr ""
 
 #: flasquelistan/templates/auth/login.html:24
-msgid "login_forgotten-password-header"
+msgid "Have you lost your password?"
 msgstr ""
 
 #: flasquelistan/templates/auth/login.html:25
-msgid "login_restore-password"
+msgid "Reset password"
 msgstr ""
 
 #: flasquelistan/templates/auth/login.html:26
-msgid "login_no-account-header"
+msgid "Do you need an account?"
 msgstr ""
 
 #: flasquelistan/templates/auth/login.html:27
-msgid "login_register-account"
+msgid "Register an account"
 msgstr ""
 
 #: flasquelistan/views/quotes.py:32
@@ -124,5 +118,29 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid "Group"
+#~ msgstr ""
+
+#~ msgid "login_title"
+#~ msgstr ""
+
+#~ msgid "login_header"
+#~ msgstr ""
+
+#~ msgid "login_login-button"
+#~ msgstr ""
+
+#~ msgid "login_forgotten-password-header"
+#~ msgstr ""
+
+#~ msgid "login_restore-password"
+#~ msgstr ""
+
+#~ msgid "login_no-account-header"
+#~ msgstr ""
+
+#~ msgid "login_register-account"
+#~ msgstr ""
+
+#~ msgid "Login"
 #~ msgstr ""
 

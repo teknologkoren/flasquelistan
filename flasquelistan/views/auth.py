@@ -140,7 +140,7 @@ def verify_token(token):
     except SignatureExpired:
         flask.flash("Länken har gått ut, var vänlig försök igen.", 'error')
         return flask.redirect(flask.url_for('auth.login'))
-    except:
+    except:  # noqa: E722 (ignore 'bare except' warning)
         flask.abort(404)
 
     user = models.User.query.get_or_404(user_id)
@@ -237,7 +237,7 @@ def reset_token(token):
     except SignatureExpired:
         flask.flash(expired, 'error')
         return flask.redirect(flask.url_for('.login'))
-    except:
+    except:  # noqa: E722 (ignore 'bare except' warning)
         flask.flash(invalid, 'error')
         return flask.redirect(flask.url_for('.login'))
 

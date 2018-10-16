@@ -23,8 +23,7 @@
     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
     <button class="void-button"
             formaction="{{ url_for('strequelistan.void_streque', streque_id=streque.id) }}"
-            data-strequeid="{{ streque.id }}"
-            data-csrftoken="{{ csrf_token() }}">
+            data-strequeid="{{ streque.id }}">
       Ångra
     </button>
   </form>
@@ -35,6 +34,9 @@
 {% block body %}
 <div class="streques">
   <h2>Historik</h2>
+
+  <input id="ajax-csrf_token" type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+
   <p class="no-streques-notice {% if streques %}hidden{% endif %}">Inga transaktioner de senaste 15 minuterna!</p>
   <ol class="streque-list">
     {% for streque in streques %}

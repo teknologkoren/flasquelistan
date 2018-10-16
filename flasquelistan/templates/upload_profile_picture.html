@@ -20,11 +20,11 @@
     <form method="POST" enctype="multipart/form-data">
       {{ form.csrf_token }}
 
-      <div class="form-field">
+      <div class="form-entry">
         {{ form.upload }}
       </div>
 
-      <div class="form-field">
+      <div class="form-entry">
         <button>Spara</button> | <a href="{{ url_for('strequelistan.change_profile_picture', user_id=user.id) }}">Avbryt</a>
       </div>
     </form>

@@ -19,10 +19,12 @@ img {
 
 body {
     font-family: sans-serif;
+    overflow-y: scroll;  /* Always show scrollbar to prevent jumping */
 }
 
 header {
     height: 4rem;
+    text-align: center;
 }
 
 h1, h2, h3 {
@@ -40,8 +42,8 @@ a:hover {
 
 .logo {
     height: 100%;
-    text-align: center;
     padding: .5rem;
+    display: inline-block;
 }
 
 .logo img {
@@ -50,14 +52,17 @@ a:hover {
 }
 
 .logo a {
-    display: inline-block;
-    vertical-align: middle;
-    text-decoration: none;
     color: #000;
+}
+
+.logo a:hover {
+    text-decoration: none;
 }
 
 .logo h1 {
     margin: 0;
+    display: inline-block;
+    vertical-align: middle;
 }
 
 nav {
@@ -160,7 +165,7 @@ main {
     padding: 0;
 }
 .flash {
-    min-width: 15em;
+    min-width: 10rem;
     padding: .5rem 1rem;
     margin: .5rem auto;
     border-radius: 7px;
@@ -298,4 +303,9 @@ input[type=number] {
     nav {
         display: none;
     }
+}
+
+@page {
+    size: A4;
+    margin: 1cm;
 }

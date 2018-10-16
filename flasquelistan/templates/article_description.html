@@ -8,11 +8,13 @@
   <p>Priserna kan variera beroende på ditt saldo.</p>
   <dl>
     {% for article in articles %}
-    <dt class="article-name">{{ article.name }}</dt>
-    <dd class="article-price">{{ article.formatted_value }}</dd>
-    <dd class="article-description">
+    <div class="article">
+      <dt class="article-name">{{ article.name }}</dt>
+      <dd class="article-price">{{ article.formatted_value }}</dd>
+      <dd class="article-description">
       {{ article.html_description|safe or "" }}
-    </dd>
+      </dd>
+    </div>
     {% endfor %}
   </dl>
 </div>
