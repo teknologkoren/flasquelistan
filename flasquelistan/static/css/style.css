@@ -299,6 +299,18 @@ input[type=number] {
     text-align: start;
 }
 
+.alcometer {
+    margin-top: .2rem;
+}
+
+.alcometer .bac {
+    display: none;
+}
+
+.alcometer:hover .bac {
+    display: inline;
+}
+
 @media print {
     nav {
         display: none;

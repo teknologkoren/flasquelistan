@@ -196,6 +196,15 @@ def edit_profile(user_id):
 
         user.nickname = form.nickname.data
         user.phone = form.phone.data
+        user.body_mass = form.body_mass.data
+
+        y_chromosome = form.y_chromosome.data
+        if y_chromosome == 'yes':
+            user.y_chromosome = True
+        elif y_chromosome == 'no':
+            user.y_chromosome = False
+        else:
+            user.y_chromosome = None
 
         models.db.session.commit()
 
@@ -204,6 +213,14 @@ def edit_profile(user_id):
                                             user_id=user.id))
     elif form.is_submitted():
         forms.flash_errors(form)
+
+    else:
+        if user.y_chromosome is True:
+            form.y_chromosome.data = 'yes'
+        elif user.y_chromosome is False:
+            form.y_chromosome.data = 'no'
+        else:
+            form.y_chromosome.data = 'n/a'
 
     return flask.render_template('edit_profile.html', form=form, user=user)
 

@@ -7,18 +7,48 @@
 
 {% macro usercard(user, articles) %}
 <div class="card usercard">
-  <a class="picture-and-name" href="{{ url_for('strequelistan.show_profile', user_id=user.id) }}">
-    {{ profile_picture(user) }}
-    <div class="username" data-firstname="{{ user.first_name }}"
-                          data-lastname="{{ user.last_name }}"
-                          data-nickname="{{ user.nickname or '' }}">
-      {% if user.nickname %}
-      {{ user.nickname }}
+  <div class="picture-and-name">
+    <a href="{{ url_for('strequelistan.show_profile', user_id=user.id) }}">
+      {{ profile_picture(user) }}
+      <div class="username" data-firstname="{{ user.first_name }}"
+                            data-lastname="{{ user.last_name }}"
+                            data-nickname="{{ user.nickname or '' }}">
+        {% if user.nickname %}
+        {{ user.nickname }}
+        {% else %}
+        {{ user.first_name }} {{ user.last_name }}
+        {% endif %}
+      </div>
+    </a>
+    {% if user.bac >= 0.1 %}
+    <div class="alcometer">
+      {% if user.bac < 0.3 %}
+      🍺
+      {% elif user.bac < 0.5 %}
+      🍻
+      {% elif user.bac < 1 %}
+      👌
+      {% elif user.bac < 1.5 %}
+      🕺
+      {% elif user.bac < 2 %}
+      😟
+      {% elif user.bac < 2.5 %}
+      🤢
+      {% elif user.bac < 3 %}
+      😵
+      {% elif user.bac < 3.5 %}
+      💀
+      {% elif user.bac < 4 %}
+      🇷🇺
       {% else %}
-      {{ user.first_name }} {{ user.last_name }}
+      🇫🇮
       {% endif %}
+      <span class="bac">
+        {{ user.bac }}
+      </span>
     </div>
-  </a>
+    {% endif %}
+  </div>
   <form class="streque-form streque-buttons" method="POST">
     {# CSRF token is cached during the request, all calls to csrf_token() will
     return the same one #}

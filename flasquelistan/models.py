@@ -23,6 +23,8 @@ class User(flask_login.UserMixin, db.Model):
     is_admin = db.Column(db.Boolean, nullable=False, default=False)
     active = db.Column(db.Boolean, nullable=False, default=False)
     group_id = db.Column(db.Integer, db.ForeignKey('group.id'))
+    body_mass = db.Column(db.Integer, nullable=True)
+    y_chromosome = db.Column(db.Boolean, nullable=True)
 
     # use_alter=True adds fk after ProfilePicture has been created to avoid
     # circular dependency
@@ -115,7 +117,8 @@ class User(flask_login.UserMixin, db.Model):
     def strequa(self, article):
         value = article.value
 
-        streque = Streque(value=value, text=article.name, user_id=self.id)
+        streque = Streque(value=value, text=article.name, user_id=self.id,
+                          standardglas=article.standardglas)
         self.balance -= value
 
         db.session.add(streque)
@@ -134,6 +137,82 @@ class User(flask_login.UserMixin, db.Model):
         db.session.commit()
 
         return transaction
+
+    @property
+    def bac(self):
+        too_old = datetime.datetime.utcnow() - datetime.timedelta(days=7)
+        streques = (Streque.query
+                    .filter(Streque.user_id == self.id,
+                            Streque.voided.is_(False),
+                            Streque.timestamp >= too_old,
+                            Streque.standardglas > 0)
+                    .order_by(Streque.timestamp)
+                    .all())
+
+        if not streques:
+            # No drinks with alcohol within the time threshold, return 0 to
+            # skip lots of logic below
+            return 0
+
+        # 1 unit of alcohol (12 g of pure ethanol) in kg
+        standardglas_alcohol_content = 0.012
+
+        # kg of alcohol burned/second
+        burn_constant = 1.667e-06
+
+        if self.y_chromosome is False:
+            # Female
+            body_mass_constant = 0.55
+        elif self.y_chromosome is True:
+            # Male
+            body_mass_constant = 0.7
+        else:
+            # Somewhere in between
+            body_mass_constant = 0.62
+
+        # No alcohol starting out
+        alcohol_in_body = 0
+        # No streque before first one
+        previous_streque_time = None
+        for streque in streques:
+            if previous_streque_time:
+                elapsed_seconds = (streque.timestamp
+                                   - previous_streque_time).total_seconds()
+            else:
+                elapsed_seconds = 0
+
+            # burn_constant will multiply by 0 first iteration, not burning
+            # away any alcohol.
+            alcohol_in_body += (
+                streque.standardglas * standardglas_alcohol_content
+                - burn_constant * elapsed_seconds
+            )
+
+            # Algorithm will burn away more alcohol that there is in the body
+            # which is not possible.
+            if alcohol_in_body < 0:
+                alcohol_in_body = 0
+
+            previous_streque_time = streque.timestamp
+
+        # Same as the loop above but burning away alcohol since last streque
+        elapsed_seconds = (datetime.datetime.utcnow()
+                           - previous_streque_time).total_seconds()
+
+        alcohol_in_body -= burn_constant * elapsed_seconds
+
+        if alcohol_in_body < 0:
+            return 0
+
+        blood_alcohol_concentration = (
+            round(
+                1000 * alcohol_in_body / ((self.body_mass or 70)
+                                          * body_mass_constant),
+                2  # Round to 2 decimals ("#.## permille")
+            )
+        )
+
+        return blood_alcohol_concentration
 
     def __str__(self):
         return "{} {} <{}>".format(self.first_name, self.last_name, self.email)
@@ -170,6 +249,8 @@ class Article(db.Model):
     name = db.Column(db.String(15), nullable=False)
     value = db.Column(db.Integer, nullable=False)  # Ören
     description = db.Column(db.Text)
+    # Swedish "units of alcohol", 12 g of alcohol
+    standardglas = db.Column(db.Float)
 
     @property
     def formatted_value(self):
@@ -207,6 +288,8 @@ class Transaction(db.Model):
 
 
 class Streque(Transaction):
+    standardglas = db.Column(db.Float)
+
     __mapper_args__ = {
         'polymorphic_identity': 'streque',
     }

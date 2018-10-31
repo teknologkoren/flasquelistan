@@ -185,6 +185,7 @@ def edit_article(article_id=None):
         article.value = int(form.value.data * 100)
         article.description = form.description.data
         article.weight = form.weight.data
+        article.standardglas = form.standardglas.data
 
         if not article_id:
             models.db.session.add(article)

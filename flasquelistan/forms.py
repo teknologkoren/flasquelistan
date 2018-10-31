@@ -162,6 +162,25 @@ class EditUserForm(flask_wtf.FlaskForm):
         description="Ett telefonnummer, med eller utan landskod."
     )
 
+    body_mass = html5_fields.IntegerField(
+        'Kroppsvikt',
+        description=("Din vikt i kg. Används för att mer precist räkna ut "
+                     "alkoholkoncentrationen i blodet. Fältet kan lämnas "
+                     "tomt"),
+        render_kw={'min': 1, 'max': 20743},
+        validators=[
+            validators.NumberRange(min=1, max=20743),
+            validators.Optional()
+        ]
+    )
+
+    y_chromosome = fields.SelectField(
+        'Har du en Y-kromosom?',
+        description=("Används för att mer precist räkna ut "
+                     "alkoholkoncentrationen i blodet."),
+        choices=[('n/a', 'Vill ej uppge'), ('yes', 'Ja'), ('no', 'Nej')]
+    )
+
 
 class FullEditUserForm(EditUserForm):
     first_name = fields.StringField(
@@ -284,16 +303,23 @@ class EditArticleForm(flask_wtf.FlaskForm):
         validators.InputRequired(),
         validators.Length(max=15)
     ])
-    value = fields.IntegerField('Pris', validators=[
-        validators.InputRequired()
-    ])
     value = html5_fields.DecimalField(
         'Pris',
         default=0,
         render_kw={'step': .01, 'min': -1000, 'max': 1000},
         validators=[
-            validators.NumberRange(min=-1000, max=1000)
-        ])
+            validators.InputRequired(),
+            validators.NumberRange(min=-1000, max=1000),
+        ]
+    )
+    standardglas = html5_fields.DecimalField(
+        'Standardglas',
+        default=1,
+        render_kw={'step': .1},
+        validators=[
+            validators.InputRequired(),
+        ]
+    )
     description = fields.TextAreaField(
         'Beskrivning',
         description="Vilka produkter som ingår och/eller beskrivning. "

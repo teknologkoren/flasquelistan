@@ -12,6 +12,12 @@
     flex: 1;
 }
 
+.usercard .picture-and-name a {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
 .usercard .username {
     text-align: center;
 }

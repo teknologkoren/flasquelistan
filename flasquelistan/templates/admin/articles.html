@@ -11,6 +11,7 @@
       <tr>
         <th>Namn</th>
         <th>Pris</th>
+        <th>Standardglas</th>
         <th>Beskrivning</th>
         <th>Sorteringsvikt</th>
       </tr>
@@ -23,6 +24,9 @@
         </td>
         <td>
           {{ article.formatted_value }}
+        </td>
+        <td>
+          {{ article.standardglas }}
         </td>
         <td class="article-description">
           {{ article.description }}
