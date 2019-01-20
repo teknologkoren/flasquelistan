@@ -4,7 +4,6 @@ from flask_wtf.file import FileAllowed
 from wtforms import fields, validators
 import wtforms.fields.html5 as html5_fields
 from flasquelistan import models, util
-from flask_babel import gettext as _
 
 
 def flash_errors(form):
@@ -158,7 +157,7 @@ class EditUserForm(flask_wtf.FlaskForm):
     nickname = fields.StringField('Smeknamn', description="Något roligt.")
 
     phone = html5_fields.TelField(
-        _("Telephone number"),
+        'Telefon',
         description="Ett telefonnummer, med eller utan landskod."
     )
 
