@@ -6,6 +6,7 @@ import flask_login
 import flask_sqlalchemy
 import markdown
 import phonenumbers
+import vobject
 from sqlalchemy.ext.hybrid import hybrid_method, hybrid_property
 from flasquelistan import util
 
@@ -42,6 +43,22 @@ class User(flask_login.UserMixin, db.Model):
     # Do not change the following directly, use User.password
     _password = db.Column(db.String(128))
     _password_timestamp = db.Column(db.DateTime)
+    
+    @property
+    def vcard(self):
+        j = vobject.vCard()
+        j.add('n')
+        j.n.value = vobject.vcard.Name( family=self.last_name, given=self.first_name )
+        j.add('fn')
+        j.fn.value = self.full_name
+        j.add('email')
+        j.email.value = self.email
+        j.email.type_param = 'INTERNET'
+        if self.phone:
+            j.add('tel')
+            j.tel.type_param = 'cell'
+            j.tel.value = self.formatted_phone
+        return j.serialize()
 
     @property
     def full_name(self):

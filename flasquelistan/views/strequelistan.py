@@ -3,6 +3,7 @@ import flask_login
 from sqlalchemy.sql.expression import func, not_
 from flasquelistan import forms, models, util
 from flasquelistan.views import auth
+from flask import Response
 
 mod = flask.Blueprint('strequelistan', __name__)
 
@@ -168,7 +169,10 @@ def user_history(user_id):
 
     return flask.render_template('user_history.html', user=user,
                                  transactions=transactions)
-
+@mod.route('/profile/<int:user_id>.vcf')
+def user_vcard(user_id):
+    user = models.User.query.get_or_404(user_id)
+    return Response(user.vcard, mimetype='text/vcard')
 
 @mod.route('/profile/<int:user_id>/edit/', methods=['GET', 'POST'])
 def edit_profile(user_id):

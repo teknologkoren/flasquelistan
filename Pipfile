@@ -17,5 +17,6 @@ Flask-WTF = "*"
 Flask-Uploads = "*"
 phonenumbers = "*"
 markdown = "*"
+vobject = "*"
 
 [dev-packages]

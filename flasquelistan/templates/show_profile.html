@@ -29,7 +29,8 @@
       {% endif %}
       </dd>
       {% endif %}
-
+      </br>
+      <a href="/profile/{{ user.id }}.vcf" download>Ladda ner kontaktfil</a>
       {% if user == current_user or current_user.is_admin %}
       <dt>Saldo</dt>
       <dd>{{ user.formatted_balance }}</dd>
