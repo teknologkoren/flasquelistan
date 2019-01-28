@@ -43,12 +43,21 @@ class User(flask_login.UserMixin, db.Model):
     # Do not change the following directly, use User.password
     _password = db.Column(db.String(128))
     _password_timestamp = db.Column(db.DateTime)
-    
+
+    def __init__(self, *args, **kwargs):
+        if 'password' not in kwargs:
+            password = ''.join(random.choice(string.ascii_letters +
+                                             string.digits) for _ in range(30))
+            kwargs['password'] = password
+
+        super().__init__(*args, **kwargs)
+
     @property
     def vcard(self):
         j = vobject.vCard()
         j.add('n')
-        j.n.value = vobject.vcard.Name( family=self.last_name, given=self.first_name )
+        j.n.value = vobject.vcard.Name(family=self.last_name,
+                                       given=self.first_name)
         j.add('fn')
         j.fn.value = self.full_name
         j.add('email')
@@ -57,7 +66,7 @@ class User(flask_login.UserMixin, db.Model):
         if self.phone:
             j.add('tel')
             j.tel.type_param = 'cell'
-            j.tel.value = self.formatted_phone
+            j.tel.value = self.formatted_phone()
         return j.serialize()
 
     @property
@@ -68,8 +77,7 @@ class User(flask_login.UserMixin, db.Model):
     def formatted_balance(self):
         return flask_babel.format_currency(self.balance/100, 'SEK')
 
-    @property
-    def formatted_phone(self):
+    def formatted_phone(self, e164=False):
         """Returns formatted number or False if not a valid number."""
         try:
             # If no country code, assume Swedish
@@ -83,7 +91,8 @@ class User(flask_login.UserMixin, db.Model):
 
         formatted = phonenumbers.format_number(
             parsed,
-            phonenumbers.PhoneNumberFormat.INTERNATIONAL
+            phonenumbers.PhoneNumberFormat.E164 if e164
+            else phonenumbers.PhoneNumberFormat.INTERNATIONAL
         )
 
         return formatted
@@ -100,14 +109,6 @@ class User(flask_login.UserMixin, db.Model):
 
         # Save in UTC, password resets compare this to UTC time!
         self._password_timestamp = datetime.datetime.utcnow()
-
-    def __init__(self, *args, **kwargs):
-        if 'password' not in kwargs:
-            password = ''.join(random.choice(string.ascii_letters +
-                                             string.digits) for _ in range(30))
-            kwargs['password'] = password
-
-        super().__init__(*args, **kwargs)
 
     def verify_password(self, plaintext):
         """Return True if plaintext matches password, else return False."""
