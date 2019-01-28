@@ -305,11 +305,18 @@ def change_email_or_password(user_id):
     user = models.User.query.get_or_404(user_id)
     current_user = flask_login.current_user
 
-    if current_user.id != user.id and not current_user.is_admin:
-        flask.flash("Du får bara redigera din egen profil! ಠ_ಠ", 'error')
-        return flask.redirect(flask.url_for('.show_profile', user_id=user_id))
+    if current_user.id != user.id:
+        if current_user.is_admin:
+            form = forms.ChangeEmailOrPasswordForm(obj=user, user=user,
+                                                   nopasswordvalidation=True)
 
-    form = forms.ChangeEmailOrPasswordForm(obj=user, user=user)
+        else:
+            flask.flash("Du får bara redigera din egen profil! ಠ_ಠ", 'error')
+            return flask.redirect(flask.url_for('.show_profile',
+                                                user_id=user_id))
+
+    else:
+        form = forms.ChangeEmailOrPasswordForm(obj=user, user=user)
 
     if form.validate_on_submit():
         if form.email.data != user.email:

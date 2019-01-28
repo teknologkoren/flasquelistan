@@ -135,8 +135,9 @@ class ChangeEmailOrPasswordForm(EmailForm, PasswordForm):
         description="Ditt nya lösenord. Åtminstone 8 tecken långt."
     )
 
-    def __init__(self, user, *args, **kwargs):
+    def __init__(self, user, nopasswordvalidation=False, *args, **kwargs):
         self.user = user
+        self.nopasswordvalidation = nopasswordvalidation
         super().__init__(*args, **kwargs)
 
     def validate_email(self, field):
@@ -149,6 +150,9 @@ class ChangeEmailOrPasswordForm(EmailForm, PasswordForm):
 
     def validate_password(self, field):
         if not self.user.verify_password(self.password.data):
+            if self.nopasswordvalidation:
+                return True
+
             self.password.errors.append("Fel lösenord.")
             return False
 
