@@ -50,10 +50,6 @@
     margin-bottom: 2.5rem;
 }
 
-.hidden {
-    display: none;
-}
-
 .streques {
     max-width: 30rem;
     width: 100%;
@@ -154,18 +150,44 @@
     margin-bottom: 1.5rem;
 }
 
-#emma {
-    display: none;
+#emma-wrapper {
     position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    object-fit: cover;
-    border-radius: 50%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
     /* NOTE: This is a bit weird, but it works. */
     max-width: 75vh;
     max-height: 75vw;
     width: 75vw;
     height: 75vh;
+}
+
+#emma-wrapper.hidden {
+    visibility: hidden;
+    transition: visibility 0s linear .1s;
+}
+
+#emma-wrapper.visible {
+    visibility: visible;
+}
+
+#emma {
+    object-fit: cover;
+    border-radius: 50%;
+    width: 0;
+    height: 0;
+    transition: width .1s, height .1s;
+    transition-timing-function: linear;
+}
+
+#emma-wrapper.visible #emma {
+    width: 100%;
+    height: 100%;
+    transition: width .1s, height .1s;
+    transition-timing-function: linear;
 }

@@ -66,6 +66,12 @@
 </div>
 {% endmacro %}
 
+{% block head %}
+{% assets "js_common", "js_streque" %}
+<script defer src="{{ ASSET_URL }}"></script>
+{% endassets %}
+{% endblock %}
+
 {% block body %}
 <div class="cards">
   <blockquote class="quote quote-display">
@@ -92,10 +98,4 @@
   </div>
   {% endfor %}
 </div>
-{% endblock %}
-
-{% block scripts %}
-{% assets "js_common", "js_streque" %}
-<script src="{{ ASSET_URL }}"></script>
-{% endassets %}
 {% endblock %}

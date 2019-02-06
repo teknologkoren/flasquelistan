@@ -1,5 +1,9 @@
 function downloadEmma() {
+  var wrapper = document.createElement('div');
   var video = document.createElement('video');
+
+  wrapper.id = 'emma-wrapper'
+  wrapper.classList.add('hidden');
   video.id = 'emma';
 
   var webm = document.createElement('source');
@@ -14,7 +18,10 @@ function downloadEmma() {
 
   video.appendChild(webm);
   video.appendChild(mp4);
-  document.body.appendChild(video)
+
+  wrapper.appendChild(video)
+
+  document.body.appendChild(wrapper)
 }
 
 var timeout;
@@ -24,13 +31,19 @@ function displayEmma() {
     clearTimeout(timeout);
   }
 
+  var wrapper = document.getElementById('emma-wrapper');
   var emma = document.getElementById('emma');
+
   emma.currentTime = 0;
-  emma.style.display = 'block';
+
+  wrapper.classList.remove('hidden');
+  wrapper.classList.add('visible');
+
   emma.play();
 
-  var timeout = setTimeout(function () {
-    emma.style.display = 'none';
+  timeout = setTimeout(function () {
+    wrapper.classList.remove('visible');
+    wrapper.classList.add('hidden');
     emma.pause();
   }, 1200);
 }
