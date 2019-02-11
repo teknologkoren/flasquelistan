@@ -37,6 +37,7 @@ class User(flask_login.UserMixin, db.Model):
     transactions = db.relationship('Transaction',
                                    back_populates='user',
                                    lazy='dynamic')
+
     profile_picture = db.relationship('ProfilePicture',
                                       foreign_keys=profile_picture_id)
 
@@ -131,11 +132,11 @@ class User(flask_login.UserMixin, db.Model):
 
         return None
 
-    def strequa(self, article):
+    def strequa(self, article, made_by):
         value = article.value
 
         streque = Streque(value=value, text=article.name, user_id=self.id,
-                          standardglas=article.standardglas)
+                          standardglas=article.standardglas, made_by=made_by)
         self.balance -= value
 
         db.session.add(streque)
@@ -283,12 +284,14 @@ class Transaction(db.Model):
     text = db.Column(db.String(50))
     value = db.Column(db.Integer, nullable=False)  # Ören
     voided = db.Column(db.Boolean, default=False)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    made_by_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     timestamp = db.Column(db.DateTime, nullable=False,
                           default=datetime.datetime.utcnow)
     type = db.Column(db.String(50))
 
-    user = db.relationship('User', back_populates='transactions')
+    user = db.relationship('User', back_populates='transactions', foreign_keys=[user_id])
+    made_by = db.relationship('User', foreign_keys=[made_by_id])
 
     __mapper_args__ = {
         'polymorphic_identity': 'transaction',
