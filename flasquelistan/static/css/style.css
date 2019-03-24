@@ -299,16 +299,12 @@ input[type=number] {
     text-align: start;
 }
 
-.alcometer {
-    margin-top: .2rem;
+.misc ul {
+    list-style: none;
 }
 
-.alcometer .bac {
-    display: none;
-}
-
-.alcometer:hover .bac {
-    display: inline;
+.misc li {
+    margin: .5rem 0;
 }
 
 @media print {

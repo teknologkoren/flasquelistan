@@ -276,6 +276,11 @@ def add_user(request_id=None):
                                  is_request=bool(request_id))
 
 
+@mod.route('/admin/users')
+def show_users():
+    users = models.User.query.all()
+    return flask.render_template('admin/users.html', users=users)
+
 @mod.route('/admin/requests/')
 def requests():
     requests = models.RegistrationRequest.query

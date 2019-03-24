@@ -30,6 +30,18 @@
     margin-bottom: .5rem;
 }
 
+.alcometer {
+    margin-top: .2rem;
+}
+
+.alcometer .bac {
+    display: none;
+}
+
+.alcometer:hover .bac {
+    display: inline;
+}
+
 .streque-buttons {
     display: flex;
     justify-content: flex-end;
