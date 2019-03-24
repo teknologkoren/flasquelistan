@@ -284,10 +284,10 @@ def BulkTransactionFormFactory(active=True):
 
             value = html5_fields.DecimalField(
                 'Transaktionsvärde',
-                default=0,
                 render_kw={'step': .01, 'min': -10000, 'max': 10000},
                 validators=[
-                    validators.NumberRange(min=-10000, max=10000)
+                    validators.NumberRange(min=-10000, max=10000),
+                    validators.Optional()
                 ])
 
             text = fields.StringField('Meddelande')

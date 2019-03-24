@@ -114,26 +114,23 @@ def bulk_transactions():
             if form_field.name == 'csrf_token':
                 continue
 
-            if form_field.value.data != 0:
+            if form_field.value.data:
                 user = models.User.query.get(form_field.user_id.data)
                 if user:
-                    transactions.append(
-                        {'user_id': user.id,
-                         'user_name': user.full_name,
-                         'value': int(form_field.value.data*100),
-                         'text': form_field.text.data}
-                    )
-
-            flask.session[form.csrf_token.data] = transactions
+                    transactions.append({
+                        'user_id': user.id,
+                        'user_name': user.full_name,
+                        'value': int(form_field.value.data*100),
+                        'text': form_field.text.data or 'Admintransaktion'
+                    })
 
         if transactions:
             return flask.render_template(
                 'admin/confirm_bulk_transactions.html',
-                transactions=transactions,
-                token=form.csrf_token.data)
+                transactions=transactions)
         else:
             flask.flash("Inga transaktioner utförda. "
-                        "Väl spenderade klockcykler, bra jobbat!", 'success')
+                        "Väl spenderade klockcykler, bra jobbat!", 'info')
 
     elif form.is_submitted():
         forms.flash_errors(form)
@@ -143,16 +140,25 @@ def bulk_transactions():
 
 @mod.route('/admin/transaktioner/bulk/confirm', methods=['POST'])
 def confirm_bulk_transactions():
-    token = flask.request.args.get('token')
-    if not token:
-        flask.abort(404)
+    form = flask.request.form
+    transactions = {}
 
-    transactions = flask.session.get(token)
-    if transactions is None:
-        flask.abort(400)
+    for name, value in form.items():
+        if not name.startswith('user'):
+            continue
 
-    for transaction in transactions:
-        user = models.User.query.get(transaction['user_id'])
+        user_id, field = name.split('-')[1:]
+
+        transactions.setdefault(user_id, {})
+        if field == 'value':
+            transactions[user_id][field] = int(value)
+        elif field == 'text':
+            transactions[user_id][field] = value
+        else:
+            flask.abort(400)
+
+    for user_id, transaction in transactions.items():
+        user = models.User.query.get(user_id)
         user.admin_transaction(transaction['value'], transaction['text'])
 
     flask.flash("Transaktionerna utfördes!", 'success')
@@ -280,6 +286,7 @@ def add_user(request_id=None):
 def show_users():
     users = models.User.query.all()
     return flask.render_template('admin/users.html', users=users)
+
 
 @mod.route('/admin/requests/')
 def requests():
