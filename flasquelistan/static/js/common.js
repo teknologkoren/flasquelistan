@@ -2,7 +2,7 @@ function downloadEmma() {
   var wrapper = document.createElement('div');
   var video = document.createElement('video');
 
-  wrapper.id = 'emma-wrapper'
+  wrapper.id = 'emma-wrapper';
   wrapper.classList.add('hidden');
   video.id = 'emma';
 
@@ -19,9 +19,9 @@ function downloadEmma() {
   video.appendChild(webm);
   video.appendChild(mp4);
 
-  wrapper.appendChild(video)
+  wrapper.appendChild(video);
 
-  document.body.appendChild(wrapper)
+  document.body.appendChild(wrapper);
 }
 
 var timeout;
@@ -68,11 +68,11 @@ function postData(uri, data, onsuccess, onfailure, csrftoken) {
 
   request.onerror = function () {
     // Error
-  }
+  };
 
-  request.send(JSON.stringify(data))
+  request.send(JSON.stringify(data));
 
-  return request
+  return request;
 }
 
 downloadEmma();
