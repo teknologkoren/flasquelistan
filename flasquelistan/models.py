@@ -359,6 +359,13 @@ class Quote(db.Model):
     def __str__(self):
         return "{}... — {}".format(self.text[:20], self.who[:10] or "<None>")
 
+    def to_json(self):
+        data = {}
+        data['id'] = self.id
+        data['text'] = self.text
+        data['who'] = self.who
+        data['timestamp'] = self.timestamp.isoformat()
+        return data
 
 class ProfilePicture(db.Model):
     id = db.Column(db.Integer, primary_key=True)
