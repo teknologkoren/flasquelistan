@@ -140,7 +140,7 @@ def history():
     return flask.render_template('history.html', streques=streques)
 
 
-@mod.route('/profile/<int:user_id>/')
+@mod.route('/profile/<int:user_id>/', methods=['GET', 'POST'])
 def show_profile(user_id):
     user = models.User.query.get_or_404(user_id)
 
@@ -149,8 +149,32 @@ def show_profile(user_id):
                     .order_by(models.Transaction.timestamp.desc())
                     .limit(10))
 
-    return flask.render_template('show_profile.html', user=user,
-                                 transactions=transactions)
+    profile_picture_form = forms.UploadProfilePictureForm()
+
+    if profile_picture_form.validate_on_submit():
+        if profile_picture_form.upload.data:
+            filename = util.image_uploads.save(
+                profile_picture_form.upload.data
+            )
+            profile_picture = models.ProfilePicture(
+                filename=filename,
+                user_id=user.id
+            )
+
+            user.profile_picture = profile_picture
+
+            models.db.session.add(profile_picture)
+            models.db.session.commit()
+
+            flask.flash("Profilbilden har ändrats!", 'success')
+
+    elif profile_picture_form.is_submitted():
+        forms.flash_errors(profile_picture_form)
+
+    return flask.render_template('show_profile.html',
+                                 user=user,
+                                 transactions=transactions,
+                                 profile_picture_form=profile_picture_form)
 
 
 @mod.route('/profile/<int:user_id>/history')

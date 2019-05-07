@@ -112,6 +112,16 @@
     margin: 2rem 0;
 }
 
+.upload-and-set-profile-picture {
+    padding: .5rem;
+    border: 1px solid #ddd;
+    border-radius: 7px;
+}
+
+.upload-and-set-profile-picture .form-entry {
+    margin-top: 0;
+}
+
 .change-profile-picture {
     max-height: 30rem;
     overflow-y: scroll;

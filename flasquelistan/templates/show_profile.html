@@ -2,7 +2,7 @@
 
 {% set active_page = "streque" %}
 
-{% from "macros.html" import profile_picture %}
+{% from "macros.html" import profile_picture, form_entry %}
 
 {% block body %}
 <div class="profile">
@@ -38,6 +38,14 @@
     <p>
       <a href="{{ url_for('strequelistan.user_vcard', user_id=user.id) }}" download>Ladda ner kontaktfil</a>
     </p>
+
+    <form class="upload-and-set-profile-picture" method="POST" enctype="multipart/form-data">
+      {{ profile_picture_form.csrf_token }}
+      {{ form_entry(profile_picture_form.upload) }}
+      <div class="form-field">
+        <button>Spara</button>
+      </div>
+    </form>
 
     {% if user == current_user or current_user.is_admin %}
     <dl>
