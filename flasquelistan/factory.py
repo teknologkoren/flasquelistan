@@ -1,7 +1,6 @@
 import click
 import flask
 
-
 def create_app(config=None, instance_config=None):
     app = flask.Flask(__name__, instance_relative_config=True)
     # Load default config
@@ -36,9 +35,10 @@ def create_app(config=None, instance_config=None):
 
 
 def register_blueprints(app):
-    from flasquelistan.views import auth, admin, misc, quotes, strequelistan
+    from flasquelistan.views import auth, admin, api, misc, quotes, strequelistan
     app.register_blueprint(auth.mod)
     app.register_blueprint(admin.mod)
+    app.register_blueprint(api.mod)
     app.register_blueprint(misc.mod)
     app.register_blueprint(strequelistan.mod)
     app.register_blueprint(quotes.mod)
@@ -295,4 +295,7 @@ def setup_flask_uploads(app):
 
 def setup_csrf_protection(app):
     from flask_wtf.csrf import CSRFProtect
-    return CSRFProtect(app)
+    from flasquelistan.views import api
+    csrf = CSRFProtect(app)
+    csrf.exempt(api.mod)
+    return csrf
