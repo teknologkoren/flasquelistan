@@ -33,7 +33,7 @@
                   {{ subfield.label.text }}
                 </div>
                 {% else %}
-                <img class="label" src="{{ image_uploads_url(subfield.label.text) }}">
+                <img class="label" src="{{ url_for_image(subfield.label.text, 'profilepicture', 200) }}">
               </label>
               {% endif %}
             </div>
