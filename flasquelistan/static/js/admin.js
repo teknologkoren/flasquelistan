@@ -26,7 +26,7 @@ function initVoidTransactionButtons() {
         alert('Something went wrong, reload the page and try again.')
       };
 
-      var request = postData('/admin/transaktioner/void', data, onsuccess, onfailure, csrftoken);
+      var request = postData('/admin/transactions/void', data, onsuccess, onfailure, csrftoken);
     });
   }
 }

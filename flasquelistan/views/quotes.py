@@ -16,7 +16,8 @@ def before_request():
 
 @mod.route('/quotes/', methods=['GET', 'POST'])
 def index():
-    quotes = models.Quote.query.order_by(models.Quote.timestamp.desc()).all()
+    quotes = models.Quote.query.order_by(models.Quote.timestamp.desc(),
+                                         models.Quote.id.desc()).all()
 
     return flask.render_template('quotes.html', quotes=quotes)
 

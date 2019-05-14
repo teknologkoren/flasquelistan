@@ -44,19 +44,16 @@ a:hover {
     height: 100%;
     padding: .5rem;
     display: inline-block;
+    color: #000;
+}
+
+.logo:hover {
+    text-decoration: none;
 }
 
 .logo img {
     margin-right: .5rem;
     display: inline-block;
-}
-
-.logo a {
-    color: #000;
-}
-
-.logo a:hover {
-    text-decoration: none;
 }
 
 .logo h1 {
@@ -118,6 +115,11 @@ main {
     align-items: center;
     justify-items: center;
     padding: 0 .65rem 4rem .65rem;
+}
+
+.non-padded {
+    padding-left: 0;
+    padding-right: 0;
 }
 
 .login {
@@ -189,45 +191,6 @@ main {
     background-color: #FFD9D0;
     border: 1px solid #FF9073;
     color: #6C1600;
-}
-
-.profile {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    width: 100%;
-}
-
-.profile > * {
-    margin: 0 .7rem;
-}
-
-.profile .profile-picture {
-    margin-top: 2rem;
-    max-width: 300px;
-    height: 200px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-}
-
-.profile .profile-picture a,
-.profile .profile-picture p {
-    margin-top: .5rem;
-}
-
-.no-profile-picture {
-    background: grey;
-    font-size: 1.5em;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.profile .no-profile-picture {
-    width: 100px;
-    height: 100px;
 }
 
 dt {

@@ -12,7 +12,11 @@ from urllib.parse import urlparse, urljoin
 # do instead: `from flasquelistan import util; util.bcrypt(...)`
 bcrypt = flask_bcrypt.Bcrypt()
 
-image_uploads = flask_uploads.UploadSet('images', flask_uploads.IMAGES)
+image_uploads = flask_uploads.UploadSet('images',
+                                        flask_uploads.IMAGES)
+
+profile_pictures = flask_uploads.UploadSet('profilepictures',
+                                           flask_uploads.IMAGES)
 
 
 def send_email(toaddr, subject, body):

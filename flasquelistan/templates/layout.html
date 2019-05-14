@@ -48,7 +48,7 @@
 {% endblock %}
 
 {% block base_body %}
-<main>
+<main{% if main_class %} class="{{ main_class }}"{% endif %}>
   {% include "flashes.html" %}
   {% block body %}
   {% endblock %}

@@ -252,7 +252,7 @@ class RegistrationRequest(db.Model):
 
 class Group(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.Integer, nullable=False)
+    name = db.Column(db.String(50), nullable=False)
     weight = db.Column(db.Integer)
 
     users = db.relationship('User', back_populates='group')

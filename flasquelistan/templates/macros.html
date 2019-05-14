@@ -29,11 +29,11 @@
 {% macro profile_picture(user, with_link=False) %}
 {% if user.profile_picture %}
 {% if with_link %}
-<a class="profile-picture" href="{{ image_uploads_url(user.profile_picture.filename) }}">
-  <img src="{{ image_uploads_url(user.profile_picture.filename) }}">
+<a class="profile-picture" href="{{ profile_pictures_url(user.profile_picture.filename) }}">
+  <img src="{{ resized_img_src(profile_pictures_url(user.profile_picture.filename), width=600) }}">
 </a>
 {% else %}
-<img class="profile-picture" src="{{ image_uploads_url(user.profile_picture.filename) }}">
+<img class="profile-picture" src="{{ resized_img_src(profile_pictures_url(user.profile_picture.filename), width=200) }}">
 {% endif %}
 {% else %}
 <div class="profile-picture no-profile-picture">

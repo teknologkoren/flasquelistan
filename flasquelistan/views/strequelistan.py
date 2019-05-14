@@ -20,7 +20,7 @@ def before_request():
 def index():
     groups = (models.Group.query
               .filter(models.Group.users.any())  # Only groups with users
-              .order_by(models.Group.weight)
+              .order_by(models.Group.weight.desc())
               .all())
 
     random_quote = models.Quote.query.order_by(func.random()).first()
@@ -108,20 +108,28 @@ def void_streque():
         return flask.redirect(flask.url_for('strequelistan.history'))
 
 
-@mod.route('/produkter')
+@mod.route('/articles')
 def article_description():
-    articles = models.Article.query.order_by(models.Article.weight).all()
+    articles = (models.Article
+                .query
+                .order_by(models.Article.weight.desc())
+                .all()
+                )
     return flask.render_template('article_description.html', articles=articles)
 
 
-@mod.route('/papperslista')
+@mod.route('/paperlist')
 def paperlist():
     users = (models.User.query
              .order_by(models.User.first_name))
 
     groups = models.Group.query.all()
 
-    articles = models.Article.query.order_by(models.Article.weight).all()
+    articles = (models.Article
+                .query
+                .order_by(models.Article.weight.desc())
+                .all()
+                )
 
     return flask.render_template('paperlist.html',
                                  users=users,
@@ -153,7 +161,7 @@ def show_profile(user_id):
 
     if profile_picture_form.validate_on_submit():
         if profile_picture_form.upload.data:
-            filename = util.image_uploads.save(
+            filename = util.profile_pictures.save(
                 profile_picture_form.upload.data
             )
             profile_picture = models.ProfilePicture(
@@ -304,7 +312,7 @@ def upload_profile_picture(user_id):
 
     if form.validate_on_submit():
         if form.upload.data:
-            filename = util.image_uploads.save(form.upload.data)
+            filename = util.profile_pictures.save(form.upload.data)
             profile_picture = models.ProfilePicture(filename=filename,
                                                     user_id=user.id)
             models.db.session.add(profile_picture)
