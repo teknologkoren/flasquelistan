@@ -19,6 +19,23 @@ profile_pictures = flask_uploads.UploadSet('profilepictures',
                                            flask_uploads.IMAGES)
 
 
+def url_for_image(filename, imagetype, width=None):
+    if not width or flask.current_app.debug:
+        if imagetype == 'profilepicture':
+            return profile_pictures.url(filename)
+
+        if imagetype == 'image':
+            return image_uploads.url(filename)
+
+    if imagetype == 'profilepicture':
+        base = profile_pictures.config.base_url
+
+    elif imagetype == 'image':
+        base = image_uploads.config.base_url
+
+    return ''.join((base, 'img{}/'.format(width), filename))
+
+
 def send_email(toaddr, subject, body):
     """Send an email with SMTP & STARTTLS.
 

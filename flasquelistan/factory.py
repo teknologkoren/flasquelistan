@@ -30,7 +30,6 @@ def create_app(config=None, instance_config=None):
     setup_flask_assets(app)
     setup_flask_babel(app)
     setup_flask_uploads(app)
-    setup_flask_images(app)
     setup_csrf_protection(app)
 
     return app
@@ -290,20 +289,7 @@ def setup_flask_uploads(app):
     flask_uploads.configure_uploads(app, util.image_uploads)
     flask_uploads.configure_uploads(app, util.profile_pictures)
 
-    app.jinja_env.globals['image_uploads_url'] = util.image_uploads.url
-    app.jinja_env.globals['image_uploads_dest'] = \
-        lambda: util.image_uploads.config.base_url
-
-    app.jinja_env.globals['profile_pictures_url'] = util.profile_pictures.url
-    app.jinja_env.globals['profile_pictures_dest'] = \
-        lambda: util.profile_pictures.config.base_url
-
-
-def setup_flask_images(app):
-    import flask_images
-    images = flask_images.Images(app)
-
-    return images
+    app.jinja_env.globals['url_for_image'] = util.url_for_image
 
 
 def setup_csrf_protection(app):
