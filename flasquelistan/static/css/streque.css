@@ -126,7 +126,8 @@
 
 .profile .profile-picture {
     margin-top: 2rem;
-    max-width: 300px
+    max-width: 300px;
+    align-self: start;
 }
 
 .profile .profile-picture img {
