@@ -167,7 +167,11 @@ def confirm_bulk_transactions():
 
 @mod.route('/admin/articles/')
 def articles():
-    articles = models.Article.query.order_by(models.Article.weight).all()
+    articles = (models.Article
+                .query
+                .order_by(models.Article.weight.desc())
+                .all()
+                )
     return flask.render_template('admin/articles.html', articles=articles)
 
 

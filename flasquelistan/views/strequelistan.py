@@ -18,7 +18,8 @@ def before_request():
 
 @mod.route('/')
 def index():
-    groups = (models.Group.query
+    groups = (models.Group
+              .query
               .filter(models.Group.users.any())  # Only groups with users
               .order_by(models.Group.weight.desc())
               .all())
@@ -27,7 +28,11 @@ def index():
 
     current_user = flask_login.current_user
 
-    articles = models.Article.query.all()
+    articles = (models.Article
+                .query
+                .order_by(models.Article.weight.desc())
+                .all()
+                )
 
     if current_user.balance <= 0:
         flask.flash("Det finns inga pengar på kontot. Dags att fylla på!",
