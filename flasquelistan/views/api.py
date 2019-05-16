@@ -1,8 +1,9 @@
 from functools import wraps
 import datetime
 import flask
-from flask import request
 from flask import Response
+from flask import request
+from flask import jsonify
 from flask_wtf.csrf import CSRFProtect
 import sqlalchemy as sqla
 from flasquelistan import models, forms, util
@@ -20,13 +21,23 @@ def check_auth(email, secret):
     """This function is called to check if a username /
     password combination is valid.
     """
-    return User.query.filter(User.email == email).filter(User.api_secret == secret).count()
+    return User.query.filter(
+            User.email == email
+        ).filter(
+            User.api_secret == secret
+        ).count()
 
-def check_admin_auth(username, password):
+def check_admin_auth(email, secret):
     """This function is called to check if a username /
     password combination is valid.
     """
-    return User.query.filter(User.email == email).filter(User.api_secret == secret).filter(User.is_admin == True).count()
+    return User.query.filter(
+            User.email == email
+        ).filter(
+            User.api_secret == secret
+        ).filter(
+            User.is_admin == True
+        ).count()
 
 def authenticate():
     """Sends a 401 response that enables basic auth"""
@@ -62,13 +73,22 @@ def transactions():
 @mod.route('/api/quotes/', methods=['POST'])
 @requires_auth
 def add_quote():
-    return "yay"
+    form = forms.QuoteForm(request.form, csrf_enabled=False)
+
+    if form.validate():
+        quote = models.Quote(text=form.text.data, who=form.who.data)
+        models.db.session.add(quote)
+        models.db.session.commit()
+        return jsonify(quote.json)
+
+    else:
+        return jsonify({'success': 'False', 'error': form.errors})
 
 @mod.route('/api/quotes/', methods=['GET'])
 @requires_auth
 def quotes():
     page = request.args.get("page", "1")
-    limit = request.args.get("limit", "2")
+    limit = request.args.get("limit", "50")
 
     try:
         page = int(page)
@@ -97,5 +117,10 @@ def quotes():
     for item in quotes.items:
         data["data"].append(item.json)
 
-    return json.dumps(data, indent=4, sort_keys=True, default=str)
+    return jsonify(data)
 
+@mod.route('/api/quotes/<int:quote_id>', methods=['GET'])
+@requires_auth
+def single_quote(quote_id):
+    quote = models.Quote.query.get_or_404(quote_id)
+    return jsonify(quote.json)
