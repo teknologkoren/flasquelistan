@@ -6,24 +6,27 @@ from flask import Response
 from flask_wtf.csrf import CSRFProtect
 import sqlalchemy as sqla
 from flasquelistan import models, forms, util
+from flasquelistan.models import User
 from flasquelistan.views import auth
 import json
+from sqlalchemy.sql import exists
+
 
 from pprint import pprint
 
 mod = flask.Blueprint('strequeapi', __name__)
 
-def check_auth(username, password):
+def check_auth(email, secret):
     """This function is called to check if a username /
     password combination is valid.
     """
-    return username == 'admin' and password == 'secret'
+    return User.query.filter(User.email == email).filter(User.api_secret == secret).count()
 
 def check_admin_auth(username, password):
     """This function is called to check if a username /
     password combination is valid.
     """
-    return username == 'admin' and password == 'secret'
+    return User.query.filter(User.email == email).filter(User.api_secret == secret).filter(User.is_admin == True).count()
 
 def authenticate():
     """Sends a 401 response that enables basic auth"""
@@ -92,7 +95,7 @@ def quotes():
 
     data["data"] = []
     for item in quotes.items:
-        data["data"].append(item.to_json())
+        data["data"].append(item.json)
 
     return json.dumps(data, indent=4, sort_keys=True, default=str)
 

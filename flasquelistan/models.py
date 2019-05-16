@@ -1,4 +1,5 @@
 import datetime
+import os
 import random
 import string
 import flask_babel
@@ -26,6 +27,7 @@ class User(flask_login.UserMixin, db.Model):
     group_id = db.Column(db.Integer, db.ForeignKey('group.id'))
     body_mass = db.Column(db.Integer, nullable=True)
     y_chromosome = db.Column(db.Boolean, nullable=True)
+    api_secret = db.Column(db.String(50), default=os.urandom(16).hex)
 
     # use_alter=True adds fk after ProfilePicture has been created to avoid
     # circular dependency
@@ -232,6 +234,9 @@ class User(flask_login.UserMixin, db.Model):
 
         return blood_alcohol_concentration
 
+    def generate_api_secret(self, lenght=32):
+        return hexlify(os.urandom(length)).decode()
+
     def __str__(self):
         return "{} {} <{}>".format(self.first_name, self.last_name, self.email)
 
@@ -357,6 +362,14 @@ class Quote(db.Model):
     def __str__(self):
         return "{}... — {}".format(self.text[:20], self.who[:10] or "<None>")
 
+    @property
+    def json(self):
+        data = {}
+        data['id'] = self.id
+        data['text'] = self.text
+        data['who'] = self.who
+        data['timestamp'] =  self.timestamp.isoformat()
+        return data
 
 class ProfilePicture(db.Model):
     id = db.Column(db.Integer, primary_key=True)

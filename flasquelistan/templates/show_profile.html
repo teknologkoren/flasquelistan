@@ -52,6 +52,9 @@
       <dt>Saldo</dt>
       <dd>{{ user.formatted_balance }}</dd>
 
+      <dt>API-lösenord</dt>
+      <dd>{{ user.api_secret }}</dd>
+
       <dt>Historik</dt>
       <dd>
       {% if transactions.all() %}
