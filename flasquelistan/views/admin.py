@@ -19,7 +19,7 @@ def before_request():
     pass
 
 
-@mod.route('/admin/transaktioner/', methods=['GET', 'POST'])
+@mod.route('/admin/transactions/', methods=['GET', 'POST'])
 def transactions():
     form = forms.DateRangeForm()
 
@@ -61,7 +61,7 @@ def transactions():
                                  form=form)
 
 
-@mod.route('/admin/transaktioner/void', methods=['POST'])
+@mod.route('/admin/transactions/void', methods=['POST'])
 def void_transaction():
     if flask.request.is_json:
         data = flask.request.get_json()
@@ -103,7 +103,7 @@ def void_transaction():
         return flask.redirect(flask.url_for('strequeadmin.transactions'))
 
 
-@mod.route('/admin/transaktioner/bulk', methods=['GET', 'POST'])
+@mod.route('/admin/transactions/bulk', methods=['GET', 'POST'])
 def bulk_transactions():
     form = forms.BulkTransactionFormFactory(active=False)
 
@@ -138,7 +138,7 @@ def bulk_transactions():
     return flask.render_template('admin/bulk_transactions.html', form=form)
 
 
-@mod.route('/admin/transaktioner/bulk/confirm', methods=['POST'])
+@mod.route('/admin/transactions/bulk/confirm', methods=['POST'])
 def confirm_bulk_transactions():
     form = flask.request.form
     transactions = {}
@@ -165,14 +165,18 @@ def confirm_bulk_transactions():
     return flask.redirect(flask.url_for('strequeadmin.bulk_transactions'))
 
 
-@mod.route('/admin/produkter/')
+@mod.route('/admin/articles/')
 def articles():
-    articles = models.Article.query.order_by(models.Article.weight).all()
+    articles = (models.Article
+                .query
+                .order_by(models.Article.weight.desc())
+                .all()
+                )
     return flask.render_template('admin/articles.html', articles=articles)
 
 
-@mod.route('/admin/produkter/new', methods=['GET', 'POST'])
-@mod.route('/admin/produkter/edit/<int:article_id>', methods=['GET', 'POST'])
+@mod.route('/admin/articles/new', methods=['GET', 'POST'])
+@mod.route('/admin/articles/edit/<int:article_id>', methods=['GET', 'POST'])
 def edit_article(article_id=None):
     if article_id:
         article = models.Article.query.get_or_404(article_id)
@@ -209,7 +213,7 @@ def edit_article(article_id=None):
                                  article=article)
 
 
-@mod.route('/admin/produkter/ta-bort/<int:article_id>', methods=['POST'])
+@mod.route('/admin/articles/remove/<int:article_id>', methods=['POST'])
 def remove_article(article_id):
     article = models.Article.query.get_or_404(article_id)
 
@@ -284,7 +288,7 @@ def add_user(request_id=None):
 
 @mod.route('/admin/users')
 def show_users():
-    users = models.User.query.all()
+    users = models.User.query.order_by(models.User.first_name.asc()).all()
     return flask.render_template('admin/users.html', users=users)
 
 
@@ -306,3 +310,54 @@ def remove_request(request_id):
                 'success')
 
     return flask.redirect(flask.url_for('strequeadmin.requests'))
+
+
+@mod.route('/admin/groups')
+def show_groups():
+    groups = models.Group.query.order_by(models.Group.weight.desc()).all()
+    return flask.render_template('admin/groups.html', groups=groups)
+
+
+@mod.route('/admin/groups/new', methods=['GET', 'POST'])
+@mod.route('/admin/groups/edit/<int:group_id>', methods=['GET', 'POST'])
+def edit_group(group_id=None):
+    if group_id:
+        group = models.Group.query.get_or_404(group_id)
+        form = forms.EditGroupForm(obj=group)
+    else:
+        group = None
+        form = forms.EditGroupForm()
+
+    if form.validate_on_submit():
+        if not group:
+            group = models.Group()
+
+        group.name = form.name.data
+        group.weight = form.weight.data
+
+        if not group_id:
+            models.db.session.add(group)
+
+        models.db.session.commit()
+
+        flask.flash("Produkt \"{}\" skapad.".format(group.name), 'success')
+
+        return flask.redirect(flask.url_for('strequeadmin.show_groups'))
+
+    elif form.is_submitted():
+        forms.flash_errors(form)
+
+    return flask.render_template('admin/edit_group.html',
+                                 form=form,
+                                 group=group)
+
+
+@mod.route('/admin/groups/remove/<int:group_id>', methods=['POST'])
+def remove_group(group_id):
+    group = models.Group.query.get_or_404(group_id)
+
+    models.db.session.delete(group)
+    models.db.session.commit()
+
+    flask.flash("Grupp \"{}\" borttagen.".format(group.name), 'success')
+    return flask.redirect(flask.url_for('strequeadmin.show_groups'))

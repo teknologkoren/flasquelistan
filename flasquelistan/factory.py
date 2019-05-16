@@ -287,10 +287,9 @@ def setup_flask_uploads(app):
     from flasquelistan import util
 
     flask_uploads.configure_uploads(app, util.image_uploads)
+    flask_uploads.configure_uploads(app, util.profile_pictures)
 
-    app.jinja_env.globals['image_uploads_url'] = util.image_uploads.url
-    app.jinja_env.globals['image_uploads_dest'] = \
-        lambda: util.image_uploads.config.base_url
+    app.jinja_env.globals['url_for_image'] = util.url_for_image
 
 
 def setup_csrf_protection(app):

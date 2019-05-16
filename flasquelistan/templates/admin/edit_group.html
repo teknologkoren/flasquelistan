@@ -1,0 +1,28 @@
+{% extends "layout.html" %}
+
+{% set active_page = "misc" %}
+
+{% from "macros.html" import form_entry %}
+
+{% block body %}
+<div>
+  <h2>{% if group %}Redigera{% else %}Skapa{% endif %} grupp</h2>
+  <form method="POST">
+    {{ form.csrf_token }}
+
+    {{ form_entry(form.name) }}
+    {{ form_entry(form.weight) }}
+
+    {% if group %}
+    <div class="form-entry">
+      <button formaction="{{ url_for('strequeadmin.remove_group', group_id=group.id) }}">Ta bort grupp</button>
+    </div>
+    {% endif %}
+
+    <div class="form-entry">
+      <button>Spara</button> | <a href="{{ url_for('strequeadmin.show_groups') }}">Avbryt</a>
+    </div>
+  </form>
+</div>
+</div>
+{% endblock %}

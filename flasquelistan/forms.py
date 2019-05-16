@@ -329,7 +329,21 @@ class EditArticleForm(flask_wtf.FlaskForm):
                     "Markdown.")
     weight = fields.IntegerField(
         'Sorteringsvikt',
-        description="Heltal. En högre vikt sjunker.",
+        description="Heltal. En högre vikt stiger.",
+        validators=[
+            validators.InputRequired()
+        ]
+    )
+
+
+class EditGroupForm(flask_wtf.FlaskForm):
+    name = fields.StringField('Namn', validators=[
+        validators.InputRequired(),
+        validators.Length(max=50)
+    ])
+    weight = fields.IntegerField(
+        'Sorteringsvikt',
+        description="Heltal. En högre vikt stiger.",
         validators=[
             validators.InputRequired()
         ]

@@ -10,7 +10,7 @@ Flask-Admin = "*"
 Flask-Login = "*"
 pytest = "*"
 Flask-Assets = "*"
-webassets = {editable = true, git = "https://github.com/miracle2k/webassets.git"}
+webassets = {editable = true,git = "https://github.com/miracle2k/webassets.git"}
 Flask-Babel = "*"
 Flask-Bcrypt = "*"
 Flask-WTF = "*"

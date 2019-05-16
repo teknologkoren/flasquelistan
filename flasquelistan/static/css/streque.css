@@ -112,6 +112,41 @@
     margin: 2rem 0;
 }
 
+.profile {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 100%;
+}
+
+.profile > * {
+    padding-left: .65rem;
+    padding-right: .65rem;
+}
+
+.profile .profile-picture {
+    margin-top: 2rem;
+    max-width: 300px;
+    align-self: start;
+}
+
+.profile .profile-picture img {
+    max-height: 200px;
+}
+
+.no-profile-picture {
+    background: grey;
+    font-size: 1.5em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.profile .no-profile-picture {
+    width: 100px;
+    height: 100px;
+}
+
 .upload-and-set-profile-picture {
     padding: .5rem;
     border: 1px solid #ddd;
