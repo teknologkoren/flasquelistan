@@ -383,18 +383,6 @@ class AdminTransaction(Transaction):
         'polymorphic_identity': 'admin_transaction',
     }
 
-    def void_and_refund(self):
-        if self.voided:
-            return False
-
-        self.user.balance -= self.value
-
-        self.voided = True
-        db.session.commit()
-
-        return True
-
-
 class Quote(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     text = db.Column(db.String(150), nullable=False)
