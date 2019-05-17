@@ -46,6 +46,29 @@ class User(flask_login.UserMixin, db.Model):
     _password = db.Column(db.String(128))
     _password_timestamp = db.Column(db.DateTime)
 
+    @property
+    def json(self):
+        data = {}
+        data['id'] = self.id
+        data['email'] = self.email
+        data['first_name'] = self.first_name
+        data['last_name'] = self.last_name
+        data['full_name'] = self.full_name
+        data['nickname'] = self.nickname
+        data['phone'] = self.phone
+        data['formatted_phone'] = self.formatted_phone()
+        data['balance'] = self.balance
+        data['formatted_balance'] = self.formatted_balance
+        data['is_admin'] = self.is_admin
+        data['active'] = self.active
+        data['group'] = self.group_id
+        data['body_mass'] = self.body_mass
+        data['y_chromosome'] = self.y_chromosome
+        data['api_secret'] = self.api_secret
+        data['profile_picture'] = self.profile_picture_id
+        data['bac'] = self.bac
+        return data
+
     def __init__(self, *args, **kwargs):
         if 'password' not in kwargs:
             password = ''.join(random.choice(string.ascii_letters +
@@ -283,6 +306,16 @@ class Article(db.Model):
     def html_description(self):
         return markdown.markdown(self.description)
 
+    @property
+    def json(self):
+        data = {}
+        data['id'] = self.id
+        data['weight'] = self.weight
+        data['name'] = self.name
+        data['description'] = self.description
+        data['standardglas'] = self.standardglas
+        return data
+
 
 class Transaction(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -308,7 +341,18 @@ class Transaction(db.Model):
     def __str__(self):
         return "{}: {} @ {}".format(self.__class__.__name__,
                                     self.value, self.user)
-
+    @property
+    def json(self):
+        data = {}
+        data['id'] = self.id
+        data['text'] = self.text
+        data['voided'] = self.voided
+        data['value'] = self.value
+        data['formatted_value'] = self.formatted_value
+        data['user_id'] = self.user_id
+        data['timestamp'] = self.timestamp.isoformat()
+        data['type'] = self.type
+        return data
 
 class Streque(Transaction):
     standardglas = db.Column(db.Float)
@@ -333,7 +377,6 @@ class Streque(Transaction):
         db.session.commit()
 
         return True
-
 
 class AdminTransaction(Transaction):
     __mapper_args__ = {

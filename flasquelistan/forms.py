@@ -348,3 +348,19 @@ class EditGroupForm(flask_wtf.FlaskForm):
             validators.InputRequired()
         ]
     )
+
+class StrequaForm(flask_wtf.FlaskForm):
+    user_id = fields.StringField('User ID', validators=[
+        validators.InputRequired(),
+        Exists(models.User, models.User.id, "Användaren existerar inte")
+    ])
+    article_id = fields.StringField('Article ID', validators=[
+        validators.InputRequired(),
+        Exists(models.Article, models.Article.id, "Användaren existerar inte")
+    ])
+
+class ReturnTransactionForm(flask_wtf.FlaskForm):
+    transaction_id = fields.StringField('Article ID', validators=[
+        validators.InputRequired(),
+        Exists(models.Transaction, models.Transaction.id, "Användaren existerar inte")
+    ])

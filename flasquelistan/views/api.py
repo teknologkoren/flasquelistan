@@ -8,10 +8,13 @@ from flask_wtf.csrf import CSRFProtect
 import sqlalchemy as sqla
 from flasquelistan import models, forms, util
 from flasquelistan.models import User
+from flasquelistan.models import Transaction
+from flasquelistan.models import Quote
 from flasquelistan.views import auth
 import json
 from sqlalchemy.sql import exists
-
+from flask_login import login_user
+from flask_login import current_user
 
 from pprint import pprint
 
@@ -21,23 +24,33 @@ def check_auth(email, secret):
     """This function is called to check if a username /
     password combination is valid.
     """
-    return User.query.filter(
+    user = User.query.filter(
             User.email == email
         ).filter(
             User.api_secret == secret
-        ).count()
+        ).first()
+    if user:
+        login_user(user)
+        return True
+    else:
+        return False
 
 def check_admin_auth(email, secret):
     """This function is called to check if a username /
     password combination is valid.
     """
-    return User.query.filter(
+    user = User.query.filter(
             User.email == email
         ).filter(
             User.api_secret == secret
         ).filter(
             User.is_admin == True
-        ).count()
+        ).first()
+    if user:
+        login_user(user)
+        return True
+    else:
+        return False
 
 def authenticate():
     """Sends a 401 response that enables basic auth"""
@@ -49,6 +62,8 @@ def authenticate():
 def requires_auth(f):
     @wraps(f)
     def decorated(*args, **kwargs):
+        if current_user.is_authenticated:
+            return f(*args, **kwargs)
         auth = request.authorization
         if not auth or not check_auth(auth.username, auth.password):
             return authenticate()
@@ -58,16 +73,76 @@ def requires_auth(f):
 def requires_admin_auth(f):
     @wraps(f)
     def decorated(*args, **kwargs):
+        if current_user.is_authenticated:
+            if current_user.is_admin:
+                return f(*args, **kwargs)
         auth = request.authorization
         if not auth or not check_admin_auth(auth.username, auth.password):
             return authenticate()
         return f(*args, **kwargs)
     return decorated
 
-@mod.route('/api/transactions/', methods=['GET'])
+@mod.route('/api/latest_streque/', methods=['GET'])
 @requires_auth
-def transactions():
-    return "asd"
+def latest_streque():
+    then = datetime.datetime.utcnow() - datetime.timedelta(minutes=15)
+    print(then)
+    streque = Transaction.query.filter(
+            Transaction.type == "streque",
+        ).filter(
+            Transaction.timestamp >= then
+        ).filter(
+            Transaction.voided == False
+        )
+    data = []
+    for s in streque:
+        data.append(s.json)
+    return jsonify(data)
+
+@mod.route('/api/transactions/', methods=['GET'])
+@requires_admin_auth
+def list_transactions():
+    page = request.args.get("page", "1")
+    limit = request.args.get("limit", "50")
+    try:
+        page = int(page)
+    except:
+        return "invalid value for page '{}', needs to be an integer".format(request.args.get("page"))
+
+    try:
+        limit = int(limit)
+    except:
+        return "invalid value for limit '{}', needs to be an integer".format(request.args.get("page"))
+
+    objects = models.Transaction.query.order_by(models.Transaction.timestamp.desc()).paginate(per_page=limit)
+    data = {}
+
+    data["current_page"] = page
+    data["limit"] = limit
+
+    if objects.has_next:
+        data["next_page"] = objects.next_num
+
+    if objects.has_prev:
+        data["prev"] = objects.prev_num
+
+    data["data"] = []
+    for item in objects.items:
+        data["data"].append(item.json)
+
+    return jsonify(data)
+
+@mod.route('/api/strequa', methods=['POST'])
+@requires_auth
+def add_streque():
+    form = forms.StrequaForm(request.form, csrf_enabled=False)
+    if form.validate():
+        user = models.User.query.get(form.user_id.data)
+        article = models.Article.query.get(form.article_id.data)
+        streque = user.strequa(article)
+        return jsonify(streque.json)
+    else:
+        return "Failed"
 
 @mod.route('/api/quotes/', methods=['POST'])
 @requires_auth
@@ -123,3 +198,26 @@ def quotes():
 def single_quote(quote_id):
     quote = models.Quote.query.get_or_404(quote_id)
     return jsonify(quote.json)
+
+
+@mod.route('/api/users/<int:user_id>', methods=['GET'])
+@requires_auth
+def single_user(user_id):
+    user = models.User.query.get_or_404(user_id)
+    if user.id == current_user.id or current_user.is_admin:
+        data = user.json
+    else: # Limit the available data for other users
+        fields = ['id', 'email', 'first_name', 'last_name', 'full_name', 'nickname', 'phone', 'formatted_phone', 'active', 'group', 'profile_picture', 'bac']
+        data = {}
+        for field in fields:
+            if field in current_user.json:
+                data[field] = current_user.json[field]
+
+
+    return jsonify(data)
+
+@mod.route('/api/vcard/<int:user_id>', methods=['GET'])
+@requires_auth
+def get_vcard(user_id):
+    user = models.User.query.get_or_404(user_id)
+    return user.vcard
