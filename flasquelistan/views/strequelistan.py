@@ -3,7 +3,7 @@ import flask_login
 from sqlalchemy.sql.expression import func, not_
 from flasquelistan import forms, models, util
 from flasquelistan.views import auth
-
+from flask import request
 mod = flask.Blueprint('strequelistan', __name__)
 
 
@@ -47,36 +47,43 @@ def index():
 
 @mod.route('/strequa', methods=['POST'])
 def add_streque():
-    if flask.request.is_json:
-        data = flask.request.get_json()
+   if request.is_json:
+        form = forms.StrequaForm()
+
+    form = forms.StrequaForm()
+    if form.validate_on_submit():
+        user = models.User.query.get(form.user_id.data)
+        article = models.Article.query.get(form.article_id.data)
+        streque = user.strequa(article)
+
+        flask.flash("{}-streque på {} tillagt.".format(
+            streque.text,
+            user.full_name
+        ), 'success')
     else:
-        data = flask.request.args
+        forms.flash_errors(form)
 
-    try:
-        user = models.User.query.get(data['user_id'])
-        article_id = int(data['article_id'])
-    except (KeyError, ValueError, TypeError):
-        flask.abort(400)
 
-    article = models.Article.query.get(article_id)
+    return flask.redirect(flask.url_for('strequelistan.index'))
 
-    if not article:
-        flask.abort(400)
+    #if flask.request.is_json:
+    #    data = flask.request.get_json()
+    #else:
+    #    data = flask.request.args
 
-    streque = user.strequa(article)
 
-    if flask.request.is_json:
-        return flask.jsonify(
-            user_id=user.id,
-            value=streque.value,
-            balance=user.balance
-        )
+    #if flask.request.is_json:
+    #    return flask.jsonify(
+    #        user_id=user.id,
+    #        value=streque.value,
+    #        balance=user.balance
+    #    )
 
-    else:
-        flask.flash("{}-streque på {} tillagt.".format(streque.text,
-                                                       user.full_name),
-                    'success')
-        return flask.redirect(flask.url_for('strequelistan.index'))
+    #else:
+    #    flask.flash("{}-streque på {} tillagt.".format(streque.text,
+    #                                                   user.full_name),
+    #                'success')
+    #    return flask.redirect(flask.url_for('strequelistan.index'))
 
 
 @mod.route('/void', methods=['POST'])
