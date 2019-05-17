@@ -364,3 +364,15 @@ class ReturnTransactionForm(flask_wtf.FlaskForm):
         validators.InputRequired(),
         Exists(models.Transaction, models.Transaction.id, "Användaren existerar inte")
     ])
+
+class AdminTransactionForm(flask_wtf.FlaskForm):
+    user_id = fields.StringField('User ID', validators=[
+        validators.InputRequired(),
+        Exists(models.User, models.User.id, "Användaren existerar inte")
+    ])
+    text = fields.StringField('Transaction text', validators=[
+        validators.InputRequired()
+    ])
+    value = fields.IntegerField('Transaction text', validators=[
+        validators.InputRequired()
+    ])

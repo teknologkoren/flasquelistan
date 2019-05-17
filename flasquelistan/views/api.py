@@ -98,6 +98,19 @@ def latest_streque():
         data.append(s.json)
     return jsonify(data)
 
+@mod.route('/api/transactions/', methods=['POST'])
+@requires_admin_auth
+def add_transaction():
+    form = forms.AdminTransactionForm(request.form, csrf_enabled=False)
+    if form.validate():
+        user = User.query.get(form.user_id.data)
+        transaction = user.admin_transaction(form.value.data, form.text.data)
+        return jsonify(transaction.json)
+
+    else:
+        return jsonify({'success': 'False', 'error': form.errors})
+
+
 @mod.route('/api/transactions/<int:transaction_id>', methods=['GET'])
 @requires_auth
 def single_transaction(transaction_id):
