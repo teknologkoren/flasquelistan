@@ -13,6 +13,7 @@ from flasquelistan.models import Quote
 from flasquelistan.views import auth
 import json
 from sqlalchemy.sql import exists
+from sqlalchemy.sql.expression import func
 from flask_login import login_user
 from flask_login import current_user
 
@@ -226,6 +227,10 @@ def single_quote(quote_id):
     quote = models.Quote.query.get_or_404(quote_id)
     return jsonify(quote.json)
 
+@mod.route('/api/random-quote/', methods=['GET'])
+@requires_auth
+def random_quote():
+    return jsonify(models.Quote.query.order_by(func.random()).first().json)
 
 @mod.route('/api/users/<int:user_id>', methods=['GET'])
 @requires_auth
