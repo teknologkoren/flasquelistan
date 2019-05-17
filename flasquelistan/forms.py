@@ -300,6 +300,40 @@ def BulkTransactionFormFactory(active=True):
 
     return BulkTransactionForm()
 
+class AddArticleForm(flask_wtf.FlaskForm):
+    name = fields.StringField('Namn', validators=[
+        validators.InputRequired(),
+        validators.Length(max=15)
+    ])
+    value = html5_fields.DecimalField(
+        'Pris (i hela kronor)',
+        default=0,
+        render_kw={'step': .01, 'min': 0, 'max': 1000},
+        validators=[
+            validators.InputRequired(),
+            validators.NumberRange(min=0, max=1000),
+        ]
+    )
+    standardglas = html5_fields.DecimalField(
+        'Standardglas',
+        default=1,
+        render_kw={'step': .1},
+        validators=[
+            validators.InputRequired(),
+        ]
+    )
+    description = fields.TextAreaField(
+        'Beskrivning',
+        description="Vilka produkter som ingår och/eller beskrivning. "
+                    "Markdown.")
+    weight = fields.IntegerField(
+        'Sorteringsvikt',
+        default="",
+        description="Heltal. En högre vikt stiger.",
+        validators=[
+            validators.InputRequired()
+        ]
+    )
 
 class EditArticleForm(flask_wtf.FlaskForm):
     name = fields.StringField('Namn', validators=[

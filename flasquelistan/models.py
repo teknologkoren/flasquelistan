@@ -320,6 +320,7 @@ class Article(db.Model):
         data['name'] = self.name
         data['description'] = self.description
         data['standardglas'] = self.standardglas
+        data['value'] = self.value
         return data
 
 

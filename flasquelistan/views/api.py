@@ -232,6 +232,15 @@ def single_quote(quote_id):
 def random_quote():
     return jsonify(models.Quote.query.order_by(func.random()).first().json)
 
+
+@mod.route('/api/quotes/<int:quote_id>', methods=['DELETE'])
+@requires_admin_auth
+def delete_qoute(quote_id):
+    quote = models.Quote.query.get_or_404(quote_id)
+    models.db.session.delete(quote)
+    models.db.session.commit()
+    return ""
+
 @mod.route('/api/users/<int:user_id>', methods=['GET'])
 @requires_auth
 def single_user(user_id):
@@ -318,3 +327,76 @@ def single_group(group_id):
     group = models.Group.query.get_or_404(group_id)
     return jsonify(group.json)
 
+@mod.route('/api/groups/<int:group_id>', methods=['DELETE'])
+@requires_admin_auth
+def delete_group(group_id):
+    group = models.Group.query.get_or_404(group_id)
+    models.db.session.delete(group)
+    models.db.session.commit()
+    return ""
+
+@mod.route('/api/articles/', methods=['POST'])
+@requires_admin_auth
+def add_article():
+    form = forms.AddArticleForm(request.form, csrf_enabled=False)
+    if form.validate():
+        article = models.Article(
+            name=form.name.data,
+            weight=form.weight.data,
+            description=form.description.data,
+            standardglas=form.standardglas.data,
+            value=int(form.value.data*100) # Fix kronor till ören
+        )
+        models.db.session.add(article)
+        models.db.session.commit()
+        return jsonify(article.json)
+    else:
+        return jsonify({'success': 'False', 'error': form.errors})
+
+@mod.route('/api/articles/', methods=['GET'])
+@requires_auth
+def articles():
+    page = request.args.get("page", "1")
+    limit = request.args.get("limit", "50")
+
+    try:
+        page = int(page)
+    except:
+        return "invalid value for page '{}', needs to be an integer".format(request.args.get("page"))
+
+    try:
+        limit = int(limit)
+    except:
+        return "invalid value for limit '{}', needs to be an integer".format(request.args.get("page"))
+
+    articles = models.Article.query.paginate(per_page=limit)
+    data = {}
+
+    data["current_page"] = page
+    data["limit"] = limit
+
+    if articles.has_next:
+        data["next_page"] = articles.next_num
+
+    if articles.has_prev:
+        data["prev"] = articles.prev_num
+
+    data["data"] = []
+    for item in articles.items:
+        data["data"].append(item.json)
+
+    return jsonify(data)
+
+@mod.route('/api/articles/<int:article_id>', methods=['GET'])
+@requires_auth
+def single_article(article_id):
+    article = models.Article.query.get_or_404(article_id)
+    return jsonify(article.json)
+
+@mod.route('/api/articles/<int:article_id>', methods=['DELETE'])
+@requires_admin_auth
+def delete_article(article_id):
+    article = models.Article.query.get_or_404(article_id)
+    models.db.session.delete(article)
+    models.db.session.commit()
+    return ""
