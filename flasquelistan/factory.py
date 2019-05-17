@@ -210,7 +210,8 @@ def setup_flask_admin(app, db):
         pass
 
     class UserModelView(LoginModelView):
-        form_excluded_columns = ("transactions",)
+        form_excluded_columns = ["transactions",]
+        column_exclude_list = ['_password', 'body_mass', 'profile_picture', 'y_chromosome', '_password_timestamp']
 
     admin = flask_admin.Admin(app, name='Flasquelistan',
                               index_view=LoginIndexView(url='/flask-admin'))
