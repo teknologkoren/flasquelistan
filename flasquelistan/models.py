@@ -334,6 +334,17 @@ class Transaction(db.Model):
         'polymorphic_on': type,
     }
 
+    def void_and_refund(self):
+        if self.voided:
+            return False
+
+        self.user.balance += self.value
+
+        self.voided = True
+        db.session.commit()
+
+        return True
+
     @property
     def formatted_value(self):
         return flask_babel.format_currency(self.value/100, 'SEK')
@@ -366,17 +377,6 @@ class Streque(Transaction):
         """Too old to be voided by user."""
         too_old = datetime.datetime.utcnow() - datetime.timedelta(minutes=old)
         return self.timestamp < too_old
-
-    def void_and_refund(self):
-        if self.voided:
-            return False
-
-        self.user.balance += self.value
-
-        self.voided = True
-        db.session.commit()
-
-        return True
 
 class AdminTransaction(Transaction):
     __mapper_args__ = {
