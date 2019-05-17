@@ -107,10 +107,10 @@ def single_transaction(transaction_id):
             return jsonify(transaction.json)
     return "not found" 
 
-@mod.route('/api/return-transaction/<int:transaction_id>', methods=['POST'])
+@mod.route('/api/return-transaction/', methods=['POST'])
 @requires_admin_auth
-def return_transaction(transaction_id):
-    transaction = models.Transaction.query.get_or_404(transaction_id)
+def return_transaction():
+    transaction = models.Transaction.query.get_or_404(request.form.transaction_id)
     transaction.void_and_refund()
     return jsonify(transaction.json)
 
