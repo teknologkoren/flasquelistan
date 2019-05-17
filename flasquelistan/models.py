@@ -135,7 +135,7 @@ class User(flask_login.UserMixin, db.Model):
     def strequa(self, article):
         value = article.value
 
-        streque = Streque(value=value, text=article.name, user_id=self.id,
+        streque = Streque(value=-value, text=article.name, user_id=self.id,
                           standardglas=article.standardglas)
         self.balance -= value
 
@@ -300,10 +300,20 @@ class Transaction(db.Model):
     def formatted_value(self):
         return flask_babel.format_currency(self.value/100, 'SEK')
 
+    def void_and_refund(self):
+        if self.voided:
+            return False
+
+        self.user.balance -= self.value
+
+        self.voided = True
+        db.session.commit()
+
+        return True
+
     def __str__(self):
         return "{}: {} @ {}".format(self.__class__.__name__,
                                     self.value, self.user)
-
 
 class Streque(Transaction):
     standardglas = db.Column(db.Float)
@@ -318,16 +328,6 @@ class Streque(Transaction):
         too_old = datetime.datetime.utcnow() - datetime.timedelta(minutes=old)
         return self.timestamp < too_old
 
-    def void_and_refund(self):
-        if self.voided:
-            return False
-
-        self.user.balance += self.value
-
-        self.voided = True
-        db.session.commit()
-
-        return True
 
 
 class AdminTransaction(Transaction):
