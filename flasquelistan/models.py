@@ -338,7 +338,7 @@ class Transaction(db.Model):
         if self.voided:
             return False
 
-        self.user.balance += self.value
+        self.user.balance -= self.value
 
         self.voided = True
         db.session.commit()
