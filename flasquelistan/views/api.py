@@ -98,6 +98,15 @@ def latest_streque():
         data.append(s.json)
     return jsonify(data)
 
+@mod.route('/api/transactions/<int:transaction_id>', methods=['GET'])
+@requires_auth
+def single_transaction(transaction_id):
+    transaction = models.Transaction.query.get(transaction_id)
+    if transaction:
+        if current_user.is_admin or current_user.id == transaction.user_id:
+            return jsonify(transaction.json)
+    return "not found" 
+
 @mod.route('/api/transactions/', methods=['GET'])
 @requires_admin_auth
 def list_transactions():
@@ -205,12 +214,24 @@ def single_user(user_id):
     if user.id == current_user.id or current_user.is_admin:
         data = user.json
     else: # Limit the available data for other users
-        fields = ['id', 'email', 'first_name', 'last_name', 'full_name', 'nickname', 'phone', 'formatted_phone', 'active', 'group', 'profile_picture', 'bac']
+        fields = [
+            'id',
+            'email',
+            'first_name',
+            'last_name',
+            'full_name',
+            'nickname',
+            'phone',
+            'formatted_phone',
+            'active',
+            'group',
+            'profile_picture',
+            'bac'
+        ]
         data = {}
         for field in fields:
             if field in current_user.json:
                 data[field] = user.json[field]
-
 
     return jsonify(data)
 
