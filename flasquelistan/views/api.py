@@ -86,7 +86,6 @@ def requires_admin_auth(f):
 @requires_auth
 def latest_streque():
     then = datetime.datetime.utcnow() - datetime.timedelta(minutes=15)
-    print(then)
     streque = Transaction.query.filter(
             Transaction.type == "streque",
         ).filter(
@@ -175,7 +174,6 @@ def quotes():
         return "invalid value for limit '{}', needs to be an integer".format(request.args.get("page"))
 
     quotes = models.Quote.query.order_by(models.Quote.timestamp.desc()).paginate(per_page=limit)
-    pprint(quotes)
     data = {}
 
     data["current_page"] = page
@@ -211,7 +209,7 @@ def single_user(user_id):
         data = {}
         for field in fields:
             if field in current_user.json:
-                data[field] = current_user.json[field]
+                data[field] = user.json[field]
 
 
     return jsonify(data)
