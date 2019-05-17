@@ -209,9 +209,12 @@ def setup_flask_admin(app, db):
     class LoginModelView(AdminLoginMixin, ModelView):
         pass
 
+    class UserModelView(LoginModelView):
+        form_excluded_columns = ("transactions",)
+
     admin = flask_admin.Admin(app, name='Flasquelistan',
                               index_view=LoginIndexView(url='/flask-admin'))
-    admin.add_view(LoginModelView(models.User, db.session, name='User'))
+    admin.add_view(UserModelView(models.User, db.session, name='User'))
     admin.add_view(LoginModelView(models.Group, db.session, name='Group'))
     admin.add_view(LoginModelView(models.Quote, db.session, name='Quote'))
     admin.add_view(LoginModelView(models.Article, db.session, name='Article'))
