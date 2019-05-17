@@ -335,6 +335,11 @@ class EditArticleForm(flask_wtf.FlaskForm):
         ]
     )
 
+class AddGroupForm(flask_wtf.FlaskForm):
+    name = fields.StringField('Transaction text', validators=[
+        validators.InputRequired()
+    ])
+    weight = fields.IntegerField('Sorting weight', default=0)
 
 class EditGroupForm(flask_wtf.FlaskForm):
     name = fields.StringField('Namn', validators=[

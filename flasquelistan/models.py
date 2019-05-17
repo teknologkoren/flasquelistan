@@ -288,6 +288,12 @@ class Group(db.Model):
     def __str__(self):
         return self.name
 
+    @property
+    def json(self):
+        data = {}
+        data['name'] = self.name
+        data['weight'] = self.weight
+        return data
 
 class Article(db.Model):
     id = db.Column(db.Integer, primary_key=True)

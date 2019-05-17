@@ -265,3 +265,56 @@ def single_user(user_id):
 def get_vcard(user_id):
     user = models.User.query.get_or_404(user_id)
     return user.vcard
+
+@mod.route('/api/groups/', methods=['POST'])
+@requires_admin_auth
+def add_group():
+    form = forms.AddGroupForm(request.form, csrf_enabled=False)
+    if form.validate():
+        group = models.Group(name=form.name.data, weight=form.weight.data)
+        models.db.session.add(group)
+        models.db.session.commit()
+        return jsonify(group.json)
+    else:
+        return jsonify({'success': 'False', 'error': form.errors})
+
+@mod.route('/api/groups/', methods=['GET'])
+@requires_auth
+def groups():
+    page = request.args.get("page", "1")
+    limit = request.args.get("limit", "50")
+
+    try:
+        page = int(page)
+    except:
+        return "invalid value for page '{}', needs to be an integer".format(request.args.get("page"))
+
+    try:
+        limit = int(limit)
+    except:
+        return "invalid value for limit '{}', needs to be an integer".format(request.args.get("page"))
+
+    groups = models.Group.query.paginate(per_page=limit)
+    data = {}
+
+    data["current_page"] = page
+    data["limit"] = limit
+
+    if groups.has_next:
+        data["next_page"] = groups.next_num
+
+    if groups.has_prev:
+        data["prev"] = groups.prev_num
+
+    data["data"] = []
+    for item in groups.items:
+        data["data"].append(item.json)
+
+    return jsonify(data)
+
+@mod.route('/api/groups/<int:group_id>', methods=['GET'])
+@requires_auth
+def single_group(group_id):
+    group = models.Group.query.get_or_404(group_id)
+    return jsonify(group.json)
+
