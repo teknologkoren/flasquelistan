@@ -1,6 +1,7 @@
 import datetime
 import random
 import string
+import hashlib
 import flask_babel
 import flask_login
 import flask_sqlalchemy
@@ -231,6 +232,15 @@ class User(flask_login.UserMixin, db.Model):
         )
 
         return blood_alcohol_concentration
+
+    @property
+    def emoji(self):
+        # hexadecimal md5-hash based on user id
+        md5 = hashlib.md5(str(self.id).encode()).hexdigest()
+        # "random" number between 0x0 and 0x44
+        i = int(md5, 16) % 0x45
+        # add number to start of the 'Emoticons' unicode block
+        return chr(0x1f600 + i)
 
     def __str__(self):
         return "{} {} <{}>".format(self.first_name, self.last_name, self.email)
