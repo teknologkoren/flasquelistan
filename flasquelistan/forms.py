@@ -196,7 +196,7 @@ class FullEditUserForm(EditUserForm):
     )
     active = fields.BooleanField(
         'Aktiv',
-        description="Om medlemmen är en aktiv medlem i kören."
+        description="Om medlemmen är aktiv i föreningen."
     )
     group_id = fields.SelectField('Grupp', coerce=int)
     # Populate .choices in view!

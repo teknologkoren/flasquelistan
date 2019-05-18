@@ -4,8 +4,8 @@
 
 {% block body %}
 <div>
-  <h2>Spamma kören</h2>
-  <p>Spamma medlemmar med negativt saldo.</p>
+  <h2>Skicka saldopåminnelser</h2>
+  <p>Skicka en påminnelse till medlemmar med negativt saldo.</p>
   <div class="table-wrap">
     <table>
       <tr>
@@ -32,7 +32,7 @@
     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
     <div class="form-entry">
       <div class="form-field">
-        <button>Spamma</button>
+        <button>Skicka</button>
       </div>
     </div>
   </form>
