@@ -342,7 +342,7 @@ def change_email_or_password(user_id):
     user = models.User.query.get_or_404(user_id)
     current_user = flask_login.current_user
 
-    if current_user.id != user.id:
+    if current_user.id != user.id and not user.is_admin:
         if current_user.is_admin:
             form = forms.ChangeEmailOrPasswordForm(obj=user, user=user,
                                                    nopasswordvalidation=True)
