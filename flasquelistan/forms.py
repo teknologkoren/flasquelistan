@@ -253,7 +253,7 @@ def ChangeProfilePictureFormFactory(user):
 
 
 class UploadProfilePictureForm(flask_wtf.FlaskForm):
-    upload = fields.FileField('Profilbild', validators=[
+    upload = fields.FileField('Ladda upp ny profilbild', validators=[
         FileAllowed(util.image_uploads, 'Endast bilder!')
     ])
 
