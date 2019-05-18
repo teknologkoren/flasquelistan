@@ -256,7 +256,6 @@ def setup_flask_assets(app):
             output='gen/admin.js'
         ),
         'css_common': Bundle(
-            'css/lib/normalize.css',
             'css/style.css',
             'css/streque.css',
             'css/quotes.css',
