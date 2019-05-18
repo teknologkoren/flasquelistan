@@ -164,6 +164,7 @@ def show_profile(user_id):
 
     upload_profile_picture_form = forms.UploadProfilePictureForm()
 
+    new_image_uploaded = False
     if upload_profile_picture_form.validate_on_submit():
         if upload_profile_picture_form.upload.data:
             filename = util.profile_pictures.save(
@@ -178,22 +179,23 @@ def show_profile(user_id):
 
             models.db.session.add(profile_picture)
             models.db.session.commit()
-
+            new_image_uploaded = True
             flask.flash("Profilbilden har ändrats!", 'success')
 
     elif upload_profile_picture_form.is_submitted():
         forms.flash_errors(upload_profile_picture_form)
 
     change_profile_picture_form = forms.ChangeProfilePictureFormFactory(user)
-    if change_profile_picture_form.validate_on_submit():
-        # The "none" choice seems to work. Not sure why.
-        user.profile_picture_id = change_profile_picture_form.profile_picture.data
-        models.db.session.commit()
+    if not new_image_uploaded:
+        if change_profile_picture_form.validate_on_submit():
+            # The "none" choice seems to work. Not sure why.
+            user.profile_picture_id = change_profile_picture_form.profile_picture.data
+            models.db.session.commit()
 
-        flask.flash("Din profilbild har ändrats!", 'success')
+            flask.flash("Din profilbild har ändrats!", 'success')
 
-    elif change_profile_picture_form.is_submitted():
-        change_profile_picture_forms.flash_errors(change_profile_picture_form)
+        elif change_profile_picture_form.is_submitted():
+            change_profile_picture_forms.flash_errors(change_profile_picture_form)
 
     return flask.render_template('show_profile.html',
                                  user=user,
