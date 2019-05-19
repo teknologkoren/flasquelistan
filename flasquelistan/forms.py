@@ -72,7 +72,8 @@ class LowercaseEmailField(html5_fields.EmailField):
 class EmailForm(flask_wtf.FlaskForm):
     email = LowercaseEmailField('E-post', validators=[
         validators.InputRequired(),
-        validators.Email()
+        validators.Email(),
+        validators.Length(max=254)
     ])
 
 
@@ -90,6 +91,7 @@ class UniqueEmailForm(flask_wtf.FlaskForm):
     email = LowercaseEmailField('E-post', validators=[
         validators.InputRequired(),
         validators.Email(),
+        validators.Length(max=254),
         Unique(models.User,
                models.User.email,
                message='Denna e-postadress används redan.')
@@ -158,7 +160,13 @@ class ChangeEmailOrPasswordForm(EmailForm, PasswordForm):
 
 
 class EditUserForm(flask_wtf.FlaskForm):
-    nickname = fields.StringField('Smeknamn', description="Något roligt.")
+    nickname = fields.StringField(
+        'Smeknamn',
+        description="Något roligt.",
+        validators=[
+            validators.Length(max=50)
+        ]
+    )
 
     phone = html5_fields.TelField(
         'Telefon',
@@ -191,11 +199,17 @@ class EditUserForm(flask_wtf.FlaskForm):
 class FullEditUserForm(EditUserForm):
     first_name = fields.StringField(
         'Förnamn',
-        validators=[validators.InputRequired()],
+        validators=[
+            validators.InputRequired(),
+            validators.Length(max=50)
+        ],
     )
     last_name = fields.StringField(
         'Efternamn',
-        validators=[validators.InputRequired()],
+        validators=[
+            validators.InputRequired(),
+            validators.Length(max=50)
+        ],
     )
     active = fields.BooleanField(
         'Aktiv',
@@ -212,11 +226,17 @@ class AddUserForm(UniqueEmailForm, FullEditUserForm):
 class RegistrationRequestForm(UniqueEmailForm):
     first_name = fields.StringField(
         'Förnamn',
-        validators=[validators.InputRequired()],
+        validators=[
+            validators.InputRequired(),
+            validators.Length(max=50)
+        ],
     )
     last_name = fields.StringField(
         'Efternamn',
-        validators=[validators.InputRequired()],
+        validators=[
+            validators.InputRequired(),
+            validators.Length(max=50)
+        ],
     )
     phone = html5_fields.TelField(
         'Telefon',
