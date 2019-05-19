@@ -126,6 +126,7 @@
 }
 
 .profile .profile-picture {
+    display: block;
     max-width: 300px;
     align-self: start;
 }
