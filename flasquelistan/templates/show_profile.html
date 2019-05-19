@@ -46,16 +46,16 @@
     </dl>
     {% endif %}
 
-    <fieldset>
-      <legend>{{ profile_picture_form.upload.label }}</legend>
-      <form class="upload-and-set-profile-picture" method="POST" enctype="multipart/form-data">
+    <form class="upload-and-set-profile-picture" method="POST" enctype="multipart/form-data">
+      <fieldset>
+        <legend>{{ profile_picture_form.upload.label }}</legend>
         {{ profile_picture_form.csrf_token }}
         <div class="form-field">
           {{ profile_picture_form.upload }}
         </div>
         <button>Spara</button>
-      </form>
-    </fieldset>
+      </fieldset>
+    </form>
 
     {% if user == current_user or current_user.is_admin %}
     <form method="POST" enctype="multipart/form-data">

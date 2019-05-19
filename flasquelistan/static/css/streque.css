@@ -151,8 +151,9 @@
     margin-bottom: .5rem;
 }
 
+.upload-and-set-profile-picture,
 .change-profile-picture {
-    margin-top: 1.5rem;
+    margin: 1.5rem 0;
 }
 
 .change-profile-picture .grid-wrapper {
