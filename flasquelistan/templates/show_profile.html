@@ -5,6 +5,10 @@
 
 {% from "macros.html" import profile_picture, form_entry %}
 
+{% block head %}
+<script defer src="{{ url_for('static', filename='js/confirmDialog.js') }}"></script>
+{% endblock %}
+
 {% block body %}
 <div class="profile">
   {{ profile_picture(user, with_link=True) }}
@@ -85,7 +89,9 @@
             </div>
             {% endfor %}
           </div>
-          <button>Spara</button>
+          <div class="submit">
+            <button>Spara</button>
+            <button class="confirm" formaction="{{ url_for('strequelistan.delete_profile_picture', user_id=user.id) }}">Ta bort</button>
         </fieldset>
       </div>
     </form>

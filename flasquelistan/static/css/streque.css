@@ -178,6 +178,11 @@
     margin-top: 1rem;
 }
 
+.change-profile-picture .submit {
+    display: flex;
+    justify-content: space-around;
+}
+
 .change-profile-picture .form-field {
     margin: 0;
 }

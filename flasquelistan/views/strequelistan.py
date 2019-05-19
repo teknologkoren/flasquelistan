@@ -192,7 +192,8 @@ def upload_profile_picture(user_id):
 
             models.db.session.add(profile_picture)
             models.db.session.commit()
-            flask.flash("Profilbilden har ändrats!", 'success')
+
+            flask.flash("Din profilbild har ändrats!", 'success')
 
     elif form.is_submitted():
         forms.flash_errors(form)
@@ -218,6 +219,45 @@ def change_profile_picture(user_id):
         models.db.session.commit()
 
         flask.flash("Din profilbild har ändrats!", 'success')
+
+    elif form.is_submitted():
+        form.flash_errors(form)
+
+    return flask.redirect(
+        flask.url_for('strequelistan.show_profile', user_id=user_id)
+    )
+
+
+@mod.route('/profile/<int:user_id>/delete-profile-picture', methods=['POST'])
+def delete_profile_picture(user_id):
+    user = models.User.query.get_or_404(user_id)
+
+    if current_user.id != user.id and not current_user.is_admin:
+        flask.flash("Du får bara redigera din egen profil! ಠ_ಠ", 'error')
+        return flask.redirect(flask.url_for('.show_profile', user_id=user_id))
+
+    form = forms.ChangeProfilePictureFormFactory(user)
+
+    if form.validate_on_submit():
+        if form.profile_picture.data == 'none':
+            flask.flash(
+                "Du kan inte ta bort "
+                "<a href=\"https://phys.org/news/2014-08-what-is-nothing.html\">"
+                "ingenting"
+                "</a>!", 'error'
+            )
+
+        elif form.profile_picture.data:
+            # The "none" choice seems to work. Not sure why.
+            profile_picture = (models.ProfilePicture
+                               .query
+                               .get_or_404(form.profile_picture.data)
+                               )
+
+            models.db.session.delete(profile_picture)
+            models.db.session.commit()
+
+            flask.flash("Profilbilden har tagits bort!", 'success')
 
     elif form.is_submitted():
         form.flash_errors(form)
