@@ -46,13 +46,17 @@
     </dl>
     {% endif %}
 
-    <form class="upload-and-set-profile-picture" method="POST" enctype="multipart/form-data">
-      {{ profile_picture_form.csrf_token }}
-      {{ form_entry(profile_picture_form.upload) }}
-      <div class="form-field">
+    <fieldset>
+      <legend>{{ profile_picture_form.upload.label }}</legend>
+      <form class="upload-and-set-profile-picture" method="POST" enctype="multipart/form-data">
+        {{ profile_picture_form.csrf_token }}
+        <div class="form-field">
+          {{ profile_picture_form.upload }}
+        </div>
         <button>Spara</button>
-      </div>
-    </form>
+      </form>
+    </fieldset>
+
     {% if user == current_user or current_user.is_admin %}
     <br/>
     <form method="POST" enctype="multipart/form-data">
@@ -77,10 +81,7 @@
             </div>
             {% endfor %}
           </div>
-          </br>
-          <div class="form-field">
-            <input type="submit" value="Spara">
-          </div>
+          <button>Spara</button>
         </fieldset>
       </div>
     </form>

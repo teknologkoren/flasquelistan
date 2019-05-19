@@ -45,6 +45,11 @@ a:hover {
     text-decoration: underline;
 }
 
+fieldset {
+    border: 1px solid #ddd;
+    border-radius: 7px;
+}
+
 .logo {
     height: 100%;
     padding: .5rem;

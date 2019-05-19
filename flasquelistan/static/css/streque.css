@@ -147,14 +147,8 @@
     height: 100px;
 }
 
-.upload-and-set-profile-picture {
-    padding: .5rem;
-    border: 1px solid #ddd;
-    border-radius: 7px;
-}
-
-.upload-and-set-profile-picture .form-entry {
-    margin-top: 0;
+.upload-and-set-profile-picture .form-field {
+    margin-bottom: .5rem;
 }
 
 .change-profile-picture .grid-wrapper {
@@ -173,6 +167,10 @@
 
 .change-profile-picture input[type=radio]:checked + label > .label {
     border: 5px solid #6797D0;
+}
+
+.change-profile-picture button {
+    margin-top: 1rem;
 }
 
 .change-profile-picture .form-field {
