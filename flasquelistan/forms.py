@@ -181,7 +181,10 @@ class EditUserForm(flask_wtf.FlaskForm):
         'Har du en Y-kromosom?',
         description=("Används för att mer precist räkna ut "
                      "alkoholkoncentrationen i blodet."),
-        choices=[('n/a', 'Vill ej uppge'), ('yes', 'Ja'), ('no', 'Nej')]
+        choices=[('n/a', 'Vill ej uppge'), ('yes', 'Ja'), ('no', 'Nej')],
+        validators=[
+            validators.Optional()
+        ]
     )
 
 
