@@ -5,18 +5,19 @@ function downloadEmma() {
   wrapper.id = 'emma-wrapper';
   wrapper.classList.add('hidden');
   video.id = 'emma';
+  video.setAttribute('preload', 'auto');
+  video.disableRemotePlayback = true;
 
+  /*
   var webm = document.createElement('source');
   webm.src = '/static/images/emma.webm';
   webm.type = 'video/webm';
+  video.appendChild(webm);
+  */
 
   var mp4 = document.createElement('source');
   mp4.src = '/static/images/emma.mp4';
   mp4.type = 'video/mp4';
-
-  video.pause();
-
-  video.appendChild(webm);
   video.appendChild(mp4);
 
   wrapper.appendChild(video);
