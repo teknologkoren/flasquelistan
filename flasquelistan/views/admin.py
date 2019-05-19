@@ -227,7 +227,7 @@ def remove_article(article_id):
 @mod.route('/admin/spam', methods=['GET', 'POST'])
 def spam():
     users = (models.User.query
-             .order_by(models.User.first_name)
+             .order_by(models.User.balance.asc())
              .filter(models.User.balance < 0))
 
     if flask.request.method == 'POST':
