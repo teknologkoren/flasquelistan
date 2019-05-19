@@ -58,7 +58,6 @@
     </fieldset>
 
     {% if user == current_user or current_user.is_admin %}
-    <br/>
     <form method="POST" enctype="multipart/form-data">
       {{ change_profile_picture_form.csrf_token }}
 

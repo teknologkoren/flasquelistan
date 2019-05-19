@@ -151,6 +151,10 @@
     margin-bottom: .5rem;
 }
 
+.change-profile-picture {
+    margin-top: 1.5rem;
+}
+
 .change-profile-picture .grid-wrapper {
     max-height: 30rem;
     overflow-y: scroll;
