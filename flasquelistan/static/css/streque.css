@@ -24,14 +24,10 @@
 
 .usercard .profile-picture {
     object-fit: cover;
-    width: 5rem;
-    height: 5rem;
+    width: 6rem;
+    height: 6rem;
     border-radius: 7px;
-    margin-bottom: .5rem;
-}
-
-.alcometer {
-    margin-top: .2rem;
+    margin-bottom: .1rem;
 }
 
 .alcometer .bac {
