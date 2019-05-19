@@ -7,7 +7,7 @@
     /* Fixes overflowing content in flex and grid (anything other than
      * "overflow: visible"). Won't overflow without this.
      * Also makes wrapping inter-word if very little space left. */
-    min-width: auto;
+    min-width: 0;
     max-width: 100%;
 }
 

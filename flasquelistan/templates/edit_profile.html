@@ -6,9 +6,11 @@
 
 {% block body %}
 <div class="profile">
-  {{ profile_picture(user, with_link=True) }}
+  <div class="profile-content">
+    {{ profile_picture(user, with_link=True) }}
+  </div>
 
-  <div>
+  <div class="profile-content">
     <h2>
       {{ user.first_name }}
       {% if user.nickname %}"{{ user.nickname }}"{% endif %}

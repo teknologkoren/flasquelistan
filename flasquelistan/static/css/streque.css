@@ -119,19 +119,20 @@
     width: 100%;
 }
 
-.profile > * {
+.profile-content {
     padding-left: .65rem;
     padding-right: .65rem;
+    max-width: 30rem;
 }
 
 .profile .profile-picture {
-    margin-top: 2rem;
     max-width: 300px;
     align-self: start;
 }
 
 .profile .profile-picture img {
     max-height: 200px;
+    margin-top: 2rem;
 }
 
 .no-profile-picture {
