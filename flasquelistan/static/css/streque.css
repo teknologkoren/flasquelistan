@@ -219,6 +219,7 @@
 
 ol.transaction-history {
   padding: 0;
+  max-width: 30rem;
 }
 
 ol.transaction-history li {
