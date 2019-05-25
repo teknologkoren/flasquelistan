@@ -211,7 +211,7 @@ def show_profile(user_id):
     transactions = (user.transactions
                     .filter(models.Streque.voided.is_(False))
                     .order_by(models.Transaction.timestamp.desc())
-                    .limit(10))
+                    .limit(5))
 
     upload_profile_picture_form = forms.UploadProfilePictureForm()
     change_profile_picture_form = forms.ChangeProfilePictureFormFactory(user)

@@ -19,31 +19,26 @@
       <p>Det är tomt här, strequa mer!</p>
       {% else %}
       <dd>
-      <div class="table-wrap">
-        <table class="transaction-history">
-          {% for transaction in transactions %}
-          <tr>
-            <td>
-              <span class="text">
-                {{ transaction.text }}
-              </span>
-            </td>
-            <td>
-              <span class="value">
-                {{ transaction.formatted_value }}
-              </span>
-            </td>
-            <td>
-              <span class="timestamp">
-                {{ format_datetime(transaction.timestamp, "dd MMMM yyyy, HH:mm") }}
-              </span>
-            </td>
-          </tr>
-          {% endfor %}
-        </table>
-      </div>
+      <ol class="transaction-history">
+      {% for transaction in transactions %}
+        <li>
+          <div class="upper">
+            <span class="text">
+              {{ transaction.text }}
+            </span>
+            <span class="value">
+              {{ transaction.formatted_value }}
+            </span>
+          </div>
+          <div class="timestamp">
+            {{ format_datetime(transaction.timestamp, "dd MMMM yyyy, HH:mm") }}
+          </div>
+        </li>
+      {% endfor %}
+      </ol>
+      </dd>
       {% endif %}
-    </dl>
-  </div>
+      </dl>
+    </div>
 </div>
 {% endblock %}

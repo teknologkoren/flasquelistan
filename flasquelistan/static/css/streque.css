@@ -217,6 +217,29 @@
     margin-bottom: 1.5rem;
 }
 
+ol.transaction-history {
+  padding: 0;
+}
+
+ol.transaction-history li {
+  display: block;
+  border: 1px solid #ddd;
+  border-radius: 7px;
+  margin: .5rem 0;
+  padding: .5rem;
+}
+
+ol.transaction-history li .upper {
+  display: flex;
+  justify-content: space-between;
+}
+
+ol.transaction-history li .value {
+  white-space: nowrap;
+  flex: 0 0 auto;
+  margin-left: 1rem;
+}
+
 #emma-wrapper {
     position: fixed;
     top: 50%;
@@ -258,3 +281,5 @@
     transition: width .1s, height .1s;
     transition-timing-function: linear;
 }
+
+
