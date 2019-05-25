@@ -36,6 +36,8 @@
             Streque
             {% elif transaction.type == 'admin_transaction' %}
             Admin
+            {% elif transaction.type == 'user_transaction' %}
+            Pay
             {% else %}
             ???
             {% endif %}
@@ -53,7 +55,7 @@
         </td>
         <td class="timestamp">
           <span>
-            {{ format_datetime(transaction.timestamp, "dd MMMM yyyy, HH:mm") }}
+            {{ format_datetime(transaction.timestamp, "yyyy-MM-dd HH:mm") }}
           </span>
         </td>
         <td>

@@ -22,7 +22,8 @@ def index():
               .query
               .filter(models.Group.users.any())  # Only groups with users
               .order_by(models.Group.weight.desc())
-              .all())
+              .all()
+              )
 
     random_quote = models.Quote.query.order_by(func.random()).first()
 
@@ -111,6 +112,58 @@ def void_streque():
         return flask.redirect(flask.url_for('strequelistan.history'))
 
 
+@mod.route('/transfer', methods=['POST'])
+def credit_transfer():
+    form = forms.CreditTransferForm()
+
+    payer = (models.User
+             .query
+             .filter_by(id=form.payer_id.data)
+             .first()
+             )
+
+    payee = (models.User
+             .query
+             .filter_by(id=form.payee_id.data)
+             .first()
+             )
+
+    if not (payer and payee):
+        flask.abort(400)
+
+    redir = flask.redirect(
+                flask.url_for(
+                    'strequelistan.show_profile',
+                    user_id=payee.id
+                )
+            )
+
+    if form.validate_on_submit():
+        if payer != current_user:
+            flask.flash(
+                "Du kan bara föra över pengar från dig själv! >:(", 'error'
+            )
+            return redir
+
+        value = int(form.value.data*100)  # To ören
+
+        if value > payer.balance:
+            flask.flash(
+                "Du kan inte föra över mer pengar än ditt saldo.", 'error'
+            )
+            return redir
+
+        message = form.message.data
+        models.CreditTransfer.create(payer, payee, value, message)
+
+        flask.flash("Förde över {0:g} pengar till {1}."
+                    .format(value/100, payee.full_name),
+                    'success'
+                    )
+
+    return redir
+
+
 @mod.route('/articles')
 def article_description():
     articles = (models.Article
@@ -162,13 +215,17 @@ def show_profile(user_id):
 
     upload_profile_picture_form = forms.UploadProfilePictureForm()
     change_profile_picture_form = forms.ChangeProfilePictureFormFactory(user)
+    credit_transfer_form = forms.CreditTransferForm()
+    credit_transfer_form.payer_id.data = current_user.id
+    credit_transfer_form.payee_id.data = user.id
 
     return flask.render_template(
         'show_profile.html',
         user=user,
         transactions=transactions,
         profile_picture_form=upload_profile_picture_form,
-        change_profile_picture_form=change_profile_picture_form
+        change_profile_picture_form=change_profile_picture_form,
+        credit_transfer_form=credit_transfer_form
     )
 
 

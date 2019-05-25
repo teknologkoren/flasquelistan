@@ -325,6 +325,7 @@ class Transaction(db.Model):
         return "{}: {} @ {}".format(self.__class__.__name__,
                                     self.value, self.user)
 
+
 class Streque(Transaction):
     standardglas = db.Column(db.Float)
 
@@ -339,22 +340,75 @@ class Streque(Transaction):
         return self.timestamp < too_old
 
 
-
 class AdminTransaction(Transaction):
     __mapper_args__ = {
         'polymorphic_identity': 'admin_transaction',
     }
 
-    def void_and_refund(self):
-        if self.voided:
+
+class UserTransaction(Transaction):
+    __mapper_args__ = {
+        'polymorphic_identity': 'user_transaction'
+    }
+
+
+class CreditTransfer(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+
+    payer_transaction_id = db.Column(
+        db.Integer,
+        db.ForeignKey('transaction.id')
+    )
+    payee_transaction_id = db.Column(
+        db.Integer,
+        db.ForeignKey('transaction.id')
+    )
+
+    payer_transaction = db.relationship(
+        'UserTransaction',
+        foreign_keys=[payer_transaction_id]
+    )
+    payee_transaction = db.relationship(
+        'UserTransaction',
+        foreign_keys=[payee_transaction_id]
+    )
+
+    @staticmethod
+    def create(payer, payee, value, message):
+        if value <= 0:
             return False
 
-        self.user.balance -= self.value
+        suffix = ": {}".format(message) if message else ""
+        payer_message = "Till {}{}".format(payee.full_name, suffix)
+        payee_message = "Från {}{}".format(payer.full_name, suffix)
 
-        self.voided = True
+        payer_tx = (
+            UserTransaction(
+                user_id=payer.id,
+                value=-value,
+                text=payer_message
+            )
+        )
+
+        payee_tx = (
+            UserTransaction(
+                user_id=payee.id,
+                value=value,
+                text=payee_message
+            )
+        )
+
+        payer.balance -= value
+        payee.balance += value
+
+        db.session.add(payer_tx)
+        db.session.add(payee_tx)
+
         db.session.commit()
 
-        return True
+    def void(self):
+        self.payer_transaction.void_and_refund()
+        self.payee_transaction.void_and_refund()
 
 
 class Quote(db.Model):

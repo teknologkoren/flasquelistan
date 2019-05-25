@@ -371,3 +371,18 @@ class EditGroupForm(flask_wtf.FlaskForm):
             validators.InputRequired()
         ]
     )
+
+
+class CreditTransferForm(flask_wtf.FlaskForm):
+    payer_id = fields.HiddenField()
+    payee_id = fields.HiddenField()
+
+    message = fields.StringField('Meddelande')
+
+    value = html5_fields.DecimalField(
+        'Summa',
+        render_kw={'step': .01, 'min': 1, 'max': 10000},
+        validators=[
+            validators.NumberRange(min=1, max=10000),
+        ]
+    )

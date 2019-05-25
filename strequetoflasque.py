@@ -120,7 +120,7 @@ def insert_transactions():
             ftx = models.Streque(
                 id=transaction['id'],
                 text=transaction['message'],
-                value=transaction['amount']*100,
+                value=-transaction['amount']*100,
                 voided=transaction['returned'],
                 user_id=transaction['user_id'],
                 timestamp=datetime.datetime.fromisoformat(
