@@ -125,11 +125,11 @@
     display: block;
     max-width: 300px;
     align-self: start;
+    margin-top: 2rem;
 }
 
 .profile .profile-picture img {
     max-height: 200px;
-    margin-top: 2rem;
 }
 
 .no-profile-picture {
