@@ -44,7 +44,7 @@
       🇫🇮
       {% endif %}
       <span class="bac">
-        {{ user.bac }}
+        {{ '{:.2f}'.format(user.bac) }}
       </span>
     </div>
     {% endif %}
