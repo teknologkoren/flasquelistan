@@ -66,6 +66,20 @@
       </fieldset>
     </form>
 
+    {% if current_user != user %}
+    <form method="POST" action="{{ url_for('strequelistan.credit_transfer') }}">
+      {{ credit_transfer_form.csrf_token }}
+      {{ credit_transfer_form.payer_id }}
+      {{ credit_transfer_form.payee_id }}
+      <fieldset>
+        <legend>Överför pengar</legend>
+        {{ form_entry(credit_transfer_form.value) }}
+        {{ form_entry(credit_transfer_form.message) }}
+        <button>Skicka</button>
+      </fieldset>
+    </form>
+    {% endif %}
+
     {% if user == current_user or current_user.is_admin %}
     <form method="POST"
           action="{{ url_for('strequelistan.change_profile_picture', user_id=user.id) }}"
@@ -125,19 +139,6 @@
       {% endif %}
       </dd>
     </dl>
-    {% endif %}
-    {% if current_user != user %}
-    <form method="POST" action="{{ url_for('strequelistan.credit_transfer') }}">
-      {{ credit_transfer_form.csrf_token }}
-      {{ credit_transfer_form.payer_id }}
-      {{ credit_transfer_form.payee_id }}
-      <fieldset>
-        <legend>Överför pengar</legend>
-        {{ form_entry(credit_transfer_form.value) }}
-        {{ form_entry(credit_transfer_form.message) }}
-        <button>Skicka</button>
-      </fieldset>
-    </form>
     {% endif %}
   </div>
 </div>
