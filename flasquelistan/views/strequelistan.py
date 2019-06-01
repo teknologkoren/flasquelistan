@@ -62,7 +62,7 @@ def add_streque():
     if not article:
         flask.abort(400)
 
-    streque = user.strequa(article)
+    streque = user.strequa(article, current_user)
 
     if flask.request.is_json:
         return flask.jsonify(

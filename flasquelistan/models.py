@@ -30,16 +30,22 @@ class User(flask_login.UserMixin, db.Model):
 
     # use_alter=True adds fk after ProfilePicture has been created to avoid
     # circular dependency
-    profile_picture_id = db.Column(db.Integer,
-                                   db.ForeignKey('profile_picture.id',
-                                                 use_alter=True))
+    profile_picture_id = db.Column(
+        db.Integer,
+        db.ForeignKey('profile_picture.id', use_alter=True)
+    )
 
     group = db.relationship('Group')
-    transactions = db.relationship('Transaction',
-                                   back_populates='user',
-                                   lazy='dynamic')
-    profile_picture = db.relationship('ProfilePicture',
-                                      foreign_keys=profile_picture_id)
+    transactions = db.relationship(
+        'Transaction',
+        back_populates='user',
+        lazy='dynamic',
+        foreign_keys='Transaction.user_id'
+    )
+    profile_picture = db.relationship(
+        'ProfilePicture',
+        foreign_keys=profile_picture_id
+    )
 
     # Do not change the following directly, use User.password
     _password = db.Column(db.String(128))
@@ -133,11 +139,16 @@ class User(flask_login.UserMixin, db.Model):
 
         return None
 
-    def strequa(self, article):
+    def strequa(self, article, by_user):
         value = article.value
 
-        streque = Streque(value=-value, text=article.name, user_id=self.id,
-                          standardglas=article.standardglas)
+        streque = Streque(
+            value=-value,
+            text=article.name,
+            user_id=self.id,
+            created_by_id=by_user.id,
+            standardglas=article.standardglas
+        )
         self.balance -= value
 
         db.session.add(streque)
@@ -295,11 +306,21 @@ class Transaction(db.Model):
     value = db.Column(db.Integer, nullable=False)  # Ören
     voided = db.Column(db.Boolean, default=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    created_by_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     timestamp = db.Column(db.DateTime, nullable=False,
                           default=datetime.datetime.utcnow)
     type = db.Column(db.String(50))
 
-    user = db.relationship('User', back_populates='transactions')
+    user = db.relationship(
+        'User',
+        back_populates='transactions',
+        foreign_keys=[user_id]
+    )
+
+    created_by = db.relationship(
+        'User',
+        foreign_keys=[created_by_id]
+    )
 
     __mapper_args__ = {
         'polymorphic_identity': 'transaction',
