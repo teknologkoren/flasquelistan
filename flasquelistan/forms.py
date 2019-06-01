@@ -290,6 +290,18 @@ class DateRangeForm(flask_wtf.FlaskForm):
     ])
 
 
+class UserTransactionForm(flask_wtf.FlaskForm):
+    value = html5_fields.DecimalField(
+        'Transaktionsvärde',
+        render_kw={'step': .01, 'min': -10000, 'max': 10000},
+        validators=[
+            validators.NumberRange(min=-10000, max=10000),
+            validators.Optional()
+        ])
+
+    text = fields.StringField('Meddelande')
+
+
 def BulkTransactionFormFactory(active=True):
     class BulkTransactionForm(flask_wtf.FlaskForm):
         pass
@@ -300,22 +312,12 @@ def BulkTransactionFormFactory(active=True):
         users = models.User.query.all()
 
     for user in users:
-        class UserTransactionForm(flask_wtf.FlaskForm):
+        class F(UserTransactionForm):
             user_name = fields.HiddenField('Namn',
                                            default=user.full_name)
             user_id = fields.HiddenField('ID', default=user.id)
 
-            value = html5_fields.DecimalField(
-                'Transaktionsvärde',
-                render_kw={'step': .01, 'min': -10000, 'max': 10000},
-                validators=[
-                    validators.NumberRange(min=-10000, max=10000),
-                    validators.Optional()
-                ])
-
-            text = fields.StringField('Meddelande')
-
-        transaction_form = fields.FormField(UserTransactionForm)
+        transaction_form = fields.FormField(F)
 
         setattr(BulkTransactionForm,
                 "user-{}".format(user.id),

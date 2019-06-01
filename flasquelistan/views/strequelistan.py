@@ -220,13 +220,39 @@ def show_profile(user_id):
     credit_transfer_form.payer_id.data = current_user.id
     credit_transfer_form.payee_id.data = user.id
 
+    if current_user.is_admin:
+        admin_transaction_form = forms.UserTransactionForm()
+    else:
+        admin_transaction_form = None
+
     return flask.render_template(
         'show_profile.html',
         user=user,
         transactions=transactions,
         profile_picture_form=upload_profile_picture_form,
         change_profile_picture_form=change_profile_picture_form,
-        credit_transfer_form=credit_transfer_form
+        credit_transfer_form=credit_transfer_form,
+        admin_transaction_form=admin_transaction_form
+    )
+
+
+@mod.route('/profile/<int:user_id>/admin-transaction', methods=['POST'])
+def admin_transaction(user_id):
+    if not current_user.is_admin:
+        flask.flash("Du måste vara admin för att göra det!", 'error')
+        return flask.redirect(flask.url_for('.show_profile', user_id=user_id))
+
+    user = models.User.query.get_or_404(user_id)
+    form = forms.UserTransactionForm()
+
+    if form.validate_on_submit():
+        user.admin_transaction(int(form.value.data*100), form.text.data)
+        flask.flash("Transaktion utförd!", 'success')
+    elif form.is_submitted():
+        forms.flash_errors(form)
+
+    return flask.redirect(
+        flask.url_for('strequelistan.show_profile', user_id=user_id)
     )
 
 

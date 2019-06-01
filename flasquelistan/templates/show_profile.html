@@ -80,6 +80,18 @@
     </form>
     {% endif %}
 
+    {% if current_user.is_admin %}
+    <form method="POST" action="{{ url_for('strequelistan.admin_transaction', user_id=user.id) }}">
+      <fieldset>
+        <legend>Admintransaktion</legend>
+        {{ admin_transaction_form.csrf_token }}
+        {{ form_entry(admin_transaction_form.value) }}
+        {{ form_entry(admin_transaction_form.text) }}
+        <button>Skicka</button>
+      </fieldset>
+    </form>
+    {% endif %}
+
     {% if user == current_user or current_user.is_admin %}
     <form method="POST"
           action="{{ url_for('strequelistan.change_profile_picture', user_id=user.id) }}"
