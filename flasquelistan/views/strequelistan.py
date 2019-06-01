@@ -29,6 +29,7 @@ def index():
 
     articles = (models.Article
                 .query
+                .filter_by(is_active=True)
                 .order_by(models.Article.weight.desc())
                 .all()
                 )

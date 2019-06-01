@@ -14,6 +14,7 @@
         <th>Standardglas</th>
         <th>Beskrivning</th>
         <th>Sorteringsvikt</th>
+        <th>Aktiv</th>
       </tr>
       {% for article in articles %}
       <tr>
@@ -33,6 +34,13 @@
         </td>
         <td>
           {{ article.weight }}
+        </td>
+        <td>
+          {% if article.is_active %}
+          Aktiv
+          {% else %}
+          Inaktiv
+          {% endif %}
         </td>
       </tr>
       {% endfor %}

@@ -290,6 +290,7 @@ class Article(db.Model):
     description = db.Column(db.Text)
     # Swedish "units of alcohol", 12 g of alcohol
     standardglas = db.Column(db.Float)
+    is_active = db.Column(db.Boolean, default=True, nullable=False)
 
     @property
     def formatted_value(self):

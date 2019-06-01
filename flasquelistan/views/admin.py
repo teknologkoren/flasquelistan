@@ -169,7 +169,10 @@ def confirm_bulk_transactions():
 def articles():
     articles = (models.Article
                 .query
-                .order_by(models.Article.weight.desc())
+                .order_by(
+                    models.Article.is_active.desc(),
+                    models.Article.weight.desc()
+                )
                 .all()
                 )
     return flask.render_template('admin/articles.html', articles=articles)
@@ -190,19 +193,23 @@ def edit_article(article_id=None):
     if form.validate_on_submit():
         if not article:
             article = models.Article()
+            flash = "Produkt \"{}\" skapad."
+        else:
+            flash = "Produkt \"{}\" ändrad."
 
         article.name = form.name.data
         article.value = int(form.value.data * 100)
         article.description = form.description.data
         article.weight = form.weight.data
         article.standardglas = form.standardglas.data
+        article.is_active = form.is_active.data
 
         if not article_id:
             models.db.session.add(article)
 
         models.db.session.commit()
 
-        flask.flash("Produkt \"{}\" skapad.".format(article.name), 'success')
+        flask.flash(flash.format(article.name), 'success')
 
         return flask.redirect(flask.url_for('strequeadmin.articles'))
 

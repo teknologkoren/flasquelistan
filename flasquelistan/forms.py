@@ -348,14 +348,20 @@ class EditArticleForm(flask_wtf.FlaskForm):
     )
     description = fields.TextAreaField(
         'Beskrivning',
-        description="Vilka produkter som ingår och/eller beskrivning. "
-                    "Markdown.")
+        description=("Vilka produkter som ingår och/eller beskrivning. "
+                     "Markdown.")
+    )
     weight = fields.IntegerField(
         'Sorteringsvikt',
         description="Heltal. En högre vikt stiger.",
         validators=[
             validators.InputRequired()
         ]
+    )
+    is_active = fields.BooleanField(
+        'Aktiv',
+        description="Produkten är synlig och går att strequa på.",
+        default=True
     )
 
 
