@@ -7,10 +7,7 @@
 {% block body %}
 <div class="login">
 <!-- code to set the default input focus -->
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    document.getElementById('email').focus();
-}, false);  </script>
+<script src="/static/js/setFocusLoginPage.js"></script>
   <form method="POST">
     {{ form.csrf_token }}
     <h2>Logga in</h2>
