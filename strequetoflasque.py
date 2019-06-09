@@ -45,6 +45,8 @@ def insert_users():
             y_chromosome=user['y_chromosome'],
         )
 
+        fuser._password_hash = user['password']
+
         if user['avatar']:
             filename = user['avatar'][18:]
 

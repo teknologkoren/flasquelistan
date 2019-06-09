@@ -1,3 +1,4 @@
+import base64
 import datetime
 import random
 import string
@@ -48,7 +49,7 @@ class User(flask_login.UserMixin, db.Model):
     )
 
     # Do not change the following directly, use User.password
-    _password = db.Column(db.String(128))
+    _password_hash = db.Column(db.String(128))
     _password_timestamp = db.Column(db.DateTime)
 
     def __init__(self, *args, **kwargs):
@@ -107,19 +108,53 @@ class User(flask_login.UserMixin, db.Model):
     @hybrid_property
     def password(self):
         """Return password hash."""
-        return self._password
+        return self._password_hash
 
     @password.setter
     def password(self, plaintext):
         """Generate and save password hash, update password timestamp."""
-        self._password = util.bcrypt.generate_password_hash(plaintext)
+        self._password_hash = (util.bcrypt
+                               .generate_password_hash(plaintext)
+                               .decode()
+                               )
 
         # Save in UTC, password resets compare this to UTC time!
         self._password_timestamp = datetime.datetime.utcnow()
 
     def verify_password(self, plaintext):
         """Return True if plaintext matches password, else return False."""
-        return util.bcrypt.check_password_hash(self._password, plaintext)
+        if self._password_hash.startswith('pbkdf2'):
+            # Old hash from teknologkoren/Strequelistan
+
+            # Extract hash info from django hash
+            # 'pbkdf2_<method>$<rounds>$<salt>$<b64(hash)>'
+            hash_meta = self._password_hash.split('$')
+            hash_method = hash_meta[0].split('_')[1]
+            hash_rounds = hash_meta[1]
+            hash_salt = hash_meta[2]
+            hash_data = hash_meta[3]
+
+            candidate_hash = hashlib.pbkdf2_hmac(
+                hash_method,
+                plaintext.encode(),
+                hash_salt.encode(),
+                int(hash_rounds)
+            )
+
+            correct = candidate_hash == base64.b64decode(hash_data)
+
+            if correct:
+                # Upgrade hash to bcrypt
+                self.password = plaintext
+                db.session.commit()
+
+        else:
+            correct = util.bcrypt.check_password_hash(
+                self._password_hash,
+                plaintext
+            )
+
+        return correct
 
     @staticmethod
     def authenticate(email, password):
