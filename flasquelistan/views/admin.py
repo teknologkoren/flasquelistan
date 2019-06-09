@@ -244,7 +244,8 @@ def spam():
                                          user=user)
             util.send_email(user.email, subject, mail)
 
-        flask.flash("Spammade {} personer!".format(users.count()), 'success')
+        flask.flash("Skickade {} saldopåminnelser!".format(users.count()),
+                    'success')
 
     return flask.render_template('admin/spam.html', users=users)
 
