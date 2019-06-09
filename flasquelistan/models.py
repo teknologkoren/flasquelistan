@@ -269,13 +269,11 @@ class User(flask_login.UserMixin, db.Model):
         if alcohol_in_body < 0:
             return 0
 
-        blood_alcohol_concentration = (
-            round(
-                1000 * alcohol_in_body / ((self.body_mass or 70)
-                                          * body_mass_constant),
-                2  # Round to 2 decimals ("#.## permille")
-            )
-        )
+        body_mass = self.body_mass or 70
+        final_bac = 1000 * alcohol_in_body / (body_mass * body_mass_constant)
+
+        # Round to 2 decimals ("#.## permille")
+        blood_alcohol_concentration = round(final_bac, 2)
 
         return blood_alcohol_concentration
 
