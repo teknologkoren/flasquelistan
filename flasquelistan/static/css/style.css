@@ -139,7 +139,7 @@ main {
     max-width: 30rem;
 }
 
-.misc {
+.more {
     max-width: 30rem;
     width: 100%;
 }
@@ -275,11 +275,11 @@ input[type=number] {
     text-align: start;
 }
 
-.misc ul {
+.more ul {
     list-style: none;
 }
 
-.misc li {
+.more li {
     margin: .5rem 0;
 }
 
