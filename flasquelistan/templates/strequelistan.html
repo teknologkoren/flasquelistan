@@ -68,9 +68,9 @@
 {% endmacro %}
 
 {% block head %}
-{% assets "js_common", "js_streque" %}
-<script defer src="{{ ASSET_URL }}"></script>
-{% endassets %}
+<script defer src="{{ url_for('static', filename='js/common.js') }}"></script>
+<script defer src="{{ url_for('static', filename='js/addStreque.js') }}"></script>
+<script defer src="{{ url_for('static', filename='js/userFilter.js') }}"></script>
 {% endblock %}
 
 {% block body %}

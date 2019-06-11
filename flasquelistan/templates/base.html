@@ -5,9 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Strequelistan</title>
 
-    {% assets "css_common" %}
-    <link rel="stylesheet" href="{{ ASSET_URL }}">
-    {% endassets %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/streque.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/quotes.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
 
     {% block head %}
     {% endblock %}

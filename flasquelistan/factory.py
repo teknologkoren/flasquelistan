@@ -27,7 +27,6 @@ def create_app(config=None, instance_config=None):
     views.auth.login_manager.init_app(app)
 
     setup_flask_admin(app, models.db)
-    setup_flask_assets(app)
     setup_flask_babel(app)
     setup_flask_uploads(app)
     setup_csrf_protection(app)
@@ -233,47 +232,6 @@ def setup_flask_admin(app, db):
                                   name='RegistrationRequest'))
 
     return admin
-
-
-def setup_flask_assets(app):
-    from flask_assets import Environment, Bundle
-
-    assets = Environment(app)
-
-    bundles = {
-        'js_common': Bundle(
-            'js/common.js',
-            output='gen/common.js'
-        ),
-        'js_streque': Bundle(
-            'js/addStreque.js',
-            'js/userFilter.js',
-            output='gen/streque.js'
-        ),
-        'js_history': Bundle(
-            'js/history.js',
-            output='gen/history.js'
-        ),
-        'js_admin': Bundle(
-            'js/admin.js',
-            output='gen/admin.js'
-        ),
-        'css_common': Bundle(
-            'css/style.css',
-            'css/streque.css',
-            'css/quotes.css',
-            'css/admin.css',
-            output='gen/style.css'
-        ),
-        'css_paperlist': Bundle(
-            'css/paperlist.css',
-            output='gen/paperlist.css'
-        ),
-    }
-
-    assets.register(bundles)
-
-    return assets
 
 
 def setup_flask_babel(app):
