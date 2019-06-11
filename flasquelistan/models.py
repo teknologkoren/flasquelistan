@@ -248,15 +248,15 @@ class User(flask_login.UserMixin, db.Model):
 
             # burn_constant will multiply by 0 first iteration, not burning
             # away any alcohol.
-            alcohol_in_body += (
-                streque.standardglas * standardglas_alcohol_content
-                - burn_constant * elapsed_seconds
-            )
+            alcohol_in_body -= burn_constant * elapsed_seconds
 
             # Algorithm will burn away more alcohol that there is in the body
             # which is not possible.
             if alcohol_in_body < 0:
                 alcohol_in_body = 0
+
+            alcohol_in_body += (streque.standardglas *
+                                standardglas_alcohol_content)
 
             previous_streque_time = streque.timestamp
 
