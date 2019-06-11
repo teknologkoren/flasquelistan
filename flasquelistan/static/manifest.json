@@ -1,0 +1,14 @@
+{
+    "name": "Strequelistan",
+    "short_name": "Streque",
+    "start_url": "/",
+    "display": "standalone",
+    "theme_color": "black",
+    "icons": [
+        {
+            "src": "/static/images/icon-192.png",
+            "type": "image/png",
+            "sizes": "192x192"
+        }
+    ]
+}

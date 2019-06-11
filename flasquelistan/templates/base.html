@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Strequelistan</title>
+    <link rel="manifest" href="/static/manifest.json">
 
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/streque.css') }}">
@@ -24,5 +25,6 @@
     {% endblock %}
     {% block base_body %}
     {% endblock %}
+    <script src="{{ url_for('static', filename='js/install-serviceworker.js') }}"></script>
   </body>
 </html>
