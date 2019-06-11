@@ -21,30 +21,31 @@
       </div>
     </a>
     {% if user.bac >= 0.1 %}
+    {% set bac = user.bac %}
     <div class="alcometer">
-      {% if user.bac < 0.3 %}
+      {% if bac < 0.3 %}
       🍺
-      {% elif user.bac < 0.5 %}
+      {% elif bac < 0.5 %}
       🍻
-      {% elif user.bac < 1 %}
+      {% elif bac < 1 %}
       👌
-      {% elif user.bac < 1.5 %}
+      {% elif bac < 1.5 %}
       🕺
-      {% elif user.bac < 2 %}
+      {% elif bac < 2 %}
       😟
-      {% elif user.bac < 2.5 %}
+      {% elif bac < 2.5 %}
       🤢
-      {% elif user.bac < 3 %}
+      {% elif bac < 3 %}
       😵
-      {% elif user.bac < 3.5 %}
+      {% elif bac < 3.5 %}
       💀
-      {% elif user.bac < 4 %}
+      {% elif bac < 4 %}
       🇷🇺
       {% else %}
       🇫🇮
       {% endif %}
       <span class="bac">
-        {{ '{:.2f}'.format(user.bac) }}
+        {{ '{:.2f}'.format(bac) }}
       </span>
     </div>
     {% endif %}
