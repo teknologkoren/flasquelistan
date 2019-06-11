@@ -74,9 +74,11 @@
 
 {% block body %}
 <div class="cards">
-  <blockquote class="quote quote-display">
-    {{ quote_inner(quote) }}
-  </blockquote>
+  {% if quote %}
+    <blockquote class="quote quote-display">
+      {{ quote_inner(quote) }}
+    </blockquote>
+  {% endif %}
 
   <input id="ajax-csrf_token" type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
 

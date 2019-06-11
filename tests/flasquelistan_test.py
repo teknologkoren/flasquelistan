@@ -1,4 +1,5 @@
 import tempfile
+from contextlib import contextmanager
 
 import pytest
 from flask import url_for
@@ -25,6 +26,27 @@ def app():
 @pytest.fixture
 def client(app):
     return app.test_client()
+
+
+@contextmanager
+def logged_in(client):
+    """Fixture for a signed in user"""
+    user = models.User(
+        email='monty@python.tld',
+        first_name='Monty',
+        last_name='Python',
+    )
+
+    models.db.session.add(user)
+    models.db.session.commit()
+
+    user.password = 'solidsnake'
+    models.db.session.commit()
+
+    with client:
+        rv = login(client, 'monty@python.tld', 'solidsnake')
+        assert rv.status_code == 302
+        yield user
 
 
 def login(client, email, password):
@@ -62,26 +84,21 @@ def test_successful_login(app):
         assert rv.status_code == 302
         assert rv.headers['Location'] == 'http://localhost/'
 
-def test_empty_quotes(app):
+def test_empty_quotes(client):
     """Test with blank database"""
-    user = models.User(
-            email='monty@python.tld',
-            first_name='Monty',
-            last_name='Python',
-    )
+    with logged_in(client):
+        response = client.get(url_for('quotes.index'))
+        text = response.get_data(as_text=True)
 
-    models.db.session.add(user)
-    models.db.session.commit()
+        assert 'No quotes yet!' in text
 
-    user.password = 'solidsnake'
-    models.db.session.commit()
+def test_single_user_no_quotes(client):
+    with logged_in(client):
+        response = client.get(url_for('strequelistan.index'))
+        text = response.get_data(as_text=True)
 
-    with app.test_client() as client:
-        rv = login(client, 'monty@python.tld', 'solidsnake')
-        assert rv.status_code == 302
-
-        rv = client.get(url_for('quotes.index'))
-        assert b'No quotes yet!' in rv.data
+        assert 'Monty Python' in text
+        assert 'permalänk' not in text
 
 
 def test_user_model(app):
