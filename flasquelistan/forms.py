@@ -353,7 +353,7 @@ class EditArticleForm(flask_wtf.FlaskForm):
         description=("Vilka produkter som ingår och/eller beskrivning. "
                      "Markdown.")
     )
-    weight = fields.IntegerField(
+    weight = html5_fields.IntegerField(
         'Sorteringsvikt',
         description="Heltal. En högre vikt stiger.",
         validators=[
@@ -372,7 +372,7 @@ class EditGroupForm(flask_wtf.FlaskForm):
         validators.InputRequired(),
         validators.Length(max=50)
     ])
-    weight = fields.IntegerField(
+    weight = html5_fields.IntegerField(
         'Sorteringsvikt',
         description="Heltal. En högre vikt stiger.",
         validators=[
