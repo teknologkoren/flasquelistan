@@ -369,3 +369,40 @@ def remove_group(group_id):
 
     flask.flash("Grupp \"{}\" borttagen.".format(group.name), 'success')
     return flask.redirect(flask.url_for('strequeadmin.show_groups'))
+
+
+@mod.route('/admin/quotes/')
+def show_quotes():
+    quotes = models.Quote.query.order_by(models.Quote.timestamp.desc()).all()
+    return flask.render_template('admin/quotes.html', quotes=quotes)
+
+
+@mod.route('/admin/quotes/edit/<int:quote_id>', methods=['GET', 'POST'])
+def edit_quote(quote_id):
+    quote = models.Quote.query.get_or_404(quote_id)
+    form = forms.EditQuoteForm(obj=quote)
+
+    if form.validate_on_submit():
+        quote.text = form.text.data
+        quote.who = form.who.data
+        quote.timestamp = form.timestamp.data
+        models.db.session.commit()
+        flask.flash("Citat har ändrats!", 'success')
+
+    elif form.is_submitted():
+        forms.flash_errors(form)
+
+    return flask.render_template('admin/edit_quote.html',
+                                 quote=quote,
+                                 form=form)
+
+
+@mod.route('/admin/quotes/remove/<int:quote_id>', methods=['POST'])
+def remove_quote(quote_id):
+    quote = models.Quote.query.get_or_404(quote_id)
+
+    models.db.session.delete(quote)
+    models.db.session.commit()
+
+    flask.flash("Citat borttaget.", 'success')
+    return flask.redirect(flask.url_for('strequeadmin.show_quotes'))

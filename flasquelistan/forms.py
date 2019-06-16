@@ -394,3 +394,28 @@ class CreditTransferForm(flask_wtf.FlaskForm):
             validators.NumberRange(min=1, max=10000),
         ]
     )
+
+
+class EditQuoteForm(flask_wtf.FlaskForm):
+    text = fields.TextAreaField(
+        'Citat',
+        description="Max 150 tecken.",
+        validators=[
+            validators.InputRequired(),
+            validators.Length(max=150)
+        ]
+    )
+    who = fields.TextAreaField(
+        'Upphovsman',
+        validators=[
+            validators.Length(max=150)
+        ]
+    )
+    timestamp = html5_fields.DateTimeLocalField(
+        'Tid',
+        description="Tidszon UTC.",
+        validators=[
+            validators.InputRequired()
+        ],
+        format='%Y-%m-%dT%H:%M'
+    )
