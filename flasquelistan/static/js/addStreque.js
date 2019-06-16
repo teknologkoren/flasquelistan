@@ -18,7 +18,7 @@ function initStrequeButtons () {
         console.log(data);
       }
 
-      var onfailure = function (data) {
+      var onfailure = function(data) {
         console.log(data);
         alert('Something went wrong, reload the page and try again.')
       };

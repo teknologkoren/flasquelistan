@@ -68,7 +68,7 @@ function postData(uri, data, onsuccess, onfailure, csrftoken) {
   };
 
   request.onerror = function () {
-    // Error
+    alert('Something went wrong, reload the page and try again.')
   };
 
   request.send(JSON.stringify(data));
