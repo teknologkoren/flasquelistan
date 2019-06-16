@@ -54,8 +54,16 @@
     min-width: 3rem;
 }
 
-.user-filter {
+h2.user-filter {
+    margin-bottom: 0;
+}
+
+div.user-filter {
     margin-bottom: 2.5rem;
+}
+
+.user-filter p {
+    margin: .5rem 0;
 }
 
 .streques {

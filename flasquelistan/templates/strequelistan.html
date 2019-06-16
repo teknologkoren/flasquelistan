@@ -12,7 +12,8 @@
       {{ profile_picture(user) }}
       <div class="username" data-firstname="{{ user.first_name }}"
                             data-lastname="{{ user.last_name }}"
-                            data-nickname="{{ user.nickname or '' }}">
+                            data-nickname="{{ user.nickname or '' }}"
+                            data-phonenumber="{{ user.formatted_phone(e164=True) }}">
         {% if user.nickname %}
         {{ user.nickname }}
         {% else %}
@@ -83,13 +84,16 @@
 
   <input id="ajax-csrf_token" type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
 
-  <h2>Inloggad användare</h2>
-  {{ usercard(current_user, articles) }}
-
-  <h2>Filtrera användare</h2>
+  <h2 class="user-filter">Filtrera användare</h2>
   <div class="user-filter">
+    <p><small>Du kan söka på namn, smeknamn och telefonnummer.</small></p>
     <input type="text" id="user-filter" placeholder="Namn" autocomplete="off">
     <button id="clear-filter" type="button">Rensa</button>
+  </div>
+
+  <div class="group">
+    <h2>Inloggad användare</h2>
+    {{ usercard(current_user, articles) }}
   </div>
 
   {% for group in groups %}
