@@ -19,7 +19,7 @@ def before_request():
     pass
 
 
-@mod.route('/admin/transaktioner/', methods=['GET', 'POST'])
+@mod.route('/admin/transactions/', methods=['GET', 'POST'])
 def transactions():
     form = forms.DateRangeForm()
 
@@ -61,7 +61,7 @@ def transactions():
                                  form=form)
 
 
-@mod.route('/admin/transaktioner/void', methods=['POST'])
+@mod.route('/admin/transactions/void', methods=['POST'])
 def void_transaction():
     if flask.request.is_json:
         data = flask.request.get_json()
@@ -103,7 +103,7 @@ def void_transaction():
         return flask.redirect(flask.url_for('strequeadmin.transactions'))
 
 
-@mod.route('/admin/transaktioner/bulk', methods=['GET', 'POST'])
+@mod.route('/admin/transactions/bulk', methods=['GET', 'POST'])
 def bulk_transactions():
     form = forms.BulkTransactionFormFactory(active=False)
 
@@ -114,26 +114,23 @@ def bulk_transactions():
             if form_field.name == 'csrf_token':
                 continue
 
-            if form_field.value.data != 0:
+            if form_field.value.data:
                 user = models.User.query.get(form_field.user_id.data)
                 if user:
-                    transactions.append(
-                        {'user_id': user.id,
-                         'user_name': user.full_name,
-                         'value': int(form_field.value.data*100),
-                         'text': form_field.text.data}
-                    )
-
-            flask.session[form.csrf_token.data] = transactions
+                    transactions.append({
+                        'user_id': user.id,
+                        'user_name': user.full_name,
+                        'value': int(form_field.value.data*100),
+                        'text': form_field.text.data or 'Admintransaktion'
+                    })
 
         if transactions:
             return flask.render_template(
                 'admin/confirm_bulk_transactions.html',
-                transactions=transactions,
-                token=form.csrf_token.data)
+                transactions=transactions)
         else:
             flask.flash("Inga transaktioner utförda. "
-                        "Väl spenderade klockcykler, bra jobbat!", 'success')
+                        "Väl spenderade klockcykler, bra jobbat!", 'info')
 
     elif form.is_submitted():
         forms.flash_errors(form)
@@ -141,32 +138,48 @@ def bulk_transactions():
     return flask.render_template('admin/bulk_transactions.html', form=form)
 
 
-@mod.route('/admin/transaktioner/bulk/confirm', methods=['POST'])
+@mod.route('/admin/transactions/bulk/confirm', methods=['POST'])
 def confirm_bulk_transactions():
-    token = flask.request.args.get('token')
-    if not token:
-        flask.abort(404)
+    form = flask.request.form
+    transactions = {}
 
-    transactions = flask.session.get(token)
-    if transactions is None:
-        flask.abort(400)
+    for name, value in form.items():
+        if not name.startswith('user'):
+            continue
 
-    for transaction in transactions:
-        user = models.User.query.get(transaction['user_id'])
+        user_id, field = name.split('-')[1:]
+
+        transactions.setdefault(user_id, {})
+        if field == 'value':
+            transactions[user_id][field] = int(value)
+        elif field == 'text':
+            transactions[user_id][field] = value
+        else:
+            flask.abort(400)
+
+    for user_id, transaction in transactions.items():
+        user = models.User.query.get(user_id)
         user.admin_transaction(transaction['value'], transaction['text'])
 
     flask.flash("Transaktionerna utfördes!", 'success')
     return flask.redirect(flask.url_for('strequeadmin.bulk_transactions'))
 
 
-@mod.route('/admin/produkter/')
+@mod.route('/admin/articles/')
 def articles():
-    articles = models.Article.query.order_by(models.Article.weight).all()
+    articles = (models.Article
+                .query
+                .order_by(
+                    models.Article.is_active.desc(),
+                    models.Article.weight.desc()
+                )
+                .all()
+                )
     return flask.render_template('admin/articles.html', articles=articles)
 
 
-@mod.route('/admin/produkter/new', methods=['GET', 'POST'])
-@mod.route('/admin/produkter/edit/<int:article_id>', methods=['GET', 'POST'])
+@mod.route('/admin/articles/new', methods=['GET', 'POST'])
+@mod.route('/admin/articles/edit/<int:article_id>', methods=['GET', 'POST'])
 def edit_article(article_id=None):
     if article_id:
         article = models.Article.query.get_or_404(article_id)
@@ -180,18 +193,23 @@ def edit_article(article_id=None):
     if form.validate_on_submit():
         if not article:
             article = models.Article()
+            flash = "Produkt \"{}\" skapad."
+        else:
+            flash = "Produkt \"{}\" ändrad."
 
         article.name = form.name.data
         article.value = int(form.value.data * 100)
         article.description = form.description.data
         article.weight = form.weight.data
+        article.standardglas = form.standardglas.data
+        article.is_active = form.is_active.data
 
         if not article_id:
             models.db.session.add(article)
 
         models.db.session.commit()
 
-        flask.flash("Produkt \"{}\" skapad.".format(article.name), 'success')
+        flask.flash(flash.format(article.name), 'success')
 
         return flask.redirect(flask.url_for('strequeadmin.articles'))
 
@@ -202,7 +220,7 @@ def edit_article(article_id=None):
                                  article=article)
 
 
-@mod.route('/admin/produkter/ta-bort/<int:article_id>', methods=['POST'])
+@mod.route('/admin/articles/remove/<int:article_id>', methods=['POST'])
 def remove_article(article_id):
     article = models.Article.query.get_or_404(article_id)
 
@@ -216,7 +234,7 @@ def remove_article(article_id):
 @mod.route('/admin/spam', methods=['GET', 'POST'])
 def spam():
     users = (models.User.query
-             .order_by(models.User.first_name)
+             .order_by(models.User.balance.asc())
              .filter(models.User.balance < 0))
 
     if flask.request.method == 'POST':
@@ -226,7 +244,8 @@ def spam():
                                          user=user)
             util.send_email(user.email, subject, mail)
 
-        flask.flash("Spammade {} personer!".format(users.count()), 'success')
+        flask.flash("Skickade {} saldopåminnelser!".format(users.count()),
+                    'success')
 
     return flask.render_template('admin/spam.html', users=users)
 
@@ -275,6 +294,12 @@ def add_user(request_id=None):
                                  is_request=bool(request_id))
 
 
+@mod.route('/admin/users')
+def show_users():
+    users = models.User.query.order_by(models.User.first_name.asc()).all()
+    return flask.render_template('admin/users.html', users=users)
+
+
 @mod.route('/admin/requests/')
 def requests():
     requests = models.RegistrationRequest.query
@@ -293,3 +318,91 @@ def remove_request(request_id):
                 'success')
 
     return flask.redirect(flask.url_for('strequeadmin.requests'))
+
+
+@mod.route('/admin/groups')
+def show_groups():
+    groups = models.Group.query.order_by(models.Group.weight.desc()).all()
+    return flask.render_template('admin/groups.html', groups=groups)
+
+
+@mod.route('/admin/groups/new', methods=['GET', 'POST'])
+@mod.route('/admin/groups/edit/<int:group_id>', methods=['GET', 'POST'])
+def edit_group(group_id=None):
+    if group_id:
+        group = models.Group.query.get_or_404(group_id)
+        form = forms.EditGroupForm(obj=group)
+    else:
+        group = None
+        form = forms.EditGroupForm()
+
+    if form.validate_on_submit():
+        if not group:
+            group = models.Group()
+
+        group.name = form.name.data
+        group.weight = form.weight.data
+
+        if not group_id:
+            models.db.session.add(group)
+
+        models.db.session.commit()
+
+        flask.flash("Produkt \"{}\" skapad.".format(group.name), 'success')
+
+        return flask.redirect(flask.url_for('strequeadmin.show_groups'))
+
+    elif form.is_submitted():
+        forms.flash_errors(form)
+
+    return flask.render_template('admin/edit_group.html',
+                                 form=form,
+                                 group=group)
+
+
+@mod.route('/admin/groups/remove/<int:group_id>', methods=['POST'])
+def remove_group(group_id):
+    group = models.Group.query.get_or_404(group_id)
+
+    models.db.session.delete(group)
+    models.db.session.commit()
+
+    flask.flash("Grupp \"{}\" borttagen.".format(group.name), 'success')
+    return flask.redirect(flask.url_for('strequeadmin.show_groups'))
+
+
+@mod.route('/admin/quotes/')
+def show_quotes():
+    quotes = models.Quote.query.order_by(models.Quote.timestamp.desc()).all()
+    return flask.render_template('admin/quotes.html', quotes=quotes)
+
+
+@mod.route('/admin/quotes/edit/<int:quote_id>', methods=['GET', 'POST'])
+def edit_quote(quote_id):
+    quote = models.Quote.query.get_or_404(quote_id)
+    form = forms.EditQuoteForm(obj=quote)
+
+    if form.validate_on_submit():
+        quote.text = form.text.data
+        quote.who = form.who.data
+        quote.timestamp = form.timestamp.data
+        models.db.session.commit()
+        flask.flash("Citat har ändrats!", 'success')
+
+    elif form.is_submitted():
+        forms.flash_errors(form)
+
+    return flask.render_template('admin/edit_quote.html',
+                                 quote=quote,
+                                 form=form)
+
+
+@mod.route('/admin/quotes/remove/<int:quote_id>', methods=['POST'])
+def remove_quote(quote_id):
+    quote = models.Quote.query.get_or_404(quote_id)
+
+    models.db.session.delete(quote)
+    models.db.session.commit()
+
+    flask.flash("Citat borttaget.", 'success')
+    return flask.redirect(flask.url_for('strequeadmin.show_quotes'))

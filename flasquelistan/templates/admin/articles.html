@@ -1,6 +1,6 @@
 {% extends 'layout.html' %}
 
-{% set active_page = "misc" %}
+{% set active_page = "more" %}
 
 {% block body %}
 <div>
@@ -11,8 +11,10 @@
       <tr>
         <th>Namn</th>
         <th>Pris</th>
+        <th>Standardglas</th>
         <th>Beskrivning</th>
         <th>Sorteringsvikt</th>
+        <th>Aktiv</th>
       </tr>
       {% for article in articles %}
       <tr>
@@ -24,11 +26,21 @@
         <td>
           {{ article.formatted_value }}
         </td>
+        <td>
+          {{ article.standardglas }}
+        </td>
         <td class="article-description">
           {{ article.description }}
         </td>
         <td>
           {{ article.weight }}
+        </td>
+        <td>
+          {% if article.is_active %}
+          Aktiv
+          {% else %}
+          Inaktiv
+          {% endif %}
         </td>
       </tr>
       {% endfor %}

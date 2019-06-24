@@ -1,0 +1,47 @@
+{% extends 'layout.html' %}
+
+{% set active_page = "more" %}
+
+{% block body %}
+<div>
+  <h2>Citat</h2>
+  <div class="table-wrap">
+    <table class="quotes">
+      <tr>
+        <th>Citat</th>
+        <th>Upphovsman</th>
+        <th>Tid</th>
+      </tr>
+      {% for quote in quotes %}
+      <tr>
+        <td class="quote">
+          <span>
+            {{ quote.text }}
+          </span>
+        </td>
+        <td class="who">
+          <span>
+            {{ quote.who }}
+          </span>
+        </td>
+        <td class="timestamp">
+          <span>
+            {{ quote.timestamp }}
+          </span>
+        </td>
+        <td class="edit-link">
+          <a href="{{ url_for('strequeadmin.edit_quote', quote_id=quote.id) }}">
+            Redigera
+          </a>
+        </td>
+      </tr>
+      {% endfor %}
+    </table>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/common.js') }}"></script>
+<script src="{{ url_for('static', filename='js/admin.js') }}"></script>
+{% endblock %}

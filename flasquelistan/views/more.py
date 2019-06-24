@@ -1,8 +1,7 @@
 import flask
 import flask_login
-from flasquelistan.views import auth
 
-mod = flask.Blueprint('misc', __name__)
+mod = flask.Blueprint('more', __name__)
 
 
 @mod.before_request
@@ -14,6 +13,6 @@ def before_request():
     pass
 
 
-@mod.route('/mer/')
+@mod.route('/more')
 def index():
-    return flask.render_template('misc.html')
+    return flask.render_template('more.html')

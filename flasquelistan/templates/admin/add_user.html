@@ -1,6 +1,6 @@
 {% extends "layout.html" %}
 
-{% set active_page = "misc" %}
+{% set active_page = "more" %}
 
 {% from "macros.html" import form_entry, form_entry_row %}
 
@@ -18,8 +18,8 @@
     {{ form_entry_row(form.active) }}
 
     <div class="form-entry">
-      <button>Spara</button> | <a href="{% if is_request %}{{ url_for('strequeadmin.requests') }}
-                                        {%- else %}{{ url_for('misc.index') }}{% endif %}">Avbryt</a>
+      <button>Spara</button>
+      | <a href="{% if is_request %}{{ url_for('strequeadmin.requests') }}{% else %}{{ url_for('more.index') }}{% endif %}">Avbryt</a>
     </div>
   </form>
 </div>

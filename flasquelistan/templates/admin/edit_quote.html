@@ -1,0 +1,27 @@
+{% extends "layout.html" %}
+
+{% set active_page = "more" %}
+
+{% from "macros.html" import form_entry %}
+
+{% block body %}
+<div>
+  <h2>Redigera citat</h2>
+  <form method="POST">
+    {{ form.csrf_token }}
+
+    {{ form_entry(form.text, cols=30, rows=5) }}
+    {{ form_entry(form.who, cols=30, rows=5) }}
+    {{ form_entry(form.timestamp, placeholder='yyyy-MM-ddTHH:mm') }}
+
+    <div class="form-entry">
+      <button formaction="{{ url_for('strequeadmin.remove_quote', quote_id=quote.id) }}">Ta bort citat</button>
+    </div>
+
+    <div class="form-entry">
+      <button>Spara</button> | <a href="{{ url_for('strequeadmin.show_quotes') }}">Avbryt</a>
+    </div>
+  </form>
+</div>
+</div>
+{% endblock %}

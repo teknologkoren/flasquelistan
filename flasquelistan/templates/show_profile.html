@@ -1,19 +1,30 @@
 {% extends "layout.html" %}
 
 {% set active_page = "streque" %}
+{% set main_class = "non-padded" %}
 
-{% from "macros.html" import profile_picture %}
+{% from "macros.html" import profile_picture, form_entry %}
+
+{% block head %}
+<script defer src="{{ url_for('static', filename='js/confirmDialog.js') }}"></script>
+{% endblock %}
 
 {% block body %}
 <div class="profile">
-  {{ profile_picture(user) }}
+  <div class="profile-content">
+    {{ profile_picture(user, with_link=True) }}
+  </div>
 
-  <div>
+  <div class="profile-content">
     <h2>
       {{ user.first_name }}
       {% if user.nickname %}"{{ user.nickname }}"{% endif %}
       {{ user.last_name }}
     </h2>
+
+    <p>
+      <a href="{{ url_for('strequelistan.edit_profile', user_id=user.id) }}">Redigera profil</a>
+    </p>
 
     <dl>
       <dt>E-postadress</dt>
@@ -22,55 +33,125 @@
       {% if user.phone %}
       <dt>Telefonnummer</dt>
       <dd>
-      {% if user.formatted_phone %}
-      <a href="tel:{{ user.formatted_phone }}">{{ user.formatted_phone }}</a>
+      {% if user.formatted_phone() %}
+      <a href="tel:{{ user.formatted_phone(e164=True) }}">{{ user.formatted_phone() }}</a>
       {% else %}
       {{ user.phone }}
       {% endif %}
       </dd>
       {% endif %}
+    </dl>
 
-      {% if user == current_user or current_user.is_admin %}
+    <p>
+      <a href="{{ url_for('strequelistan.user_vcard', user_id=user.id) }}" download>Ladda ner kontaktfil</a>
+    </p>
+    {% if user == current_user or current_user.is_admin %}
+    <dl>
       <dt>Saldo</dt>
       <dd>{{ user.formatted_balance }}</dd>
-
-      <p>
-        <a href="{{ url_for('strequelistan.edit_profile', user_id=user.id) }}">Redigera profil</a>
-      </p>
-
-      <dt>Historik</a></dt>
-      {% if transactions.all() %}
-      <dd>
-      <div class="table-wrap">
-        <table class="transaction-history">
-          {% for transaction in transactions %}
-          <tr>
-            <td>
-              <span class="text">
-                {{ transaction.text }}
-              </span>
-            </td>
-            <td>
-              <span class="value">
-                {{ transaction.formatted_value }}
-              </span>
-            </td>
-            <td>
-              <span class="timestamp">
-                {{ format_datetime(transaction.timestamp, "dd MMMM yyyy, HH:mm") }}
-              </span>
-            </td>
-          </tr>
-          {% endfor %}
-        </table>
-      </div>
-      {% else %}
-      <p>Det är tomt här, strequa mer!</p>
-      {% endif %}
-      <p><a href="{{ url_for('strequelistan.user_history', user_id=user.id) }}">All historik</a></p>
-      </dd>
-      {% endif %}
     </dl>
+    {% endif %}
+
+    <form class="upload-and-set-profile-picture"
+          method="POST"
+          action="{{ url_for('strequelistan.upload_profile_picture', user_id=user.id) }}"
+          enctype="multipart/form-data">
+      <fieldset>
+        <legend>{{ profile_picture_form.upload.label }}</legend>
+        {{ profile_picture_form.csrf_token }}
+        <div class="form-field">
+          {{ profile_picture_form.upload }}
+        </div>
+        <button>Spara</button>
+      </fieldset>
+    </form>
+
+    {% if current_user != user %}
+    <form method="POST" action="{{ url_for('strequelistan.credit_transfer') }}">
+      {{ credit_transfer_form.csrf_token }}
+      {{ credit_transfer_form.payer_id }}
+      {{ credit_transfer_form.payee_id }}
+      <fieldset>
+        <legend>Överför pengar</legend>
+        {{ form_entry(credit_transfer_form.value) }}
+        {{ form_entry(credit_transfer_form.message) }}
+        <button>Skicka</button>
+      </fieldset>
+    </form>
+    {% endif %}
+
+    {% if current_user.is_admin %}
+    <form method="POST" action="{{ url_for('strequelistan.admin_transaction', user_id=user.id) }}">
+      <fieldset>
+        <legend>Admintransaktion</legend>
+        {{ admin_transaction_form.csrf_token }}
+        {{ form_entry(admin_transaction_form.value) }}
+        {{ form_entry(admin_transaction_form.text) }}
+        <button>Skicka</button>
+      </fieldset>
+    </form>
+    {% endif %}
+
+    {% if user == current_user or current_user.is_admin %}
+    <form method="POST"
+          action="{{ url_for('strequelistan.change_profile_picture', user_id=user.id) }}"
+          enctype="multipart/form-data">
+
+      {{ change_profile_picture_form.csrf_token }}
+
+      <div class="form-field">
+        <fieldset class="change-profile-picture">
+          <legend>Uppladdade profilbilder</legend>
+          <div class="grid-wrapper">
+            {% for subfield in change_profile_picture_form.profile_picture %}
+            <div class="form-field">
+              {{ subfield }}
+              <label for="{{ subfield.id }}">
+                {% if loop.first %}
+                <div class="label">
+                  {{ subfield.label.text }}
+                </div>
+                {% else %}
+                <img class="label" src="{{ url_for_image(subfield.label.text, 'profilepicture', 200) }}">
+              </label>
+              {% endif %}
+            </div>
+            {% endfor %}
+          </div>
+          <div class="submit">
+            <button>Spara</button>
+            <button class="confirm" formaction="{{ url_for('strequelistan.delete_profile_picture', user_id=user.id) }}">Ta bort</button>
+        </fieldset>
+      </div>
+    </form>
+    <dl>
+      <dt>Historik</dt>
+      <dd>
+      <p><a href="{{ url_for('strequelistan.user_history', user_id=user.id) }}">All historik</a></p>
+      {% if transactions.all() %}
+      <ol class="transaction-history">
+      {% for transaction in transactions %}
+        <li>
+          <div class="upper">
+            <span class="text">
+              {{ transaction.text }}
+            </span>
+            <span class="value">
+              {{ transaction.formatted_value }}
+            </span>
+          </div>
+          <div class="timestamp">
+            {{ format_datetime(transaction.timestamp, "dd MMMM yyyy, HH:mm") }}
+          </div>
+        </li>
+      {% endfor %}
+      </ol>
+      {% else %}
+      Det är tomt här, strequa mer!
+      {% endif %}
+      </dd>
+    </dl>
+    {% endif %}
   </div>
 </div>
 {% endblock %}

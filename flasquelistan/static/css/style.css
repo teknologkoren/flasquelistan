@@ -7,8 +7,13 @@
     /* Fixes overflowing content in flex and grid (anything other than
      * "overflow: visible"). Won't overflow without this.
      * Also makes wrapping inter-word if very little space left. */
-    min-width: auto;
+    min-width: 0;
     max-width: 100%;
+}
+
+body {
+  padding: 0;
+  margin: 0;
 }
 
 img {
@@ -40,23 +45,26 @@ a:hover {
     text-decoration: underline;
 }
 
+fieldset {
+    border: 1px solid #ddd;
+    border-radius: 7px;
+    margin: 1.5rem 0;
+}
+
 .logo {
     height: 100%;
     padding: .5rem;
     display: inline-block;
+    color: #000;
+}
+
+.logo:hover {
+    text-decoration: none;
 }
 
 .logo img {
     margin-right: .5rem;
     display: inline-block;
-}
-
-.logo a {
-    color: #000;
-}
-
-.logo a:hover {
-    text-decoration: none;
 }
 
 .logo h1 {
@@ -96,6 +104,8 @@ nav a:hover {
     display: flex;
     flex-direction: column;
     align-items: center;
+    padding-left: 0.6rem;
+    padding-right: 0.6rem;
 }
 
 nav svg {
@@ -117,14 +127,19 @@ main {
     flex-direction: column;
     align-items: center;
     justify-items: center;
-    padding: 0 1rem 4rem 1rem;
+    padding: 0 .65rem 4rem .65rem;
+}
+
+.non-padded {
+    padding-left: 0;
+    padding-right: 0;
 }
 
 .login {
     max-width: 30rem;
 }
 
-.misc {
+.more {
     max-width: 30rem;
     width: 100%;
 }
@@ -137,8 +152,8 @@ main {
 .card {
     display: flex;
     justify-content: space-between;
-    padding: 1rem;
-    margin: 1rem 0;
+    padding: .7rem;
+    margin: .65rem 0;
     border: solid 1px #ddd;
     border-radius: 7px;
 }
@@ -189,45 +204,6 @@ main {
     background-color: #FFD9D0;
     border: 1px solid #FF9073;
     color: #6C1600;
-}
-
-.profile {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    width: 100%;
-}
-
-.profile > * {
-    margin: 0 .7rem;
-}
-
-.profile .profile-picture {
-    margin-top: 2rem;
-    max-width: 300px;
-    height: 200px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-}
-
-.profile .profile-picture a,
-.profile .profile-picture p {
-    margin-top: .5rem;
-}
-
-.no-profile-picture {
-    background: grey;
-    font-size: 1.5em;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.profile .no-profile-picture {
-    width: 100px;
-    height: 100px;
 }
 
 dt {
@@ -297,6 +273,14 @@ input[type=number] {
 
 .table-wrap th {
     text-align: start;
+}
+
+.more ul {
+    list-style: none;
+}
+
+.more li {
+    margin: .5rem 0;
 }
 
 @media print {

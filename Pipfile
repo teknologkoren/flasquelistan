@@ -9,13 +9,15 @@ Flask-SQLAlchemy = "*"
 Flask-Admin = "*"
 Flask-Login = "*"
 pytest = "*"
-Flask-Assets = "*"
-webassets = {editable = true, git = "https://github.com/miracle2k/webassets.git"}
 Flask-Babel = "*"
 Flask-Bcrypt = "*"
 Flask-WTF = "*"
 Flask-Uploads = "*"
 phonenumbers = "*"
 markdown = "*"
+vobject = "*"
+
+[requires]
+python_version = "3.7"
 
 [dev-packages]

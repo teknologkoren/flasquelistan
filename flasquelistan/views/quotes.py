@@ -1,7 +1,6 @@
 import flask
 import flask_login
 from flasquelistan import models, forms
-from flask_babel import gettext as _
 
 mod = flask.Blueprint('quotes', __name__)
 
@@ -17,7 +16,8 @@ def before_request():
 
 @mod.route('/quotes/', methods=['GET', 'POST'])
 def index():
-    quotes = models.Quote.query.order_by(models.Quote.timestamp.desc()).all()
+    quotes = models.Quote.query.order_by(models.Quote.timestamp.desc(),
+                                         models.Quote.id.desc()).all()
 
     return flask.render_template('quotes.html', quotes=quotes)
 
@@ -29,9 +29,7 @@ def add_quote():
         quote = models.Quote(text=form.text.data, who=form.who.data)
         models.db.session.add(quote)
         models.db.session.commit()
-        flask.flash(_("Quote added"), 'success')
-
-        #flask.flash('Citat tillagt!', 'success')
+        flask.flash('Citat tillagt!', 'success')
         return flask.redirect(flask.url_for('.index'))
     else:
         forms.flash_errors(form)

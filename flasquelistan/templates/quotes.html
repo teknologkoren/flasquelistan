@@ -5,13 +5,13 @@
 {% macro quote_inner(quote) %}
 <div class="quote-text">{{ quote.text }}</div>
 <div class="quote-meta">
-  <div class="right">
-    {% if quote.who %}
-    <div class="quote-who">&mdash; {{ quote.who }}</div>
-    {% endif %}
-    <div class="quote-when">{{ format_datetime(quote.timestamp, "dd MMMM yyyy, HH:mm") }}</div>
+  {% if quote.who %}
+  <div class="quote-who">&mdash; {{ quote.who }}</div>
+  {% endif %}
+  <div class="lower">
+    <span class="quote-when">{{ format_datetime(quote.timestamp, "dd MMMM yyyy, HH:mm") }}</span>
+    <span class="quote-permalink"><a href="{{ url_for('quotes.quote', quote_id=quote.id) }}">Perma&shy;länk</a></span>
   </div>
-  <div class="quote-permalink"><a href="{{ url_for('quotes.quote', quote_id=quote.id) }}">Permalänk</a></div>
 </div>
 {% endmacro %}
 

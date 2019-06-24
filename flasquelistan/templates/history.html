@@ -37,7 +37,7 @@
 
   <input id="ajax-csrf_token" type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
 
-  <p class="no-streques-notice {% if streques %}hidden{% endif %}">Inga transaktioner de senaste 15 minuterna!</p>
+  <p class="no-streques-notice"{% if streques %} hidden{% endif %}>Inga transaktioner de senaste 15 minuterna!</p>
   <ol class="streque-list">
     {% for streque in streques %}
     {{ streque_card(streque) }}
@@ -47,7 +47,6 @@
 {% endblock %}
 
 {% block scripts %}
-{% assets "js_common", "js_history" %}
-<script src="{{ ASSET_URL }}"></script>
-{% endassets %}
+<script src="{{ url_for('static', filename='js/common.js') }}"></script>
+<script src="{{ url_for('static', filename='js/history.js') }}"></script>
 {% endblock %}

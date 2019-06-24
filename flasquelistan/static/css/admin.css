@@ -44,3 +44,15 @@
 .requests dl {
     margin-bottom: 1.5rem;
 }
+
+.quotes .quote {
+    white-space: normal;
+    max-width: 20rem;
+    min-width: 15rem;
+}
+
+.quotes .who {
+    white-space: normal;
+    max-width: 15rem;
+    min-width: 10rem;
+}

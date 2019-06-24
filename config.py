@@ -16,6 +16,7 @@ BABEL_DEFAULT_LOCALE = 'sv_SE'
 BABEL_DEFAULT_TIMEZONE = 'CET'
 
 UPLOADS_DEFAULT_DEST = BASEDIR.joinpath('flasquelistan/static/uploads')
+UPLOADS_DEFAULT_URL = '/static/uploads/'
 
 WTF_CSRF_TIME_LIMIT = 21600  # 6 hours
 

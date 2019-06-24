@@ -1,6 +1,6 @@
 {% extends "layout.html" %}
 
-{% set active_page = "misc" %}
+{% set active_page = "more" %}
 
 {% from "macros.html" import form_entry %}
 
@@ -12,8 +12,10 @@
 
     {{ form_entry(form.name) }}
     {{ form_entry(form.value) }}
+    {{ form_entry(form.standardglas) }}
     {{ form_entry(form.description, cols=30, rows=5) }}
     {{ form_entry(form.weight) }}
+    {{ form_entry(form.is_active) }}
 
     {% if article %}
     <div class="form-entry">

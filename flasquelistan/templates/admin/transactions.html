@@ -1,6 +1,6 @@
 {% extends 'layout.html' %}
 
-{% set active_page = "misc" %}
+{% set active_page = "more" %}
 
 {% from "macros.html" import form_entry %}
 
@@ -18,6 +18,7 @@
     <table class="transaction-history">
       <tr>
         <th>Användare</th>
+        <th>Skapad av</th>
         <th>Transaktionstyp</th>
         <th>Meddelande</th>
         <th>Värde</th>
@@ -30,14 +31,25 @@
             {{ transaction.user.full_name }}
           </span>
         </td>
+        <td class="user">
+          <span>
+            {% if transaction.created_by %}
+            {{ transaction.created_by.full_name }}
+            {% else %}
+            Okänt
+            {% endif %}
+          </span>
+        </td>
         <td class="type">
           <span>
             {% if transaction.type == 'streque' %}
             Streque
             {% elif transaction.type == 'admin_transaction' %}
             Admin
+            {% elif transaction.type == 'user_transaction' %}
+            Pay
             {% else %}
-            ???
+            {{ transaction.type }}
             {% endif %}
           </span>
         </td>
@@ -53,7 +65,7 @@
         </td>
         <td class="timestamp">
           <span>
-            {{ format_datetime(transaction.timestamp, "dd MMMM yyyy, HH:mm") }}
+            {{ format_datetime(transaction.timestamp, "yyyy-MM-dd HH:mm") }}
           </span>
         </td>
         <td>
@@ -86,7 +98,6 @@
 {% endblock %}
 
 {% block scripts %}
-{% assets "js_common", "js_admin" %}
-<script src="{{ ASSET_URL }}"></script>
-{% endassets %}
+<script src="{{ url_for('static', filename='js/common.js') }}"></script>
+<script src="{{ url_for('static', filename='js/admin.js') }}"></script>
 {% endblock %}

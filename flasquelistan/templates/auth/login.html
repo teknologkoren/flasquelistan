@@ -2,13 +2,15 @@
 
 {% from "macros.html" import form_entry, form_entry_row %}
 
-{% set title = _("Log in") %}
+{% set title = "Logga in" %}
 
 {% block body %}
 <div class="login">
+<!-- code to set the default input focus -->
+<script src="/static/js/setFocusLoginPage.js"></script>
   <form method="POST">
     {{ form.csrf_token }}
-    <h2>{{_("Log in")}}</h2>
+    <h2>Logga in</h2>
 
     {{ form_entry(form.email, description=False) }}
 
@@ -17,14 +19,14 @@
     {{ form_entry_row(form.remember) }}
 
     <div class="form-field">
-      <button>{{ _("Log in")}}</button>
+      <button>Logga in</button>
     </div>
   </form>
   <dl>
-    <dt>{{ _("Have you lost your password?")}}</dt>
-    <dd><a href="{{ url_for('auth.reset') }}">{{ _("Reset password")}}</a></dd>
-    <dt>{{_("Do you need an account?")}}</dt>
-    <dd><a href="{{ url_for('auth.register') }}">{{ _("Register an account")}}</a></dd>
+    <dt>Glömt ditt lösenord?</dt>
+    <dd><a href="{{ url_for('auth.reset') }}">Återställ lösenord</a></dd>
+    <dt>Har du inget konto?</dt>
+    <dd><a href="{{ url_for('auth.register') }}">Begär ett konto</a></dd>
   </dl>
 </div>
 {% endblock %}

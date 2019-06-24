@@ -1,0 +1,34 @@
+{% extends 'layout.html' %}
+
+{% set active_page = "more" %}
+
+{% block body %}
+<div>
+  <h2>Grupper</h2>
+  {% if groups %}
+  <div class="table-wrap">
+    <table class="groups">
+      <tr>
+        <th>Namn</th>
+        <th>Sorteringsvikt</th>
+      </tr>
+      {% for group in groups %}
+      <tr>
+        <td>
+          <a href="{{ url_for('strequeadmin.edit_group', group_id=group.id) }}">
+            {{ group.name }}
+          </a>
+        </td>
+        <td>
+          {{ group.weight }}
+        </td>
+      </tr>
+      {% endfor %}
+    </table>
+  </div>
+  {% else %}
+  <p>Inga grupper funna.</p>
+  {% endif %}
+  <p><a href="{{ url_for('strequeadmin.edit_group') }}">Ny grupp</a></p>
+</div>
+{% endblock %}

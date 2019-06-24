@@ -1,13 +1,14 @@
 {% extends 'layout.html' %}
 
-{% set active_page = "misc" %}
+{% set active_page = "more" %}
 
 {% block body %}
 <div class="transactions">
   <h2>Gör transaktioner i bulk</h2>
   <p>Positivt transaktionsvärde innebär en insättning till användarens konto, negativt innebär ett uttag.</p>
   <p>Dessa transaktioner kommer genomföras, vill du fortsätta?</p>
-  <form method="POST" action="{{ url_for('strequeadmin.confirm_bulk_transactions', token=token) }}">
+  <p>Använd bakåt-knappen i webbläsaren istället för "Avbryt" ifall du vill ha kvar värdena!</p>
+  <form method="POST" action="{{ url_for('strequeadmin.confirm_bulk_transactions') }}">
     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
     <div class="table-wrap bulk-transactions">
       <table>
@@ -25,11 +26,13 @@
           </td>
           <td>
             <span class="value">
+              <input type="hidden" name="user-{{ transaction.user_id }}-value" value="{{ transaction.value }}"/>
               {{ format_currency(transaction.value/100, 'SEK') }}
             </span>
           </td>
           <td>
             <span class="text">
+              <input type="hidden" name="user-{{ transaction.user_id }}-text" value="{{ transaction.text }}"/>
               {{ transaction.text }}
             </span>
           </td>
@@ -45,7 +48,6 @@
 {% endblock %}
 
 {% block scripts %}
-{% assets "js_common", "js_admin" %}
-<script src="{{ ASSET_URL }}"></script>
-{% endassets %}
+<script src="{{ url_for('static', filename='js/common.js') }}"></script>
+<script src="{{ url_for('static', filename='js/admin.js') }}"></script>
 {% endblock %}

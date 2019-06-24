@@ -27,7 +27,6 @@ def create_app(config=None, instance_config=None):
     views.auth.login_manager.init_app(app)
 
     setup_flask_admin(app, models.db)
-    setup_flask_assets(app)
     setup_flask_babel(app)
     setup_flask_uploads(app)
     setup_csrf_protection(app)
@@ -36,10 +35,11 @@ def create_app(config=None, instance_config=None):
 
 
 def register_blueprints(app):
-    from flasquelistan.views import auth, admin, misc, quotes, strequelistan
+    from flasquelistan.views import auth, admin, more, quotes, serviceworker, strequelistan
     app.register_blueprint(auth.mod)
     app.register_blueprint(admin.mod)
-    app.register_blueprint(misc.mod)
+    app.register_blueprint(more.mod)
+    app.register_blueprint(serviceworker.mod)
     app.register_blueprint(strequelistan.mod)
     app.register_blueprint(quotes.mod)
 
@@ -137,11 +137,12 @@ def populate_testdb():
     tenor = models.Group(name='Tenor', weight='30')
     bass = models.Group(name='Bas', weight='40')
 
-    beer = models.Article(name='Öl', value=1200, weight=10)
-    cider = models.Article(name='Cider', value=1200, weight=20)
-    wine = models.Article(name='Vin', value=1500, weight=30)
-    shot = models.Article(name='4 cl', value=1600, weight=40)
-    soft = models.Article(name='Alkfritt', value=1000, weight=50)
+    beer = models.Article(name='Öl', value=1200, weight=10, standardglas=1)
+    cider = models.Article(name='Cider', value=1200, weight=20, standardglas=1)
+    wine = models.Article(name='Vin', value=1500, weight=30, standardglas=1)
+    shot = models.Article(name='4 cl', value=1600, weight=40, standardglas=1)
+    soft = models.Article(name='Alkfritt', value=1000, weight=50,
+                          standardglas=0)
 
     quote1 = models.Quote(
         text="Kom igen, testa citaten, det blir kul!",
@@ -208,9 +209,16 @@ def setup_flask_admin(app, db):
     class LoginModelView(AdminLoginMixin, ModelView):
         pass
 
+    class UserModelView(LoginModelView):
+        form_excluded_columns = ['transactions']
+        column_exclude_list = [
+            '_password_hash', 'body_mass', 'profile_picture', 'y_chromosome',
+            '_password_timestamp'
+        ]
+
     admin = flask_admin.Admin(app, name='Flasquelistan',
                               index_view=LoginIndexView(url='/flask-admin'))
-    admin.add_view(LoginModelView(models.User, db.session, name='User'))
+    admin.add_view(UserModelView(models.User, db.session, name='User'))
     admin.add_view(LoginModelView(models.Group, db.session, name='Group'))
     admin.add_view(LoginModelView(models.Quote, db.session, name='Quote'))
     admin.add_view(LoginModelView(models.Article, db.session, name='Article'))
@@ -225,48 +233,6 @@ def setup_flask_admin(app, db):
                                   name='RegistrationRequest'))
 
     return admin
-
-
-def setup_flask_assets(app):
-    from flask_assets import Environment, Bundle
-
-    assets = Environment(app)
-
-    bundles = {
-        'js_common': Bundle(
-            'js/common.js',
-            output='gen/common.js'
-        ),
-        'js_streque': Bundle(
-            'js/addStreque.js',
-            'js/userFilter.js',
-            output='gen/streque.js'
-        ),
-        'js_history': Bundle(
-            'js/history.js',
-            output='gen/history.js'
-        ),
-        'js_admin': Bundle(
-            'js/admin.js',
-            output='gen/admin.js'
-        ),
-        'css_common': Bundle(
-            'css/lib/normalize.css',
-            'css/style.css',
-            'css/streque.css',
-            'css/quotes.css',
-            'css/admin.css',
-            output='gen/style.css'
-        ),
-        'css_paperlist': Bundle(
-            'css/paperlist.css',
-            output='gen/paperlist.css'
-        ),
-    }
-
-    assets.register(bundles)
-
-    return assets
 
 
 def setup_flask_babel(app):
@@ -286,10 +252,9 @@ def setup_flask_uploads(app):
     from flasquelistan import util
 
     flask_uploads.configure_uploads(app, util.image_uploads)
+    flask_uploads.configure_uploads(app, util.profile_pictures)
 
-    app.jinja_env.globals['image_uploads_url'] = util.image_uploads.url
-    app.jinja_env.globals['image_uploads_dest'] = \
-        lambda: util.image_uploads.config.base_url
+    app.jinja_env.globals['url_for_image'] = util.url_for_image
 
 
 def setup_csrf_protection(app):

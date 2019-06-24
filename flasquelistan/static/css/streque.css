@@ -12,16 +12,30 @@
     flex: 1;
 }
 
+.usercard .picture-and-name a {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
 .usercard .username {
     text-align: center;
 }
 
 .usercard .profile-picture {
     object-fit: cover;
-    width: 5rem;
-    height: 5rem;
+    width: 6rem;
+    height: 6rem;
     border-radius: 7px;
-    margin-bottom: .5rem;
+    margin-bottom: .1rem;
+}
+
+.alcometer .bac {
+    display: none;
+}
+
+.alcometer:hover .bac {
+    display: inline;
 }
 
 .streque-buttons {
@@ -40,12 +54,16 @@
     min-width: 3rem;
 }
 
-.user-filter {
+h2.user-filter {
+    margin-bottom: 0;
+}
+
+div.user-filter {
     margin-bottom: 2.5rem;
 }
 
-.hidden {
-    display: none;
+.user-filter p {
+    margin: .5rem 0;
 }
 
 .streques {
@@ -98,7 +116,60 @@
     margin: 2rem 0;
 }
 
+.profile {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 100%;
+}
+
+.profile-content {
+    padding-left: .65rem;
+    padding-right: .65rem;
+    max-width: 30rem;
+}
+
+.profile .profile-picture {
+    display: block;
+    max-width: 300px;
+    align-self: start;
+    margin-top: 2rem;
+}
+
+.profile .profile-picture img {
+    max-height: 200px;
+}
+
+.no-profile-picture {
+    width: 100%;
+    height: 100%;
+    background: grey;
+    font-size: 1.5em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.usercard .no-profile-picture {
+    border-radius: 7px;
+}
+
+.profile .no-profile-picture {
+    width: 100px;
+    height: 100px;
+    margin-top: 2rem;
+}
+
+.upload-and-set-profile-picture .form-field {
+    margin-bottom: .5rem;
+}
+
+.upload-and-set-profile-picture,
 .change-profile-picture {
+    margin: 1.5rem 0;
+}
+
+.change-profile-picture .grid-wrapper {
     max-height: 30rem;
     overflow-y: scroll;
     display: grid;
@@ -114,6 +185,15 @@
 
 .change-profile-picture input[type=radio]:checked + label > .label {
     border: 5px solid #6797D0;
+}
+
+.change-profile-picture button {
+    margin-top: 1rem;
+}
+
+.change-profile-picture .submit {
+    display: flex;
+    justify-content: space-around;
 }
 
 .change-profile-picture .form-field {
@@ -145,14 +225,39 @@
     margin-bottom: 1.5rem;
 }
 
-#emma {
-    display: none;
+ol.transaction-history {
+  padding: 0;
+  max-width: 30rem;
+}
+
+ol.transaction-history li {
+  display: block;
+  border: 1px solid #ddd;
+  border-radius: 7px;
+  margin: .5rem 0;
+  padding: .5rem;
+}
+
+ol.transaction-history li .upper {
+  display: flex;
+  justify-content: space-between;
+}
+
+ol.transaction-history li .value {
+  white-space: nowrap;
+  flex: 0 0 auto;
+  margin-left: 1rem;
+}
+
+#emma-wrapper {
     position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    object-fit: cover;
-    border-radius: 50%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
     /* NOTE: This is a bit weird, but it works. */
     max-width: 75vh;
@@ -160,3 +265,30 @@
     width: 75vw;
     height: 75vh;
 }
+
+#emma-wrapper.hidden {
+    visibility: hidden;
+    transition: visibility 0s linear .1s;
+}
+
+#emma-wrapper.visible {
+    visibility: visible;
+}
+
+#emma {
+    object-fit: cover;
+    border-radius: 50%;
+    width: 0;
+    height: 0;
+    transition: width .1s, height .1s;
+    transition-timing-function: linear;
+}
+
+#emma-wrapper.visible #emma {
+    width: 100%;
+    height: 100%;
+    transition: width .1s, height .1s;
+    transition-timing-function: linear;
+}
+
+

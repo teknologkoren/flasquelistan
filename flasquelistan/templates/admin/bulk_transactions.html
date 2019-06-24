@@ -1,6 +1,6 @@
 {% extends 'layout.html' %}
 
-{% set active_page = "misc" %}
+{% set active_page = "more" %}
 
 {% from "macros.html" import form_entry %}
 
@@ -28,12 +28,12 @@
           </td>
           <td>
             <span class="value">
-              {{ field.value }} kr
+              {{ field.value(placeholder='0,00') }} kr
             </span>
           </td>
           <td>
             <span class="text">
-              {{ field.text }}
+              {{ field.text(placeholder="Admintransaktion") }}
             </span>
           </td>
         </tr>
@@ -46,7 +46,6 @@
 {% endblock %}
 
 {% block scripts %}
-{% assets "js_common", "js_admin" %}
-<script src="{{ ASSET_URL }}"></script>
-{% endassets %}
+<script src="{{ url_for('static', filename='js/common.js') }}"></script>
+<script src="{{ url_for('static', filename='js/admin.js') }}"></script>
 {% endblock %}

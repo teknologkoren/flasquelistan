@@ -1,5 +1,5 @@
 import flask
-import flask_login
+from flask_login import current_user, login_required
 from sqlalchemy.sql.expression import func, not_
 from flasquelistan import forms, models, util
 from flasquelistan.views import auth
@@ -8,7 +8,7 @@ mod = flask.Blueprint('strequelistan', __name__)
 
 
 @mod.before_request
-@flask_login.login_required
+@login_required
 def before_request():
     """Make sure user is logged in before request.
     This function does nothing, but the decorators do.
@@ -18,16 +18,21 @@ def before_request():
 
 @mod.route('/')
 def index():
-    groups = (models.Group.query
+    groups = (models.Group
+              .query
               .filter(models.Group.users.any())  # Only groups with users
-              .order_by(models.Group.weight)
-              .all())
+              .order_by(models.Group.weight.desc())
+              .all()
+              )
 
     random_quote = models.Quote.query.order_by(func.random()).first()
 
-    current_user = flask_login.current_user
-
-    articles = models.Article.query.all()
+    articles = (models.Article
+                .query
+                .filter_by(is_active=True)
+                .order_by(models.Article.weight.desc())
+                .all()
+                )
 
     if current_user.balance <= 0:
         flask.flash("Det finns inga pengar på kontot. Dags att fylla på!",
@@ -58,7 +63,7 @@ def add_streque():
     if not article:
         flask.abort(400)
 
-    streque = user.strequa(article)
+    streque = user.strequa(article, current_user)
 
     if flask.request.is_json:
         return flask.jsonify(
@@ -108,20 +113,80 @@ def void_streque():
         return flask.redirect(flask.url_for('strequelistan.history'))
 
 
-@mod.route('/produkter')
+@mod.route('/transfer', methods=['POST'])
+def credit_transfer():
+    form = forms.CreditTransferForm()
+
+    payer = (models.User
+             .query
+             .filter_by(id=form.payer_id.data)
+             .first()
+             )
+
+    payee = (models.User
+             .query
+             .filter_by(id=form.payee_id.data)
+             .first()
+             )
+
+    if not (payer and payee):
+        flask.abort(400)
+
+    redir = flask.redirect(
+                flask.url_for(
+                    'strequelistan.show_profile',
+                    user_id=payee.id
+                )
+            )
+
+    if form.validate_on_submit():
+        if payer != current_user:
+            flask.flash(
+                "Du kan bara föra över pengar från dig själv! >:(", 'error'
+            )
+            return redir
+
+        value = int(form.value.data*100)  # To ören
+
+        if value > payer.balance:
+            flask.flash(
+                "Du kan inte föra över mer pengar än ditt saldo.", 'error'
+            )
+            return redir
+
+        message = form.message.data
+        models.CreditTransfer.create(payer, payee, value, message)
+
+        flask.flash("Förde över {0:g} pengar till {1}."
+                    .format(value/100, payee.full_name),
+                    'success'
+                    )
+
+    return redir
+
+
+@mod.route('/articles')
 def article_description():
-    articles = models.Article.query.order_by(models.Article.weight).all()
+    articles = (models.Article
+                .query
+                .order_by(models.Article.weight.desc())
+                .all()
+                )
     return flask.render_template('article_description.html', articles=articles)
 
 
-@mod.route('/papperslista')
+@mod.route('/paperlist')
 def paperlist():
     users = (models.User.query
              .order_by(models.User.first_name))
 
     groups = models.Group.query.all()
 
-    articles = models.Article.query.order_by(models.Article.weight).all()
+    articles = (models.Article
+                .query
+                .order_by(models.Article.weight.desc())
+                .all()
+                )
 
     return flask.render_template('paperlist.html',
                                  users=users,
@@ -147,16 +212,148 @@ def show_profile(user_id):
     transactions = (user.transactions
                     .filter(models.Streque.voided.is_(False))
                     .order_by(models.Transaction.timestamp.desc())
-                    .limit(10))
+                    .limit(5))
 
-    return flask.render_template('show_profile.html', user=user,
-                                 transactions=transactions)
+    upload_profile_picture_form = forms.UploadProfilePictureForm()
+    change_profile_picture_form = forms.ChangeProfilePictureFormFactory(user)
+    credit_transfer_form = forms.CreditTransferForm()
+    credit_transfer_form.payer_id.data = current_user.id
+    credit_transfer_form.payee_id.data = user.id
+
+    if current_user.is_admin:
+        admin_transaction_form = forms.UserTransactionForm()
+    else:
+        admin_transaction_form = None
+
+    return flask.render_template(
+        'show_profile.html',
+        user=user,
+        transactions=transactions,
+        profile_picture_form=upload_profile_picture_form,
+        change_profile_picture_form=change_profile_picture_form,
+        credit_transfer_form=credit_transfer_form,
+        admin_transaction_form=admin_transaction_form
+    )
+
+
+@mod.route('/profile/<int:user_id>/admin-transaction', methods=['POST'])
+def admin_transaction(user_id):
+    if not current_user.is_admin:
+        flask.flash("Du måste vara admin för att göra det!", 'error')
+        return flask.redirect(flask.url_for('.show_profile', user_id=user_id))
+
+    user = models.User.query.get_or_404(user_id)
+    form = forms.UserTransactionForm()
+
+    if form.validate_on_submit():
+        user.admin_transaction(int(form.value.data*100), form.text.data)
+        flask.flash("Transaktion utförd!", 'success')
+    elif form.is_submitted():
+        forms.flash_errors(form)
+
+    return flask.redirect(
+        flask.url_for('strequelistan.show_profile', user_id=user_id)
+    )
+
+
+@mod.route('/profile/<int:user_id>/upload-profile-picture', methods=['POST'])
+def upload_profile_picture(user_id):
+    form = forms.UploadProfilePictureForm()
+
+    if form.validate_on_submit():
+        if form.upload.data:
+            user = models.User.query.get_or_404(user_id)
+
+            filename = util.profile_pictures.save(
+                form.upload.data
+            )
+            profile_picture = models.ProfilePicture(
+                filename=filename,
+                user_id=user.id
+            )
+
+            user.profile_picture = profile_picture
+
+            models.db.session.add(profile_picture)
+            models.db.session.commit()
+
+            flask.flash("Din profilbild har ändrats!", 'success')
+
+    elif form.is_submitted():
+        forms.flash_errors(form)
+
+    return flask.redirect(
+        flask.url_for('strequelistan.show_profile', user_id=user_id)
+    )
+
+
+@mod.route('/profile/<int:user_id>/change-profile-picture', methods=['POST'])
+def change_profile_picture(user_id):
+    user = models.User.query.get_or_404(user_id)
+
+    if current_user.id != user.id and not current_user.is_admin:
+        flask.flash("Du får bara redigera din egen profil! ಠ_ಠ", 'error')
+        return flask.redirect(flask.url_for('.show_profile', user_id=user_id))
+
+    form = forms.ChangeProfilePictureFormFactory(user)
+
+    if form.validate_on_submit():
+        # The "none" choice seems to work. Not sure why.
+        user.profile_picture_id = form.profile_picture.data
+        models.db.session.commit()
+
+        flask.flash("Din profilbild har ändrats!", 'success')
+
+    elif form.is_submitted():
+        form.flash_errors(form)
+
+    return flask.redirect(
+        flask.url_for('strequelistan.show_profile', user_id=user_id)
+    )
+
+
+@mod.route('/profile/<int:user_id>/delete-profile-picture', methods=['POST'])
+def delete_profile_picture(user_id):
+    user = models.User.query.get_or_404(user_id)
+
+    if current_user.id != user.id and not current_user.is_admin:
+        flask.flash("Du får bara redigera din egen profil! ಠ_ಠ", 'error')
+        return flask.redirect(flask.url_for('.show_profile', user_id=user_id))
+
+    form = forms.ChangeProfilePictureFormFactory(user)
+
+    if form.validate_on_submit():
+        if form.profile_picture.data == 'none':
+            flask.flash(
+                "Du kan inte ta bort "
+                "<a href=\"https://phys.org/news/2014-08-what-is-nothing.html\">"
+                "ingenting"
+                "</a>!", 'error'
+            )
+
+        elif form.profile_picture.data:
+            # The "none" choice seems to work. Not sure why.
+            profile_picture = (models.ProfilePicture
+                               .query
+                               .get_or_404(form.profile_picture.data)
+                               )
+
+            models.db.session.delete(profile_picture)
+            models.db.session.commit()
+
+            flask.flash("Profilbilden har tagits bort!", 'success')
+
+    elif form.is_submitted():
+        form.flash_errors(form)
+
+    return flask.redirect(
+        flask.url_for('strequelistan.show_profile', user_id=user_id)
+    )
 
 
 @mod.route('/profile/<int:user_id>/history')
 def user_history(user_id):
     user = models.User.query.get_or_404(user_id)
-    current_user = flask_login.current_user
 
     if current_user.id != user.id and not current_user.is_admin:
         return flask.redirect(flask.url_for('.show_profile', user_id=user_id))
@@ -170,10 +367,21 @@ def user_history(user_id):
                                  transactions=transactions)
 
 
+@mod.route('/profile/<int:user_id>/vcard')
+def user_vcard(user_id):
+    user = models.User.query.get_or_404(user_id)
+    response = flask.make_response(user.vcard)
+    response.mimetype = 'text/vcard'
+    response.headers['Content-Disposition'] = (
+        'attachment; filename="{}_{}.vcf"'
+        .format(user.first_name, user.last_name)
+    )
+    return response
+
+
 @mod.route('/profile/<int:user_id>/edit/', methods=['GET', 'POST'])
 def edit_profile(user_id):
     user = models.User.query.get_or_404(user_id)
-    current_user = flask_login.current_user
 
     if current_user.id != user.id and not current_user.is_admin:
         flask.flash("Du får bara redigera din egen profil! ಠ_ಠ", 'error')
@@ -196,6 +404,15 @@ def edit_profile(user_id):
 
         user.nickname = form.nickname.data
         user.phone = form.phone.data
+        user.body_mass = form.body_mass.data
+
+        y_chromosome = form.y_chromosome.data
+        if y_chromosome == 'yes':
+            user.y_chromosome = True
+        elif y_chromosome == 'no':
+            user.y_chromosome = False
+        else:
+            user.y_chromosome = None
 
         models.db.session.commit()
 
@@ -205,82 +422,33 @@ def edit_profile(user_id):
     elif form.is_submitted():
         forms.flash_errors(form)
 
+    else:
+        if user.y_chromosome is True:
+            form.y_chromosome.data = 'yes'
+        elif user.y_chromosome is False:
+            form.y_chromosome.data = 'no'
+        else:
+            form.y_chromosome.data = 'n/a'
+
     return flask.render_template('edit_profile.html', form=form, user=user)
-
-
-@mod.route('/profile/<int:user_id>/edit/profile-picture',
-           methods=['GET', 'POST'])
-def change_profile_picture(user_id):
-    user = models.User.query.get_or_404(user_id)
-    current_user = flask_login.current_user
-
-    if current_user.id != user.id and not current_user.is_admin:
-        flask.flash("Du får bara redigera din egen profil! ಠ_ಠ", 'error')
-        return flask.redirect(flask.url_for('.show_profile', user_id=user_id))
-
-    form = forms.ChangeProfilePictureFormFactory(user)
-
-    if form.validate_on_submit():
-        # The "none" choice seems to work. Not sure why.
-        user.profile_picture_id = form.profile_picture.data
-        models.db.session.commit()
-
-        flask.flash("Din profilbild har ändrats!", 'success')
-
-        return flask.redirect(flask.url_for('strequelistan.edit_profile',
-                                            user_id=user.id))
-
-    elif form.is_submitted():
-        forms.flash_errors(form)
-
-    return flask.render_template('change_profile_picture.html', form=form,
-                                 user=user)
-
-
-@mod.route('/profile/<int:user_id>/edit/profile-picture/upload',
-           methods=['GET', 'POST'])
-def upload_profile_picture(user_id):
-    user = models.User.query.get_or_404(user_id)
-    current_user = flask_login.current_user
-
-    if current_user.id != user.id and not current_user.is_admin:
-        flask.flash("Du får bara redigera din egen profil! ಠ_ಠ", 'error')
-        return flask.redirect(flask.url_for('.show_profile', user_id=user_id))
-
-    form = forms.UploadProfilePictureForm()
-
-    if form.validate_on_submit():
-        if form.upload.data:
-            filename = util.image_uploads.save(form.upload.data)
-            profile_picture = models.ProfilePicture(filename=filename,
-                                                    user_id=user.id)
-            models.db.session.add(profile_picture)
-            models.db.session.commit()
-
-            flask.flash("Din nya profilbild har laddats upp!", 'success')
-
-        return flask.redirect(
-            flask.url_for('strequelistan.change_profile_picture',
-                          user_id=user.id)
-        )
-
-    elif form.is_submitted():
-        forms.flash_errors(form)
-
-    return flask.render_template('upload_profile_picture.html', form=form,
-                                 user=user)
 
 
 @mod.route('/profile/<int:user_id>/edit/password', methods=['GET', 'POST'])
 def change_email_or_password(user_id):
     user = models.User.query.get_or_404(user_id)
-    current_user = flask_login.current_user
 
-    if current_user.id != user.id and not current_user.is_admin:
-        flask.flash("Du får bara redigera din egen profil! ಠ_ಠ", 'error')
-        return flask.redirect(flask.url_for('.show_profile', user_id=user_id))
+    if current_user.id != user.id and not user.is_admin:
+        if current_user.is_admin:
+            form = forms.ChangeEmailOrPasswordForm(obj=user, user=user,
+                                                   nopasswordvalidation=True)
 
-    form = forms.ChangeEmailOrPasswordForm(obj=user, user=user)
+        else:
+            flask.flash("Du får bara redigera din egen profil! ಠ_ಠ", 'error')
+            return flask.redirect(flask.url_for('.show_profile',
+                                                user_id=user_id))
+
+    else:
+        form = forms.ChangeEmailOrPasswordForm(obj=user, user=user)
 
     if form.validate_on_submit():
         if form.email.data != user.email:

@@ -4,7 +4,6 @@ from flask_wtf.file import FileAllowed
 from wtforms import fields, validators
 import wtforms.fields.html5 as html5_fields
 from flasquelistan import models, util
-from flask_babel import gettext as _
 
 
 def flash_errors(form):
@@ -73,7 +72,8 @@ class LowercaseEmailField(html5_fields.EmailField):
 class EmailForm(flask_wtf.FlaskForm):
     email = LowercaseEmailField('E-post', validators=[
         validators.InputRequired(),
-        validators.Email()
+        validators.Email(),
+        validators.Length(max=254)
     ])
 
 
@@ -91,6 +91,7 @@ class UniqueEmailForm(flask_wtf.FlaskForm):
     email = LowercaseEmailField('E-post', validators=[
         validators.InputRequired(),
         validators.Email(),
+        validators.Length(max=254),
         Unique(models.User,
                models.User.email,
                message='Denna e-postadress används redan.')
@@ -136,8 +137,9 @@ class ChangeEmailOrPasswordForm(EmailForm, PasswordForm):
         description="Ditt nya lösenord. Åtminstone 8 tecken långt."
     )
 
-    def __init__(self, user, *args, **kwargs):
+    def __init__(self, user, nopasswordvalidation=False, *args, **kwargs):
         self.user = user
+        self.nopasswordvalidation = nopasswordvalidation
         super().__init__(*args, **kwargs)
 
     def validate_email(self, field):
@@ -150,31 +152,68 @@ class ChangeEmailOrPasswordForm(EmailForm, PasswordForm):
 
     def validate_password(self, field):
         if not self.user.verify_password(self.password.data):
+            if self.nopasswordvalidation:
+                return True
+
             self.password.errors.append("Fel lösenord.")
             return False
 
 
 class EditUserForm(flask_wtf.FlaskForm):
-    nickname = fields.StringField('Smeknamn', description="Något roligt.")
+    nickname = fields.StringField(
+        'Smeknamn',
+        description="Något roligt.",
+        validators=[
+            validators.Length(max=50)
+        ]
+    )
 
     phone = html5_fields.TelField(
-        _("Telephone number"),
+        'Telefon',
         description="Ett telefonnummer, med eller utan landskod."
+    )
+
+    body_mass = html5_fields.IntegerField(
+        'Kroppsvikt',
+        description=("Din vikt i kg. Används för att mer precist räkna ut "
+                     "alkoholkoncentrationen i blodet. Fältet kan lämnas "
+                     "tomt"),
+        render_kw={'min': 1, 'max': 20743},
+        validators=[
+            validators.NumberRange(min=1, max=20743),
+            validators.Optional()
+        ]
+    )
+
+    y_chromosome = fields.SelectField(
+        'Har du en Y-kromosom?',
+        description=("Används för att mer precist räkna ut "
+                     "alkoholkoncentrationen i blodet."),
+        choices=[('n/a', 'Vill ej uppge'), ('yes', 'Ja'), ('no', 'Nej')],
+        validators=[
+            validators.Optional()
+        ]
     )
 
 
 class FullEditUserForm(EditUserForm):
     first_name = fields.StringField(
         'Förnamn',
-        validators=[validators.InputRequired()],
+        validators=[
+            validators.InputRequired(),
+            validators.Length(max=50)
+        ],
     )
     last_name = fields.StringField(
         'Efternamn',
-        validators=[validators.InputRequired()],
+        validators=[
+            validators.InputRequired(),
+            validators.Length(max=50)
+        ],
     )
     active = fields.BooleanField(
         'Aktiv',
-        description="Om medlemmen är en aktiv medlem i kören."
+        description="Om medlemmen är aktiv i föreningen."
     )
     group_id = fields.SelectField('Grupp', coerce=int)
     # Populate .choices in view!
@@ -187,11 +226,17 @@ class AddUserForm(UniqueEmailForm, FullEditUserForm):
 class RegistrationRequestForm(UniqueEmailForm):
     first_name = fields.StringField(
         'Förnamn',
-        validators=[validators.InputRequired()],
+        validators=[
+            validators.InputRequired(),
+            validators.Length(max=50)
+        ],
     )
     last_name = fields.StringField(
         'Efternamn',
-        validators=[validators.InputRequired()],
+        validators=[
+            validators.InputRequired(),
+            validators.Length(max=50)
+        ],
     )
     phone = html5_fields.TelField(
         'Telefon',
@@ -231,7 +276,7 @@ def ChangeProfilePictureFormFactory(user):
 
 
 class UploadProfilePictureForm(flask_wtf.FlaskForm):
-    upload = fields.FileField('Profilbild', validators=[
+    upload = fields.FileField('Ladda upp ny profilbild', validators=[
         FileAllowed(util.image_uploads, 'Endast bilder!')
     ])
 
@@ -245,6 +290,18 @@ class DateRangeForm(flask_wtf.FlaskForm):
     ])
 
 
+class UserTransactionForm(flask_wtf.FlaskForm):
+    value = html5_fields.DecimalField(
+        'Transaktionsvärde',
+        render_kw={'step': .01, 'min': -10000, 'max': 10000},
+        validators=[
+            validators.NumberRange(min=-10000, max=10000),
+            validators.Optional()
+        ])
+
+    text = fields.StringField('Meddelande')
+
+
 def BulkTransactionFormFactory(active=True):
     class BulkTransactionForm(flask_wtf.FlaskForm):
         pass
@@ -255,22 +312,12 @@ def BulkTransactionFormFactory(active=True):
         users = models.User.query.all()
 
     for user in users:
-        class UserTransactionForm(flask_wtf.FlaskForm):
+        class F(UserTransactionForm):
             user_name = fields.HiddenField('Namn',
                                            default=user.full_name)
             user_id = fields.HiddenField('ID', default=user.id)
 
-            value = html5_fields.DecimalField(
-                'Transaktionsvärde',
-                default=0,
-                render_kw={'step': .01, 'min': -10000, 'max': 10000},
-                validators=[
-                    validators.NumberRange(min=-10000, max=10000)
-                ])
-
-            text = fields.StringField('Meddelande')
-
-        transaction_form = fields.FormField(UserTransactionForm)
+        transaction_form = fields.FormField(F)
 
         setattr(BulkTransactionForm,
                 "user-{}".format(user.id),
@@ -284,24 +331,91 @@ class EditArticleForm(flask_wtf.FlaskForm):
         validators.InputRequired(),
         validators.Length(max=15)
     ])
-    value = fields.IntegerField('Pris', validators=[
-        validators.InputRequired()
-    ])
     value = html5_fields.DecimalField(
         'Pris',
         default=0,
         render_kw={'step': .01, 'min': -1000, 'max': 1000},
         validators=[
-            validators.NumberRange(min=-1000, max=1000)
-        ])
+            validators.InputRequired(),
+            validators.NumberRange(min=-1000, max=1000),
+        ]
+    )
+    standardglas = html5_fields.DecimalField(
+        'Standardglas',
+        default=1,
+        render_kw={'step': .1},
+        validators=[
+            validators.InputRequired(),
+        ]
+    )
     description = fields.TextAreaField(
         'Beskrivning',
-        description="Vilka produkter som ingår och/eller beskrivning. "
-                    "Markdown.")
-    weight = fields.IntegerField(
+        description=("Vilka produkter som ingår och/eller beskrivning. "
+                     "Markdown.")
+    )
+    weight = html5_fields.IntegerField(
         'Sorteringsvikt',
-        description="Heltal. En högre vikt sjunker.",
+        description="Heltal. En högre vikt stiger.",
         validators=[
             validators.InputRequired()
         ]
+    )
+    is_active = fields.BooleanField(
+        'Aktiv',
+        description="Produkten är synlig och går att strequa på.",
+        default=True
+    )
+
+
+class EditGroupForm(flask_wtf.FlaskForm):
+    name = fields.StringField('Namn', validators=[
+        validators.InputRequired(),
+        validators.Length(max=50)
+    ])
+    weight = html5_fields.IntegerField(
+        'Sorteringsvikt',
+        description="Heltal. En högre vikt stiger.",
+        validators=[
+            validators.InputRequired()
+        ]
+    )
+
+
+class CreditTransferForm(flask_wtf.FlaskForm):
+    payer_id = fields.HiddenField()
+    payee_id = fields.HiddenField()
+
+    message = fields.StringField('Meddelande')
+
+    value = html5_fields.DecimalField(
+        'Summa',
+        render_kw={'step': .01, 'min': 1, 'max': 10000},
+        validators=[
+            validators.NumberRange(min=1, max=10000),
+        ]
+    )
+
+
+class EditQuoteForm(flask_wtf.FlaskForm):
+    text = fields.TextAreaField(
+        'Citat',
+        description="Max 150 tecken.",
+        validators=[
+            validators.InputRequired(),
+            validators.Length(max=150)
+        ]
+    )
+    who = fields.TextAreaField(
+        'Upphovsman',
+        validators=[
+            validators.Length(max=150)
+        ]
+    )
+    timestamp = html5_fields.DateTimeLocalField(
+        'Tid',
+        description="Tidszon UTC.",
+        validators=[
+            validators.InputRequired()
+        ],
+        format='%Y-%m-%dT%H:%M'
     )

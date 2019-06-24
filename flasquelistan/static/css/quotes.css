@@ -8,14 +8,17 @@
 
 .quote-meta {
     display: flex;
+    flex-direction: column;
+}
+
+.quote .lower {
+    display: flex;
+    justify-content: space-between;
     flex-direction: row-reverse;
-    flex-wrap: wrap;
 }
 
 .quote-permalink {
     margin-right: .5rem;
-    align-self: flex-end;
-    flex: 1;
     font-size: small;
 }
 

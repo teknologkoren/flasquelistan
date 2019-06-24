@@ -4,26 +4,27 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Strequelistan</title>
+    <link rel="manifest" href="/static/manifest.json">
 
-    {% assets "css_common" %}
-    <link rel="stylesheet" href="{{ ASSET_URL }}">
-    {% endassets %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/streque.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/quotes.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
 
     {% block head %}
     {% endblock %}
   </head>
   <body>
     <header>
-      <div class="logo">
-        <a href="{{ url_for('strequelistan.index') }}">
-          <img src="{{ url_for('static', filename='images/cuteladypoursadrink.png') }}">
-          <h1>Strequelistan</h1>
-        </a>
-      </div>
+      <a class="logo" href="{{ url_for('strequelistan.index') }}">
+        <img src="{{ url_for('static', filename='images/cuteladypoursadrink.png') }}" alt="Cute lady pours a drink">
+        <h1>Strequelistan</h1>
+      </a>
     </header>
     {% block nav %}
     {% endblock %}
     {% block base_body %}
     {% endblock %}
+    <script src="{{ url_for('static', filename='js/install-serviceworker.js') }}"></script>
   </body>
 </html>

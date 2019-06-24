@@ -1,0 +1,72 @@
+{% extends 'layout.html' %}
+
+{% set active_page = "more" %}
+
+{% from "macros.html" import form_entry %}
+
+{% block body %}
+<div>
+  <h2>Användare</h2>
+  <div class="table-wrap">
+    <table class="users">
+      <tr>
+        <th>Namn</th>
+        <th>E-postadress</th>
+        <th>Telefonnummer</th>
+        <th>Saldo</th>
+        <th>Aktiv</th>
+        <th>Admin</th>
+      </tr>
+      {% for user in users %}
+      <tr>
+        <td class="name">
+          <span>
+            <a href="{{ url_for('strequelistan.show_profile', user_id=user.id) }}">
+              {{ user.full_name }}
+            </a>
+          </span>
+        </td>
+        <td class="email">
+          <span>
+            {{ user.email }}
+          </span>
+        </td>
+        <td class="phone">
+          <span>
+            {{ user.phone }}
+          </span>
+        </td>
+        <td class="balance">
+          <span>
+            {{ user.formatted_balance }}
+          </span>
+        </td>
+        <td class="active">
+          <span>
+            {% if user.active %}
+            Aktiv
+            {% else %}
+            Inaktiv
+            {% endif %}
+          </span>
+        </td>
+        <td class="admin">
+          <span>
+            {% if user.is_admin %}
+            Admin
+            {% else %}
+            Ej admin
+            {% endif %}
+          </span>
+        </td>
+      </tr>
+      {% endfor %}
+    </table>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/common.js') }}"></script>
+<script src="{{ url_for('static', filename='js/admin.js') }}"></script>
+{% endblock %}

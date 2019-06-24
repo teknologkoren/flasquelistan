@@ -7,18 +7,50 @@
 
 {% macro usercard(user, articles) %}
 <div class="card usercard">
-  <a class="picture-and-name" href="{{ url_for('strequelistan.show_profile', user_id=user.id) }}">
-    {{ profile_picture(user) }}
-    <div class="username" data-firstname="{{ user.first_name }}"
-                          data-lastname="{{ user.last_name }}"
-                          data-nickname="{{ user.nickname or '' }}">
-      {% if user.nickname %}
-      {{ user.nickname }}
+  <div class="picture-and-name">
+    <a href="{{ url_for('strequelistan.show_profile', user_id=user.id) }}">
+      {{ profile_picture(user) }}
+      <div class="username" data-firstname="{{ user.first_name }}"
+                            data-lastname="{{ user.last_name }}"
+                            data-nickname="{{ user.nickname or '' }}"
+                            data-phonenumber="{{ user.formatted_phone(e164=True) }}">
+        {% if user.nickname %}
+        {{ user.nickname }}
+        {% else %}
+        {{ user.first_name }} {{ user.last_name }}
+        {% endif %}
+      </div>
+    </a>
+    {% if user.bac >= 0.1 %}
+    {% set bac = user.bac %}
+    <div class="alcometer">
+      {% if bac < 0.3 %}
+      🍺
+      {% elif bac < 0.5 %}
+      🍻
+      {% elif bac < 1 %}
+      👌
+      {% elif bac < 1.5 %}
+      🕺
+      {% elif bac < 2 %}
+      😟
+      {% elif bac < 2.5 %}
+      🤢
+      {% elif bac < 3 %}
+      😵
+      {% elif bac < 3.5 %}
+      💀
+      {% elif bac < 4 %}
+      🇷🇺
       {% else %}
-      {{ user.first_name }} {{ user.last_name }}
+      🇫🇮
       {% endif %}
+      <span class="bac">
+        {{ '{:.2f}'.format(bac) }}
+      </span>
     </div>
-  </a>
+    {% endif %}
+  </div>
   <form class="streque-form streque-buttons" method="POST">
     {# CSRF token is cached during the request, all calls to csrf_token() will
     return the same one #}
@@ -36,21 +68,32 @@
 </div>
 {% endmacro %}
 
+{% block head %}
+<script defer src="{{ url_for('static', filename='js/common.js') }}"></script>
+<script defer src="{{ url_for('static', filename='js/addStreque.js') }}"></script>
+<script defer src="{{ url_for('static', filename='js/userFilter.js') }}"></script>
+{% endblock %}
+
 {% block body %}
 <div class="cards">
-  <blockquote class="quote quote-display">
-    {{ quote_inner(quote) }}
-  </blockquote>
+  {% if quote %}
+    <blockquote class="quote quote-display">
+      {{ quote_inner(quote) }}
+    </blockquote>
+  {% endif %}
 
   <input id="ajax-csrf_token" type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
 
-  <h2>Inloggad användare</h2>
-  {{ usercard(current_user, articles) }}
-
-  <h2>Filtrera användare</h2>
+  <h2 class="user-filter">Filtrera användare</h2>
   <div class="user-filter">
+    <p><small>Du kan söka på namn, smeknamn och telefonnummer.</small></p>
     <input type="text" id="user-filter" placeholder="Namn" autocomplete="off">
     <button id="clear-filter" type="button">Rensa</button>
+  </div>
+
+  <div class="group">
+    <h2>Inloggad användare</h2>
+    {{ usercard(current_user, articles) }}
   </div>
 
   {% for group in groups %}
@@ -62,10 +105,4 @@
   </div>
   {% endfor %}
 </div>
-{% endblock %}
-
-{% block scripts %}
-{% assets "js_common", "js_streque" %}
-<script src="{{ ASSET_URL }}"></script>
-{% endassets %}
 {% endblock %}
