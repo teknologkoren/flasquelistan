@@ -293,3 +293,9 @@ input[type=number] {
     size: A4;
     margin: 1cm;
 }
+
+#langselector{
+    float: right;
+}
+#langselector img{
+    max-width: 30px;

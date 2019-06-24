@@ -237,13 +237,29 @@ def setup_flask_admin(app, db):
 
 def setup_flask_babel(app):
     import flask_babel
-
+    from flask import request
+    from flask import session
+    from flask import g
     babel = flask_babel.Babel(app)
 
     app.jinja_env.globals['format_datetime'] = flask_babel.format_datetime
     app.jinja_env.globals['format_date'] = flask_babel.format_date
     app.jinja_env.globals['format_currency'] = flask_babel.format_currency
 
+    @babel.localeselector
+    def get_locale():
+        if request.args.get('lang'):
+            print("Updating locale to {}".format(request.args.get('lang')))
+            session['lang'] = request.args.get('lang')
+        return session.get('lang', 'sv_SE')
+
+    @babel.timezoneselector
+    def get_timezone():
+        # Used to change the time zone.
+        # user = getattr(g, 'user', None)
+        # if user is not None:
+        #    return user.timezone
+        return None
     return babel
 
 
