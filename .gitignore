@@ -13,3 +13,5 @@ flasquelistan/static/.webassets-cache*
 *pytest_cache*
 
 *.mo
+
+*.swp
