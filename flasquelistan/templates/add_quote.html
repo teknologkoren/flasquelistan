@@ -6,13 +6,13 @@
 
 {% block body %}
 <div>
-  <h2>Lägg till citat</h2>
+  <h2>{{_("Lägg till citat")}}</h2>
   <form method="POST">
     {{ form.csrf_token }}
     {{ form_entry(form.text, cols=30, rows=5) }}
     {{ form_entry(form.who) }}
     <div class="form-field">
-      <button>Lägg till</button> | <a href="{{ url_for('quotes.index') }}">Avbryt</a>
+      <button>{{_("Lägg till")}}</button> | <a href="{{ url_for('quotes.index') }}">{{_("Avbryt")}}</a>
     </div>
   </form>
 </div>

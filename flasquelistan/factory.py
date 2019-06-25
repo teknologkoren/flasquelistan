@@ -239,7 +239,9 @@ def setup_flask_babel(app):
     import flask_babel
     from flask import request
     from flask import session
-    from flask import g
+    from flask_login import current_user
+    from flasquelistan import models
+
     babel = flask_babel.Babel(app)
 
     app.jinja_env.globals['format_datetime'] = flask_babel.format_datetime
@@ -248,10 +250,17 @@ def setup_flask_babel(app):
 
     @babel.localeselector
     def get_locale():
-        if request.args.get('lang'):
-            print("Updating locale to {}".format(request.args.get('lang')))
-            session['lang'] = request.args.get('lang')
-        return session.get('lang', 'sv_SE')
+        # Check if user is logged in, if so, use the users stored preferences
+        if current_user.is_authenticated:
+            if request.args.get('lang'):
+                current_user.lang = request.args.get('lang')
+                models.db.session.commit()
+            return current_user.lang
+        # Check the session cookie if the user isn't logged in
+        else:
+            if request.args.get('lang'):
+                session['lang'] = request.args.get('lang')
+            return session.get('lang', None)
 
     @babel.timezoneselector
     def get_timezone():

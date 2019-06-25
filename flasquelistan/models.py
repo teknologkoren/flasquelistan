@@ -28,6 +28,7 @@ class User(flask_login.UserMixin, db.Model):
     group_id = db.Column(db.Integer, db.ForeignKey('group.id'))
     body_mass = db.Column(db.Integer, nullable=True)
     y_chromosome = db.Column(db.Boolean, nullable=True)
+    lang = db.Column(db.String(20), nullable=True, default="sv_SE")
 
     # use_alter=True adds fk after ProfilePicture has been created to avoid
     # circular dependency

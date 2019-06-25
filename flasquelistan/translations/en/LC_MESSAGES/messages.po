@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2019-06-24 22:07+0200\n"
+"POT-Creation-Date: 2019-06-25 08:34+0200\n"
 "PO-Revision-Date: 2019-06-24 08:20+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: en\n"
@@ -18,10 +18,91 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.7.0\n"
 
-#: templates/quotes.html:27
+#: templates/add_quote.html:9 templates/quotes.html:27
 msgid "Lägg till citat"
 msgstr "Add quote"
 
-#~ msgid "testtest"
-#~ msgstr "test-en"
+#: templates/add_quote.html:15
+msgid "Lägg till"
+msgstr "Add"
+
+#: templates/add_quote.html:15 templates/admin/add_user.html:22
+msgid "Avbryt"
+msgstr "Cancel"
+
+#: templates/admin/articles.html:7 templates/article_description.html:7
+msgid "Produkter"
+msgstr "Products"
+
+#: templates/article_description.html:8
+msgid "Priserna kan variera beroende på ditt saldo."
+msgstr "The prices may vary depending on your current balance"
+
+#: templates/base.html:6
+msgid "Site title"
+msgstr "The streque list"
+
+#: templates/base.html:21
+msgid "Site heading"
+msgstr "The streque list"
+
+#: templates/admin/add_user.html:9
+msgid "Skapa användare"
+msgstr "Create user"
+
+#: templates/admin/add_user.html:21
+msgid "Spara"
+msgstr "Save"
+
+#: templates/admin/articles.html:12
+msgid "Namn"
+msgstr "Name"
+
+#: templates/admin/articles.html:13
+msgid "Pris"
+msgstr "Price"
+
+#: templates/admin/articles.html:14
+msgid "Standardglass"
+msgstr "Standard unit of alcohol"
+
+#: templates/admin/articles.html:15
+msgid "Beskrivning"
+msgstr "Description"
+
+#: templates/admin/articles.html:16
+msgid "Sorteringsvikt"
+msgstr "Sorting weight"
+
+#: templates/admin/articles.html:17 templates/admin/articles.html:40
+msgid "Aktiv"
+msgstr "Active"
+
+#: templates/admin/articles.html:42
+msgid "Inaktiv"
+msgstr "Inactive"
+
+#: templates/auth/login.html:5
+msgid "Logga in title"
+msgstr "Sign in"
+
+#: templates/auth/login.html:13 templates/auth/login.html:22
+msgid "Logga in"
+msgstr "Sign in"
+
+#: templates/auth/login.html:26
+msgid "Glömt ditt lösenord?"
+msgstr "Forgotten your password?"
+
+#: templates/auth/login.html:27
+msgid "Återställ lösenord"
+msgstr "Reset your password"
+
+#: templates/auth/login.html:28
+msgid "Har du inget konto?"
+msgstr "Do you need a account?"
+
+#: templates/auth/login.html:29
+msgid "Begär ett konto"
+msgstr "Request a account"
 
