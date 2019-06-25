@@ -4,7 +4,8 @@ from flask_wtf.file import FileAllowed
 from wtforms import fields, validators
 import wtforms.fields.html5 as html5_fields
 from flasquelistan import models, util
-
+from flask_babel import lazy_gettext as _l
+from flask_babel import gettext as _
 
 def flash_errors(form):
     """Flash all errors in a form."""
@@ -14,14 +15,17 @@ def flash_errors(form):
             continue
 
         for error in field.errors:
-            flask.flash(("Fel i fältet \"{}\": {}"
-                         .format(field.label.text, error)),
-                        'error')
-
+#            flask.flash(("Fel i fältet \"{}\": {}"
+#                .format(field.label.text, error)),
+#                'error')
+            flask.flash(
+                        _(u'Fel i fältet "%(label_text)s": %(error_text)s', label_text=field.label.text, error_text=error),
+                        'error'
+                    )
 
 class Unique:
     """Validate that field is unique in model."""
-    def __init__(self, model, field, message='Detta element existerar redan.'):
+    def __init__(self, model, field, message=_l('Detta element existerar redan.')):
         self.model = model
         self.field = field
         self.message = message
@@ -34,7 +38,7 @@ class Unique:
 
 class Exists:
     """Validate that field is unique in model."""
-    def __init__(self, model, field, message='Detta element existerar inte.'):
+    def __init__(self, model, field, message=_('Detta element existerar inte.')):
         self.model = model
         self.field = field
         self.message = message
@@ -70,7 +74,7 @@ class LowercaseEmailField(html5_fields.EmailField):
 
 
 class EmailForm(flask_wtf.FlaskForm):
-    email = LowercaseEmailField('E-post', validators=[
+    email = LowercaseEmailField(_l('E-post'), validators=[
         validators.InputRequired(),
         validators.Email(),
         validators.Length(max=254)
@@ -78,44 +82,44 @@ class EmailForm(flask_wtf.FlaskForm):
 
 
 class ExistingEmailForm(flask_wtf.FlaskForm):
-    email = LowercaseEmailField('E-post', validators=[
+    email = LowercaseEmailField(_l('E-post'), validators=[
         validators.InputRequired(),
         validators.Email(),
         Exists(models.User,
                models.User.email,
-               message='Okänd e-postadress.')
+               message=_('Okänd e-postadress.'))
     ])
 
 
 class UniqueEmailForm(flask_wtf.FlaskForm):
-    email = LowercaseEmailField('E-post', validators=[
+    email = LowercaseEmailField(_('E-post'), validators=[
         validators.InputRequired(),
         validators.Email(),
         validators.Length(max=254),
         Unique(models.User,
                models.User.email,
-               message='Denna e-postadress används redan.')
+               message=_('Denna e-postadress används redan.'))
     ])
 
 
 class PasswordForm(flask_wtf.FlaskForm):
     password = fields.PasswordField(
-        'Lösenord',
+        _l('Lösenord'),
         validators=[validators.InputRequired()],
-        description="Ditt nuvarande lösenord."
+        description=_l("Ditt nuvarande lösenord.")
     )
 
 
 class NewPasswordForm(flask_wtf.FlaskForm):
     new_password = fields.PasswordField(
-        'Nytt lösenord',
+        _l('Nytt lösenord'),
         validators=[validators.InputRequired(), validators.Length(min=8)],
-        description="Ditt nya lösenord. Åtminstone 8 tecken långt."
+        description=_l("Ditt nya lösenord. Åtminstone 8 tecken långt.")
     )
 
 
 class LoginForm(RedirectForm, EmailForm, PasswordForm):
-    remember = fields.BooleanField("Håll mig inloggad")
+    remember = fields.BooleanField(_l("Håll mig inloggad"))
 
     def validate(self):
         if not flask_wtf.FlaskForm.validate(self):
@@ -132,9 +136,9 @@ class LoginForm(RedirectForm, EmailForm, PasswordForm):
 
 class ChangeEmailOrPasswordForm(EmailForm, PasswordForm):
     new_password = fields.PasswordField(
-        'Nytt lösenord',
+        _l('Nytt lösenord'),
         validators=[validators.Optional(), validators.Length(min=8)],
-        description="Ditt nya lösenord. Åtminstone 8 tecken långt."
+        description=_l("Ditt nya lösenord. Åtminstone 8 tecken långt.")
     )
 
     def __init__(self, user, nopasswordvalidation=False, *args, **kwargs):
@@ -145,7 +149,7 @@ class ChangeEmailOrPasswordForm(EmailForm, PasswordForm):
     def validate_email(self, field):
         if models.User.query.filter_by(email=field.data).scalar():
             if field.data != self.user.email:
-                self.email.errors.append("Denna e-postadress används redan.")
+                self.email.errors.append(_l("Denna e-postadress används redan."))
                 return False
 
         return True
@@ -155,29 +159,29 @@ class ChangeEmailOrPasswordForm(EmailForm, PasswordForm):
             if self.nopasswordvalidation:
                 return True
 
-            self.password.errors.append("Fel lösenord.")
+            self.password.errors.append(_l("Fel lösenord."))
             return False
 
 
 class EditUserForm(flask_wtf.FlaskForm):
     nickname = fields.StringField(
-        'Smeknamn',
-        description="Något roligt.",
+        _l('Smeknamn'),
+        description=_l("Något roligt."),
         validators=[
             validators.Length(max=50)
         ]
     )
 
     phone = html5_fields.TelField(
-        'Telefon',
-        description="Ett telefonnummer, med eller utan landskod."
+        _l('Telefon'),
+        description=_l("Ett telefonnummer, med eller utan landskod.")
     )
 
     body_mass = html5_fields.IntegerField(
-        'Kroppsvikt',
-        description=("Din vikt i kg. Används för att mer precist räkna ut "
+        _l('Kroppsvikt'),
+        description=(_l("Din vikt i kg. Används för att mer precist räkna ut "
                      "alkoholkoncentrationen i blodet. Fältet kan lämnas "
-                     "tomt"),
+                     "tomt")),
         render_kw={'min': 1, 'max': 20743},
         validators=[
             validators.NumberRange(min=1, max=20743),
@@ -186,10 +190,10 @@ class EditUserForm(flask_wtf.FlaskForm):
     )
 
     y_chromosome = fields.SelectField(
-        'Har du en Y-kromosom?',
-        description=("Används för att mer precist räkna ut "
-                     "alkoholkoncentrationen i blodet."),
-        choices=[('n/a', 'Vill ej uppge'), ('yes', 'Ja'), ('no', 'Nej')],
+        _l('Har du en Y-kromosom?'),
+        description=(_l("Används för att mer precist räkna ut "
+                     "alkoholkoncentrationen i blodet.")),
+        choices=[('n/a', _l('Vill ej uppge')), ('yes', _l('Ja')), ('no', _l('Nej'))],
         validators=[
             validators.Optional()
         ]
@@ -198,24 +202,24 @@ class EditUserForm(flask_wtf.FlaskForm):
 
 class FullEditUserForm(EditUserForm):
     first_name = fields.StringField(
-        'Förnamn',
+        _l('Förnamn'),
         validators=[
             validators.InputRequired(),
             validators.Length(max=50)
         ],
     )
     last_name = fields.StringField(
-        'Efternamn',
+        _l('Efternamn'),
         validators=[
             validators.InputRequired(),
             validators.Length(max=50)
         ],
     )
     active = fields.BooleanField(
-        'Aktiv',
-        description="Om medlemmen är aktiv i föreningen."
+        _l('Aktiv'),
+        description=_l("Om medlemmen är aktiv i föreningen.")
     )
-    group_id = fields.SelectField('Grupp', coerce=int)
+    group_id = fields.SelectField(_l('Grupp'), coerce=int)
     # Populate .choices in view!
 
 
@@ -225,42 +229,42 @@ class AddUserForm(UniqueEmailForm, FullEditUserForm):
 
 class RegistrationRequestForm(UniqueEmailForm):
     first_name = fields.StringField(
-        'Förnamn',
+        _l('Förnamn'),
         validators=[
             validators.InputRequired(),
             validators.Length(max=50)
         ],
     )
     last_name = fields.StringField(
-        'Efternamn',
+        _l('Efternamn'),
         validators=[
             validators.InputRequired(),
             validators.Length(max=50)
         ],
     )
     phone = html5_fields.TelField(
-        'Telefon',
-        description="Ett telefonnummer, med eller utan landskod."
+        _l('Telefon'),
+        description=_l("Ett telefonnummer, med eller utan landskod.")
     )
-    message = fields.TextAreaField('Meddelande till QM')
+    message = fields.TextAreaField(_l('Meddelande till QM'))
 
 
 class QuoteForm(flask_wtf.FlaskForm):
     text = fields.TextAreaField(
-        'Citat',
-        description="Max 150 tecken.",
+        _l('Citat'),
+        description=_l("Max 150 tecken."),
         validators=[
             validators.InputRequired(),
             validators.Length(max=150)
         ])
-    who = fields.StringField('Upphovsman', validators=[
+    who = fields.StringField(_l('Upphovsman'), validators=[
         validators.Length(max=150)
     ])
 
 
 def ChangeProfilePictureFormFactory(user):
     class ChangeProfilePictureForm(flask_wtf.FlaskForm):
-        choices = [('none', 'Ingen')]
+        choices = [('none', _l('Ingen'))]
         default = None
 
         for pic in user.profile_pictures:

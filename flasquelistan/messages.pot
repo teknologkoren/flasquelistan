@@ -8,14 +8,150 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2019-06-25 15:33+0200\n"
+"POT-Creation-Date: 2019-06-25 19:32+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.6.0\n"
+"Generated-By: Babel 2.7.0\n"
+
+#: forms.py:22
+#, python-format
+msgid "Fel i fältet \"%(label_text)s\": %(error_text)s"
+msgstr ""
+
+#: forms.py:28
+msgid "Detta element existerar redan."
+msgstr ""
+
+#: forms.py:41
+msgid "Detta element existerar inte."
+msgstr ""
+
+#: forms.py:77 forms.py:85 forms.py:95
+msgid "E-post"
+msgstr ""
+
+#: forms.py:90
+msgid "Okänd e-postadress."
+msgstr ""
+
+#: forms.py:101 forms.py:152
+msgid "Denna e-postadress används redan."
+msgstr ""
+
+#: forms.py:107
+msgid "Lösenord"
+msgstr ""
+
+#: forms.py:109
+msgid "Ditt nuvarande lösenord."
+msgstr ""
+
+#: forms.py:115 forms.py:139
+msgid "Nytt lösenord"
+msgstr ""
+
+#: forms.py:117 forms.py:141
+msgid "Ditt nya lösenord. Åtminstone 8 tecken långt."
+msgstr ""
+
+#: forms.py:122
+msgid "Håll mig inloggad"
+msgstr ""
+
+#: forms.py:162
+msgid "Fel lösenord."
+msgstr ""
+
+#: forms.py:168
+msgid "Smeknamn"
+msgstr ""
+
+#: forms.py:169
+msgid "Något roligt."
+msgstr ""
+
+#: forms.py:176 forms.py:246
+msgid "Telefon"
+msgstr ""
+
+#: forms.py:177 forms.py:247
+msgid "Ett telefonnummer, med eller utan landskod."
+msgstr ""
+
+#: forms.py:181
+msgid "Kroppsvikt"
+msgstr ""
+
+#: forms.py:182
+msgid ""
+"Din vikt i kg. Används för att mer precist räkna ut "
+"alkoholkoncentrationen i blodet. Fältet kan lämnas tomt"
+msgstr ""
+
+#: forms.py:193
+msgid "Har du en Y-kromosom?"
+msgstr ""
+
+#: forms.py:194
+msgid "Används för att mer precist räkna ut alkoholkoncentrationen i blodet."
+msgstr ""
+
+#: forms.py:196
+msgid "Vill ej uppge"
+msgstr ""
+
+#: forms.py:196
+msgid "Ja"
+msgstr ""
+
+#: forms.py:196
+msgid "Nej"
+msgstr ""
+
+#: forms.py:205 forms.py:232
+msgid "Förnamn"
+msgstr ""
+
+#: forms.py:212 forms.py:239
+msgid "Efternamn"
+msgstr ""
+
+#: forms.py:219 templates/admin/articles.html:17
+#: templates/admin/articles.html:40
+msgid "Aktiv"
+msgstr ""
+
+#: forms.py:220
+msgid "Om medlemmen är aktiv i föreningen."
+msgstr ""
+
+#: forms.py:222
+msgid "Grupp"
+msgstr ""
+
+#: forms.py:249
+msgid "Meddelande till QM"
+msgstr ""
+
+#: forms.py:254
+msgid "Citat"
+msgstr ""
+
+#: forms.py:255
+msgid "Max 150 tecken."
+msgstr ""
+
+#: forms.py:260
+msgid "Upphovsman"
+msgstr ""
+
+#: forms.py:267
+msgid "Ingen"
+msgstr ""
 
 #: templates/add_quote.html:9 templates/quotes.html:27
 msgid "Lägg till citat"
@@ -75,10 +211,6 @@ msgstr ""
 
 #: templates/admin/articles.html:16
 msgid "Sorteringsvikt"
-msgstr ""
-
-#: templates/admin/articles.html:17 templates/admin/articles.html:40
-msgid "Aktiv"
 msgstr ""
 
 #: templates/admin/articles.html:42

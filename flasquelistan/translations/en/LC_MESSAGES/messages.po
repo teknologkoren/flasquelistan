@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2019-06-25 15:33+0200\n"
+"POT-Creation-Date: 2019-06-25 19:32+0200\n"
 "PO-Revision-Date: 2019-06-24 08:20+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: en\n"
@@ -16,7 +16,145 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.6.0\n"
+"Generated-By: Babel 2.7.0\n"
+
+#: forms.py:22
+#, python-format
+msgid "Fel i fältet \"%(label_text)s\": %(error_text)s"
+msgstr "Error in field \"%(label_text)s\": %(error_text)s"
+
+#: forms.py:28
+msgid "Detta element existerar redan."
+msgstr "This item alredy exists"
+
+#: forms.py:41
+msgid "Detta element existerar inte."
+msgstr "This item already exists"
+
+#: forms.py:77 forms.py:85 forms.py:95
+msgid "E-post"
+msgstr "Email"
+
+#: forms.py:90
+msgid "Okänd e-postadress."
+msgstr "Unknown email address"
+
+#: forms.py:101 forms.py:152
+msgid "Denna e-postadress används redan."
+msgstr "This email address is already used"
+
+#: forms.py:107
+msgid "Lösenord"
+msgstr "Password"
+
+#: forms.py:109
+msgid "Ditt nuvarande lösenord."
+msgstr "Your current password"
+
+#: forms.py:115 forms.py:139
+msgid "Nytt lösenord"
+msgstr "New password"
+
+#: forms.py:117 forms.py:141
+msgid "Ditt nya lösenord. Åtminstone 8 tecken långt."
+msgstr "Your new password. At least 8 characters"
+
+#: forms.py:122
+msgid "Håll mig inloggad"
+msgstr "Keep me logged in"
+
+#: forms.py:162
+msgid "Fel lösenord."
+msgstr "Wrong password"
+
+#: forms.py:168
+msgid "Smeknamn"
+msgstr "Nickname"
+
+#: forms.py:169
+msgid "Något roligt."
+msgstr "Something funny"
+
+#: forms.py:176 forms.py:246
+msgid "Telefon"
+msgstr "Telephone"
+
+#: forms.py:177 forms.py:247
+msgid "Ett telefonnummer, med eller utan landskod."
+msgstr "A phonenumber, with or without country code"
+
+#: forms.py:181
+msgid "Kroppsvikt"
+msgstr "Body weight"
+
+#: forms.py:182
+msgid ""
+"Din vikt i kg. Används för att mer precist räkna ut "
+"alkoholkoncentrationen i blodet. Fältet kan lämnas tomt"
+msgstr ""
+"Your weight in kg. Used to more precisely calculatethe alcohol "
+"concentration in your blood. The field can be left empty"
+
+#: forms.py:193
+msgid "Har du en Y-kromosom?"
+msgstr "Do you have an Y-chromosome?"
+
+#: forms.py:194
+msgid "Används för att mer precist räkna ut alkoholkoncentrationen i blodet."
+msgstr "Used to more precesely calculate your blood alcohol concentration"
+
+#: forms.py:196
+msgid "Vill ej uppge"
+msgstr "Would not disclose"
+
+#: forms.py:196
+msgid "Ja"
+msgstr "Yes"
+
+#: forms.py:196
+msgid "Nej"
+msgstr "No"
+
+#: forms.py:205 forms.py:232
+msgid "Förnamn"
+msgstr "First name"
+
+#: forms.py:212 forms.py:239
+msgid "Efternamn"
+msgstr "Last name"
+
+#: forms.py:219 templates/admin/articles.html:17
+#: templates/admin/articles.html:40
+msgid "Aktiv"
+msgstr "Active"
+
+#: forms.py:220
+msgid "Om medlemmen är aktiv i föreningen."
+msgstr "If the member is active in the organisation"
+
+#: forms.py:222
+msgid "Grupp"
+msgstr "Group"
+
+#: forms.py:249
+msgid "Meddelande till QM"
+msgstr "Message to QM"
+
+#: forms.py:254
+msgid "Citat"
+msgstr "Quote"
+
+#: forms.py:255
+msgid "Max 150 tecken."
+msgstr "Max 150 characters"
+
+#: forms.py:260
+msgid "Upphovsman"
+msgstr "Originator"
+
+#: forms.py:267
+msgid "Ingen"
+msgstr "None"
 
 #: templates/add_quote.html:9 templates/quotes.html:27
 msgid "Lägg till citat"
@@ -40,11 +178,11 @@ msgstr "The prices may vary depending on your current balance"
 
 #: templates/base.html:6
 msgid "Site title"
-msgstr "The streque list"
+msgstr "The Streque List"
 
 #: templates/base.html:21
 msgid "Site heading"
-msgstr "The streque list"
+msgstr "The Streque List"
 
 #: templates/auth/login.html:32 templates/show_profile.html:129
 msgid "Byt språk"
@@ -78,10 +216,6 @@ msgstr "Description"
 msgid "Sorteringsvikt"
 msgstr "Sorting weight"
 
-#: templates/admin/articles.html:17 templates/admin/articles.html:40
-msgid "Aktiv"
-msgstr "Active"
-
 #: templates/admin/articles.html:42
 msgid "Inaktiv"
 msgstr "Inactive"
@@ -109,4 +243,7 @@ msgstr "Do you need a account?"
 #: templates/auth/login.html:29
 msgid "Begär ett konto"
 msgstr "Request a account"
+
+#~ msgid "Fel i fältet %(label_text)"
+#~ msgstr ""
 
