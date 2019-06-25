@@ -4,17 +4,17 @@
 
 {% block body %}
 <div>
-  <h2>Produkter</h2>
+  <h2>{{_("Produkter")}}</h2>
   {% if articles %}
   <div class="table-wrap">
     <table class="articles">
       <tr>
-        <th>Namn</th>
-        <th>Pris</th>
-        <th>Standardglas</th>
-        <th>Beskrivning</th>
-        <th>Sorteringsvikt</th>
-        <th>Aktiv</th>
+        <th>{{_("Namn")}}</th>
+        <th>{{_("Pris")}}</th>
+        <th>{{_("Standardglass")}}</th>
+        <th>{{_("Beskrivning")}}</th>
+        <th>{{_("Sorteringsvikt")}}</th>
+        <th>{{_("Aktiv")}}</th>
       </tr>
       {% for article in articles %}
       <tr>
@@ -37,9 +37,9 @@
         </td>
         <td>
           {% if article.is_active %}
-          Aktiv
+          {{_("Aktiv")}}
           {% else %}
-          Inaktiv
+          {{_("Inaktiv")}}
           {% endif %}
         </td>
       </tr>

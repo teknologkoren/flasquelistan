@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2019-06-24 22:07+0200\n"
+"POT-Creation-Date: 2019-06-25 08:34+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,7 +17,91 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.7.0\n"
 
-#: templates/quotes.html:27
+#: templates/add_quote.html:9 templates/quotes.html:27
 msgid "Lägg till citat"
+msgstr ""
+
+#: templates/add_quote.html:15
+msgid "Lägg till"
+msgstr ""
+
+#: templates/add_quote.html:15 templates/admin/add_user.html:22
+msgid "Avbryt"
+msgstr ""
+
+#: templates/admin/articles.html:7 templates/article_description.html:7
+msgid "Produkter"
+msgstr ""
+
+#: templates/article_description.html:8
+msgid "Priserna kan variera beroende på ditt saldo."
+msgstr ""
+
+#: templates/base.html:6
+msgid "Site title"
+msgstr ""
+
+#: templates/base.html:21
+msgid "Site heading"
+msgstr ""
+
+#: templates/admin/add_user.html:9
+msgid "Skapa användare"
+msgstr ""
+
+#: templates/admin/add_user.html:21
+msgid "Spara"
+msgstr ""
+
+#: templates/admin/articles.html:12
+msgid "Namn"
+msgstr ""
+
+#: templates/admin/articles.html:13
+msgid "Pris"
+msgstr ""
+
+#: templates/admin/articles.html:14
+msgid "Standardglass"
+msgstr ""
+
+#: templates/admin/articles.html:15
+msgid "Beskrivning"
+msgstr ""
+
+#: templates/admin/articles.html:16
+msgid "Sorteringsvikt"
+msgstr ""
+
+#: templates/admin/articles.html:17 templates/admin/articles.html:40
+msgid "Aktiv"
+msgstr ""
+
+#: templates/admin/articles.html:42
+msgid "Inaktiv"
+msgstr ""
+
+#: templates/auth/login.html:5
+msgid "Logga in title"
+msgstr ""
+
+#: templates/auth/login.html:13 templates/auth/login.html:22
+msgid "Logga in"
+msgstr ""
+
+#: templates/auth/login.html:26
+msgid "Glömt ditt lösenord?"
+msgstr ""
+
+#: templates/auth/login.html:27
+msgid "Återställ lösenord"
+msgstr ""
+
+#: templates/auth/login.html:28
+msgid "Har du inget konto?"
+msgstr ""
+
+#: templates/auth/login.html:29
+msgid "Begär ett konto"
 msgstr ""
 
