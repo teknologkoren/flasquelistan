@@ -10,7 +10,7 @@
   {% endif %}
   <div class="lower">
     <span class="quote-when">{{ format_datetime(quote.timestamp, "dd MMMM yyyy, HH:mm") }}</span>
-    <span class="quote-permalink"><a href="{{ url_for('quotes.quote', quote_id=quote.id) }}">Perma&shy;länk</a></span>
+    <span class="quote-permalink"><a href="{{ url_for('quotes.quote', quote_id=quote.id) }}">{{_("Perma&shy;länk")}}</a></span>
   </div>
 </div>
 {% endmacro %}
@@ -23,10 +23,10 @@
 
 {% block body %}
 <div class="cards">
-  <h2>Citat</h2>
+  <h2>{{_("Citat")}}</h2>
   <p><a href="{{ url_for('quotes.add_quote') }}">{{_("Lägg till citat")}}</a></p>
   {% if not quotes %}
-  <p>No quotes yet!</p>
+  <p>{{_("No quotes yet!")}}</p>
   {% endif %}
   {% for quote in quotes %}
   {{ quote_card(quote) }}

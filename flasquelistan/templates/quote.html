@@ -6,8 +6,8 @@
 
 {% block body %}
 <div class="cards">
-  <h2>Citat</h2>
+  <h2>{{_("Citat")}}</h2>
   {{ quote_card(quote) }}
-  <p><a href="{{ url_for('quotes.index') }}">Alla citat</a></p>
+  <p><a href="{{ url_for('quotes.index') }}">{{_("Alla citat")}}</a></p>
 </div>
 {% endblock %}

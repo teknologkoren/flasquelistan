@@ -3,7 +3,8 @@ from flask_login import current_user, login_required
 from sqlalchemy.sql.expression import func, not_
 from flasquelistan import forms, models, util
 from flasquelistan.views import auth
-
+from flask_babel import gettext as _
+from flask_babel import lazy_gettext as _l
 mod = flask.Blueprint('strequelistan', __name__)
 
 
@@ -35,10 +36,10 @@ def index():
                 )
 
     if current_user.balance <= 0:
-        flask.flash("Det finns inga pengar på kontot. Dags att fylla på!",
+        flask.flash(_l("Det finns inga pengar på kontot. Dags att fylla på!"),
                     'error')
     elif current_user.balance < 10000:
-        flask.flash("Det är ont om pengar på kontot. Dags att fylla på?",
+        flask.flash(_l("Det är ont om pengar på kontot. Dags att fylla på?"),
                     'warning')
 
     return flask.render_template('strequelistan.html', groups=groups,
@@ -73,9 +74,7 @@ def add_streque():
         )
 
     else:
-        flask.flash("{}-streque på {} tillagt.".format(streque.text,
-                                                       user.full_name),
-                    'success')
+        flask.flash(_("%(text)s-streque på %(name)s tillagt.", text=streque.text, name=user.full_name), 'success')
         return flask.redirect(flask.url_for('strequelistan.index'))
 
 
@@ -107,9 +106,7 @@ def void_streque():
         )
 
     else:
-        flask.flash("Ångrade {}-streque på {}.".format(streque.text,
-                                                       streque.user.full_name),
-                    'success')
+        flask.flash(_("Ångrade %(text)s-streque på %(name)s.", text=streque.text,name=streque.user.full_name), 'success')
         return flask.redirect(flask.url_for('strequelistan.history'))
 
 
@@ -133,16 +130,13 @@ def credit_transfer():
         flask.abort(400)
 
     redir = flask.redirect(
-                flask.url_for(
-                    'strequelistan.show_profile',
-                    user_id=payee.id
-                )
-            )
+        flask.url_for('strequelistan.show_profile',user_id=payee.id)
+    )
 
     if form.validate_on_submit():
         if payer != current_user:
             flask.flash(
-                "Du kan bara föra över pengar från dig själv! >:(", 'error'
+                _l("Du kan bara föra över pengar från dig själv! >:("), 'error'
             )
             return redir
 
@@ -150,15 +144,15 @@ def credit_transfer():
 
         if value > payer.balance:
             flask.flash(
-                "Du kan inte föra över mer pengar än ditt saldo.", 'error'
+                _l("Du kan inte föra över mer pengar än ditt saldo."), 'error'
             )
             return redir
 
         message = form.message.data
         models.CreditTransfer.create(payer, payee, value, message)
 
-        flask.flash("Förde över {0:g} pengar till {1}."
-                    .format(value/100, payee.full_name),
+        flask.flash(_("Förde över %(a)i pengar till %(name)s",
+                    a=value/100, name=payee.full_name),
                     'success'
                     )
 
@@ -239,7 +233,7 @@ def show_profile(user_id):
 @mod.route('/profile/<int:user_id>/admin-transaction', methods=['POST'])
 def admin_transaction(user_id):
     if not current_user.is_admin:
-        flask.flash("Du måste vara admin för att göra det!", 'error')
+        flask.flash(_l("Du måste vara admin för att göra det!"), 'error')
         return flask.redirect(flask.url_for('.show_profile', user_id=user_id))
 
     user = models.User.query.get_or_404(user_id)
@@ -247,7 +241,7 @@ def admin_transaction(user_id):
 
     if form.validate_on_submit():
         user.admin_transaction(int(form.value.data*100), form.text.data)
-        flask.flash("Transaktion utförd!", 'success')
+        flask.flash(_l("Transaktion utförd!"), 'success')
     elif form.is_submitted():
         forms.flash_errors(form)
 
@@ -277,7 +271,7 @@ def upload_profile_picture(user_id):
             models.db.session.add(profile_picture)
             models.db.session.commit()
 
-            flask.flash("Din profilbild har ändrats!", 'success')
+            flask.flash(_l("Din profilbild har ändrats!"), 'success')
 
     elif form.is_submitted():
         forms.flash_errors(form)
@@ -292,7 +286,7 @@ def change_profile_picture(user_id):
     user = models.User.query.get_or_404(user_id)
 
     if current_user.id != user.id and not current_user.is_admin:
-        flask.flash("Du får bara redigera din egen profil! ಠ_ಠ", 'error')
+        flask.flash(_l("Du får bara redigera din egen profil! ಠ_ಠ"), 'error')
         return flask.redirect(flask.url_for('.show_profile', user_id=user_id))
 
     form = forms.ChangeProfilePictureFormFactory(user)
@@ -302,7 +296,7 @@ def change_profile_picture(user_id):
         user.profile_picture_id = form.profile_picture.data
         models.db.session.commit()
 
-        flask.flash("Din profilbild har ändrats!", 'success')
+        flask.flash(_l("Din profilbild har ändrats!"), 'success')
 
     elif form.is_submitted():
         form.flash_errors(form)
@@ -317,18 +311,18 @@ def delete_profile_picture(user_id):
     user = models.User.query.get_or_404(user_id)
 
     if current_user.id != user.id and not current_user.is_admin:
-        flask.flash("Du får bara redigera din egen profil! ಠ_ಠ", 'error')
+        flask.flash(_l("Du får bara redigera din egen profil! ಠ_ಠ"), 'error')
         return flask.redirect(flask.url_for('.show_profile', user_id=user_id))
 
     form = forms.ChangeProfilePictureFormFactory(user)
 
     if form.validate_on_submit():
         if form.profile_picture.data == 'none':
-            flask.flash(
+            flask.flash(_l(
                 "Du kan inte ta bort "
                 "<a href=\"https://phys.org/news/2014-08-what-is-nothing.html\">"
                 "ingenting"
-                "</a>!", 'error'
+                "</a>!"), 'error'
             )
 
         elif form.profile_picture.data:
@@ -341,7 +335,7 @@ def delete_profile_picture(user_id):
             models.db.session.delete(profile_picture)
             models.db.session.commit()
 
-            flask.flash("Profilbilden har tagits bort!", 'success')
+            flask.flash(_l("Profilbilden har tagits bort!"), 'success')
 
     elif form.is_submitted():
         form.flash_errors(form)
@@ -384,7 +378,7 @@ def edit_profile(user_id):
     user = models.User.query.get_or_404(user_id)
 
     if current_user.id != user.id and not current_user.is_admin:
-        flask.flash("Du får bara redigera din egen profil! ಠ_ಠ", 'error')
+        flask.flash(_l("Du får bara redigera din egen profil! ಠ_ಠ"), 'error')
         return flask.redirect(flask.url_for('.show_profile', user_id=user_id))
 
     if current_user.is_admin:
@@ -416,7 +410,7 @@ def edit_profile(user_id):
 
         models.db.session.commit()
 
-        flask.flash("Ändringarna har sparats!", 'success')
+        flask.flash(_l("Ändringarna har sparats!"), 'success')
         return flask.redirect(flask.url_for('strequelistan.show_profile',
                                             user_id=user.id))
     elif form.is_submitted():
@@ -443,7 +437,7 @@ def change_email_or_password(user_id):
                                                    nopasswordvalidation=True)
 
         else:
-            flask.flash("Du får bara redigera din egen profil! ಠ_ಠ", 'error')
+            flask.flash(_l("Du får bara redigera din egen profil! ಠ_ಠ"), 'error')
             return flask.redirect(flask.url_for('.show_profile',
                                                 user_id=user_id))
 
@@ -453,12 +447,12 @@ def change_email_or_password(user_id):
     if form.validate_on_submit():
         if form.email.data != user.email:
             auth.verify_email(user, form.email.data)
-            flask.flash(("En länk för att verifiera e-postadressen har "
-                         "skickats till {}.").format(form.email.data), 'info')
+            flask.flash(_l("En länk för att verifiera e-postadressen har "
+                         "skickats till %(email)s.", email=form.email.data), 'info')
 
         if form.new_password.data:
             user.password = form.new_password.data
-            flask.flash("Lösenordet har ändrats!", 'success')
+            flask.flash(_l("Lösenordet har ändrats!"), 'success')
 
         models.db.session.commit()
 
@@ -467,5 +461,5 @@ def change_email_or_password(user_id):
     elif form.is_submitted():
         forms.flash_errors(form)
 
-    return flask.render_template('change_email_or_password.html',
-                                 form=form, user=user)
+    return flask.render_template('change_email_or_password.html', form=form, user=user)
+

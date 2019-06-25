@@ -5,7 +5,8 @@ import flask_babel
 import sqlalchemy as sqla
 from flasquelistan import models, forms, util
 from flasquelistan.views import auth
-
+from flask_babel import gettext as _
+from flask_babel import lazy_gettext as _l
 mod = flask.Blueprint('strequeadmin', __name__)
 
 
@@ -41,7 +42,7 @@ def transactions():
             from_date = datetime.date.fromisoformat(from_date)
             to_date = datetime.date.fromisoformat(to_date)
         except ValueError:
-            flask.flash("Ogiltigt datumintervall!", 'error')
+            flask.flash(_l("Ogiltigt datumintervall!"), 'error')
             from_date, to_date = None, None
 
     if not (from_date and to_date):
@@ -121,7 +122,7 @@ def bulk_transactions():
                         'user_id': user.id,
                         'user_name': user.full_name,
                         'value': int(form_field.value.data*100),
-                        'text': form_field.text.data or 'Admintransaktion'
+                        'text': form_field.text.data or _l('Admintransaktion')
                     })
 
         if transactions:
@@ -129,8 +130,8 @@ def bulk_transactions():
                 'admin/confirm_bulk_transactions.html',
                 transactions=transactions)
         else:
-            flask.flash("Inga transaktioner utförda. "
-                        "Väl spenderade klockcykler, bra jobbat!", 'info')
+            flask.flash(_l("Inga transaktioner utförda. "
+                        "Väl spenderade klockcykler, bra jobbat!"), 'info')
 
     elif form.is_submitted():
         forms.flash_errors(form)
@@ -161,7 +162,7 @@ def confirm_bulk_transactions():
         user = models.User.query.get(user_id)
         user.admin_transaction(transaction['value'], transaction['text'])
 
-    flask.flash("Transaktionerna utfördes!", 'success')
+    flask.flash(_l("Transaktionerna utfördes!"), 'success')
     return flask.redirect(flask.url_for('strequeadmin.bulk_transactions'))
 
 
@@ -244,7 +245,7 @@ def spam():
                                          user=user)
             util.send_email(user.email, subject, mail)
 
-        flask.flash("Skickade {} saldopåminnelser!".format(users.count()),
+        flask.flash(_("Skickade %(nr)i saldopåminnelser!", nr=users.count()),
                     'success')
 
     return flask.render_template('admin/spam.html', users=users)
@@ -259,7 +260,7 @@ def add_user(request_id=None):
     form = forms.AddUserForm(obj=request, group_id=-1)
 
     form.group_id.choices = [(g.id, g.name) for g in models.Group.query]
-    form.group_id.choices.insert(0, (-1, 'Ingen'))
+    form.group_id.choices.insert(0, (-1, _l('Ingen')))
 
     if form.validate_on_submit():
         user = models.User(
@@ -278,12 +279,12 @@ def add_user(request_id=None):
         if request:
             models.db.session.delete(request)
             models.db.session.commit()
-            flask.flash("{} skapad och förfrågan borttagen!".format(user),
+            flask.flash(_("%(user_name)s skapad och förfrågan borttagen!", user_name=user),
                         'success')
             return flask.redirect(flask.url_for('strequeadmin.requests'))
 
         else:
-            flask.flash("{} skapad!".format(user), 'success')
+            flask.flash(_("%(user_name)s skapad!", user_name=user), 'success')
             # Redirect to clear form
             return flask.redirect(flask.url_for('strequeadmin.add_user'))
 
@@ -313,8 +314,8 @@ def remove_request(request_id):
     models.db.session.delete(request)
     models.db.session.commit()
 
-    flask.flash("Förfrågan från {} {} borttagen.".format(request.first_name,
-                                                         request.last_name),
+    flask.flash(_("Förfrågan från %(first)s %(last)s borttagen.", first=request.first_name,
+                                                         last=request.last_name),
                 'success')
 
     return flask.redirect(flask.url_for('strequeadmin.requests'))
@@ -348,7 +349,7 @@ def edit_group(group_id=None):
 
         models.db.session.commit()
 
-        flask.flash("Produkt \"{}\" skapad.".format(group.name), 'success')
+        flask.flash(_("Grupp \"%(group_name)s\" skapad.", group_name=group.name), 'success')
 
         return flask.redirect(flask.url_for('strequeadmin.show_groups'))
 
@@ -367,7 +368,7 @@ def remove_group(group_id):
     models.db.session.delete(group)
     models.db.session.commit()
 
-    flask.flash("Grupp \"{}\" borttagen.".format(group.name), 'success')
+    flask.flash(_("Grupp \"%(group_name)s\" borttagen.", group_name=group.name), 'success')
     return flask.redirect(flask.url_for('strequeadmin.show_groups'))
 
 
@@ -387,7 +388,7 @@ def edit_quote(quote_id):
         quote.who = form.who.data
         quote.timestamp = form.timestamp.data
         models.db.session.commit()
-        flask.flash("Citat har ändrats!", 'success')
+        flask.flash(_l("Citat har ändrats!"), 'success')
 
     elif form.is_submitted():
         forms.flash_errors(form)
@@ -404,5 +405,5 @@ def remove_quote(quote_id):
     models.db.session.delete(quote)
     models.db.session.commit()
 
-    flask.flash("Citat borttaget.", 'success')
+    flask.flash(_l("Citat borttaget."), 'success')
     return flask.redirect(flask.url_for('strequeadmin.show_quotes'))

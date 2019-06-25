@@ -4,35 +4,35 @@
 
 {% block body %}
 <div class="more">
-  <h2>Mer…</h2>
+    <h2>{{_("Mer…")}}</h2>
   <ul>
-    <li><a href="{{ url_for("strequelistan.article_description") }}">Produktlista</a></li>
-    <li><a href="{{ url_for("auth.logout") }}">Logga ut</a></li>
+      <li><a href="{{ url_for("strequelistan.article_description") }}">{{_("Produktlista")}}</a></li>
+    <li><a href="{{ url_for("auth.logout") }}">{{_("Logga ut")}}</a></li>
   </ul>
   {% if current_user.is_admin %}
-  <h2>Admin</h2>
-  <h3>Användare</h3>
+  <h2>{{_("Admin")}}</h2>
+  <h3>{{_("Användare")}}</h3>
   <ul>
-    <li><a href="{{ url_for("strequeadmin.add_user") }}">Skapa användare</a></li>
-    <li><a href="{{ url_for("strequeadmin.requests") }}">Kontoförfrågningar</a></li>
-    <li><a href="{{ url_for("strequeadmin.show_users") }}">Lista över användare</a></li>
-    <li><a href="{{ url_for("strequeadmin.show_groups") }}">Grupper</a></li>
-    <li><a href="{{ url_for("strequeadmin.spam") }}">Skicka saldopåminnelser</a></li>
+    <li><a href="{{ url_for("strequeadmin.add_user") }}">{{_("Skapa användare")}}</a></li>
+    <li><a href="{{ url_for("strequeadmin.requests") }}">{{_("Kontoförfrågningar")}}</a></li>
+    <li><a href="{{ url_for("strequeadmin.show_users") }}">{{_("Lista över användare")}}</a></li>
+    <li><a href="{{ url_for("strequeadmin.show_groups") }}">{{_("Grupper")}}</a></li>
+    <li><a href="{{ url_for("strequeadmin.spam") }}">{{_("Skicka saldopåminnelser")}}</a></li>
   </ul>
-  <h3>Transaktioner</h3>
+  <h3>{{_("Transaktioner")}}</h3>
   <ul>
-    <li><a href="{{ url_for("strequeadmin.transactions") }}">Transaktionshistorik</a></li>
-    <li><a href="{{ url_for("strequeadmin.bulk_transactions") }}">Gör bulktransaktioner</a></li>
+    <li><a href="{{ url_for("strequeadmin.transactions") }}">{{_("Transaktionshistorik")}}</a></li>
+    <li><a href="{{ url_for("strequeadmin.bulk_transactions") }}">{{_("Gör bulktransaktioner")}}</a></li>
   </ul>
-  <h3>Produkter</h3>
+  <h3>{{_("Produkter")}}</h3>
   <ul>
-    <li><a href="{{ url_for("strequeadmin.articles") }}">Produkter</a></li>
-    <li><a href="{{ url_for("strequelistan.paperlist") }}">Papperslista</a></li>
+    <li><a href="{{ url_for("strequeadmin.articles") }}">{{_("Produkter")}}</a></li>
+    <li><a href="{{ url_for("strequelistan.paperlist") }}">{{_("Papperslista")}}</a></li>
   </ul>
-  <h3>Annat</h3>
+  <h3>{{_("Annat")}}</h3>
   <ul>
-    <li><a href="{{ url_for("strequeadmin.show_quotes") }}">Citat</a></li>
-    <li><a href="{{ url_for("admin.index") }}">Databas-admin</a></li>
+    <li><a href="{{ url_for("strequeadmin.show_quotes") }}">{{_("Citat")}}</a></li>
+    <li><a href="{{ url_for("admin.index") }}">{{_("Databas-admin")}}</a></li>
   </ul>
   {% endif %}
   </ul>

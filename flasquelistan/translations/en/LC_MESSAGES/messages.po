@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2019-06-25 20:13+0200\n"
+"POT-Creation-Date: 2019-06-25 22:17+0200\n"
 "PO-Revision-Date: 2019-06-24 08:20+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: en\n"
@@ -140,9 +140,10 @@ msgstr "Group"
 msgid "Meddelande till QM"
 msgstr "Message to QM"
 
-#: forms.py:254 forms.py:405
+#: forms.py:254 forms.py:405 templates/layout.html:33 templates/more.html:34
+#: templates/quote.html:9 templates/quotes.html:26
 msgid "Citat"
-msgstr "Quote"
+msgstr "Quotes"
 
 #: forms.py:255 forms.py:406
 msgid "Max 150 tecken."
@@ -152,7 +153,7 @@ msgstr "Max 150 characters"
 msgid "Upphovsman"
 msgstr "Originator"
 
-#: forms.py:267
+#: forms.py:267 views/admin.py:263
 msgid "Ingen"
 msgstr "None"
 
@@ -233,10 +234,12 @@ msgid "Lägg till"
 msgstr "Add"
 
 #: templates/add_quote.html:15 templates/admin/add_user.html:22
+#: templates/edit_profile.html:38
 msgid "Avbryt"
 msgstr "Cancel"
 
 #: templates/admin/articles.html:7 templates/article_description.html:7
+#: templates/more.html:27 templates/more.html:29
 msgid "Produkter"
 msgstr "Products"
 
@@ -252,17 +255,175 @@ msgstr "The Streque List"
 msgid "Site heading"
 msgstr "The Streque List"
 
+#: templates/edit_profile.html:35
+msgid "Byt e-postadress eller lösenord"
+msgstr "Change email address or password"
+
+#: templates/admin/add_user.html:21 templates/edit_profile.html:38
+#: templates/show_profile.html:65 templates/show_profile.html:122
+msgid "Spara"
+msgstr "Save"
+
+#: templates/history.html:36 templates/layout.html:23
+#: templates/show_profile.html:135
+msgid "Historik"
+msgstr "History"
+
+#: templates/history.html:40
+msgid "Inga transaktioner de senaste 15 minuterna!"
+msgstr "No transactions the last 15 minutes"
+
+#: templates/layout.html:13
+msgid "Streque"
+msgstr "Streque"
+
+#: templates/layout.html:43
+msgid "Mer"
+msgstr "More"
+
+#: templates/more.html:7
+msgid "Mer…"
+msgstr "More"
+
+#: templates/more.html:9
+msgid "Produktlista"
+msgstr "Product list"
+
+#: templates/more.html:10
+msgid "Logga ut"
+msgstr "Sign out"
+
+#: templates/more.html:13
+msgid "Admin"
+msgstr "Admin"
+
+#: templates/more.html:14
+msgid "Användare"
+msgstr "Users"
+
+#: templates/admin/add_user.html:9 templates/more.html:16
+msgid "Skapa användare"
+msgstr "Create user"
+
+#: templates/more.html:17
+msgid "Kontoförfrågningar"
+msgstr "Account requests"
+
+#: templates/more.html:18
+msgid "Lista över användare"
+msgstr "List of users"
+
+#: templates/more.html:19
+msgid "Grupper"
+msgstr "Groups"
+
+#: templates/more.html:20
+msgid "Skicka saldopåminnelser"
+msgstr "Send balance reminders"
+
+#: templates/more.html:22
+msgid "Transaktioner"
+msgstr "Transactions"
+
+#: templates/more.html:24
+msgid "Transaktionshistorik"
+msgstr "Transaction history"
+
+#: templates/more.html:25
+msgid "Gör bulktransaktioner"
+msgstr "Do bulk transactions"
+
+#: templates/more.html:30
+msgid "Papperslista"
+msgstr "Paper list"
+
+#: templates/more.html:32
+msgid "Annat"
+msgstr "Other"
+
+#: templates/more.html:35
+msgid "Databas-admin"
+msgstr "Database admin"
+
+#: templates/quote.html:11
+msgid "Alla citat"
+msgstr "All quotes"
+
+#: templates/quotes.html:13
+msgid "Perma&shy;länk"
+msgstr "Permanent link"
+
+#: templates/quotes.html:29
+msgid "No quotes yet!"
+msgstr "No quotes yet!"
+
+#: templates/show_profile.html:26
+msgid "Redigera profil"
+msgstr "Edit profile"
+
+#: templates/show_profile.html:30
+msgid "E-postadress"
+msgstr "Email address"
+
+#: templates/show_profile.html:34
+msgid "Telefonnummer"
+msgstr "Phonenumber"
+
+#: templates/show_profile.html:46
+msgid "Ladda ner kontaktfil"
+msgstr "Download contact file"
+
+#: templates/show_profile.html:50
+msgid "Saldo"
+msgstr "Balance"
+
+#: templates/show_profile.html:75
+msgid "Överför pengar"
+msgstr "Transfer money"
+
+#: templates/show_profile.html:78 templates/show_profile.html:90
+msgid "Skicka"
+msgstr "Send"
+
+#: templates/show_profile.html:86 views/admin.py:125
+msgid "Admintransaktion"
+msgstr "Admin transaction"
+
+#: templates/show_profile.html:104
+msgid "Uppladdade profilbilder"
+msgstr "Uploaded profile pictures"
+
+#: templates/show_profile.html:123
+msgid "Ta bort"
+msgstr "Delete"
+
 #: templates/auth/login.html:32 templates/show_profile.html:129
 msgid "Byt språk"
 msgstr "Change language"
 
-#: templates/admin/add_user.html:9
-msgid "Skapa användare"
-msgstr "Create user"
+#: templates/show_profile.html:137
+msgid "All historik"
+msgstr "All history"
 
-#: templates/admin/add_user.html:21
-msgid "Spara"
-msgstr "Save"
+#: templates/show_profile.html:157
+msgid "Det är tomt här, strequa mer!"
+msgstr "It's empty here, strequa more!"
+
+#: templates/strequelistan.html:87
+msgid "Filtrera användare"
+msgstr "Filter users"
+
+#: templates/strequelistan.html:89
+msgid "Du kan söka på namn, smeknamn och telefonnummer."
+msgstr "You can search for names, nicknames or phonenumbers"
+
+#: templates/strequelistan.html:91
+msgid "Rensa"
+msgstr "Clear"
+
+#: templates/strequelistan.html:95
+msgid "Inloggad användare"
+msgstr "Logged in user"
 
 #: templates/admin/articles.html:14
 msgid "Standardglass"
@@ -295,6 +456,129 @@ msgstr "Do you need a account?"
 #: templates/auth/login.html:29
 msgid "Begär ett konto"
 msgstr "Request a account"
+
+#: views/admin.py:45
+msgid "Ogiltigt datumintervall!"
+msgstr "Invalid date range"
+
+#: views/admin.py:133
+msgid "Inga transaktioner utförda. Väl spenderade klockcykler, bra jobbat!"
+msgstr "No transactions processed. Well spended clock-cycles, well done!"
+
+#: views/admin.py:165
+msgid "Transaktionerna utfördes!"
+msgstr "Transactions performed"
+
+#: views/admin.py:248
+#, python-format
+msgid "Skickade %(nr)i saldopåminnelser!"
+msgstr "Sent %(nr)i balance reminders!"
+
+#: views/admin.py:282
+#, python-format
+msgid "%(user_name)s skapad och förfrågan borttagen!"
+msgstr "%(user_name)s created and request removed"
+
+#: views/admin.py:287
+#, python-format
+msgid "%(user_name)s skapad!"
+msgstr "%(user_name)s created!"
+
+#: views/admin.py:317
+#, python-format
+msgid "Förfrågan från %(first)s %(last)s borttagen."
+msgstr "Request from %(first)s %(last)s  removed"
+
+#: views/admin.py:352
+#, python-format
+msgid "Grupp \"%(group_name)s\" skapad."
+msgstr "Group \"%(group_name)s\" created."
+
+#: views/admin.py:371
+#, python-format
+msgid "Grupp \"%(group_name)s\" borttagen."
+msgstr "Group \"%(group_name)s\" removed."
+
+#: views/admin.py:391
+msgid "Citat har ändrats!"
+msgstr "Quote changed"
+
+#: views/admin.py:408
+msgid "Citat borttaget."
+msgstr "Quote deleted."
+
+#: views/strequelistan.py:39
+msgid "Det finns inga pengar på kontot. Dags att fylla på!"
+msgstr "You don't have any money left in your balance, time to top it up!"
+
+#: views/strequelistan.py:42
+msgid "Det är ont om pengar på kontot. Dags att fylla på?"
+msgstr "Your balance is almost 0. Time to top it up?"
+
+#: views/strequelistan.py:77
+#, python-format
+msgid "%(text)s-streque på %(name)s tillagt."
+msgstr "%(text)s-streque on %(name)s added"
+
+#: views/strequelistan.py:109
+#, python-format
+msgid "Ångrade %(text)s-streque på %(name)s."
+msgstr "Refunded %(text)s-streque on %(name)s"
+
+#: views/strequelistan.py:139
+msgid "Du kan bara föra över pengar från dig själv! >:("
+msgstr "You can only transfer money from your own balance! >:("
+
+#: views/strequelistan.py:147
+msgid "Du kan inte föra över mer pengar än ditt saldo."
+msgstr "You cannot transfer more money than you have in your balance"
+
+#: views/strequelistan.py:154
+#, python-format
+msgid "Förde över %(a)i pengar till %(name)s"
+msgstr "Transfered %(a)i money to %(name)s"
+
+#: views/strequelistan.py:236
+msgid "Du måste vara admin för att göra det!"
+msgstr "You need to be admin to do this!"
+
+#: views/strequelistan.py:244
+msgid "Transaktion utförd!"
+msgstr "Transaction preformed"
+
+#: views/strequelistan.py:274 views/strequelistan.py:299
+msgid "Din profilbild har ändrats!"
+msgstr "Your profile picture has been changed!"
+
+#: views/strequelistan.py:289 views/strequelistan.py:314
+#: views/strequelistan.py:381 views/strequelistan.py:440
+msgid "Du får bara redigera din egen profil! ಠ_ಠ"
+msgstr "You are only allowd to edit your own profile ಠ_ಠ"
+
+#: views/strequelistan.py:321
+msgid ""
+"Du kan inte ta bort <a href=\"https://phys.org/news/2014-08-what-is-"
+"nothing.html\">ingenting</a>!"
+msgstr ""
+"You can not delete <a href=\"https://phys.org/news/2014-08-what-is-"
+"nothing.html\">nothing</a>!"
+
+#: views/strequelistan.py:338
+msgid "Profilbilden har tagits bort!"
+msgstr "Profile picture deleted"
+
+#: views/strequelistan.py:413
+msgid "Ändringarna har sparats!"
+msgstr "Changes saved!"
+
+#: views/strequelistan.py:450
+#, python-format
+msgid "En länk för att verifiera e-postadressen har skickats till %(email)s."
+msgstr "A link to verify your email address has been sent to %(email)s"
+
+#: views/strequelistan.py:455
+msgid "Lösenordet har ändrats!"
+msgstr "Password changed!"
 
 #~ msgid "Fel i fältet %(label_text)"
 #~ msgstr ""

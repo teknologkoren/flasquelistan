@@ -23,15 +23,15 @@
     </h2>
 
     <p>
-      <a href="{{ url_for('strequelistan.edit_profile', user_id=user.id) }}">Redigera profil</a>
+    <a href="{{ url_for('strequelistan.edit_profile', user_id=user.id) }}">{{_("Redigera profil")}}</a>
     </p>
 
     <dl>
-      <dt>E-postadress</dt>
+      <dt>{{_("E-postadress")}}</dt>
       <dd><a href="mailto:{{ user.email }}">{{ user.email }}</a></dd>
 
       {% if user.phone %}
-      <dt>Telefonnummer</dt>
+      <dt>{{_("Telefonnummer")}}</dt>
       <dd>
       {% if user.formatted_phone() %}
       <a href="tel:{{ user.formatted_phone(e164=True) }}">{{ user.formatted_phone() }}</a>
@@ -43,11 +43,11 @@
     </dl>
 
     <p>
-      <a href="{{ url_for('strequelistan.user_vcard', user_id=user.id) }}" download>Ladda ner kontaktfil</a>
+      <a href="{{ url_for('strequelistan.user_vcard', user_id=user.id) }}" download>{{_("Ladda ner kontaktfil")}}</a>
     </p>
     {% if user == current_user or current_user.is_admin %}
     <dl>
-      <dt>Saldo</dt>
+      <dt>{{_("Saldo")}}</dt>
       <dd>{{ user.formatted_balance }}</dd>
     </dl>
     {% endif %}
@@ -62,7 +62,7 @@
         <div class="form-field">
           {{ profile_picture_form.upload }}
         </div>
-        <button>Spara</button>
+        <button>{{_("Spara")}}</button>
       </fieldset>
     </form>
 
@@ -72,10 +72,10 @@
       {{ credit_transfer_form.payer_id }}
       {{ credit_transfer_form.payee_id }}
       <fieldset>
-        <legend>Överför pengar</legend>
+        <legend>{{_("Överför pengar")}}</legend>
         {{ form_entry(credit_transfer_form.value) }}
         {{ form_entry(credit_transfer_form.message) }}
-        <button>Skicka</button>
+        <button>{{_("Skicka")}}</button>
       </fieldset>
     </form>
     {% endif %}
@@ -83,11 +83,11 @@
     {% if current_user.is_admin %}
     <form method="POST" action="{{ url_for('strequelistan.admin_transaction', user_id=user.id) }}">
       <fieldset>
-        <legend>Admintransaktion</legend>
+          <legend>{{_("Admintransaktion")}}</legend>
         {{ admin_transaction_form.csrf_token }}
         {{ form_entry(admin_transaction_form.value) }}
         {{ form_entry(admin_transaction_form.text) }}
-        <button>Skicka</button>
+        <button>{{_("Skicka")}}</button>
       </fieldset>
     </form>
     {% endif %}
@@ -101,7 +101,7 @@
 
       <div class="form-field">
         <fieldset class="change-profile-picture">
-          <legend>Uppladdade profilbilder</legend>
+            <legend>{{_("Uppladdade profilbilder")}}</legend>
           <div class="grid-wrapper">
             {% for subfield in change_profile_picture_form.profile_picture %}
             <div class="form-field">
@@ -119,8 +119,8 @@
             {% endfor %}
           </div>
           <div class="submit">
-            <button>Spara</button>
-            <button class="confirm" formaction="{{ url_for('strequelistan.delete_profile_picture', user_id=user.id) }}">Ta bort</button>
+              <button>{{_("Spara")}}</button>
+              <button class="confirm" formaction="{{ url_for('strequelistan.delete_profile_picture', user_id=user.id) }}">{{_("Ta bort")}}</button>
         </fieldset>
       </div>
     </form>
@@ -132,9 +132,9 @@
     </dl>
     {% endif %}
     <dl>
-      <dt>Historik</dt>
+      <dt>{{_("Historik")}}</dt>
       <dd>
-      <p><a href="{{ url_for('strequelistan.user_history', user_id=user.id) }}">All historik</a></p>
+      <p><a href="{{ url_for('strequelistan.user_history', user_id=user.id) }}">{{_("All historik")}}</a></p>
       {% if transactions.all() %}
       <ol class="transaction-history">
       {% for transaction in transactions %}
@@ -154,7 +154,7 @@
       {% endfor %}
       </ol>
       {% else %}
-      Det är tomt här, strequa mer!
+      {{_("Det är tomt här, strequa mer!")}}
       {% endif %}
       </dd>
     </dl>
