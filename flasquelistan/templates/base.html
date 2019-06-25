@@ -20,14 +20,6 @@
         <img src="{{ url_for('static', filename='images/cuteladypoursadrink.png') }}" alt="Cute lady pours a drink">
         <h1>{{_("Site heading")}}</h1>
       </a>
-      <div id="langselector">
-        <a href="?lang=sv_SE">
-          <img src="{{ url_for('static', filename='images/flags/Sweden.png') }}" alt="Swedish flag">
-        </a>
-        <a href="?lang=en">
-          <img src="{{ url_for('static', filename='images/flags/United-Kingdom.png') }}" alt="UK flag">
-        </a>
-      </div>
     </header>
     {% block nav %}
     {% endblock %}
