@@ -255,11 +255,13 @@ def setup_flask_babel(app):
             if request.args.get('lang'):
                 current_user.lang = request.args.get('lang')
                 models.db.session.commit()
+                flask_babel.refresh()
             return current_user.lang
         # Check the session cookie if the user isn't logged in
         else:
             if request.args.get('lang'):
                 session['lang'] = request.args.get('lang')
+                flask_babel.refresh()
             return session.get('lang', None)
 
     @babel.timezoneselector
