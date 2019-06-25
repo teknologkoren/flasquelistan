@@ -225,7 +225,7 @@ msgstr ""
 
 #: templates/add_quote.html:9 templates/quotes.html:27
 msgid "Lägg till citat"
-msgstr "Lägg till ett citat test test"
+msgstr "Lägg till ett citat"
 
 #: templates/add_quote.html:15
 msgid "Lägg till"
