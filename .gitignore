@@ -11,3 +11,5 @@ flasquelistan/static/gen/*
 flasquelistan/static/.webassets-cache*
 
 *pytest_cache*
+
+*.mo
