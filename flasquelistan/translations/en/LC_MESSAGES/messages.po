@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2019-06-25 22:17+0200\n"
+"POT-Creation-Date: 2019-06-25 22:26+0200\n"
 "PO-Revision-Date: 2019-06-24 08:20+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: en\n"
@@ -579,7 +579,4 @@ msgstr "A link to verify your email address has been sent to %(email)s"
 #: views/strequelistan.py:455
 msgid "Lösenordet har ändrats!"
 msgstr "Password changed!"
-
-#~ msgid "Fel i fältet %(label_text)"
-#~ msgstr ""
 

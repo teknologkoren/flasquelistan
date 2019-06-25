@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2019-06-25 22:17+0200\n"
+"POT-Creation-Date: 2019-06-25 22:26+0200\n"
 "PO-Revision-Date: 2019-06-24 08:18+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: sv\n"
@@ -225,7 +225,7 @@ msgstr ""
 
 #: templates/add_quote.html:9 templates/quotes.html:27
 msgid "Lägg till citat"
-msgstr ""
+msgstr "Lägg till ett citat test test"
 
 #: templates/add_quote.html:15
 msgid "Lägg till"
@@ -247,11 +247,11 @@ msgstr ""
 
 #: templates/base.html:6
 msgid "Site title"
-msgstr ""
+msgstr "Strequelistan"
 
 #: templates/base.html:21
 msgid "Site heading"
-msgstr ""
+msgstr "Strequelistan"
 
 #: templates/edit_profile.html:35
 msgid "Byt e-postadress eller lösenord"
@@ -433,7 +433,7 @@ msgstr ""
 
 #: templates/auth/login.html:5
 msgid "Logga in title"
-msgstr ""
+msgstr "Logga in"
 
 #: templates/auth/login.html:13 templates/auth/login.html:22
 msgid "Logga in"
@@ -575,367 +575,4 @@ msgstr ""
 #: views/strequelistan.py:455
 msgid "Lösenordet har ändrats!"
 msgstr ""
-
-#~ msgid "testtest"
-#~ msgstr "test-sv"
-
-#~ msgid "Fel i fältet %(label_text)"
-#~ msgstr ""
-
-#~ msgid "Fel i fältet \"%(label_text)s\": %(error_text)s"
-#~ msgstr ""
-
-#~ msgid "Detta element existerar redan."
-#~ msgstr ""
-
-#~ msgid "Detta element existerar inte."
-#~ msgstr ""
-
-#~ msgid "E-post"
-#~ msgstr ""
-
-#~ msgid "Okänd e-postadress."
-#~ msgstr ""
-
-#~ msgid "Denna e-postadress används redan."
-#~ msgstr ""
-
-#~ msgid "Lösenord"
-#~ msgstr ""
-
-#~ msgid "Ditt nuvarande lösenord."
-#~ msgstr ""
-
-#~ msgid "Nytt lösenord"
-#~ msgstr ""
-
-#~ msgid "Ditt nya lösenord. Åtminstone 8 tecken långt."
-#~ msgstr ""
-
-#~ msgid "Håll mig inloggad"
-#~ msgstr ""
-
-#~ msgid "Fel lösenord."
-#~ msgstr ""
-
-#~ msgid "Smeknamn"
-#~ msgstr ""
-
-#~ msgid "Något roligt."
-#~ msgstr ""
-
-#~ msgid "Telefon"
-#~ msgstr ""
-
-#~ msgid "Ett telefonnummer, med eller utan landskod."
-#~ msgstr ""
-
-#~ msgid "Kroppsvikt"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Din vikt i kg. Används för att "
-#~ "mer precist räkna ut alkoholkoncentrationen"
-#~ " i blodet. Fältet kan lämnas tomt"
-#~ msgstr ""
-
-#~ msgid "Har du en Y-kromosom?"
-#~ msgstr ""
-
-#~ msgid "Används för att mer precist räkna ut alkoholkoncentrationen i blodet."
-#~ msgstr ""
-
-#~ msgid "Vill ej uppge"
-#~ msgstr ""
-
-#~ msgid "Ja"
-#~ msgstr ""
-
-#~ msgid "Nej"
-#~ msgstr ""
-
-#~ msgid "Förnamn"
-#~ msgstr ""
-
-#~ msgid "Efternamn"
-#~ msgstr ""
-
-#~ msgid "Aktiv"
-#~ msgstr ""
-
-#~ msgid "Om medlemmen är aktiv i föreningen."
-#~ msgstr ""
-
-#~ msgid "Grupp"
-#~ msgstr ""
-
-#~ msgid "Meddelande till QM"
-#~ msgstr ""
-
-#~ msgid "Citat"
-#~ msgstr ""
-
-#~ msgid "Max 150 tecken."
-#~ msgstr ""
-
-#~ msgid "Upphovsman"
-#~ msgstr ""
-
-#~ msgid "Ingen"
-#~ msgstr ""
-
-#~ msgid "Ladda upp ny profilbild"
-#~ msgstr ""
-
-#~ msgid "Endast bilder!"
-#~ msgstr ""
-
-#~ msgid "Från"
-#~ msgstr ""
-
-#~ msgid "Till"
-#~ msgstr ""
-
-#~ msgid "Transaktionsvärde"
-#~ msgstr ""
-
-#~ msgid "Meddelande"
-#~ msgstr ""
-
-#~ msgid "Namn"
-#~ msgstr ""
-
-#~ msgid "Pris"
-#~ msgstr ""
-
-#~ msgid "Standardglas"
-#~ msgstr ""
-
-#~ msgid "Beskrivning"
-#~ msgstr ""
-
-#~ msgid "Vilka produkter som ingår och/eller beskrivning. Markdown."
-#~ msgstr ""
-
-#~ msgid "Sorteringsvikt"
-#~ msgstr ""
-
-#~ msgid "Heltal. En högre vikt stiger."
-#~ msgstr ""
-
-#~ msgid "Produkten är synlig och går att strequa på."
-#~ msgstr ""
-
-#~ msgid "Summa"
-#~ msgstr ""
-
-#~ msgid "Tid"
-#~ msgstr ""
-
-#~ msgid "Tidszon UTC."
-#~ msgstr ""
-
-#~ msgid "Lägg till citat"
-#~ msgstr "Lägg till ett citat test test"
-
-#~ msgid "Lägg till"
-#~ msgstr ""
-
-#~ msgid "Avbryt"
-#~ msgstr ""
-
-#~ msgid "Produkter"
-#~ msgstr ""
-
-#~ msgid "Priserna kan variera beroende på ditt saldo."
-#~ msgstr ""
-
-#~ msgid "Site title"
-#~ msgstr "Strequelistan"
-
-#~ msgid "Site heading"
-#~ msgstr "Strequelistan"
-
-#~ msgid "Byt e-postadress eller lösenord"
-#~ msgstr ""
-
-#~ msgid "Spara"
-#~ msgstr ""
-
-#~ msgid "Historik"
-#~ msgstr ""
-
-#~ msgid "Inga transaktioner de senaste 15 minuterna!"
-#~ msgstr ""
-
-#~ msgid "Streque"
-#~ msgstr ""
-
-#~ msgid "Mer"
-#~ msgstr ""
-
-#~ msgid "Mer…"
-#~ msgstr ""
-
-#~ msgid "Produktlista"
-#~ msgstr ""
-
-#~ msgid "Logga ut"
-#~ msgstr ""
-
-#~ msgid "Admin"
-#~ msgstr ""
-
-#~ msgid "Användare"
-#~ msgstr ""
-
-#~ msgid "Skapa användare"
-#~ msgstr ""
-
-#~ msgid "Kontoförfrågningar"
-#~ msgstr ""
-
-#~ msgid "Lista över användare"
-#~ msgstr ""
-
-#~ msgid "Grupper"
-#~ msgstr ""
-
-#~ msgid "Skicka saldopåminnelser"
-#~ msgstr ""
-
-#~ msgid "Transaktioner"
-#~ msgstr ""
-
-#~ msgid "Transaktionshistorik"
-#~ msgstr ""
-
-#~ msgid "Gör bulktransaktioner"
-#~ msgstr ""
-
-#~ msgid "Papperslista"
-#~ msgstr ""
-
-#~ msgid "Annat"
-#~ msgstr ""
-
-#~ msgid "Databas-admin"
-#~ msgstr ""
-
-#~ msgid "Alla citat"
-#~ msgstr ""
-
-#~ msgid "Perma&shy;länk"
-#~ msgstr ""
-
-#~ msgid "No quotes yet!"
-#~ msgstr ""
-
-#~ msgid "Redigera profil"
-#~ msgstr ""
-
-#~ msgid "E-postadress"
-#~ msgstr ""
-
-#~ msgid "Telefonnummer"
-#~ msgstr ""
-
-#~ msgid "Ladda ner kontaktfil"
-#~ msgstr ""
-
-#~ msgid "Saldo"
-#~ msgstr ""
-
-#~ msgid "Överför pengar"
-#~ msgstr ""
-
-#~ msgid "Skicka"
-#~ msgstr ""
-
-#~ msgid "Admintransaktion"
-#~ msgstr ""
-
-#~ msgid "Uppladdade profilbilder"
-#~ msgstr ""
-
-#~ msgid "Ta bort"
-#~ msgstr ""
-
-#~ msgid "Byt språk"
-#~ msgstr ""
-
-#~ msgid "All historik"
-#~ msgstr ""
-
-#~ msgid "Det är tomt här, strequa mer!"
-#~ msgstr ""
-
-#~ msgid "Filtrera användare"
-#~ msgstr ""
-
-#~ msgid "Du kan söka på namn, smeknamn och telefonnummer."
-#~ msgstr ""
-
-#~ msgid "Rensa"
-#~ msgstr ""
-
-#~ msgid "Inloggad användare"
-#~ msgstr ""
-
-#~ msgid "Standardglass"
-#~ msgstr ""
-
-#~ msgid "Inaktiv"
-#~ msgstr ""
-
-#~ msgid "Logga in title"
-#~ msgstr "Logga in"
-
-#~ msgid "Logga in"
-#~ msgstr ""
-
-#~ msgid "Glömt ditt lösenord?"
-#~ msgstr ""
-
-#~ msgid "Återställ lösenord"
-#~ msgstr ""
-
-#~ msgid "Har du inget konto?"
-#~ msgstr ""
-
-#~ msgid "Begär ett konto"
-#~ msgstr ""
-
-#~ msgid "Ogiltigt datumintervall!"
-#~ msgstr ""
-
-#~ msgid "Inga transaktioner utförda. Väl spenderade klockcykler, bra jobbat!"
-#~ msgstr ""
-
-#~ msgid "Transaktionerna utfördes!"
-#~ msgstr ""
-
-#~ msgid "Skickade %(nr)i saldopåminnelser!"
-#~ msgstr ""
-
-#~ msgid "%(user_name)s skapad och förfrågan borttagen!"
-#~ msgstr ""
-
-#~ msgid "%(user_name)s skapad!"
-#~ msgstr ""
-
-#~ msgid "Förfrågan från %(first)s %(last)s borttagen."
-#~ msgstr ""
-
-#~ msgid "Grupp \"%(group_name)s\" skapad."
-#~ msgstr ""
-
-#~ msgid "Grupp \"%(group_name)s\" borttagen."
-#~ msgstr ""
-
-#~ msgid "Citat har ändrats!"
-#~ msgstr ""
-
-#~ msgid "Citat borttaget."
-#~ msgstr ""
 
