@@ -28,5 +28,11 @@
     <dt>{{_("Har du inget konto?")}}</dt>
     <dd><a href="{{ url_for('auth.register') }}">{{_("Begär ett konto")}}</a></dd>
   </dl>
+  <dl>
+      <dt>{{_("Byt språk")}}</dt>
+      <dd><a href="?lang=sv_SE">Svenska</a></dd>
+      <dd><a href="?lang=en">English</a></dd>
+      <dd></dd>
+  </dl>
 </div>
 {% endblock %}
