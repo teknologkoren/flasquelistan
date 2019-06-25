@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2019-06-25 19:32+0200\n"
+"POT-Creation-Date: 2019-06-25 20:13+0200\n"
 "PO-Revision-Date: 2019-06-24 08:18+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: sv\n"
@@ -121,7 +121,7 @@ msgstr ""
 msgid "Efternamn"
 msgstr ""
 
-#: forms.py:219 templates/admin/articles.html:17
+#: forms.py:219 forms.py:368 templates/admin/articles.html:17
 #: templates/admin/articles.html:40
 msgid "Aktiv"
 msgstr ""
@@ -138,20 +138,88 @@ msgstr ""
 msgid "Meddelande till QM"
 msgstr ""
 
-#: forms.py:254
+#: forms.py:254 forms.py:405
 msgid "Citat"
 msgstr ""
 
-#: forms.py:255
+#: forms.py:255 forms.py:406
 msgid "Max 150 tecken."
 msgstr ""
 
-#: forms.py:260
+#: forms.py:260 forms.py:413
 msgid "Upphovsman"
 msgstr ""
 
 #: forms.py:267
 msgid "Ingen"
+msgstr ""
+
+#: forms.py:283
+msgid "Ladda upp ny profilbild"
+msgstr ""
+
+#: forms.py:284
+msgid "Endast bilder!"
+msgstr ""
+
+#: forms.py:289
+msgid "Från"
+msgstr ""
+
+#: forms.py:292
+msgid "Till"
+msgstr ""
+
+#: forms.py:299
+msgid "Transaktionsvärde"
+msgstr ""
+
+#: forms.py:306 forms.py:392
+msgid "Meddelande"
+msgstr ""
+
+#: forms.py:320 forms.py:334 forms.py:375 templates/admin/articles.html:12
+msgid "Namn"
+msgstr ""
+
+#: forms.py:339 templates/admin/articles.html:13
+msgid "Pris"
+msgstr ""
+
+#: forms.py:348
+msgid "Standardglas"
+msgstr ""
+
+#: forms.py:356 templates/admin/articles.html:15
+msgid "Beskrivning"
+msgstr ""
+
+#: forms.py:357
+msgid "Vilka produkter som ingår och/eller beskrivning. Markdown."
+msgstr ""
+
+#: forms.py:361 forms.py:380 templates/admin/articles.html:16
+msgid "Sorteringsvikt"
+msgstr ""
+
+#: forms.py:362 forms.py:381
+msgid "Heltal. En högre vikt stiger."
+msgstr ""
+
+#: forms.py:369
+msgid "Produkten är synlig och går att strequa på."
+msgstr ""
+
+#: forms.py:395
+msgid "Summa"
+msgstr ""
+
+#: forms.py:419
+msgid "Tid"
+msgstr ""
+
+#: forms.py:420
+msgid "Tidszon UTC."
 msgstr ""
 
 #: templates/add_quote.html:9 templates/quotes.html:27
@@ -194,24 +262,8 @@ msgstr ""
 msgid "Spara"
 msgstr ""
 
-#: templates/admin/articles.html:12
-msgid "Namn"
-msgstr ""
-
-#: templates/admin/articles.html:13
-msgid "Pris"
-msgstr ""
-
 #: templates/admin/articles.html:14
 msgid "Standardglass"
-msgstr ""
-
-#: templates/admin/articles.html:15
-msgid "Beskrivning"
-msgstr ""
-
-#: templates/admin/articles.html:16
-msgid "Sorteringsvikt"
 msgstr ""
 
 #: templates/admin/articles.html:42
