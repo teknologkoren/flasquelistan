@@ -47,8 +47,8 @@
     </table>
   </div>
   {% else %}
-  <p>Inga produkter funna.</p>
+  <p>{{_("Inga produkter funna.")}}</p>
   {% endif %}
-  <p><a href="{{ url_for('strequeadmin.edit_article') }}">Ny produkt</a></p>
+  <p><a href="{{ url_for('strequeadmin.edit_article') }}">{{_("Ny produkt")}}</a></p>
 </div>
 {% endblock %}

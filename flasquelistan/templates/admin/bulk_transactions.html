@@ -6,16 +6,16 @@
 
 {% block body %}
 <div class="transactions">
-  <h2>Gör transaktioner i bulk</h2>
-  <p>Positivt transaktionsvärde innebär en insättning till användarens konto, negativt innebär ett uttag.</p>
+    <h2>{{_("Gör transaktioner i bulk")}}</h2>
+    <p>{{_("Positivt transaktionsvärde innebär en insättning till användarens konto, negativt innebär ett uttag.")}}</p>
   <form method="POST">
     {{ form.csrf_token }}
     <div class="table-wrap bulk-transactions">
       <table>
         <tr>
-          <th>Användare</th>
-          <th>Transaktionsvärde</th>
-          <th>Meddelande</th>
+            <th>{{_("Användare")}}</th>
+          <th>{{_("Transaktionsvärde")}}</th>
+          <th>{{_("Meddelande")}}</th>
         </tr>
         {% for field in form if field.name != "csrf_token" %}
         <tr>
@@ -33,14 +33,14 @@
           </td>
           <td>
             <span class="text">
-              {{ field.text(placeholder="Admintransaktion") }}
+              {{ field.text(placeholder=_("Admintransaktion")) }}
             </span>
           </td>
         </tr>
         {% endfor %}
       </table>
     </div>
-    <button>Skicka</button>
+    <button>{{_("Skicka")}}</button>
   </form>
 </div>
 {% endblock %}

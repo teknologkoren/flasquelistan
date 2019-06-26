@@ -4,13 +4,13 @@
 
 {% block body %}
 <div>
-  <h2>Citat</h2>
+  <h2>{{_("Citat")}}</h2>
   <div class="table-wrap">
     <table class="quotes">
       <tr>
-        <th>Citat</th>
-        <th>Upphovsman</th>
-        <th>Tid</th>
+        <th>{{_("Citat")}}</th>
+        <th>{{_("Upphovsman")}}</th>
+        <th>{{_("Tid")}}</th>
       </tr>
       {% for quote in quotes %}
       <tr>
@@ -31,7 +31,7 @@
         </td>
         <td class="edit-link">
           <a href="{{ url_for('strequeadmin.edit_quote', quote_id=quote.id) }}">
-            Redigera
+            {{_("Redigera")}}
           </a>
         </td>
       </tr>

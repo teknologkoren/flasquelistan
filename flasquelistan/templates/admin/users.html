@@ -6,16 +6,16 @@
 
 {% block body %}
 <div>
-  <h2>Användare</h2>
+  <h2>{{_("Användare")}}</h2>
   <div class="table-wrap">
     <table class="users">
       <tr>
-        <th>Namn</th>
-        <th>E-postadress</th>
-        <th>Telefonnummer</th>
-        <th>Saldo</th>
-        <th>Aktiv</th>
-        <th>Admin</th>
+        <th>{{_("Namn")}}</th>
+        <th>{{_("E-postadress")}}</th>
+        <th>{{_("Telefonnummer")}}</th>
+        <th>{{_("Saldo")}}</th>
+        <th>{{_("Aktiv")}}</th>
+        <th>{{_("Admin")}}</th>
       </tr>
       {% for user in users %}
       <tr>
@@ -44,18 +44,18 @@
         <td class="active">
           <span>
             {% if user.active %}
-            Aktiv
+            {{_("Aktiv")}}
             {% else %}
-            Inaktiv
+            {{_("Inaktiv")}}
             {% endif %}
           </span>
         </td>
         <td class="admin">
           <span>
             {% if user.is_admin %}
-            Admin
+            {{_("Admin")}}
             {% else %}
-            Ej admin
+            {{_("Ej admin")}}
             {% endif %}
           </span>
         </td>

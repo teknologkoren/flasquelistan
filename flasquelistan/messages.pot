@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2019-06-25 22:26+0200\n"
+"POT-Creation-Date: 2019-06-26 08:32+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -121,7 +121,8 @@ msgid "Efternamn"
 msgstr ""
 
 #: forms.py:219 forms.py:368 templates/admin/articles.html:17
-#: templates/admin/articles.html:40
+#: templates/admin/articles.html:40 templates/admin/users.html:17
+#: templates/admin/users.html:47
 msgid "Aktiv"
 msgstr ""
 
@@ -137,8 +138,9 @@ msgstr ""
 msgid "Meddelande till QM"
 msgstr ""
 
-#: forms.py:254 forms.py:405 templates/layout.html:33 templates/more.html:34
-#: templates/quote.html:9 templates/quotes.html:26
+#: forms.py:254 forms.py:405 templates/admin/quotes.html:7
+#: templates/admin/quotes.html:11 templates/layout.html:33
+#: templates/more.html:34 templates/quote.html:9 templates/quotes.html:26
 msgid "Citat"
 msgstr ""
 
@@ -146,11 +148,11 @@ msgstr ""
 msgid "Max 150 tecken."
 msgstr ""
 
-#: forms.py:260 forms.py:413
+#: forms.py:260 forms.py:413 templates/admin/quotes.html:12
 msgid "Upphovsman"
 msgstr ""
 
-#: forms.py:267 views/admin.py:263
+#: forms.py:267 views/admin.py:262
 msgid "Ingen"
 msgstr ""
 
@@ -170,15 +172,20 @@ msgstr ""
 msgid "Till"
 msgstr ""
 
-#: forms.py:299
+#: forms.py:299 templates/admin/bulk_transactions.html:17
+#: templates/admin/confirm_bulk_transactions.html:17
 msgid "Transaktionsvärde"
 msgstr ""
 
-#: forms.py:306 forms.py:392
+#: forms.py:306 forms.py:392 templates/admin/bulk_transactions.html:18
+#: templates/admin/confirm_bulk_transactions.html:18
+#: templates/admin/requests.html:19 templates/admin/transactions.html:23
 msgid "Meddelande"
 msgstr ""
 
 #: forms.py:320 forms.py:334 forms.py:375 templates/admin/articles.html:12
+#: templates/admin/groups.html:12 templates/admin/requests.html:15
+#: templates/admin/users.html:13
 msgid "Namn"
 msgstr ""
 
@@ -199,6 +206,7 @@ msgid "Vilka produkter som ingår och/eller beskrivning. Markdown."
 msgstr ""
 
 #: forms.py:361 forms.py:380 templates/admin/articles.html:16
+#: templates/admin/groups.html:13
 msgid "Sorteringsvikt"
 msgstr ""
 
@@ -214,7 +222,7 @@ msgstr ""
 msgid "Summa"
 msgstr ""
 
-#: forms.py:419
+#: forms.py:419 templates/admin/quotes.html:13
 msgid "Tid"
 msgstr ""
 
@@ -231,7 +239,9 @@ msgid "Lägg till"
 msgstr ""
 
 #: templates/add_quote.html:15 templates/admin/add_user.html:22
-#: templates/edit_profile.html:38
+#: templates/admin/confirm_bulk_transactions.html:44
+#: templates/admin/edit_article.html:27 templates/admin/edit_group.html:23
+#: templates/admin/edit_quote.html:22 templates/edit_profile.html:38
 msgid "Avbryt"
 msgstr ""
 
@@ -256,8 +266,10 @@ msgstr ""
 msgid "Byt e-postadress eller lösenord"
 msgstr ""
 
-#: templates/admin/add_user.html:21 templates/edit_profile.html:38
-#: templates/show_profile.html:65 templates/show_profile.html:122
+#: templates/admin/add_user.html:21 templates/admin/edit_article.html:27
+#: templates/admin/edit_group.html:23 templates/admin/edit_quote.html:22
+#: templates/edit_profile.html:38 templates/show_profile.html:65
+#: templates/show_profile.html:122
 msgid "Spara"
 msgstr ""
 
@@ -270,7 +282,7 @@ msgstr ""
 msgid "Inga transaktioner de senaste 15 minuterna!"
 msgstr ""
 
-#: templates/layout.html:13
+#: templates/admin/transactions.html:46 templates/layout.html:13
 msgid "Streque"
 msgstr ""
 
@@ -290,11 +302,15 @@ msgstr ""
 msgid "Logga ut"
 msgstr ""
 
-#: templates/more.html:13
+#: templates/admin/transactions.html:48 templates/admin/users.html:18
+#: templates/admin/users.html:56 templates/more.html:13
 msgid "Admin"
 msgstr ""
 
-#: templates/more.html:14
+#: templates/admin/bulk_transactions.html:16
+#: templates/admin/confirm_bulk_transactions.html:16
+#: templates/admin/spam.html:12 templates/admin/transactions.html:20
+#: templates/admin/users.html:9 templates/more.html:14
 msgid "Användare"
 msgstr ""
 
@@ -302,7 +318,7 @@ msgstr ""
 msgid "Skapa användare"
 msgstr ""
 
-#: templates/more.html:17
+#: templates/admin/requests.html:7 templates/more.html:17
 msgid "Kontoförfrågningar"
 msgstr ""
 
@@ -310,11 +326,11 @@ msgstr ""
 msgid "Lista över användare"
 msgstr ""
 
-#: templates/more.html:19
+#: templates/admin/groups.html:7 templates/more.html:19
 msgid "Grupper"
 msgstr ""
 
-#: templates/more.html:20
+#: templates/admin/spam.html:7 templates/more.html:20
 msgid "Skicka saldopåminnelser"
 msgstr ""
 
@@ -322,7 +338,7 @@ msgstr ""
 msgid "Transaktioner"
 msgstr ""
 
-#: templates/more.html:24
+#: templates/admin/transactions.html:9 templates/more.html:24
 msgid "Transaktionshistorik"
 msgstr ""
 
@@ -358,11 +374,11 @@ msgstr ""
 msgid "Redigera profil"
 msgstr ""
 
-#: templates/show_profile.html:30
+#: templates/admin/users.html:14 templates/show_profile.html:30
 msgid "E-postadress"
 msgstr ""
 
-#: templates/show_profile.html:34
+#: templates/admin/users.html:15 templates/show_profile.html:34
 msgid "Telefonnummer"
 msgstr ""
 
@@ -370,6 +386,7 @@ msgstr ""
 msgid "Ladda ner kontaktfil"
 msgstr ""
 
+#: templates/admin/spam.html:13 templates/admin/users.html:16
 #: templates/show_profile.html:50
 msgid "Saldo"
 msgstr ""
@@ -378,11 +395,16 @@ msgstr ""
 msgid "Överför pengar"
 msgstr ""
 
-#: templates/show_profile.html:78 templates/show_profile.html:90
+#: templates/admin/bulk_transactions.html:43
+#: templates/admin/confirm_bulk_transactions.html:44
+#: templates/admin/spam.html:35 templates/auth/register.html:19
+#: templates/auth/reset.html:15 templates/show_profile.html:78
+#: templates/show_profile.html:90
 msgid "Skicka"
 msgstr ""
 
-#: templates/show_profile.html:86 views/admin.py:125
+#: templates/admin/bulk_transactions.html:36 templates/show_profile.html:86
+#: views/admin.py:124
 msgid "Admintransaktion"
 msgstr ""
 
@@ -390,7 +412,7 @@ msgstr ""
 msgid "Uppladdade profilbilder"
 msgstr ""
 
-#: templates/show_profile.html:123
+#: templates/admin/requests.html:35 templates/show_profile.html:123
 msgid "Ta bort"
 msgstr ""
 
@@ -426,8 +448,149 @@ msgstr ""
 msgid "Standardglass"
 msgstr ""
 
-#: templates/admin/articles.html:42
+#: templates/admin/articles.html:42 templates/admin/users.html:49
 msgid "Inaktiv"
+msgstr ""
+
+#: templates/admin/articles.html:50
+msgid "Inga produkter funna."
+msgstr ""
+
+#: templates/admin/articles.html:52
+msgid "Ny produkt"
+msgstr ""
+
+#: templates/admin/bulk_transactions.html:9
+#: templates/admin/confirm_bulk_transactions.html:7
+msgid "Gör transaktioner i bulk"
+msgstr ""
+
+#: templates/admin/bulk_transactions.html:10
+#: templates/admin/confirm_bulk_transactions.html:8
+msgid ""
+"Positivt transaktionsvärde innebär en insättning till användarens konto, "
+"negativt innebär ett uttag."
+msgstr ""
+
+#: templates/admin/confirm_bulk_transactions.html:9
+msgid "Dessa transaktioner kommer genomföras, vill du fortsätta?"
+msgstr ""
+
+#: templates/admin/confirm_bulk_transactions.html:10
+msgid ""
+"Använd bakåt-knappen i webbläsaren istället för \"Avbryt\" ifall du vill "
+"ha kvar värdena!"
+msgstr ""
+
+#: templates/admin/edit_article.html:9 templates/admin/edit_group.html:9
+#: templates/admin/quotes.html:34
+msgid "Redigera"
+msgstr ""
+
+#: templates/admin/edit_article.html:9 templates/admin/edit_group.html:9
+msgid "Skapa"
+msgstr ""
+
+#: templates/admin/edit_article.html:9
+msgid "produkt"
+msgstr ""
+
+#: templates/admin/edit_article.html:22
+msgid "Ta bort produkt"
+msgstr ""
+
+#: templates/admin/edit_group.html:9
+msgid "grupp"
+msgstr ""
+
+#: templates/admin/edit_group.html:18
+msgid "Ta bort grupp"
+msgstr ""
+
+#: templates/admin/edit_quote.html:9
+msgid "Redigera citat"
+msgstr ""
+
+#: templates/admin/edit_quote.html:18
+msgid "Ta bort cit.at"
+msgstr ""
+
+#: templates/admin/groups.html:30
+msgid "Inga grupper funna."
+msgstr ""
+
+#: templates/admin/groups.html:32
+msgid "Ny grupp"
+msgstr ""
+
+#: templates/admin/requests.html:9
+msgid ""
+"Att lägga till en användare från länkarna nedan tar bort förfrågan\n"
+"    automatiskt när användaren skapats."
+msgstr ""
+
+#: templates/admin/requests.html:17
+msgid "E-postaddress"
+msgstr ""
+
+#: templates/admin/requests.html:23
+msgid "Inget meddelande lämnat"
+msgstr ""
+
+#: templates/admin/requests.html:28
+msgid "Lägg till användare"
+msgstr ""
+
+#: templates/admin/requests.html:41
+msgid "Inga kontoförfrågningar just nu!"
+msgstr ""
+
+#: templates/admin/spam.html:8
+msgid "Skicka en påminnelse till medlemmar med negativt saldo."
+msgstr ""
+
+#: templates/admin/transactions.html:14
+msgid "Sök"
+msgstr ""
+
+#: templates/admin/transactions.html:21
+msgid "Skapad av"
+msgstr ""
+
+#: templates/admin/transactions.html:22
+msgid "Transaktionstyp"
+msgstr ""
+
+#: templates/admin/transactions.html:24
+msgid "Värde"
+msgstr ""
+
+#: templates/admin/transactions.html:25
+msgid "Datum"
+msgstr ""
+
+#: templates/admin/transactions.html:39
+msgid "Okänt"
+msgstr ""
+
+#: templates/admin/transactions.html:50
+msgid "Pay"
+msgstr ""
+
+#: templates/admin/transactions.html:83
+msgid "Ångra"
+msgstr ""
+
+#: templates/admin/transactions.html:87
+msgid "Ångrad"
+msgstr ""
+
+#: templates/admin/transactions.html:95
+msgid "Inga transaktioner funna."
+msgstr ""
+
+#: templates/admin/users.html:58
+msgid "Ej admin"
 msgstr ""
 
 #: templates/auth/login.html:5
@@ -442,7 +605,7 @@ msgstr ""
 msgid "Glömt ditt lösenord?"
 msgstr ""
 
-#: templates/auth/login.html:27
+#: templates/auth/login.html:27 templates/auth/reset.html:5
 msgid "Återställ lösenord"
 msgstr ""
 
@@ -450,58 +613,122 @@ msgstr ""
 msgid "Har du inget konto?"
 msgstr ""
 
-#: templates/auth/login.html:29
+#: templates/auth/login.html:29 templates/auth/register.html:5
+#: templates/auth/register.html:10
 msgid "Begär ett konto"
+msgstr ""
+
+#: templates/auth/reset.html:10
+msgid "Begär återställningslänk"
 msgstr ""
 
 #: views/admin.py:45
 msgid "Ogiltigt datumintervall!"
 msgstr ""
 
-#: views/admin.py:133
+#: views/admin.py:97
+#, python-format
+msgid "Ångrade %(type)s \"%(text)s\", %(value)s den %(date)s på %(user)s."
+msgstr ""
+
+#: views/admin.py:132
 msgid "Inga transaktioner utförda. Väl spenderade klockcykler, bra jobbat!"
 msgstr ""
 
-#: views/admin.py:165
+#: views/admin.py:164
 msgid "Transaktionerna utfördes!"
 msgstr ""
 
-#: views/admin.py:248
+#: views/admin.py:196
+msgid "Produkt \"{}\" skapad."
+msgstr ""
+
+#: views/admin.py:198
+msgid "Produkt \"{}\" ändrad."
+msgstr ""
+
+#: views/admin.py:230
+#, python-format
+msgid "Produkt \"%(name)s\" borttagen."
+msgstr ""
+
+#: views/admin.py:247
 #, python-format
 msgid "Skickade %(nr)i saldopåminnelser!"
 msgstr ""
 
-#: views/admin.py:282
+#: views/admin.py:281
 #, python-format
 msgid "%(user_name)s skapad och förfrågan borttagen!"
 msgstr ""
 
-#: views/admin.py:287
+#: views/admin.py:286
 #, python-format
 msgid "%(user_name)s skapad!"
 msgstr ""
 
-#: views/admin.py:317
+#: views/admin.py:316
 #, python-format
 msgid "Förfrågan från %(first)s %(last)s borttagen."
 msgstr ""
 
-#: views/admin.py:352
+#: views/admin.py:351
 #, python-format
 msgid "Grupp \"%(group_name)s\" skapad."
 msgstr ""
 
-#: views/admin.py:371
+#: views/admin.py:370
 #, python-format
 msgid "Grupp \"%(group_name)s\" borttagen."
 msgstr ""
 
-#: views/admin.py:391
+#: views/admin.py:390
 msgid "Citat har ändrats!"
 msgstr ""
 
-#: views/admin.py:408
+#: views/admin.py:407
 msgid "Citat borttaget."
+msgstr ""
+
+#: views/auth.py:32
+msgid "Du måste vara admin för att komma åt den sidan."
+msgstr ""
+
+#: views/auth.py:58
+msgid "E-postadressen eller lösenordet du angav stämmer inte."
+msgstr ""
+
+#: views/auth.py:95
+msgid "QM har uppmärksammats om din förfrågan."
+msgstr ""
+
+#: views/auth.py:141 views/auth.py:227
+msgid "Länken har gått ut, var vänlig försök igen."
+msgstr ""
+
+#: views/auth.py:150
+#, python-format
+msgid "%(e)s är nu verifierad!"
+msgstr ""
+
+#: views/auth.py:179
+msgid ""
+"Om {} är en registrerad adress så har vi skickat en återställningslänk "
+"till den."
+msgstr ""
+
+#: views/auth.py:210
+msgid "Vänligen skriv in din e-epostaddress"
+msgstr ""
+
+#: views/auth.py:228
+msgid ""
+"Länken verkar vara trasig eller felaktig,               var vänlig försök"
+" igen."
+msgstr ""
+
+#: views/auth.py:253
+msgid "Ditt lösenord har återställts!"
 msgstr ""
 
 #: views/strequelistan.py:39

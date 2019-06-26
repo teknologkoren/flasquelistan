@@ -29,7 +29,7 @@ def admin_required():
                 # Request is AJAX
                 return flask.abort(403)
 
-            flask.flash("Du måste vara admin för att komma åt den sidan.",
+            flask.flash(_l("Du måste vara admin för att komma åt den sidan."),
                         'error')
             return flask.redirect(flask.request.referrer
                                   or flask.url_for('strequelistan.index'))
@@ -55,7 +55,7 @@ def login():
         flask_login.login_user(user, remember=form.remember.data)
         return form.redirect('strequelistan.index')
     elif form.is_submitted():
-        flask.flash("E-postadressen eller lösenordet du angav stämmer inte.",
+        flask.flash(_l("E-postadressen eller lösenordet du angav stämmer inte."),
                     'error')
 
     return flask.render_template('auth/login.html', form=form)
@@ -92,7 +92,7 @@ def register():
                                               request=request)
                         )
 
-        flask.flash("QM har uppmärksammats om din förfrågan.", 'info')
+        flask.flash(_l("QM har uppmärksammats om din förfrågan."), 'info')
 
         return flask.redirect(flask.url_for('auth.login'))
 
@@ -138,7 +138,7 @@ def verify_token(token):
     try:
         user_id, email = ts.loads(token, salt='verify-email', max_age=900)
     except SignatureExpired:
-        flask.flash("Länken har gått ut, var vänlig försök igen.", 'error')
+        flask.flash(_l("Länken har gått ut, var vänlig försök igen."), 'error')
         return flask.redirect(flask.url_for('auth.login'))
     except:  # noqa: E722 (ignore 'bare except' warning)
         flask.abort(404)
@@ -147,7 +147,7 @@ def verify_token(token):
     user.email = email
     models.db.session.commit()
 
-    flask.flash("{} är nu verifierad!".format(email), 'success')
+    flask.flash(_("%(e)s är nu verifierad!", e=email), 'success')
     return flask.redirect(flask.url_for('auth.login'))
 
 
@@ -176,8 +176,8 @@ def reset():
     * Tokens are not stored anywhere other than in the email sent to
         user.
     """
-    reset_flash = ("Om {} är en registrerad adress så har vi skickat en "
-                   "återställningslänk till den.")
+    reset_flash = (_l("Om {} är en registrerad adress så har vi skickat en "
+                   "återställningslänk till den."))
 
     ts = URLSafeTimedSerializer(flask.current_app.config["SECRET_KEY"])
 
@@ -207,7 +207,7 @@ def reset():
         return flask.redirect(flask.url_for('.login'))
 
     elif form.errors:
-        flask.flash("Please enter your email.", 'error')
+        flask.flash(_l("Vänligen skriv in din e-epostaddress"), 'error')
 
     return flask.render_template('auth/reset.html', form=form)
 
@@ -224,9 +224,9 @@ def reset_token(token):
 
     Note: itsdangerous saves the timestamp in tokens in UTC!
     """
-    expired = "Länken har gått ut, var vänlig försök igen."
-    invalid = "Länken verkar vara trasig eller felaktig,\
-               var vänlig försök igen."
+    expired = _l("Länken har gått ut, var vänlig försök igen.")
+    invalid = _l("Länken verkar vara trasig eller felaktig,\
+               var vänlig försök igen.")
 
     ts = URLSafeTimedSerializer(flask.current_app.config["SECRET_KEY"])
 
@@ -250,7 +250,7 @@ def reset_token(token):
     if form.validate_on_submit():
         user.password = form.new_password.data
         models.db.session.commit()
-        flask.flash("Ditt lösenord har återställts!", 'success')
+        flask.flash(_l("Ditt lösenord har återställts!"), 'success')
         return flask.redirect(flask.url_for('.login'))
     else:
         forms.flash_errors(form)

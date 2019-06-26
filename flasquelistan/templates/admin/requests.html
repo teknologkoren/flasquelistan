@@ -4,41 +4,41 @@
 
 {% block body %}
 <div class="requests">
-  <h2>Kontoförfrågningar</h2>
+    <h2>{{_("Kontoförfrågningar")}}</h2>
   <p>
-    Att lägga till en användare från länkarna nedan tar bort förfrågan
-    automatiskt när användaren skapats.
+    {{_("Att lägga till en användare från länkarna nedan tar bort förfrågan
+    automatiskt när användaren skapats.")}}
   </p>
   {% if requests.count() %}
   {% for request in requests %}
   <dl>
-    <dt>Namn</dt>
+    <dt>{{_("Namn")}}</dt>
     <dd>{{ request.first_name }} {{ request.last_name }}</dd>
-    <dt>E-postaddress</dt>
+    <dt>{{_("E-postaddress")}}</dt>
     <dd>{{ request.email }}</dd>
-    <dt>Meddelande</dt>
+    <dt>{{_("Meddelande")}}</dt>
     {% if request.message %}
     <dd>{{ request.message }}</dd>
     {% else %}
-    <dd>Inget meddelande lämnat</dd>
+    <dd>{{_("Inget meddelande lämnat")}}</dd>
     {% endif %}
 
     <p>
       <a href="{{ url_for('strequeadmin.add_user', request_id=request.id) }}">
-        Lägg till användare
+        {{_("Lägg till användare")}}
       </a>
     </p>
 
     <form action="{{ url_for('strequeadmin.remove_request', request_id=request.id) }}" method="POST">
       <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
       <div class="form-entry">
-        <button>Ta bort</button>
+        <button>{{_("Ta bort")}}</button>
       </div>
     </form>
   </dl>
   {% endfor %}
   {% else %}
-  <p>Inga kontoförfrågningar just nu!</p>
+  <p>{{_("Inga kontoförfrågningar just nu!")}}</p>
   {% endif %}
 </div>
 {% endblock %}

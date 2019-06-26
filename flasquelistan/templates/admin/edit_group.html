@@ -6,7 +6,7 @@
 
 {% block body %}
 <div>
-  <h2>{% if group %}Redigera{% else %}Skapa{% endif %} grupp</h2>
+  <h2>{% if group %}{{_("Redigera")}}{% else %}{{_("Skapa")}}{% endif %} {{_("grupp")}}</h2>
   <form method="POST">
     {{ form.csrf_token }}
 
@@ -15,12 +15,12 @@
 
     {% if group %}
     <div class="form-entry">
-      <button formaction="{{ url_for('strequeadmin.remove_group', group_id=group.id) }}">Ta bort grupp</button>
+      <button formaction="{{ url_for('strequeadmin.remove_group', group_id=group.id) }}">{{_("Ta bort grupp")}}</button>
     </div>
     {% endif %}
 
     <div class="form-entry">
-      <button>Spara</button> | <a href="{{ url_for('strequeadmin.show_groups') }}">Avbryt</a>
+        <button>{{_("Spara")}}</button> | <a href="{{ url_for('strequeadmin.show_groups') }}">{{_("Avbryt")}}</a>
     </div>
   </form>
 </div>

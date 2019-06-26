@@ -2,17 +2,17 @@
 
 {% from "macros.html" import form_entry %}
 
-{% set title = "Återställ lösenord" %}
+{% set title = {{_("Återställ lösenord") %}
 
 {% block body %}
 <form class="reset-token" method="POST">
   {{ form.csrf_token }}
-  <h2>Återställ lösenord</h2>
+  <h2>{{_("Återställ lösenord")}}</h2>
 
   {{ form_entry(form.new_password) }}
 
   <div class="field">
-    <button>Skicka</button>
+    <button>{{_("Skicka")}}</button>
   </div>
 </form>
 {% endblock %}

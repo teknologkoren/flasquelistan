@@ -90,8 +90,7 @@ def void_transaction():
         )
 
     else:
-        flask.flash("Ångrade {type} \"{text}\", {value} den {date} på {user}."
-                    .format(
+        flask.flash(_("Ångrade %(type)s \"%(text)s\", %(value)s den %(date)s på %(user)s.",
                         type=transaction.type,
                         text=transaction.text,
                         value=transaction.formatted_value,
@@ -194,9 +193,9 @@ def edit_article(article_id=None):
     if form.validate_on_submit():
         if not article:
             article = models.Article()
-            flash = "Produkt \"{}\" skapad."
+            flash = _l("Produkt \"{}\" skapad.")
         else:
-            flash = "Produkt \"{}\" ändrad."
+            flash = _("Produkt \"{}\" ändrad.")
 
         article.name = form.name.data
         article.value = int(form.value.data * 100)
@@ -228,7 +227,7 @@ def remove_article(article_id):
     models.db.session.delete(article)
     models.db.session.commit()
 
-    flask.flash("Produkt \"{}\" borttagen.".format(article.name), 'success')
+    flask.flash(_l("Produkt \"%(name)s\" borttagen.", name=article.name), 'success')
     return flask.redirect(flask.url_for('strequeadmin.articles'))
 
 
