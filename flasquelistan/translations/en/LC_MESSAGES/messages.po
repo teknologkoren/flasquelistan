@@ -620,12 +620,12 @@ msgstr "Reset your password"
 
 #: templates/auth/login.html:28
 msgid "Har du inget konto?"
-msgstr "Do you need a account?"
+msgstr "Do you need an account?"
 
 #: templates/auth/login.html:29 templates/auth/register.html:5
 #: templates/auth/register.html:10
 msgid "Begär ett konto"
-msgstr "Request a account"
+msgstr "Request an account"
 
 #: templates/auth/reset.html:10
 msgid "Begär återställningslänk"
