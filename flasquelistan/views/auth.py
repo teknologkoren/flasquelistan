@@ -5,6 +5,9 @@ from flask_login import current_user
 from itsdangerous import SignatureExpired, URLSafeTimedSerializer
 from flasquelistan import forms, models, util
 
+from flask_babel import gettext as _
+from flask_babel import lazy_gettext as _l
+
 mod = flask.Blueprint('auth', __name__)
 
 login_manager = flask_login.LoginManager()
