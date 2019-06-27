@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2019-06-26 08:53+0200\n"
+"POT-Creation-Date: 2019-06-27 17:25+0200\n"
 "PO-Revision-Date: 2019-06-24 08:20+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: en\n"
@@ -143,7 +143,7 @@ msgstr "Message to QM"
 
 #: forms.py:254 forms.py:405 templates/admin/quotes.html:7
 #: templates/admin/quotes.html:11 templates/layout.html:33
-#: templates/more.html:34 templates/quote.html:9 templates/quotes.html:26
+#: templates/more.html:35 templates/quote.html:9 templates/quotes.html:26
 msgid "Citat"
 msgstr "Quotes"
 
@@ -249,7 +249,7 @@ msgid "Avbryt"
 msgstr "Cancel"
 
 #: templates/admin/articles.html:7 templates/article_description.html:7
-#: templates/more.html:27 templates/more.html:29
+#: templates/more.html:28 templates/more.html:30
 msgid "Produkter"
 msgstr "Products"
 
@@ -301,65 +301,77 @@ msgstr "More"
 msgid "Produktlista"
 msgstr "Product list"
 
-#: templates/more.html:10
+#: templates/more.html:10 templates/payments.html:6
+msgid "Påfyllning av saldo"
+msgstr "Refilling your balance"
+
+#: templates/more.html:11
 msgid "Logga ut"
 msgstr "Sign out"
 
 #: templates/admin/transactions.html:48 templates/admin/users.html:18
-#: templates/admin/users.html:56 templates/more.html:13
+#: templates/admin/users.html:56 templates/more.html:14
 msgid "Admin"
 msgstr "Admin"
 
 #: templates/admin/bulk_transactions.html:16
 #: templates/admin/confirm_bulk_transactions.html:16
 #: templates/admin/spam.html:12 templates/admin/transactions.html:20
-#: templates/admin/users.html:9 templates/more.html:14
+#: templates/admin/users.html:9 templates/more.html:15
 msgid "Användare"
 msgstr "Users"
 
-#: templates/admin/add_user.html:9 templates/more.html:16
+#: templates/admin/add_user.html:9 templates/more.html:17
 msgid "Skapa användare"
 msgstr "Create user"
 
-#: templates/admin/requests.html:7 templates/more.html:17
+#: templates/admin/requests.html:7 templates/more.html:18
 msgid "Kontoförfrågningar"
 msgstr "Account requests"
 
-#: templates/more.html:18
+#: templates/more.html:19
 msgid "Lista över användare"
 msgstr "List of users"
 
-#: templates/admin/groups.html:7 templates/more.html:19
+#: templates/admin/groups.html:7 templates/more.html:20
 msgid "Grupper"
 msgstr "Groups"
 
-#: templates/admin/spam.html:7 templates/more.html:20
+#: templates/admin/spam.html:7 templates/more.html:21
 msgid "Skicka saldopåminnelser"
 msgstr "Send balance reminders"
 
-#: templates/more.html:22
+#: templates/more.html:23
 msgid "Transaktioner"
 msgstr "Transactions"
 
-#: templates/admin/transactions.html:9 templates/more.html:24
+#: templates/admin/transactions.html:9 templates/more.html:25
 msgid "Transaktionshistorik"
 msgstr "Transaction history"
 
-#: templates/more.html:25
+#: templates/more.html:26
 msgid "Gör bulktransaktioner"
 msgstr "Do bulk transactions"
 
-#: templates/more.html:30
+#: templates/more.html:31
 msgid "Papperslista"
 msgstr "Paper list"
 
-#: templates/more.html:32
+#: templates/more.html:33
 msgid "Annat"
 msgstr "Other"
 
-#: templates/more.html:35
+#: templates/more.html:36
 msgid "Databas-admin"
 msgstr "Database admin"
+
+#: templates/payments.html:7
+msgid "Beskrivning hur man sätter in pengar"
+msgstr ""
+"To add money to your balance you make a bank transaction to PlusGiro (PG)"
+" 20 74-3 with your name and the word \"streque\" as the comment. If you "
+"for some reason can't do this (if for example you don't have a Swedish "
+"bank account) you can give QM cash."
 
 #: templates/quote.html:11
 msgid "Alla citat"
@@ -699,44 +711,44 @@ msgstr "Quote changed"
 msgid "Citat borttaget."
 msgstr "Quote deleted."
 
-#: views/auth.py:32
+#: views/auth.py:35
 msgid "Du måste vara admin för att komma åt den sidan."
 msgstr "You need to be admin to reach this page"
 
-#: views/auth.py:58
+#: views/auth.py:61
 msgid "E-postadressen eller lösenordet du angav stämmer inte."
 msgstr "The email address or the password is wrong"
 
-#: views/auth.py:95
+#: views/auth.py:98
 msgid "QM har uppmärksammats om din förfrågan."
 msgstr "QM has been notified of your request"
 
-#: views/auth.py:141 views/auth.py:227
+#: views/auth.py:144 views/auth.py:230
 msgid "Länken har gått ut, var vänlig försök igen."
 msgstr "The link has expired, please try again"
 
-#: views/auth.py:150
+#: views/auth.py:153
 #, python-format
 msgid "%(e)s är nu verifierad!"
 msgstr "%(e)s is now verified"
 
-#: views/auth.py:179
+#: views/auth.py:182
 msgid ""
 "Om {} är en registrerad adress så har vi skickat en återställningslänk "
 "till den."
 msgstr "We have sent a password reset link to {} if it is a registered address"
 
-#: views/auth.py:210
+#: views/auth.py:213
 msgid "Vänligen skriv in din e-epostaddress"
 msgstr "Please enter your email address"
 
-#: views/auth.py:228
+#: views/auth.py:231
 msgid ""
 "Länken verkar vara trasig eller felaktig,               var vänlig försök"
 " igen."
 msgstr "The link seems to be broken, please try again"
 
-#: views/auth.py:253
+#: views/auth.py:256
 msgid "Ditt lösenord har återställts!"
 msgstr "Your passwor has been reset"
 
@@ -771,24 +783,24 @@ msgstr "You cannot transfer more money than you have in your balance"
 msgid "Förde över %(a)i pengar till %(name)s"
 msgstr "Transfered %(a)i money to %(name)s"
 
-#: views/strequelistan.py:236
+#: views/strequelistan.py:241
 msgid "Du måste vara admin för att göra det!"
 msgstr "You need to be admin to do this!"
 
-#: views/strequelistan.py:244
+#: views/strequelistan.py:249
 msgid "Transaktion utförd!"
 msgstr "Transaction preformed"
 
-#: views/strequelistan.py:274 views/strequelistan.py:299
+#: views/strequelistan.py:279 views/strequelistan.py:304
 msgid "Din profilbild har ändrats!"
 msgstr "Your profile picture has been changed!"
 
-#: views/strequelistan.py:289 views/strequelistan.py:314
-#: views/strequelistan.py:381 views/strequelistan.py:440
+#: views/strequelistan.py:294 views/strequelistan.py:319
+#: views/strequelistan.py:386 views/strequelistan.py:445
 msgid "Du får bara redigera din egen profil! ಠ_ಠ"
 msgstr "You are only allowd to edit your own profile ಠ_ಠ"
 
-#: views/strequelistan.py:321
+#: views/strequelistan.py:326
 msgid ""
 "Du kan inte ta bort <a href=\"https://phys.org/news/2014-08-what-is-"
 "nothing.html\">ingenting</a>!"
@@ -796,20 +808,23 @@ msgstr ""
 "You can not delete <a href=\"https://phys.org/news/2014-08-what-is-"
 "nothing.html\">nothing</a>!"
 
-#: views/strequelistan.py:338
+#: views/strequelistan.py:343
 msgid "Profilbilden har tagits bort!"
 msgstr "Profile picture deleted"
 
-#: views/strequelistan.py:413
+#: views/strequelistan.py:418
 msgid "Ändringarna har sparats!"
 msgstr "Changes saved!"
 
-#: views/strequelistan.py:450
+#: views/strequelistan.py:455
 #, python-format
 msgid "En länk för att verifiera e-postadressen har skickats till %(email)s."
 msgstr "A link to verify your email address has been sent to %(email)s"
 
-#: views/strequelistan.py:455
+#: views/strequelistan.py:460
 msgid "Lösenordet har ändrats!"
 msgstr "Password changed!"
+
+#~ msgid "Insättning av pengar"
+#~ msgstr ""
 
