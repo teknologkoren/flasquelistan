@@ -176,7 +176,13 @@ def payments():
 
 @mod.route('/paperlist')
 def paperlist():
-    users = (models.User.query
+
+    if flask.request.args.get("active", "false").lower() == "true":
+        users = (models.User.query
+            .filter(models.User.active.is_(True))
+            .order_by(models.User.first_name))
+    else:
+        users = (models.User.query
              .order_by(models.User.first_name))
 
     groups = models.Group.query.all()
