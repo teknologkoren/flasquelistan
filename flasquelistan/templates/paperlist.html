@@ -26,6 +26,12 @@
       {% endfor %}
       {% endif %}
       {% endfor %}
+      {% for n in range(empty) %}
+      <tr>
+        <td></td>
+        {{ "<td></td>"|safe * articles|length }}
+      </tr>
+      {% endfor %}
     </table>
   </div>
 </main>

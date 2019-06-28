@@ -192,11 +192,16 @@ def paperlist():
                 .order_by(models.Article.weight.desc())
                 .all()
                 )
+    try:
+        empty = int(flask.request.args.get("empty", "0"))
+    except:
+        empty = 0
 
     return flask.render_template('paperlist.html',
                                  users=users,
                                  groups=groups,
-                                 articles=articles)
+                                 articles=articles,
+                                 empty=empty)
 
 
 @mod.route('/history')

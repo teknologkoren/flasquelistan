@@ -19,6 +19,7 @@ th,
 td {
     text-align: start;
     padding: 5px;
+    height: 1.5rem;
 }
 
 th:nth-child(1),
