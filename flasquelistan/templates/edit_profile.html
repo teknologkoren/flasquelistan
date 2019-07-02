@@ -38,6 +38,13 @@
           <button>{{_("Spara")}}</button> | <a href="{{ url_for('strequelistan.show_profile', user_id=user.id) }}">{{_("Avbryt")}}</a>
       </div>
     </form>
+    {% if user == current_user %}
+    <dl>
+        <dt>{{_("Byt språk")}}</dt>
+        <dd><a href="?lang=sv_SE">Svenska</a></dd>
+        <dd><a href="?lang=en">English</a></dd>
+    </dl>
+    {% endif %}
   </div>
 </div>
 {% endblock %}
