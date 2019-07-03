@@ -39,7 +39,7 @@ def insert_users():
             phone=user['phone_number'],
             balance=user['balance']*100,
             is_admin=user['is_admin'],
-            active=user['is_active'],
+            active=user['active_singer'],
             group_id=user['group_id'],
             body_mass=user['weight'],
             y_chromosome=user['y_chromosome'],
