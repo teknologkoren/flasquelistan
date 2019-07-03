@@ -28,9 +28,15 @@
   <h3>{{_("Produkter")}}</h3>
   <ul>
     <li><a href="{{ url_for("strequeadmin.articles") }}">{{_("Produkter")}}</a></li>
-    <li><a href="{{ url_for("strequelistan.paperlist") }}">{{_("Papperslista")}}</a></li>
-    <li><a href="{{ url_for("strequelistan.paperlist") }}?active=true">{{_("Papperslista - Activa medlemmar")}}</a></li>
   </ul>
+  <h3>{{_("Generera en papperslista")}}</h3>
+      <form action="{{ url_for("strequelistan.paperlist") }}" method="GET">
+        <ul>
+          <li>Endast aktiva: <input type="checkbox" name="active" value="true"></li>
+          <li>Extra rader: <input type="number" name="empty" value="0"></br></li>
+          <li><input type="submit" value="{{_("Generera")}}"></li>
+        </ul>
+      </form>
   <h3>{{_("Annat")}}</h3>
   <ul>
     <li><a href="{{ url_for("strequeadmin.show_quotes") }}">{{_("Citat")}}</a></li>
