@@ -280,10 +280,10 @@ class User(flask_login.UserMixin, db.Model):
 
     @property
     def emoji(self):
-        # hexadecimal md5-hash based on user id
-        md5 = hashlib.md5(str(self.id).encode()).hexdigest()
+        # md5-hash based on user id
+        md5 = hashlib.md5(str(self.id).encode())
         # "random" number between 0x0 and 0x44
-        i = int(md5, 16) % 0x45
+        i = int.from_bytes(md5.digest(), 'little') % 0x45
         # add number to start of the 'Emoticons' unicode block
         return chr(0x1f600 + i)
 
