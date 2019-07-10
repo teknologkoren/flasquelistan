@@ -429,8 +429,8 @@ class CreditTransfer(db.Model):
         foreign_keys=[payee_transaction_id]
     )
 
-    @staticmethod
-    def create(payer, payee, value, message):
+    @classmethod
+    def create(cls, payer, payee, value, message):
         if value <= 0:
             return False
 
@@ -459,8 +459,17 @@ class CreditTransfer(db.Model):
 
         db.session.add(payer_tx)
         db.session.add(payee_tx)
-
         db.session.commit()
+
+        credit_transfer = cls(
+            payer_transaction_id=payer_tx.id,
+            payee_transaction_id=payee_tx.id
+        )
+
+        db.session.add(credit_transfer)
+        db.session.commit()
+
+        return credit_transfer
 
     def void(self):
         self.payer_transaction.void_and_refund()
