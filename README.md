@@ -44,5 +44,5 @@ created in `/instance`.
 [Pytest](https://docs.pytest.org/en/latest/) is used for testing, tests are
 located in `tests/`. Run the tests with
 ```sh
-$ pytest tests/flasquelistan_tests.py
+$ pytest tests/flasquelistan_test.py
 ```
