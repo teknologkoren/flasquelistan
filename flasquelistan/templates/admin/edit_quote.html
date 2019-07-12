@@ -15,7 +15,7 @@
     {{ form_entry(form.timestamp, placeholder='yyyy-MM-ddTHH:mm') }}
 
     <div class="form-entry">
-      <button formaction="{{ url_for('strequeadmin.remove_quote', quote_id=quote.id) }}">{{_("Ta bort cit.at")}}</button>
+      <button class="confirm" formaction="{{ url_for('strequeadmin.remove_quote', quote_id=quote.id) }}">{{_("Ta bort cit.at")}}</button>
     </div>
 
     <div class="form-entry">
@@ -24,4 +24,8 @@
   </form>
 </div>
 </div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for("static", filename="js/confirmDialog.js") }}">
 {% endblock %}

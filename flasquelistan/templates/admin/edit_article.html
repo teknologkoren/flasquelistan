@@ -19,7 +19,7 @@
 
     {% if article %}
     <div class="form-entry">
-      <button formaction="{{ url_for('strequeadmin.remove_article', article_id=article.id) }}">{{_("Ta bort produkt")}}</button>
+      <button class="confirm" formaction="{{ url_for('strequeadmin.remove_article', article_id=article.id) }}">{{_("Ta bort produkt")}}</button>
     </div>
     {% endif %}
 
@@ -29,4 +29,8 @@
   </form>
 </div>
 </div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for("static", filename="js/confirmDialog.js") }}">
 {% endblock %}

@@ -15,7 +15,7 @@
 
     {% if group %}
     <div class="form-entry">
-      <button formaction="{{ url_for('strequeadmin.remove_group', group_id=group.id) }}">{{_("Ta bort grupp")}}</button>
+      <button class="confirm" formaction="{{ url_for('strequeadmin.remove_group', group_id=group.id) }}">{{_("Ta bort grupp")}}</button>
     </div>
     {% endif %}
 
@@ -25,4 +25,8 @@
   </form>
 </div>
 </div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for("static", filename="js/confirmDialog.js") }}">
 {% endblock %}
