@@ -13,8 +13,10 @@ from tests.helpers import logged_in
 from tests.helpers import login
 from tests.helpers import logout
 
+
 class TestAuth:
     """Tests authentication functions"""
+
     def test_must_login_redirect(self, client):
         """Tests that users get redirected to the login page"""
         rv = client.get('/')
@@ -25,18 +27,18 @@ class TestAuth:
     def test_login_logout(self, app):
         # Create 2 users
         user = models.User(
-                email='monty@python1.tld',
-                first_name='Monty',
-                last_name='Python',
+            email='monty@python1.tld',
+            first_name='Monty',
+            last_name='Python',
         )
 
         models.db.session.add(user)
         models.db.session.commit()
 
         user = models.User(
-                email='monty@python2.tld',
-                first_name='Monty',
-                last_name='Python',
+            email='monty@python2.tld',
+            first_name='Monty',
+            last_name='Python',
         )
 
         models.db.session.add(user)
@@ -69,7 +71,7 @@ class TestAuth:
             rv = client.get('/logout')
 
             # Check that logout redirect to login page
-            assert rv.headers['Location'].endswith( url_for('auth.login'))
+            assert rv.headers['Location'].endswith(url_for('auth.login'))
 
             # Check that current_user is unset
             assert not hasattr(current_user, 'id')
@@ -93,7 +95,6 @@ class TestIndexPage():
             assert 'Monty Python' not in text
             assert 'Black Knight' in text
 
-
     class TestGroups():
         def test_group_show_up_on_index_page(self, client):
             """Tests that a group with members shows up on the index page"""
@@ -106,7 +107,7 @@ class TestIndexPage():
             models.db.session.commit()
 
             with logged_in(client):
-                current_user.group=group
+                current_user.group = group
                 models.db.session.commit()
                 response = client.get(url_for('strequelistan.index'))
                 text = response.get_data(as_text=True)
@@ -261,14 +262,74 @@ class TestStrequa():
 
 class TestProfilePage:
     """Tests for the profile page"""
-    pass
+    # TODO
 
 
 class TestHistoryPage:
     """Tests for the transaction history page"""
-    pass
+    # TODO
 
 
 class TestMorePage:
     """Tests for the 'More' page"""
-    pass
+    # TODO
+
+
+class TestPaperListPage:
+    """Test the generaton of paper lists"""
+    # TODO
+
+
+class TestCreateUserPage:
+    """description"""
+    # TODO
+
+
+class TestAccountRequestPage:
+    """description"""
+    # TODO
+
+
+class TestListUserPage:
+    """description"""
+    # TODO
+
+
+class TestGroupsPage:
+    """description"""
+    # TODO
+
+
+class TestBalanceReminderPage:
+    """description"""
+    # TODO
+
+
+class TestTransactionHistoryPage:
+    """description"""
+    # TODO
+
+
+class TestBulkTransactionPage:
+    """description"""
+    # TODO
+
+
+class TestEditProductsPage:
+    """description"""
+    # TODO
+
+
+class TestEditQuotePage:
+    """description"""
+    # TODO
+
+
+class TestProductPage:
+    """description"""
+    # TODO
+
+
+class TestAddBalancePage:
+    """description"""
+    # TODO
