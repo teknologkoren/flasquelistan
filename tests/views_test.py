@@ -14,7 +14,7 @@ from tests.helpers import login
 from tests.helpers import logout
 
 
-class TestStrequelistan():
+class TestIndexPage():
     def test_name_in_list(self, client):
         """Test that users full name shows up on index page if no nickname is present"""
         with logged_in(client):
@@ -34,15 +34,37 @@ class TestStrequelistan():
 
 
 class TestGroups():
-    def test_group_show_up_on_index_page(self):
+    def test_group_show_up_on_index_page(self, client):
         """Tests that a group with members shows up on the index page"""
-        # TODO:
-        pass
+        group = models.Group(
+            name="Knights who say Ni",
+            weight=1000
+        )
 
-    def test_empty_group_hidden_on_index_page(self):
+        models.db.session.add(group)
+        models.db.session.commit()
+
+        with logged_in(client):
+            current_user.group=group
+            models.db.session.commit()
+            response = client.get(url_for('strequelistan.index'))
+            text = response.get_data(as_text=True)
+            assert group.name in text
+
+    def test_empty_group_hidden_on_index_page(self, client):
         """Tests that a group without members is hidden on the index page"""
-        # TODO:
-        pass
+        group = models.Group(
+            name="Knights who say Ni!",
+            weight=1000
+        )
+
+        models.db.session.add(group)
+        models.db.session.commit()
+
+        with logged_in(client):
+            response = client.get(url_for('strequelistan.index'))
+            text = response.get_data(as_text=True)
+            assert group.name not in text
 
 
 class TestQuotes():
@@ -54,7 +76,7 @@ class TestQuotes():
 
             assert 'No quotes yet!' in text
 
-    def test_single_user_no_quotes(self, client):
+    def test_index_no_quotes(self, client):
         """Test that the index page works without quotes"""
         with logged_in(client):
             response = client.get(url_for('strequelistan.index'))
@@ -138,3 +160,18 @@ class TestStrequa():
             assert response.json.get('value') == -article.value
             assert current_user.balance == -article.value
             assert current_user.transactions[0].text == 'Holy Grail'
+
+
+class TestProfilePage:
+    """Tests for the profile page"""
+    pass
+
+
+class TestHistoryPage:
+    """Tests for the transaction history page"""
+    pass
+
+
+class TestMorePage:
+    """Tests for the 'More' page"""
+    pass
