@@ -16,3 +16,4 @@ flasquelistan/static/.webassets-cache*
 *.mo
 
 *.swp
+.coverage
