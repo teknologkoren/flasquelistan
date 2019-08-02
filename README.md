@@ -42,7 +42,18 @@ created in `/instance`.
 
 ## Testing
 [Pytest](https://docs.pytest.org/en/latest/) is used for testing, tests are
-located in `tests/`. Run the tests with
+located in `tests/`. Run the tests from the root directory with
 ```sh
-$ pytest tests/flasquelistan_test.py
+$ pytest
 ```
+
+You can also add the -n auto flag if you want to run the tests in paralell, and the -v flag for a more verbose output:
+```sh
+$ pytest -v -n auto
+```
+
+If you want to only run a certain set of tests you can use the -k flag to filter the tests:
+```sh
+$ pytest -k quote
+```
+
