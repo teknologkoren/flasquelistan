@@ -15,14 +15,14 @@ from tests.helpers import logout
 
 
 class TestIndexPage():
-    def test_name_in_list(self, client):
+    def test_name_on_index_page(self, client):
         """Test that users full name shows up on index page if no nickname is present"""
         with logged_in(client):
             response = client.get(url_for('strequelistan.index'))
             text = response.get_data(as_text=True)
             assert 'Monty Python' in text
 
-    def test_nickname_replaces_rea_name(self, client):
+    def test_nickname_replaces_real_name(self, client):
         """Test that nicknames replace 'real' name on index page"""
         with logged_in(client):
             current_user.nickname = "Black Knight"
@@ -33,75 +33,111 @@ class TestIndexPage():
             assert 'Black Knight' in text
 
 
-class TestGroups():
-    def test_group_show_up_on_index_page(self, client):
-        """Tests that a group with members shows up on the index page"""
-        group = models.Group(
-            name="Knights who say Ni",
-            weight=1000
-        )
+    class TestGroups():
+        def test_group_show_up_on_index_page(self, client):
+            """Tests that a group with members shows up on the index page"""
+            group = models.Group(
+                name="Knights who say Ni",
+                weight=1000
+            )
 
-        models.db.session.add(group)
-        models.db.session.commit()
-
-        with logged_in(client):
-            current_user.group=group
+            models.db.session.add(group)
             models.db.session.commit()
-            response = client.get(url_for('strequelistan.index'))
-            text = response.get_data(as_text=True)
-            assert group.name in text
 
-    def test_empty_group_hidden_on_index_page(self, client):
-        """Tests that a group without members is hidden on the index page"""
-        group = models.Group(
-            name="Knights who say Ni!",
-            weight=1000
-        )
+            with logged_in(client):
+                current_user.group=group
+                models.db.session.commit()
+                response = client.get(url_for('strequelistan.index'))
+                text = response.get_data(as_text=True)
+                assert group.name in text
 
-        models.db.session.add(group)
-        models.db.session.commit()
+        def test_empty_group_hidden_on_index_page(self, client):
+            """Tests that a group without members is hidden on the index page"""
+            group = models.Group(
+                name="Knights who say Ni!",
+                weight=1000
+            )
 
-        with logged_in(client):
-            response = client.get(url_for('strequelistan.index'))
-            text = response.get_data(as_text=True)
-            assert group.name not in text
+            models.db.session.add(group)
+            models.db.session.commit()
 
+            with logged_in(client):
+                response = client.get(url_for('strequelistan.index'))
+                text = response.get_data(as_text=True)
+                assert group.name not in text
 
-class TestQuotes():
-    def test_empty_quotes(self, client):
-        """Test with blank database"""
-        with logged_in(client):
-            response = client.get(url_for('quotes.index'))
-            text = response.get_data(as_text=True)
+    class TestArticleLinks:
+        def test_article_links_on_index_page(self, client):
+            article1 = models.Article(
+                weight=1,
+                name='Holy Grail',
+                value=10000,
+                description="Difficult to find. Watch out for the rabbit.",
+                standardglas=2,
+                is_active=True
+            )
 
-            assert 'No quotes yet!' in text
+            models.db.session.add(article1)
+            models.db.session.commit()
 
-    def test_index_no_quotes(self, client):
-        """Test that the index page works without quotes"""
-        with logged_in(client):
-            response = client.get(url_for('strequelistan.index'))
-            text = response.get_data(as_text=True)
+            with logged_in(client):
+                response = client.get(url_for('strequelistan.index'))
+                text = response.get_data(as_text=True)
+                assert article1.name in text
 
-            assert 'permalänk' not in text
+        def test_hidden_article_links_on_index_page(self, client):
+            article = models.Article(
+                weight=1,
+                name='Holy Grail',
+                value=10000,
+                description="Difficult to find. Watch out for the rabbit.",
+                standardglas=2,
+                is_active=False
+            )
 
-    def test_quote_on_index_page(self, client):
-        """Test that a quote shows up on the index page"""
-        quote = models.Quote(
-            text="And now for something completely different.",
-            who="Newsreader [John Cleese]"
-        )
-        models.db.session.add(quote)
-        models.db.session.commit()
+            models.db.session.add(article)
+            models.db.session.commit()
 
-        with logged_in(client):
-            response = client.get(url_for('strequelistan.index'))
-            text = response.get_data(as_text=True)
+            with logged_in(client):
+                response = client.get(url_for('strequelistan.index'))
+                text = response.get_data(as_text=True)
+                assert article.name not in text
 
-            # Check if the quote text is present
-            assert quote.text in text
+    class TestQuotes():
+        def test_empty_quotes(self, client):
+            """Test with blank database"""
+            with logged_in(client):
+                response = client.get(url_for('quotes.index'))
+                text = response.get_data(as_text=True)
 
-            # Check if the person who said the quote is present
-            assert quote.who in text
+                assert 'No quotes yet!' in text
+
+        def test_index_no_quotes(self, client):
+            """Test that the index page works without quotes"""
+            with logged_in(client):
+                response = client.get(url_for('strequelistan.index'))
+                text = response.get_data(as_text=True)
+
+                assert 'permalänk' not in text
+
+        def test_quote_on_index_page(self, client):
+            """Test that a quote shows up on the index page"""
+            quote = models.Quote(
+                text="And now for something completely different.",
+                who="Newsreader [John Cleese]"
+            )
+            models.db.session.add(quote)
+            models.db.session.commit()
+
+            with logged_in(client):
+                response = client.get(url_for('strequelistan.index'))
+                text = response.get_data(as_text=True)
+
+                # Check if the quote text is present
+                assert quote.text in text
+
+                # Check if the person who said the quote is present
+                assert quote.who in text
 
 
 class TestStrequa():
