@@ -1,0 +1,7 @@
+[run]
+branch=True
+source =
+    flasquelistan
+
+[report]
+show_missing=True

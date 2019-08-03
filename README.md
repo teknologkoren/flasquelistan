@@ -57,3 +57,13 @@ If you want to only run a certain set of tests you can use the -k flag to filter
 $ pytest -k quote
 ```
 
+### Messure test coverage
+You can test the test coverage by running:
+```sh
+$ coverage run -m pytest
+```
+And then show the result with:
+```sh
+$ coverage report
+```
+
