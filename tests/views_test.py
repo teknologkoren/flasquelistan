@@ -5,11 +5,14 @@ import pytest
 from flask import url_for
 from flask_login import current_user
 
+import datetime
+
 from flasquelistan import models
 
 from tests.helpers import app
 from tests.helpers import client
 from tests.helpers import logged_in
+from tests.helpers import logged_in_admin
 from tests.helpers import login
 from tests.helpers import logout
 
@@ -166,6 +169,12 @@ class TestIndexPage():
                 assert article.name not in text
 
     class TestQuotes():
+
+        def test_status(self, client):
+            with logged_in(client):
+                response = client.get(url_for('quotes.index'))
+                assert response.status_code == 200
+
         def test_empty_quotes(self, client):
             """Test with blank database"""
             with logged_in(client):
@@ -262,74 +271,633 @@ class TestStrequa():
 
 class TestProfilePage:
     """Tests for the profile page"""
-    # TODO
+    def test_status(self, client):
+        with logged_in(client):
+            response = client.get(url_for('strequelistan.show_profile', user_id=1))
+            assert response.status_code == 200
 
 
 class TestHistoryPage:
     """Tests for the transaction history page"""
-    # TODO
+    def test_status(self, client):
+        with logged_in(client):
+            response = client.get(url_for('strequelistan.history'))
+            assert response.status_code == 200
+
+    def test_transaction_show_up(self, client):
+        # create article
+        article = models.Article(
+            weight=1,
+            name='Holy Grail',
+            value=10000,
+            description="Difficult to find. Watch out for the rabbit.",
+            standardglas=2,
+            is_active=True
+        )
+
+        models.db.session.add(article)
+        models.db.session.commit()
+
+        with logged_in(client):
+            current_user.strequa(article, current_user)
+            response = client.get(url_for('strequelistan.history'))
+            text = response.get_data(as_text=True)
+            print(text)
+            assert current_user.full_name in text
+
+    def test_old_transactions_hidden(self, client):
+        # create article
+        article = models.Article(
+            weight=1,
+            name='Holy Grail',
+            value=10000,
+            description="Difficult to find. Watch out for the rabbit.",
+            standardglas=2,
+            is_active=True
+        )
+
+        models.db.session.add(article)
+        models.db.session.commit()
+
+        with logged_in(client):
+            streque = current_user.strequa(article, current_user)
+            streque.timestamp = streque.timestamp - datetime.timedelta(minutes=16)
+            response = client.get(url_for('strequelistan.history'))
+            text = response.get_data(as_text=True)
+            assert current_user.full_name not in text
+
+    def test_returned_transactions_hidden(self, client):
+        # create article
+        article = models.Article(
+            weight=1,
+            name='Holy Grail',
+            value=10000,
+            description="Difficult to find. Watch out for the rabbit.",
+            standardglas=2,
+            is_active=True
+        )
+
+        models.db.session.add(article)
+        models.db.session.commit()
+
+        with logged_in(client):
+            streque = current_user.strequa(article, current_user)
+            streque.void_and_refund()
+            response = client.get(url_for('strequelistan.history'))
+            text = response.get_data(as_text=True)
+            assert current_user.full_name not in text
 
 
 class TestMorePage:
     """Tests for the 'More' page"""
-    # TODO
+    def test_status(self, client):
+        with logged_in(client):
+            response = client.get(url_for('more.index'))
+            assert response.status_code == 200
 
 
 class TestPaperListPage:
     """Test the generaton of paper lists"""
-    # TODO
+
+    def test_status_admin(self, client):
+        with logged_in_admin(client):
+            response = client.get(url_for('strequelistan.paperlist'))
+            assert response.status_code == 200
+
+    def test_status_regular_user(self, client):
+        with logged_in_admin(client):
+            response = client.get(url_for('strequelistan.paperlist'))
+            assert response.status_code == 200
+            # TODO: Should mayme be limitet to admins? on the other hand,
+            # there's no sensitive information / edits preformed here
+
+    def test_not_logged_in(self, client):
+        with client:
+            response = client.get('http://localhost/paperlist')
+            assert response.status_code == 302
+            assert response.headers['Location'] == 'http://localhost/login?next=%2Fpaperlist'
 
 
 class TestCreateUserPage:
     """description"""
-    # TODO
+
+    def test_status_admin(self, client):
+        with logged_in_admin(client):
+            response = client.get(url_for('strequeadmin.add_user'))
+            assert response.status_code == 200
+
+    def test_status_regular_user(self, client):
+        with logged_in(client):
+            response = client.get(url_for('strequeadmin.add_user'))
+            assert response.status_code == 302
+
+    def test_not_logged_in(self, client):
+        with client:
+            response = client.get('http://localhost/admin/add-user/')
+            assert response.status_code == 302
+
+    def test_create_user(self, client):
+
+        with logged_in_admin(client):
+            data = {
+                "first_name": "Monty",
+                "last_name": "Python",
+                "email": "monty@python.example.org",
+                "phone": "+46761234567",
+            }
+
+            response = client.post(
+                    url_for('strequeadmin.add_user'),
+                    data=data,
+                    follow_redirects = True
+            )
+
+
+            text = response.get_data(as_text=True)
+            assert "Monty Python <monty@python.example.org> skapad!" in text
+
+
+class TestCreateUserFromRequestPage:
+    """description"""
+
+    def test_status_admin(self, client):
+        r = models.RegistrationRequest(
+            email="monty@python.example.org",
+            first_name="Monty",
+            last_name="Python",
+            phone="+46761234567",
+            message="Hejsan!"
+        )
+        models.db.session.add(r)
+        models.db.session.commit()
+
+        with logged_in_admin(client):
+            response = client.post(url_for('strequeadmin.add_user', request_id=1))
+            text = response.get_data(as_text=True)
+
+            assert "monty@python.example.org" in text
+            assert response.status_code == 200
+
+    def test_status_regular_user(self, client):
+        r = models.RegistrationRequest(
+            email="monty@python.example.org",
+            first_name="Monty",
+            last_name="Python",
+            phone="+46761234567",
+            message="Hejsan!"
+        )
+        models.db.session.add(r)
+        models.db.session.commit()
+
+        with logged_in(client):
+            response = client.get(url_for('strequeadmin.add_user', request_id=1))
+            assert response.status_code == 302
+
+    def test_not_logged_in(self, client):
+        r = models.RegistrationRequest(
+            email="monty@python.example.org",
+            first_name="Monty",
+            last_name="Python",
+            phone="+46761234567",
+            message="Hejsan!"
+        )
+        models.db.session.add(r)
+        models.db.session.commit()
+
+        with client:
+            response = client.get('http://localhost/admin/add-user/request/1')
+            assert response.status_code == 302
 
 
 class TestAccountRequestPage:
     """description"""
-    # TODO
+
+    def test_status_admin(self, client):
+        with logged_in_admin(client):
+            response = client.get(url_for('strequeadmin.requests'))
+            assert response.status_code == 200
+
+    def test_status_regular_user(self, client):
+        with logged_in(client):
+            response = client.get(url_for('strequeadmin.requests'))
+            assert response.status_code == 302
+
+    def test_not_logged_in(self, client):
+        with client:
+            response = client.get('http://localhost/admin/requests/')
+            assert response.status_code == 302
+
+
+class TestRemoveAccountRequestPage:
+    """description"""
+    def test_status_admin(self, client):
+        r = models.RegistrationRequest(
+            email="monty@python.example.org",
+            first_name="Monty",
+            last_name="Python",
+            phone="+46761234567",
+            message="Hejsan!"
+        )
+        models.db.session.add(r)
+        models.db.session.commit()
+
+        with logged_in_admin(client):
+            response = client.post(
+                    url_for('strequeadmin.remove_request', request_id=1),
+                    follow_redirects=True
+            )
+            text = response.get_data(as_text=True)
+
+            assert "Förfrågan från Monty Python borttagen." in text
+            assert response.status_code == 200
+
+    def test_status_regular_user(self, client):
+        with logged_in(client):
+            response = client.post(
+                    url_for('strequeadmin.remove_request', request_id=1),
+            )
+            assert response.headers['Location'] == 'http://localhost/'
+            assert response.status_code == 302
+
+    def test_not_logged_in(self, client):
+        with client:
+            response = client.post('http://localhost/admin/requests/remove/1')
+            assert response.status_code == 302
 
 
 class TestListUserPage:
     """description"""
-    # TODO
+
+    def test_status_admin(self, client):
+        with logged_in_admin(client):
+            response = client.get(url_for('strequeadmin.show_users'))
+            assert response.status_code == 200
+
+    def test_status_regular_user(self, client):
+        with logged_in(client):
+            response = client.get(url_for('strequeadmin.show_users'))
+            assert response.status_code == 302
+
+    def test_not_logged_in(self, client):
+        with client:
+            response = client.get('http://localhost/admin/users')
+            assert response.status_code == 302
 
 
 class TestGroupsPage:
     """description"""
-    # TODO
+
+    def test_status_admin(self, client):
+        with logged_in_admin(client):
+            response = client.get(url_for('strequeadmin.show_groups'))
+            assert response.status_code == 200
+
+    def test_status_regular_user(self, client):
+        with logged_in(client):
+            response = client.get(url_for('strequeadmin.show_groups'))
+            assert response.status_code == 302
+
+    def test_not_logged_in(self, client):
+        with client:
+            response = client.get('http://localhost/admin/groups')
+            assert response.status_code == 302
+
+class TestRemoveGroupPage:
+    """description"""
+    def test_status_admin(self, client):
+        group = models.Group(
+            name="Knights of the round table",
+        )
+        models.db.session.add(group)
+        models.db.session.commit()
+
+        with logged_in_admin(client):
+            response = client.post(
+                    url_for('strequeadmin.remove_group', group_id=1),
+                    follow_redirects=True
+            )
+            text = response.get_data(as_text=True)
+
+            assert "Grupp \"Knights of the round table\" borttagen" in text
+            assert response.status_code == 200
+
+    def test_status_regular_user(self, client):
+        with logged_in(client):
+            response = client.post(
+                    url_for('strequeadmin.remove_group', group_id=1),
+            )
+            assert response.headers['Location'] == 'http://localhost/'
+            assert response.status_code == 302
+
+    def test_not_logged_in(self, client):
+        with client:
+            response = client.post('http://localhost/admin/groups/remove/1')
+            assert response.status_code == 302
+
 
 
 class TestBalanceReminderPage:
     """description"""
-    # TODO
+
+    def test_status_admin(self, client):
+        with logged_in_admin(client):
+            response = client.get(url_for('strequeadmin.spam'))
+            assert response.status_code == 200
+
+    def test_status_regular_user(self, client):
+        with logged_in(client):
+            response = client.get(url_for('strequeadmin.spam'))
+            assert response.status_code == 302
+
+    def test_not_logged_in(self, client):
+        with client:
+            response = client.get('http://localhost/admin/spam')
+            assert response.status_code == 302
+
+    def test_correct_users(self, client):
+        user = models.User(
+                email='monty@python2.tld',
+                first_name='Malvina',
+                last_name='Teknolog'
+        )
+
+        user.balance = -1000
+
+        models.db.session.add(user)
+        models.db.session.commit()
+
+        user = models.User(
+                email='monty@python3.tld',
+                first_name='Osquar',
+                last_name='Teknolog'
+        )
+
+        user.balance = 1000
+
+        models.db.session.add(user)
+        models.db.session.commit()
+
+        with logged_in_admin(client):
+            response = client.get(url_for('strequeadmin.spam'))
+            text = response.get_data(as_text=True)
+            assert "Malvina Teknolog" in text
+            assert "Osquar Teknolog" not in text
 
 
-class TestTransactionHistoryPage:
+class TestAdminTransactionHistoryPage:
     """description"""
-    # TODO
+
+    def test_status_admin(self, client):
+        with logged_in_admin(client):
+            response = client.get(url_for('strequeadmin.transactions'))
+            assert response.status_code == 200
+
+    def test_status_regular_user(self, client):
+        with logged_in(client):
+            response = client.get(url_for('strequeadmin.transactions'))
+            assert response.status_code == 302
+
+    def test_not_logged_in(self, client):
+        with client:
+            response = client.get('http://localhost/admin/transactions/')
+            assert response.status_code == 302
+
+    def test_transaction_show_up(self, client):
+        # create article
+        article = models.Article(
+            weight=1,
+            name='Holy Grail',
+            value=10000,
+            description="Difficult to find. Watch out for the rabbit.",
+            standardglas=2,
+            is_active=True
+        )
+
+        models.db.session.add(article)
+        models.db.session.commit()
+
+        with logged_in_admin(client):
+            current_user.strequa(article, current_user)
+            response = client.get(url_for('strequeadmin.transactions'))
+            text = response.get_data(as_text=True)
+            print(text)
+            assert current_user.full_name in text
 
 
 class TestBulkTransactionPage:
     """description"""
-    # TODO
+
+    def test_status_admin(self, client):
+        with logged_in_admin(client):
+            response = client.get(url_for('strequeadmin.bulk_transactions'))
+            assert response.status_code == 200
+
+    def test_status_regular_user(self, client):
+        with logged_in(client):
+            response = client.get(url_for('strequeadmin.bulk_transactions'))
+            assert response.status_code == 302
+
+    def test_not_logged_in(self, client):
+        with client:
+            response = client.get('http://localhost/admin/transactions/bulk')
+            assert response.status_code == 302
 
 
-class TestEditProductsPage:
+class TestConfirmBulkTransactionPage:
     """description"""
-    # TODO
 
+    def test_status_admin(self, client):
+        with logged_in_admin(client):
+            response = client.post(url_for('strequeadmin.confirm_bulk_transactions'), follow_redirects=True)
+            text = response.get_data(as_text=True)
+            assert "Transaktionerna utfördes!" in text
+            assert response.status_code == 200
+
+    def test_status_regular_user(self, client):
+        with logged_in(client):
+            response = client.post(url_for('strequeadmin.confirm_bulk_transactions'))
+            assert response.status_code == 302
+
+    def test_not_logged_in(self, client):
+        with client:
+            response = client.post('http://localhost/admin/transactions/bulk/confirm')
+            assert response.status_code == 302
+
+
+
+class TestadminQuotePage:
+    """description"""
+
+    def test_status_admin(self, client):
+        with logged_in_admin(client):
+            response = client.get(url_for('strequeadmin.show_quotes'))
+            assert response.status_code == 200
+
+    def test_status_regular_user(self, client):
+        with logged_in(client):
+            response = client.get(url_for('strequeadmin.show_quotes'))
+            assert response.status_code == 302
+
+    def test_not_logged_in(self, client):
+        with client:
+            response = client.get('http://localhost/admin/quotes/')
+            assert response.status_code == 302
 
 class TestEditQuotePage:
     """description"""
-    # TODO
+    def test_status_admin(self, client):
+        quote = models.Quote(
+            text="And now for something completely different.",
+            who="Newsreader [John Cleese]"
+        )
+        models.db.session.add(quote)
+        models.db.session.commit()
+
+        with logged_in_admin(client):
+            response = client.get(url_for('strequeadmin.edit_quote', quote_id=1))
+            assert response.status_code == 200
+
+    def test_status_regular_user(self, client):
+        with logged_in(client):
+            response = client.get(url_for('strequeadmin.edit_quote', quote_id=1))
+            assert response.status_code == 302
+
+    def test_not_logged_in(self, client):
+        with client:
+            response = client.get('http://localhost/admin/quotes/edit/1')
+            assert response.status_code == 302
 
 
-class TestProductPage:
+class TestRemoveQuotePage:
     """description"""
-    # TODO
+    def test_status_admin(self, client):
+        quote = models.Quote(
+            text="And now for something completely different.",
+            who="Newsreader [John Cleese]"
+        )
+        models.db.session.add(quote)
+        models.db.session.commit()
+
+        with logged_in_admin(client):
+            response = client.post(
+                    url_for('strequeadmin.remove_quote', quote_id=1),
+                    follow_redirects=True
+            )
+            text = response.get_data(as_text=True)
+
+            assert "Citat borttaget" in text
+            assert response.status_code == 200
+
+    def test_status_regular_user(self, client):
+        with logged_in(client):
+            response = client.post(
+                    url_for('strequeadmin.remove_quote', quote_id=1),
+                    #follow_redirects=True
+            )
+            assert response.headers['Location'] == 'http://localhost/'
+            assert response.status_code == 302
+
+    def test_not_logged_in(self, client):
+        with client:
+            response = client.post('http://localhost/admin/quotes/remove/1')
+            assert response.status_code == 302
 
 
-class TestAddBalancePage:
+class TestArticlePage:
     """description"""
-    # TODO
+
+    def test_status_admin(self, client):
+        with logged_in_admin(client):
+            response = client.get(url_for('strequeadmin.articles'))
+            assert response.status_code == 200
+
+    def test_status_regular_user(self, client):
+        with logged_in(client):
+            response = client.get(url_for('strequeadmin.articles'))
+            assert response.status_code == 302
+
+    def test_not_logged_in(self, client):
+        with client:
+            response = client.get('http://localhost/admin/articles/')
+            assert response.status_code == 302
+
+
+class TestEditArticlePage:
+    """description"""
+
+    def test_status_admin(self, client):
+        with logged_in_admin(client):
+            response = client.get(url_for('strequeadmin.edit_article'))
+            assert response.status_code == 200
+
+    def test_status_regular_user(self, client):
+        with logged_in(client):
+            response = client.get(url_for('strequeadmin.edit_article'))
+            assert response.status_code == 302
+
+    def test_not_logged_in(self, client):
+        with client:
+            response = client.get('http://localhost/admin/articles/new')
+            assert response.status_code == 302
+
+
+class TestRemoveArticlePage:
+    """description"""
+
+    def test_status_admin(self, client):
+        article = models.Article(
+            weight=1,
+            name='Holy Grail',
+            value=10000,
+            description="Difficult to find. Watch out for the rabbit.",
+            standardglas=2,
+            is_active=True
+        )
+
+        models.db.session.add(article)
+        models.db.session.commit()
+        with logged_in_admin(client):
+            response = client.post(
+                    url_for(
+                        'strequeadmin.remove_article',
+                        article_id=1
+                    ),
+                    follow_redirects=True
+            )
+            text = response.get_data(as_text=True)
+            assert 'Produkt "Holy Grail" borttagen' in text
+            assert response.status_code == 200
+
+    def test_status_regular_user(self, client):
+        article = models.Article(
+            weight=1,
+            name='Holy Grail',
+            value=10000,
+            description="Difficult to find. Watch out for the rabbit.",
+            standardglas=2,
+            is_active=True
+        )
+
+        models.db.session.add(article)
+        models.db.session.commit()
+
+        with logged_in(client):
+            response = client.post(url_for('strequeadmin.remove_article', article_id=1))
+            assert response.status_code == 302
+
+    def test_not_logged_in(self, client):
+        article = models.Article(
+            weight=1,
+            name='Holy Grail',
+            value=10000,
+            description="Difficult to find. Watch out for the rabbit.",
+            standardglas=2,
+            is_active=True
+        )
+
+        models.db.session.add(article)
+        models.db.session.commit()
+
+        with client:
+            response = client.post('http://localhost/admin/articles/remove/1')
+            assert response.status_code == 302
