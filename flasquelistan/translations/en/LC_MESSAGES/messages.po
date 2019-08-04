@@ -827,4 +827,3 @@ msgstr "Password changed!"
 
 #~ msgid "Insättning av pengar"
 #~ msgstr ""
-
