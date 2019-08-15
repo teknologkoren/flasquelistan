@@ -26,3 +26,7 @@ SMTP_STARTTLS_PORT = 587
 SMTP_USERNAME = 'webmaster@example.com'
 SMTP_PASSWORD = 'smtpsecretpassword'
 SMTP_SENDADDR = 'webmaster@example.com'
+
+
+RECAPTCHA_PUBLIC_KEY = 'Recaptcha public key'
+RECAPTCHA_PRIVATE_KEY = 'Recaptcha private key'

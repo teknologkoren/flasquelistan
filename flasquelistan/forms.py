@@ -2,6 +2,7 @@ import flask
 import flask_wtf
 from flask_wtf.file import FileAllowed
 from wtforms import fields, validators
+from flask_wtf.recaptcha import RecaptchaField
 import wtforms.fields.html5 as html5_fields
 from flasquelistan import models, util
 from flask_babel import lazy_gettext as _l
@@ -247,6 +248,8 @@ class RegistrationRequestForm(UniqueEmailForm):
         description=_l("Ett telefonnummer, med eller utan landskod.")
     )
     message = fields.TextAreaField(_l('Meddelande till QM'))
+
+    recaptcha = RecaptchaField(_l('Är du en robot?'))
 
 
 class QuoteForm(flask_wtf.FlaskForm):
