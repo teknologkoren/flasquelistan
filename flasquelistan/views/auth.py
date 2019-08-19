@@ -40,6 +40,12 @@ def admin_required():
     return decorator
 
 
+@mod.route('/robots.txt')
+def robots():
+    """Serve the robots.txt file
+    """
+    return flask.render_template('auth/robots.txt')
+
 @mod.route('/login', methods=['GET', 'POST'])
 def login():
     """Show login page and form.
