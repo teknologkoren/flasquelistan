@@ -142,12 +142,6 @@ def credit_transfer():
 
         value = int(form.value.data*100)  # To ören
 
-        if value > payer.balance:
-            flask.flash(
-                _l("Du kan inte föra över mer pengar än ditt saldo."), 'error'
-            )
-            return redir
-
         message = form.message.data
         models.CreditTransfer.create(payer, payee, value, message)
 
