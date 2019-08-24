@@ -276,6 +276,49 @@ class TestProfilePage:
             response = client.get(url_for('strequelistan.show_profile', user_id=1))
             assert response.status_code == 200
 
+    def test_edit_profile_link_correct_user(self, client):
+
+        with logged_in(client):
+            response = client.get(url_for('strequelistan.show_profile', user_id=1))
+            text = response.get_data(as_text=True)
+
+            assert "Redigera profil" in text
+
+    def test_edit_profile_link_admin(self, client):
+
+        user = models.User(
+                email='monty@python2.tld',
+                first_name='Osquar',
+                last_name='Teknolog'
+        )
+
+        models.db.session.add(user)
+        models.db.session.commit()
+
+
+        with logged_in_admin(client):
+
+            response = client.get(url_for('strequelistan.show_profile', user_id=user.id))
+            text = response.get_data(as_text=True)
+
+            assert "Redigera profil" in text
+
+    def test_edit_profile_link_hidden(self, client):
+
+        user = models.User(
+                email='monty@python2.tld',
+                first_name='Osquar',
+                last_name='Teknolog'
+        )
+
+        models.db.session.add(user)
+        models.db.session.commit()
+
+        with logged_in(client):
+            response = client.get(url_for('strequelistan.show_profile', user_id=user.id))
+            text = response.get_data(as_text=True)
+
+            assert "Redigera profil" not in text
 
 class TestHistoryPage:
     """Tests for the transaction history page"""
