@@ -303,7 +303,6 @@ class UserTransactionForm(flask_wtf.FlaskForm):
         render_kw={'step': .01, 'min': -10000, 'max': 10000},
         validators=[
             validators.NumberRange(min=-10000, max=10000),
-            validators.Optional()
         ])
 
     text = fields.StringField(_l('Meddelande'))
