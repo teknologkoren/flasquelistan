@@ -21,10 +21,11 @@
       {% if user.nickname %}"{{ user.nickname }}"{% endif %}
       {{ user.last_name }}
     </h2>
-
+    {% if user == current_user or current_user.is_admin %}
     <p>
     <a href="{{ url_for('strequelistan.edit_profile', user_id=user.id) }}">{{_("Redigera profil")}}</a>
     </p>
+    {% endif %}
 
     <dl>
       <dt>{{_("E-postadress")}}</dt>
