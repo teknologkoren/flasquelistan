@@ -1,0 +1,25 @@
+{% extends 'layout.html' %}
+
+{% set active_page = "more" %}
+
+{% from "macros.html" import form_entry %}
+
+{% block body %}
+<div class="transactions">
+    <h2>{{_("Utför samma transaktion på flera användare")}}</h2>
+    <p>{{_("Positivt transaktionsvärde innebär en insättning till användarens konto, negativt innebär ett uttag.")}}</p>
+  <form method="POST">
+    {{form.csrf_token}}
+    {{form.value.label}}{{form.value}}
+    {{form.text.label}}{{form.text}}
+    {{form.users.label}}{{form.users}}
+    </div>
+    <button>{{_("Skicka")}}</button>
+  </form>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/common.js') }}"></script>
+<script src="{{ url_for('static', filename='js/admin.js') }}"></script>
+{% endblock %}

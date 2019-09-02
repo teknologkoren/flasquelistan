@@ -1,7 +1,7 @@
 import flask
 import flask_wtf
 from flask_wtf.file import FileAllowed
-from wtforms import fields, validators
+from wtforms import fields, validators, widgets
 from flask_wtf.recaptcha import RecaptchaField
 import wtforms.fields.html5 as html5_fields
 from flasquelistan import models, util
@@ -331,6 +331,42 @@ def BulkTransactionFormFactory(active=True):
 
     return BulkTransactionForm()
 
+
+class MultiCheckboxField(fields.SelectMultipleField):
+    widget = widgets.ListWidget(prefix_label=False)
+    option_widget = widgets.CheckboxInput()
+
+
+def MultiTransactionFormFactory(active=True):
+
+    if active:
+        users = models.User.query.filter_by(active=True)
+    else:
+        users = models.User.query.all()
+
+    choices = []
+    for user in users:
+        choices.append((user.id, user.full_name))
+
+    def validateUserList(self, users):
+        return True
+
+    class MultiTransactionForm(flask_wtf.FlaskForm):
+        value = html5_fields.DecimalField(
+            _l('Transaktionsvärde'),
+            render_kw={'step': .01, 'min': -10000, 'max': 10000},
+            validators=[
+                validators.NumberRange(min=-10000, max=10000),
+            ]
+        )
+        users = MultiCheckboxField(_l('Användare'), choices)
+        text = fields.StringField(_l('Meddelande'))
+    #setattr(
+    #    MultiTransactionForm,
+    #    'users',
+    #    MultiCheckboxField('users', choices=choices, validators=[validateUserList])
+    #)
+    return MultiTransactionForm()
 
 class EditArticleForm(flask_wtf.FlaskForm):
     name = fields.StringField(_l('Namn'), validators=[

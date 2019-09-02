@@ -165,6 +165,63 @@ def confirm_bulk_transactions():
     return flask.redirect(flask.url_for('strequeadmin.bulk_transactions'))
 
 
+@mod.route('/admin/transactions/multi', methods=['GET', 'POST'])
+def multi_transactions():
+    form = forms.MultiTransactionFormFactory(active=False)
+    if form.validate_on_submit():
+        transactions = []
+        for user_id in form.data['users']:
+            user = models.User.query.get(user_id)
+            print(user)
+            if user:
+                transactions.append({
+                    'user_id': user.id,
+                    'user_name': user.full_name,
+                    'value': int(form_field.value.data*100),
+                    'text': form_field.text.data or _l('Admintransaktion')
+                })
+
+        if transactions:
+            return flask.render_template(
+                'admin/confirm_bulk_transactions.html',
+                transactions=transactions)
+        else:
+            flask.flash(_l("Inga transaktioner utförda. "
+                        "Väl spenderade klockcykler, bra jobbat!"), 'info')
+
+    elif form.is_submitted():
+        forms.flash_errors(form)
+
+    return flask.render_template('admin/multi_transactions.html', form=form)
+
+
+@mod.route('/admin/transactions/multi/confirm', methods=['POST'])
+def confirm_multi_transactions():
+    form = flask.request.form
+    transactions = {}
+
+    for name, value in form.items():
+        if not name.startswith('user'):
+            continue
+
+        user_id, field = name.split('-')[1:]
+
+        transactions.setdefault(user_id, {})
+        if field == 'value':
+            transactions[user_id][field] = int(value)
+        elif field == 'text':
+            transactions[user_id][field] = value
+        else:
+            flask.abort(400)
+
+    for user_id, transaction in transactions.items():
+        user = models.User.query.get(user_id)
+        user.admin_transaction(transaction['value'], transaction['text'])
+
+    flask.flash(_l("Transaktionerna utfördes!"), 'success')
+    return flask.redirect(flask.url_for('strequeadmin.bulk_transactions'))
+
+
 @mod.route('/admin/articles/')
 def articles():
     articles = (models.Article
