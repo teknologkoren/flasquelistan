@@ -6,13 +6,11 @@
 
 {% block body %}
 <div class="login">
-<!-- code to set the default input focus -->
-<script src="/static/js/setFocusLoginPage.js"></script>
   <form method="POST">
     {{ form.csrf_token }}
     <h2>{{ _("Logga in") }}</h2>
 
-    {{ form_entry(form.email, description=False) }}
+    {{ form_entry(form.email, description=False, autofocus=true) }}
 
     {{ form_entry(form.password, description=False) }}
 
@@ -29,9 +27,9 @@
     <dd><a href="{{ url_for('auth.register') }}">{{ _("Begär ett konto") }}</a></dd>
   </dl>
   <dl>
-      <dt>{{ _("Byt språk") }}</dt>
-      <dd><a href="?lang=sv_SE">Svenska</a></dd>
-      <dd><a href="?lang=en">English</a></dd>
+    <dt>{{ _("Byt språk") }}</dt>
+    <dd><a href="?lang=sv_SE">Svenska</a></dd>
+    <dd><a href="?lang=en">English</a></dd>
   </dl>
 </div>
 {% endblock %}
