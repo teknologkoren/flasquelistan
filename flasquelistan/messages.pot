@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2019-09-14 12:55+0200\n"
+"POT-Creation-Date: 2019-09-14 16:58+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,220 +17,225 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.6.0\n"
 
-#: forms.py:23
+#: forms.py:22
 #, python-format
 msgid "Fel i fältet \"%(label_text)s\": %(error_text)s"
 msgstr ""
 
-#: forms.py:29
+#: forms.py:32
 msgid "Detta element existerar redan."
 msgstr ""
 
-#: forms.py:42
+#: forms.py:46
 msgid "Detta element existerar inte."
 msgstr ""
 
-#: forms.py:78 forms.py:86 forms.py:96
+#: forms.py:82
+msgid "Fel svar."
+msgstr ""
+
+#: forms.py:95
+#, python-format
+msgid "Vad är %(x)d + %(y)d?"
+msgstr ""
+
+#: forms.py:116 forms.py:124 forms.py:134
 msgid "E-post"
 msgstr ""
 
-#: forms.py:91
+#: forms.py:129
 msgid "Okänd e-postadress."
 msgstr ""
 
-#: forms.py:102 forms.py:153
+#: forms.py:140 forms.py:192
 msgid "Denna e-postadress används redan."
 msgstr ""
 
-#: forms.py:108
+#: forms.py:146
 msgid "Lösenord"
 msgstr ""
 
-#: forms.py:110
+#: forms.py:148
 msgid "Ditt nuvarande lösenord."
 msgstr ""
 
-#: forms.py:116 forms.py:140
+#: forms.py:154 forms.py:178
 msgid "Nytt lösenord"
 msgstr ""
 
-#: forms.py:118 forms.py:142
+#: forms.py:156 forms.py:180
 msgid "Ditt nya lösenord. Åtminstone 8 tecken långt."
 msgstr ""
 
-#: forms.py:123
+#: forms.py:161
 msgid "Håll mig inloggad"
 msgstr ""
 
-#: forms.py:163
+#: forms.py:203
 msgid "Fel lösenord."
 msgstr ""
 
-#: forms.py:169
+#: forms.py:209
 msgid "Smeknamn"
 msgstr ""
 
-#: forms.py:170
+#: forms.py:210
 msgid "Något roligt."
 msgstr ""
 
-#: forms.py:177 forms.py:247
+#: forms.py:217 forms.py:291
 msgid "Telefon"
 msgstr ""
 
-#: forms.py:178 forms.py:248
+#: forms.py:218 forms.py:292
 msgid "Ett telefonnummer, med eller utan landskod."
 msgstr ""
 
-#: forms.py:182
+#: forms.py:222
 msgid "Kroppsvikt"
 msgstr ""
 
-#: forms.py:183
+#: forms.py:223
 msgid ""
 "Din vikt i kg. Används för att mer precist räkna ut "
 "alkoholkoncentrationen i blodet. Fältet kan lämnas tomt"
 msgstr ""
 
-#: forms.py:194
+#: forms.py:234
 msgid "Har du en Y-kromosom?"
 msgstr ""
 
-#: forms.py:195
+#: forms.py:235
 msgid "Används för att mer precist räkna ut alkoholkoncentrationen i blodet."
 msgstr ""
 
-#: forms.py:197
+#: forms.py:238
 msgid "Vill ej uppge"
 msgstr ""
 
-#: forms.py:197
+#: forms.py:239
 msgid "Ja"
 msgstr ""
 
-#: forms.py:197
+#: forms.py:240
 msgid "Nej"
 msgstr ""
 
-#: forms.py:206 forms.py:233
+#: forms.py:250 forms.py:277
 msgid "Förnamn"
 msgstr ""
 
-#: forms.py:213 forms.py:240
+#: forms.py:257 forms.py:284
 msgid "Efternamn"
 msgstr ""
 
-#: forms.py:220 forms.py:370 templates/admin/articles.html:17
+#: forms.py:264 forms.py:414 templates/admin/articles.html:17
 #: templates/admin/articles.html:40 templates/admin/users.html:17
 #: templates/admin/users.html:47
 msgid "Aktiv"
 msgstr ""
 
-#: forms.py:221
+#: forms.py:265
 msgid "Om medlemmen är aktiv i föreningen."
 msgstr ""
 
-#: forms.py:223
+#: forms.py:267
 msgid "Grupp"
 msgstr ""
 
-#: forms.py:250
+#: forms.py:294
 msgid "Meddelande till QM"
 msgstr ""
 
-#: forms.py:252
-msgid "Är du en robot?"
-msgstr ""
-
-#: forms.py:257 forms.py:407 templates/admin/quotes.html:7
+#: forms.py:301 forms.py:451 templates/admin/quotes.html:7
 #: templates/admin/quotes.html:11 templates/layout.html:33
 #: templates/more.html:47 templates/quote.html:9 templates/quotes.html:26
 msgid "Citat"
 msgstr ""
 
-#: forms.py:258 forms.py:408
+#: forms.py:302 forms.py:452
 msgid "Max 150 tecken."
 msgstr ""
 
-#: forms.py:263 forms.py:415 templates/admin/quotes.html:12
+#: forms.py:307 forms.py:459 templates/admin/quotes.html:12
 msgid "Upphovsman"
 msgstr ""
 
-#: forms.py:270 views/admin.py:262
+#: forms.py:314 views/admin.py:254
 msgid "Ingen"
 msgstr ""
 
-#: forms.py:286
+#: forms.py:330
 msgid "Ladda upp ny profilbild"
 msgstr ""
 
-#: forms.py:287
+#: forms.py:331
 msgid "Endast bilder!"
 msgstr ""
 
-#: forms.py:292
+#: forms.py:336
 msgid "Från"
 msgstr ""
 
-#: forms.py:295
+#: forms.py:339
 msgid "Till"
 msgstr ""
 
-#: forms.py:302 templates/admin/bulk_transactions.html:17
+#: forms.py:346 templates/admin/bulk_transactions.html:17
 #: templates/admin/confirm_bulk_transactions.html:17
 msgid "Transaktionsvärde"
 msgstr ""
 
-#: forms.py:308 forms.py:394 templates/admin/bulk_transactions.html:18
+#: forms.py:352 forms.py:438 templates/admin/bulk_transactions.html:18
 #: templates/admin/confirm_bulk_transactions.html:18
 #: templates/admin/requests.html:19 templates/admin/transactions.html:23
 msgid "Meddelande"
 msgstr ""
 
-#: forms.py:322 forms.py:336 forms.py:377 templates/admin/articles.html:12
+#: forms.py:366 forms.py:380 forms.py:421 templates/admin/articles.html:12
 #: templates/admin/groups.html:12 templates/admin/requests.html:15
 #: templates/admin/users.html:13 templates/paperlist.html:31
 msgid "Namn"
 msgstr ""
 
-#: forms.py:341 templates/admin/articles.html:13
+#: forms.py:385 templates/admin/articles.html:13
 msgid "Pris"
 msgstr ""
 
-#: forms.py:350
+#: forms.py:394
 msgid "Standardglas"
 msgstr ""
 
-#: forms.py:358 templates/admin/articles.html:15
+#: forms.py:402 templates/admin/articles.html:15
 msgid "Beskrivning"
 msgstr ""
 
-#: forms.py:359
+#: forms.py:403
 msgid "Vilka produkter som ingår och/eller beskrivning. Markdown."
 msgstr ""
 
-#: forms.py:363 forms.py:382 templates/admin/articles.html:16
+#: forms.py:407 forms.py:426 templates/admin/articles.html:16
 #: templates/admin/groups.html:13
 msgid "Sorteringsvikt"
 msgstr ""
 
-#: forms.py:364 forms.py:383
+#: forms.py:408 forms.py:427
 msgid "Heltal. En högre vikt stiger."
 msgstr ""
 
-#: forms.py:371
+#: forms.py:415
 msgid "Produkten är synlig och går att strequa på."
 msgstr ""
 
-#: forms.py:397
+#: forms.py:441
 msgid "Summa"
 msgstr ""
 
-#: forms.py:421 templates/admin/quotes.html:13
+#: forms.py:465 templates/admin/quotes.html:13
 msgid "Tid"
 msgstr ""
 
-#: forms.py:422
+#: forms.py:466
 msgid "Tidszon UTC."
 msgstr ""
 
@@ -294,6 +299,10 @@ msgstr ""
 msgid "Mer"
 msgstr ""
 
+#: templates/macros.html:6
+msgid "Fel:"
+msgstr ""
+
 #: templates/more.html:7
 msgid "Mer…"
 msgstr ""
@@ -310,7 +319,7 @@ msgstr ""
 msgid "Logga ut"
 msgstr ""
 
-#: templates/auth/login.html:32 templates/more.html:13
+#: templates/auth/login.html:30 templates/more.html:13
 msgid "Byt språk"
 msgstr ""
 
@@ -417,14 +426,14 @@ msgstr ""
 
 #: templates/admin/bulk_transactions.html:43
 #: templates/admin/confirm_bulk_transactions.html:44
-#: templates/admin/spam.html:35 templates/auth/register.html:20
+#: templates/admin/spam.html:35 templates/auth/register.html:22
 #: templates/auth/reset.html:15 templates/auth/reset_token.html:15
 #: templates/show_profile.html:79 templates/show_profile.html:91
 msgid "Skicka"
 msgstr ""
 
 #: templates/admin/bulk_transactions.html:36 templates/show_profile.html:87
-#: views/admin.py:124
+#: views/admin.py:122
 msgid "Admintransaktion"
 msgstr ""
 
@@ -613,24 +622,24 @@ msgstr ""
 msgid "Logga in title"
 msgstr ""
 
-#: templates/auth/login.html:13 templates/auth/login.html:22
+#: templates/auth/login.html:11 templates/auth/login.html:20
 msgid "Logga in"
 msgstr ""
 
-#: templates/auth/login.html:26
+#: templates/auth/login.html:24
 msgid "Glömt ditt lösenord?"
 msgstr ""
 
-#: templates/auth/login.html:27 templates/auth/reset.html:5
+#: templates/auth/login.html:25 templates/auth/reset.html:5
 #: templates/auth/reset_token.html:5 templates/auth/reset_token.html:10
 msgid "Återställ lösenord"
 msgstr ""
 
-#: templates/auth/login.html:28
+#: templates/auth/login.html:26
 msgid "Har du inget konto?"
 msgstr ""
 
-#: templates/auth/login.html:29 templates/auth/register.html:5
+#: templates/auth/login.html:27 templates/auth/register.html:5
 #: templates/auth/register.html:10
 msgid "Begär ett konto"
 msgstr ""
@@ -639,71 +648,71 @@ msgstr ""
 msgid "Begär återställningslänk"
 msgstr ""
 
-#: views/admin.py:45
+#: views/admin.py:43
 msgid "Ogiltigt datumintervall!"
 msgstr ""
 
-#: views/admin.py:97
+#: views/admin.py:95
 #, python-format
 msgid "Ångrade %(type)s \"%(text)s\", %(value)s den %(date)s på %(user)s."
 msgstr ""
 
-#: views/admin.py:132
+#: views/admin.py:130
 msgid "Inga transaktioner utförda. Väl spenderade klockcykler, bra jobbat!"
 msgstr ""
 
-#: views/admin.py:164
+#: views/admin.py:159
 msgid "Transaktionerna utfördes!"
 msgstr ""
 
-#: views/admin.py:196
+#: views/admin.py:191
 msgid "Produkt \"{}\" skapad."
 msgstr ""
 
-#: views/admin.py:198
+#: views/admin.py:193
 msgid "Produkt \"{}\" ändrad."
 msgstr ""
 
-#: views/admin.py:230
+#: views/admin.py:222
 #, python-format
 msgid "Produkt \"%(name)s\" borttagen."
 msgstr ""
 
-#: views/admin.py:247
+#: views/admin.py:239
 #, python-format
 msgid "Skickade %(nr)i saldopåminnelser!"
 msgstr ""
 
-#: views/admin.py:281
+#: views/admin.py:273
 #, python-format
 msgid "%(user_name)s skapad och förfrågan borttagen!"
 msgstr ""
 
-#: views/admin.py:286
+#: views/admin.py:278
 #, python-format
 msgid "%(user_name)s skapad!"
 msgstr ""
 
-#: views/admin.py:316
+#: views/admin.py:305
 #, python-format
 msgid "Förfrågan från %(first)s %(last)s borttagen."
 msgstr ""
 
-#: views/admin.py:351
+#: views/admin.py:340
 #, python-format
 msgid "Grupp \"%(group_name)s\" skapad."
 msgstr ""
 
-#: views/admin.py:370
+#: views/admin.py:356
 #, python-format
 msgid "Grupp \"%(group_name)s\" borttagen."
 msgstr ""
 
-#: views/admin.py:390
+#: views/admin.py:376
 msgid "Citat har ändrats!"
 msgstr ""
 
-#: views/admin.py:407
+#: views/admin.py:390
 msgid "Citat borttaget."
 msgstr ""
 
@@ -719,32 +728,32 @@ msgstr ""
 msgid "QM har uppmärksammats om din förfrågan."
 msgstr ""
 
-#: views/auth.py:150 views/auth.py:236
+#: views/auth.py:147 views/auth.py:233
 msgid "Länken har gått ut, var vänlig försök igen."
 msgstr ""
 
-#: views/auth.py:159
+#: views/auth.py:156
 #, python-format
 msgid "%(e)s är nu verifierad!"
 msgstr ""
 
-#: views/auth.py:188
+#: views/auth.py:185
 msgid ""
 "Om {} är en registrerad adress så har vi skickat en återställningslänk "
 "till den."
 msgstr ""
 
-#: views/auth.py:219
+#: views/auth.py:216
 msgid "Vänligen skriv in din e-epostaddress"
 msgstr ""
 
-#: views/auth.py:237
+#: views/auth.py:234
 msgid ""
 "Länken verkar vara trasig eller felaktig,               var vänlig försök"
 " igen."
 msgstr ""
 
-#: views/auth.py:262
+#: views/auth.py:259
 msgid "Ditt lösenord har återställts!"
 msgstr ""
 
@@ -787,35 +796,35 @@ msgstr ""
 msgid "Transaktion utförd!"
 msgstr ""
 
-#: views/strequelistan.py:284 views/strequelistan.py:309
+#: views/strequelistan.py:282 views/strequelistan.py:304
 msgid "Din profilbild har ändrats!"
 msgstr ""
 
-#: views/strequelistan.py:299 views/strequelistan.py:324
-#: views/strequelistan.py:391 views/strequelistan.py:450
+#: views/strequelistan.py:294 views/strequelistan.py:316
+#: views/strequelistan.py:380 views/strequelistan.py:437
 msgid "Du får bara redigera din egen profil! ಠ_ಠ"
 msgstr ""
 
-#: views/strequelistan.py:331
+#: views/strequelistan.py:323
 msgid ""
 "Du kan inte ta bort <a href=\"https://phys.org/news/2014-08-what-is-"
 "nothing.html\">ingenting</a>!"
 msgstr ""
 
-#: views/strequelistan.py:348
+#: views/strequelistan.py:340
 msgid "Profilbilden har tagits bort!"
 msgstr ""
 
-#: views/strequelistan.py:423
+#: views/strequelistan.py:412
 msgid "Ändringarna har sparats!"
 msgstr ""
 
-#: views/strequelistan.py:460
+#: views/strequelistan.py:447
 #, python-format
 msgid "En länk för att verifiera e-postadressen har skickats till %(email)s."
 msgstr ""
 
-#: views/strequelistan.py:465
+#: views/strequelistan.py:452
 msgid "Lösenordet har ändrats!"
 msgstr ""
 
