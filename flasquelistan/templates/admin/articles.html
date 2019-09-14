@@ -4,17 +4,17 @@
 
 {% block body %}
 <div>
-  <h2>{{_("Produkter")}}</h2>
+  <h2>{{ _("Produkter") }}</h2>
   {% if articles %}
   <div class="table-wrap">
     <table class="articles">
       <tr>
-        <th>{{_("Namn")}}</th>
-        <th>{{_("Pris")}}</th>
-        <th>{{_("Standardglass")}}</th>
-        <th>{{_("Beskrivning")}}</th>
-        <th>{{_("Sorteringsvikt")}}</th>
-        <th>{{_("Aktiv")}}</th>
+        <th>{{ _("Namn") }}</th>
+        <th>{{ _("Pris") }}</th>
+        <th>{{ _("Standardglass") }}</th>
+        <th>{{ _("Beskrivning") }}</th>
+        <th>{{ _("Sorteringsvikt") }}</th>
+        <th>{{ _("Aktiv") }}</th>
       </tr>
       {% for article in articles %}
       <tr>
@@ -37,9 +37,9 @@
         </td>
         <td>
           {% if article.is_active %}
-          {{_("Aktiv")}}
+          {{ _("Aktiv") }}
           {% else %}
-          {{_("Inaktiv")}}
+          {{ _("Inaktiv") }}
           {% endif %}
         </td>
       </tr>
@@ -47,8 +47,8 @@
     </table>
   </div>
   {% else %}
-  <p>{{_("Inga produkter funna.")}}</p>
+  <p>{{ _("Inga produkter funna.") }}</p>
   {% endif %}
-  <p><a href="{{ url_for('strequeadmin.edit_article') }}">{{_("Ny produkt")}}</a></p>
+  <p><a href="{{ url_for('strequeadmin.edit_article') }}">{{ _("Ny produkt") }}</a></p>
 </div>
 {% endblock %}

@@ -7,7 +7,7 @@
 {% block body %}
 <form method="POST">
   {{ form.csrf_token }}
-  <h2>{{_("Begär ett konto")}}</h2>
+  <h2>{{ _("Begär ett konto") }}</h2>
 
   {{ form_entry(form.first_name, description=False) }}
   {{ form_entry(form.last_name, description=False) }}
@@ -17,7 +17,7 @@
   {{ form_entry(form.recaptcha, description=False) }}
 
   <div class="form-entry">
-      <button>{{_("Skicka")}}</button>
+      <button>{{ _("Skicka") }}</button>
   </div>
 </form>
 {% endblock %}

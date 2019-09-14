@@ -6,7 +6,7 @@
 
 {% block body %}
 <div>
-    <h2>{{_("Redigera citat")}}</h2>
+    <h2>{{ _("Redigera citat") }}</h2>
   <form method="POST">
     {{ form.csrf_token }}
 
@@ -15,11 +15,11 @@
     {{ form_entry(form.timestamp, placeholder='yyyy-MM-ddTHH:mm') }}
 
     <div class="form-entry">
-      <button class="confirm" formaction="{{ url_for('strequeadmin.remove_quote', quote_id=quote.id) }}">{{_("Ta bort cit.at")}}</button>
+      <button class="confirm" formaction="{{ url_for('strequeadmin.remove_quote', quote_id=quote.id) }}">{{ _("Ta bort citat") }}</button>
     </div>
 
     <div class="form-entry">
-      <button>{{_("Spara")}}</button> | <a href="{{ url_for('strequeadmin.show_quotes') }}">{{_("Avbryt")}}</a>
+      <button>{{ _("Spara") }}</button> | <a href="{{ url_for('strequeadmin.show_quotes') }}">{{ _("Avbryt") }}</a>
     </div>
   </form>
 </div>

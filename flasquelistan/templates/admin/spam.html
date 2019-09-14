@@ -4,13 +4,13 @@
 
 {% block body %}
 <div>
-  <h2>{{_("Skicka saldopåminnelser")}}</h2>
-  <p>{{_("Skicka en påminnelse till medlemmar med negativt saldo.")}}</p>
+  <h2>{{ _("Skicka saldopåminnelser") }}</h2>
+  <p>{{ _("Skicka en påminnelse till medlemmar med negativt saldo.") }}</p>
   <div class="table-wrap">
     <table>
       <tr>
-        <th>{{_("Användare")}}</th>
-        <th>{{_("Saldo")}}</th>
+        <th>{{ _("Användare") }}</th>
+        <th>{{ _("Saldo") }}</th>
       </tr>
       {% for user in users %}
       <tr>
@@ -32,7 +32,7 @@
     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
     <div class="form-entry">
       <div class="form-field">
-        <button>{{_("Skicka")}}</button>
+        <button>{{ _("Skicka") }}</button>
       </div>
     </div>
   </form>

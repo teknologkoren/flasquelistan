@@ -10,7 +10,7 @@
 <script src="/static/js/setFocusLoginPage.js"></script>
   <form method="POST">
     {{ form.csrf_token }}
-    <h2>{{_("Logga in")}}</h2>
+    <h2>{{ _("Logga in") }}</h2>
 
     {{ form_entry(form.email, description=False) }}
 
@@ -19,17 +19,17 @@
     {{ form_entry_row(form.remember) }}
 
     <div class="form-field">
-      <button>{{_("Logga in")}}</button>
+      <button>{{ _("Logga in") }}</button>
     </div>
   </form>
   <dl>
-    <dt>{{_("Glömt ditt lösenord?")}}</dt>
-    <dd><a href="{{ url_for('auth.reset') }}">{{_("Återställ lösenord")}}</a></dd>
-    <dt>{{_("Har du inget konto?")}}</dt>
-    <dd><a href="{{ url_for('auth.register') }}">{{_("Begär ett konto")}}</a></dd>
+    <dt>{{ _("Glömt ditt lösenord?") }}</dt>
+    <dd><a href="{{ url_for('auth.reset') }}">{{ _("Återställ lösenord") }}</a></dd>
+    <dt>{{ _("Har du inget konto?") }}</dt>
+    <dd><a href="{{ url_for('auth.register') }}">{{ _("Begär ett konto") }}</a></dd>
   </dl>
   <dl>
-      <dt>{{_("Byt språk")}}</dt>
+      <dt>{{ _("Byt språk") }}</dt>
       <dd><a href="?lang=sv_SE"><img class="lang-flag" src="{{ url_for('static', filename='images/flags/Sweden.png') }}" alt="Swedish flag">Svenska</a></dd>
       <dd><a href="?lang=en"><img class="lang-flag" src="{{ url_for('static', filename='images/flags/United-Kingdom.png') }}" alt="United Kingdom flag">English</a></dd>
   </dl>

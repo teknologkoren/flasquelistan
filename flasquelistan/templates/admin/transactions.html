@@ -6,23 +6,23 @@
 
 {% block body %}
 <div class="transactions">
-  <h2>{{_("Transaktionshistorik")}}</h2>
+  <h2>{{ _("Transaktionshistorik") }}</h2>
   <form class="date-range-form" method="POST">
     {{ form.csrf_token }}
     {{ form_entry(form.start) }}
     {{ form_entry(form.end) }}
-    <button>{{_("Sök")}}</button>
+    <button>{{ _("Sök") }}</button>
   </form>
   {% if transactions.all() %}
   <div class="table-wrap">
     <table class="transaction-history">
       <tr>
-        <th>{{_("Användare")}}</th>
-        <th>{{_("Skapad av")}}</th>
-        <th>{{_("Transaktionstyp")}}</th>
-        <th>{{_("Meddelande")}}</th>
-        <th>{{_("Värde")}}</th>
-        <th>{{_("Datum")}}</th>
+        <th>{{ _("Användare") }}</th>
+        <th>{{ _("Skapad av") }}</th>
+        <th>{{ _("Transaktionstyp") }}</th>
+        <th>{{ _("Meddelande") }}</th>
+        <th>{{ _("Värde") }}</th>
+        <th>{{ _("Datum") }}</th>
       </tr>
       {% for transaction in transactions %}
       <tr>
@@ -36,18 +36,18 @@
             {% if transaction.created_by %}
             {{ transaction.created_by.full_name }}
             {% else %}
-            {{_("Okänt")}}
+            {{ _("Okänt") }}
             {% endif %}
           </span>
         </td>
         <td class="type">
           <span>
             {% if transaction.type == 'streque' %}
-            {{_("Streque")}}
+            {{ _("Streque") }}
             {% elif transaction.type == 'admin_transaction' %}
-            {{_("Admin")}}
+            {{ _("Admin") }}
             {% elif transaction.type == 'user_transaction' %}
-            {{_("Pay")}}
+            {{ _("Pay") }}
             {% else %}
             {{ transaction.type }}
             {% endif %}
@@ -80,11 +80,11 @@
                     formaction="{{ url_for('strequeadmin.void_transaction', transaction_id=transaction.id) }}"
                     data-transactionid="{{ transaction.id }}"
                     data-csrftoken="{{ csrf_token() }}">
-              {{_("Ångra")}}
+              {{ _("Ångra") }}
             </button>
           </form>
           {% else %}
-          {{_("Ångrad")}}
+          {{ _("Ångrad") }}
           {% endif %}
         </td>
       </tr>
@@ -92,7 +92,7 @@
     </table>
   </div>
   {% else %}
-  <p>{{_("Inga transaktioner funna.")}}</p>
+  <p>{{ _("Inga transaktioner funna.") }}</p>
   {% endif %}
 </div>
 {% endblock %}

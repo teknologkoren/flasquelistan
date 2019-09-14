@@ -84,15 +84,15 @@
 
   <input id="ajax-csrf_token" type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
 
-  <h2 class="user-filter">{{_("Filtrera användare")}}</h2>
+  <h2 class="user-filter">{{ _("Filtrera användare") }}</h2>
   <div class="user-filter">
-      <p><small>{{_("Du kan söka på namn, smeknamn och telefonnummer.")}}</small></p>
+      <p><small>{{ _("Du kan söka på namn, smeknamn och telefonnummer.") }}</small></p>
     <input type="text" id="user-filter" placeholder="Namn" autocomplete="off">
-    <button id="clear-filter" type="button">{{_("Rensa")}}</button>
+    <button id="clear-filter" type="button">{{ _("Rensa") }}</button>
   </div>
 
   <div class="group">
-    <h2>{{_("Inloggad användare")}}</h2>
+    <h2>{{ _("Inloggad användare") }}</h2>
     {{ usercard(current_user, articles) }}
   </div>
 

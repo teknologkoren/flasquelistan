@@ -6,7 +6,7 @@
 
 {% block body %}
 <div>
-  <h2>{{_("Skapa användare")}}</h2>
+  <h2>{{ _("Skapa användare") }}</h2>
   <form method="POST">
     {{ form.csrf_token }}
     {{ form_entry(form.first_name) }}
@@ -18,8 +18,8 @@
     {{ form_entry_row(form.active) }}
 
     <div class="form-entry">
-      <button>{{_("Spara")}}</button>
-      | <a href="{% if is_request %}{{ url_for('strequeadmin.requests') }}{% else %}{{ url_for('more.index') }}{% endif %}">{{_("Avbryt")}}</a>
+      <button>{{ _("Spara") }}</button>
+      | <a href="{% if is_request %}{{ url_for('strequeadmin.requests') }}{% else %}{{ url_for('more.index') }}{% endif %}">{{ _("Avbryt") }}</a>
     </div>
   </form>
 </div>

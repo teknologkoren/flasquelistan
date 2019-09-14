@@ -6,7 +6,7 @@
 
 {% block body %}
 <div>
-    <h2>{% if article %}{{_("Redigera")}}{% else %}{{_("Skapa")}}{% endif %} {{_("produkt")}}</h2>
+    <h2>{% if article %}{{ _("Redigera") }}{% else %}{{ _("Skapa") }}{% endif %} {{ _("produkt") }}</h2>
   <form method="POST">
     {{ form.csrf_token }}
 
@@ -19,12 +19,12 @@
 
     {% if article %}
     <div class="form-entry">
-      <button class="confirm" formaction="{{ url_for('strequeadmin.remove_article', article_id=article.id) }}">{{_("Ta bort produkt")}}</button>
+      <button class="confirm" formaction="{{ url_for('strequeadmin.remove_article', article_id=article.id) }}">{{ _("Ta bort produkt") }}</button>
     </div>
     {% endif %}
 
     <div class="form-entry">
-      <button>{{_("Spara")}}</button> | <a href="{{ url_for('strequeadmin.articles') }}">{{_("Avbryt")}}</a>
+      <button>{{ _("Spara") }}</button> | <a href="{{ url_for('strequeadmin.articles') }}">{{ _("Avbryt") }}</a>
     </div>
   </form>
 </div>

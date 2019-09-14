@@ -33,11 +33,11 @@
 
 {% block body %}
 <div class="streques">
-    <h2>{{_("Historik")}}</h2>
+    <h2>{{ _("Historik") }}</h2>
 
   <input id="ajax-csrf_token" type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
 
-  <p class="no-streques-notice"{% if streques %} hidden{% endif %}>{{_("Inga transaktioner de senaste 15 minuterna!")}}</p>
+  <p class="no-streques-notice"{% if streques %} hidden{% endif %}>{{ _("Inga transaktioner de senaste 15 minuterna!") }}</p>
   <ol class="streque-list">
     {% for streque in streques %}
     {{ streque_card(streque) }}

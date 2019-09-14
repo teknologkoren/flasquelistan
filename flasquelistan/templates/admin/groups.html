@@ -4,13 +4,13 @@
 
 {% block body %}
 <div>
-  <h2>{{_("Grupper")}}</h2>
+  <h2>{{ _("Grupper") }}</h2>
   {% if groups %}
   <div class="table-wrap">
     <table class="groups">
       <tr>
-        <th>{{_("Namn")}}</th>
-        <th>{{_("Sorteringsvikt")}}</th>
+        <th>{{ _("Namn") }}</th>
+        <th>{{ _("Sorteringsvikt") }}</th>
       </tr>
       {% for group in groups %}
       <tr>
@@ -27,8 +27,8 @@
     </table>
   </div>
   {% else %}
-  <p>{{_("Inga grupper funna.")}}</p>
+  <p>{{ _("Inga grupper funna.") }}</p>
   {% endif %}
-  <p><a href="{{ url_for('strequeadmin.edit_group') }}">{{_("Ny grupp")}}</a></p>
+  <p><a href="{{ url_for('strequeadmin.edit_group') }}">{{ _("Ny grupp") }}</a></p>
 </div>
 {% endblock %}

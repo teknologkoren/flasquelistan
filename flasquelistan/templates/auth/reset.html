@@ -7,12 +7,12 @@
 {% block body %}
 <form class="reset-password" method="POST">
   {{ form.csrf_token }}
-  <h2>{{_("Begär återställningslänk")}}</h2>
+  <h2>{{ _("Begär återställningslänk") }}</h2>
 
   {{ form_entry(form.email, description=False) }}
 
   <div class="field">
-      <button>{{_("Skicka")}}</button>
+      <button>{{ _("Skicka") }}</button>
   </div>
 </form>
 {% endblock %}

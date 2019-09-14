@@ -4,18 +4,18 @@
 
 {% block body %}
 <div class="transactions">
-    <h2>{{_("Gör transaktioner i bulk")}}</h2>
-  <p>{{_("Positivt transaktionsvärde innebär en insättning till användarens konto, negativt innebär ett uttag.")}}</p>
-  <p>{{_("Dessa transaktioner kommer genomföras, vill du fortsätta?")}}</p>
-  <p>{{_("Använd bakåt-knappen i webbläsaren istället för \"Avbryt\" ifall du vill ha kvar värdena!")}}</p>
+    <h2>{{ _("Gör transaktioner i bulk") }}</h2>
+  <p>{{ _("Positivt transaktionsvärde innebär en insättning till användarens konto, negativt innebär ett uttag.") }}</p>
+  <p>{{ _("Dessa transaktioner kommer genomföras, vill du fortsätta?") }}</p>
+  <p>{{ _("Använd bakåt-knappen i webbläsaren istället för \"Avbryt\" ifall du vill ha kvar värdena!") }}</p>
   <form method="POST" action="{{ url_for('strequeadmin.confirm_bulk_transactions') }}">
     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
     <div class="table-wrap bulk-transactions">
       <table>
         <tr>
-          <th>{{_("Användare")}}</th>
-          <th>{{_("Transaktionsvärde")}}</th>
-          <th>{{_("Meddelande")}}</th>
+          <th>{{ _("Användare") }}</th>
+          <th>{{ _("Transaktionsvärde") }}</th>
+          <th>{{ _("Meddelande") }}</th>
         </tr>
         {% for transaction in transactions %}
         <tr>
@@ -41,7 +41,7 @@
       </table>
     </div>
     <div class="form-field">
-        <button>{{_("Skicka")}}</button> | <a href="{{ url_for('strequeadmin.bulk_transactions') }}">{{_("Avbryt")}}</a>
+        <button>{{ _("Skicka") }}</button> | <a href="{{ url_for('strequeadmin.bulk_transactions') }}">{{ _("Avbryt") }}</a>
     </div>
   </form>
 </div>

@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{{_("Site title")}}</title>
+    <title>{{ _("Site title") }}</title>
     <link rel="manifest" href="/static/manifest.json">
 
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
@@ -19,7 +19,7 @@
     <header>
       <a class="logo" href="{{ url_for('strequelistan.index') }}">
         <img src="{{ url_for('static', filename='images/cuteladypoursadrink.png') }}" alt="Cute lady pours a drink">
-        <h1>{{_("Site heading")}}</h1>
+        <h1>{{ _("Site heading") }}</h1>
       </a>
     </header>
     {% block nav %}

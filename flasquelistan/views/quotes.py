@@ -1,5 +1,7 @@
 import flask
 import flask_login
+from flask_babel import gettext as _
+from flask_babel import lazy_gettext as _l
 from flasquelistan import models, forms
 
 mod = flask.Blueprint('quotes', __name__)
@@ -29,7 +31,7 @@ def add_quote():
         quote = models.Quote(text=form.text.data, who=form.who.data)
         models.db.session.add(quote)
         models.db.session.commit()
-        flask.flash('Citat tillagt!', 'success')
+        flask.flash(_l('Citat tillagt!'), 'success')
         return flask.redirect(flask.url_for('.index'))
     else:
         forms.flash_errors(form)
