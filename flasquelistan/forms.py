@@ -8,6 +8,7 @@ from flasquelistan import models, util
 from flask_babel import lazy_gettext as _l
 from flask_babel import gettext as _
 
+
 def flash_errors(form):
     """Flash all errors in a form."""
     for field in form:
@@ -16,17 +17,18 @@ def flash_errors(form):
             continue
 
         for error in field.errors:
-#            flask.flash(("Fel i fältet \"{}\": {}"
-#                .format(field.label.text, error)),
-#                'error')
             flask.flash(
-                        _(u'Fel i fältet "%(label_text)s": %(error_text)s', label_text=field.label.text, error_text=error),
-                        'error'
-                    )
+                _('Fel i fältet "%(label_text)s": %(error_text)s',
+                  label_text=field.label.text,
+                  error_text=error),
+                'error'
+            )
+
 
 class Unique:
     """Validate that field is unique in model."""
-    def __init__(self, model, field, message=_l('Detta element existerar redan.')):
+    def __init__(self, model, field,
+                 message=_l('Detta element existerar redan.')):
         self.model = model
         self.field = field
         self.message = message
@@ -39,7 +41,8 @@ class Unique:
 
 class Exists:
     """Validate that field is unique in model."""
-    def __init__(self, model, field, message=_('Detta element existerar inte.')):
+    def __init__(self, model, field,
+                 message=_('Detta element existerar inte.')):
         self.model = model
         self.field = field
         self.message = message
@@ -150,7 +153,9 @@ class ChangeEmailOrPasswordForm(EmailForm, PasswordForm):
     def validate_email(self, field):
         if models.User.query.filter_by(email=field.data).scalar():
             if field.data != self.user.email:
-                self.email.errors.append(_l("Denna e-postadress används redan."))
+                self.email.errors.append(
+                    _l("Denna e-postadress används redan.")
+                )
                 return False
 
         return True
@@ -180,9 +185,9 @@ class EditUserForm(flask_wtf.FlaskForm):
 
     body_mass = html5_fields.IntegerField(
         _l('Kroppsvikt'),
-        description=(_l("Din vikt i kg. Används för att mer precist räkna ut "
-                     "alkoholkoncentrationen i blodet. Fältet kan lämnas "
-                     "tomt")),
+        description=_l("Din vikt i kg. Används för att mer precist räkna ut "
+                       "alkoholkoncentrationen i blodet. Fältet kan lämnas "
+                       "tomt"),
         render_kw={'min': 1, 'max': 20743},
         validators=[
             validators.NumberRange(min=1, max=20743),
@@ -192,9 +197,13 @@ class EditUserForm(flask_wtf.FlaskForm):
 
     y_chromosome = fields.SelectField(
         _l('Har du en Y-kromosom?'),
-        description=(_l("Används för att mer precist räkna ut "
-                     "alkoholkoncentrationen i blodet.")),
-        choices=[('n/a', _l('Vill ej uppge')), ('yes', _l('Ja')), ('no', _l('Nej'))],
+        description=_l("Används för att mer precist räkna ut "
+                       "alkoholkoncentrationen i blodet."),
+        choices=[
+            ('n/a', _l('Vill ej uppge')),
+            ('yes', _l('Ja')),
+            ('no', _l('Nej'))
+        ],
         validators=[
             validators.Optional()
         ]
@@ -356,8 +365,8 @@ class EditArticleForm(flask_wtf.FlaskForm):
     )
     description = fields.TextAreaField(
         _l('Beskrivning'),
-        description=(_l("Vilka produkter som ingår och/eller beskrivning. "
-                     "Markdown."))
+        description=_l("Vilka produkter som ingår och/eller beskrivning. "
+                       "Markdown.")
     )
     weight = html5_fields.IntegerField(
         _l('Sorteringsvikt'),
