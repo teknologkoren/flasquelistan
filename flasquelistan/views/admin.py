@@ -31,8 +31,6 @@ def transactions():
         return flask.redirect(flask.url_for('strequeadmin.transactions',
                                             from_date=from_date,
                                             to_date=to_date))
-    elif form.is_submitted():
-        forms.flash_errors(form)
 
     from_date = flask.request.args.get('from_date', None)
     to_date = flask.request.args.get('to_date', None)
@@ -132,9 +130,6 @@ def bulk_transactions():
             flask.flash(_l("Inga transaktioner utförda. "
                         "Väl spenderade klockcykler, bra jobbat!"), 'info')
 
-    elif form.is_submitted():
-        forms.flash_errors(form)
-
     return flask.render_template('admin/bulk_transactions.html', form=form)
 
 
@@ -213,9 +208,6 @@ def edit_article(article_id=None):
 
         return flask.redirect(flask.url_for('strequeadmin.articles'))
 
-    elif form.is_submitted():
-        forms.flash_errors(form)
-
     return flask.render_template('admin/edit_article.html', form=form,
                                  article=article)
 
@@ -287,9 +279,6 @@ def add_user(request_id=None):
             # Redirect to clear form
             return flask.redirect(flask.url_for('strequeadmin.add_user'))
 
-    elif form.is_submitted():
-        forms.flash_errors(form)
-
     return flask.render_template('admin/add_user.html', form=form,
                                  is_request=bool(request_id))
 
@@ -352,9 +341,6 @@ def edit_group(group_id=None):
 
         return flask.redirect(flask.url_for('strequeadmin.show_groups'))
 
-    elif form.is_submitted():
-        forms.flash_errors(form)
-
     return flask.render_template('admin/edit_group.html',
                                  form=form,
                                  group=group)
@@ -388,9 +374,6 @@ def edit_quote(quote_id):
         quote.timestamp = form.timestamp.data
         models.db.session.commit()
         flask.flash(_l("Citat har ändrats!"), 'success')
-
-    elif form.is_submitted():
-        forms.flash_errors(form)
 
     return flask.render_template('admin/edit_quote.html',
                                  quote=quote,

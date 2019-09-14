@@ -252,8 +252,6 @@ def admin_transaction(user_id):
     if form.validate_on_submit():
         user.admin_transaction(int(form.value.data*100), form.text.data)
         flask.flash(_l("Transaktion utförd!"), 'success')
-    elif form.is_submitted():
-        forms.flash_errors(form)
 
     return flask.redirect(
         flask.url_for('strequelistan.show_profile', user_id=user_id)
@@ -283,9 +281,6 @@ def upload_profile_picture(user_id):
 
             flask.flash(_l("Din profilbild har ändrats!"), 'success')
 
-    elif form.is_submitted():
-        forms.flash_errors(form)
-
     return flask.redirect(
         flask.url_for('strequelistan.show_profile', user_id=user_id)
     )
@@ -307,9 +302,6 @@ def change_profile_picture(user_id):
         models.db.session.commit()
 
         flask.flash(_l("Din profilbild har ändrats!"), 'success')
-
-    elif form.is_submitted():
-        form.flash_errors(form)
 
     return flask.redirect(
         flask.url_for('strequelistan.show_profile', user_id=user_id)
@@ -346,9 +338,6 @@ def delete_profile_picture(user_id):
             models.db.session.commit()
 
             flask.flash(_l("Profilbilden har tagits bort!"), 'success')
-
-    elif form.is_submitted():
-        form.flash_errors(form)
 
     return flask.redirect(
         flask.url_for('strequelistan.show_profile', user_id=user_id)
@@ -423,8 +412,6 @@ def edit_profile(user_id):
         flask.flash(_l("Ändringarna har sparats!"), 'success')
         return flask.redirect(flask.url_for('strequelistan.show_profile',
                                             user_id=user.id))
-    elif form.is_submitted():
-        forms.flash_errors(form)
 
     else:
         if user.y_chromosome is True:
@@ -468,8 +455,6 @@ def change_email_or_password(user_id):
 
         return flask.redirect(flask.url_for('strequelistan.show_profile',
                                             user_id=user.id))
-    elif form.is_submitted():
-        forms.flash_errors(form)
 
     return flask.render_template('change_email_or_password.html', form=form, user=user)
 

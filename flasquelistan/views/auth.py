@@ -105,9 +105,6 @@ def register():
 
         return flask.redirect(flask.url_for('auth.login'))
 
-    elif form.is_submitted():
-        forms.flash_errors(form)
-
     return flask.render_template('auth/register.html', form=form)
 
 
@@ -261,7 +258,5 @@ def reset_token(token):
         models.db.session.commit()
         flask.flash(_l("Ditt lösenord har återställts!"), 'success')
         return flask.redirect(flask.url_for('.login'))
-    else:
-        forms.flash_errors(form)
 
     return flask.render_template('auth/reset_token.html', form=form)

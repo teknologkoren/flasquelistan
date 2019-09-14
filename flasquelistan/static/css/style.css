@@ -185,22 +185,22 @@ main {
     margin: .5rem auto;
     border-radius: 7px;
 }
-.success {
+.flash.success {
     background-color: #C9F7DD;
     border: 1px solid #62D895;
     color: #004D21;
 }
-.info {
+.flash.info {
     background-color: #CBDEF5;
     border: 1px solid #6797D0;
     color: #042246;
 }
-.warning {
+.flash.warning {
     background-color: #FFF3CC;
     border: 1px solid #FFCF32;
     color: #332700;
 }
-.error {
+.flash.error {
     background-color: #FFD9D0;
     border: 1px solid #FF9073;
     color: #6C1600;
@@ -225,6 +225,12 @@ input[type=number] {
     margin-bottom: 1rem;
 }
 
+.form-entry label.error {
+    padding: 3px;
+    border-radius: 3px;
+    background-color: #FFD9D0;
+}
+
 .form-field label+input,
 .form-field label+textarea {
     display: block;
@@ -232,7 +238,6 @@ input[type=number] {
 
 .field-description {
     font-size: 0.7em;
-    align-self: flex-start;
     padding-left: 0;
     margin-top: 0.2rem;
     max-width: 16rem;
@@ -240,6 +245,10 @@ input[type=number] {
 
 .field-description:before {
     content: "- ";
+}
+
+.field-description.error {
+    color: red;
 }
 
 .form-field input,

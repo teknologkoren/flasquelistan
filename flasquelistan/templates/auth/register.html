@@ -14,7 +14,9 @@
   {{ form_entry(form.email, description=False) }}
   {{ form_entry(form.phone, description=True) }}
   {{ form_entry(form.message, cols=30, rows=7) }}
-  {{ form_entry(form.recaptcha, description=False) }}
+  {{ form_entry(form.are_you_a_robot.question, description=False) }}
+  {{ form.are_you_a_robot.answer }}
+  {{ form.are_you_a_robot.csrf_token }}
 
   <div class="form-entry">
       <button>{{ _("Skicka") }}</button>

@@ -33,8 +33,6 @@ def add_quote():
         models.db.session.commit()
         flask.flash(_l('Citat tillagt!'), 'success')
         return flask.redirect(flask.url_for('.index'))
-    else:
-        forms.flash_errors(form)
 
     return flask.render_template('add_quote.html', form=form)
 
