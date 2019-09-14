@@ -1,8 +1,9 @@
 import flask
 import flask_wtf
+import random
+import hashlib
 from flask_wtf.file import FileAllowed
 from wtforms import fields, validators
-from flask_wtf.recaptcha import RecaptchaField
 import wtforms.fields.html5 as html5_fields
 from flasquelistan import models, util
 from flask_babel import lazy_gettext as _l
@@ -66,6 +67,40 @@ class RedirectForm(flask_wtf.FlaskForm):
             return flask.redirect(self.next.data)
         target = util.get_redirect_target()
         return flask.redirect(target or flask.url_for(endpoint, **values))
+
+
+def AreYouARobotFormFactory(*args, **kwargs):
+    def make_hash(n):
+        s = (flask.current_app.config['SECRET_KEY']+str(n)).encode()
+        h = hashlib.sha256(s).hexdigest()
+        return h
+
+    class F(flask_wtf.FlaskForm):
+        def validate(self):
+            if self.answer.data != make_hash(self.question.data):
+                errors = list(self.question.errors)
+                errors.append(_l("Fel svar."))
+                self.question.errors = errors
+                self.answer.data = self.answer.default
+                return False
+
+            self.answer.data = self.answer.default
+            return True
+
+    x, y = random.randint(1, 9), random.randint(1, 9)
+    answer = x+y
+    ans_hash = make_hash(answer)
+
+    F.question = html5_fields.IntegerField(
+        _l("Vad är %(x)d + %(y)d?", x=x, y=y),
+        validators=[
+            validators.InputRequired()
+        ]
+    )
+
+    F.answer = fields.HiddenField(default=ans_hash)
+
+    return F(*args, **kwargs)
 
 
 class LowercaseEmailField(html5_fields.EmailField):
@@ -258,7 +293,7 @@ class RegistrationRequestForm(UniqueEmailForm):
     )
     message = fields.TextAreaField(_l('Meddelande till QM'))
 
-    recaptcha = RecaptchaField(_l('Är du en robot?'))
+    are_you_a_robot = fields.FormField(AreYouARobotFormFactory)
 
 
 class QuoteForm(flask_wtf.FlaskForm):
