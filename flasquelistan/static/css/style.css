@@ -293,10 +293,3 @@ input[type=number] {
     size: A4;
     margin: 1cm;
 }
-
-.lang-flag{
-    max-height: 20px;
-    position: relative;
-    top: -1px;
-    padding-right: 10px;
-}
