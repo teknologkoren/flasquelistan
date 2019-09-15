@@ -16,12 +16,10 @@
     <dd>{{ request.first_name }} {{ request.last_name }}</dd>
     <dt>{{ _("E-postaddress") }}</dt>
     <dd>{{ request.email }}</dd>
+    <dt>{{ _("Telefonnummer") }}</dt>
+    <dd>{{ request.phone or _("Inget telefonnummer") }}</dd>
     <dt>{{ _("Meddelande") }}</dt>
-    {% if request.message %}
-    <dd>{{ request.message }}</dd>
-    {% else %}
-    <dd>{{ _("Inget meddelande lämnat") }}</dd>
-    {% endif %}
+    <dd>{{ request.message or _("Inget meddelande lämnat") }}</dd>
 
     <p>
       <a href="{{ url_for('strequeadmin.add_user', request_id=request.id) }}">
