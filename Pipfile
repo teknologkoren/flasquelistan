@@ -18,6 +18,7 @@ Flask-Uploads = "*"
 phonenumbers = "*"
 markdown = "*"
 vobject = "*"
+flask-migrate = "*"
 
 [requires]
 python_version = "3.7"

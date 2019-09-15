@@ -53,3 +53,66 @@
 </div>
 {% endif %}
 {% endmacro %}
+
+{% macro usercard(user, articles) %}
+<div class="card usercard">
+  <div class="picture-and-name">
+    <a href="{{ url_for('strequelistan.show_profile', user_id=user.id) }}">
+      {{ profile_picture(user) }}
+      <div class="username" data-firstname="{{ user.first_name }}"
+                            data-lastname="{{ user.last_name }}"
+                            data-nickname="{{ user.nickname or '' }}"
+                            data-phonenumber="{{ user.formatted_phone(e164=True) }}">
+        {% if user.nickname %}
+        {{ user.nickname }}
+        {% else %}
+        {{ user.first_name }} {{ user.last_name }}
+        {% endif %}
+      </div>
+    </a>
+    {% if user.bac >= 0.1 %}
+    {% set bac = user.bac %}
+    <div class="alcometer">
+      {% if bac < 0.3 %}
+      🍺
+      {% elif bac < 0.5 %}
+      🍻
+      {% elif bac < 1 %}
+      👌
+      {% elif bac < 1.5 %}
+      🕺
+      {% elif bac < 2 %}
+      😟
+      {% elif bac < 2.5 %}
+      🤢
+      {% elif bac < 3 %}
+      😵
+      {% elif bac < 3.5 %}
+      💀
+      {% elif bac < 4 %}
+      🇷🇺
+      {% else %}
+      🇫🇮
+      {% endif %}
+      <span class="bac">
+        {{ '{:.2f}'.format(bac) }}
+      </span>
+    </div>
+    {% endif %}
+  </div>
+  <form class="streque-form streque-buttons" method="POST">
+    {# CSRF token is cached during the request, all calls to csrf_token() will
+    return the same one #}
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+    {% for article in articles %}
+    <button class="streque-button"
+            type="submit"
+            formaction="{{ url_for('strequelistan.add_streque', user_id=user.id, article_id=article.id) }}"
+            data-userid="{{ user.id }}"
+            data-articleid="{{ article.id }}">
+      {{ article.name }}
+    </button>
+    {% endfor %}
+  </form>
+</div>
+{% endmacro %}

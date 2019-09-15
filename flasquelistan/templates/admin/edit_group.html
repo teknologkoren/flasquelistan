@@ -2,7 +2,7 @@
 
 {% set active_page = "more" %}
 
-{% from "macros.html" import form_entry %}
+{% from "macros.html" import form_entry, form_entry_row %}
 
 {% block body %}
 <div>
@@ -12,6 +12,7 @@
 
     {{ form_entry(form.name) }}
     {{ form_entry(form.weight) }}
+    {{ form_entry_row(form.on_startpage, description=false) }}
 
     {% if group %}
     <div class="form-entry">

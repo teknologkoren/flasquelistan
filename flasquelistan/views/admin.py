@@ -331,6 +331,7 @@ def edit_group(group_id=None):
 
         group.name = form.name.data
         group.weight = form.weight.data
+        group.on_startpage = form.on_startpage.data
 
         if not group_id:
             models.db.session.add(group)

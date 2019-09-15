@@ -30,6 +30,7 @@ def create_app(config=None, instance_config=None):
     setup_flask_babel(app)
     setup_flask_uploads(app)
     setup_csrf_protection(app)
+    setup_flask_migrate(app)
 
     return app
 
@@ -287,3 +288,10 @@ def setup_flask_uploads(app):
 def setup_csrf_protection(app):
     from flask_wtf.csrf import CSRFProtect
     return CSRFProtect(app)
+
+
+def setup_flask_migrate(app):
+    from flask_migrate import Migrate
+    from flasquelistan import models
+    migrate = Migrate(app, models.db)
+    return migrate

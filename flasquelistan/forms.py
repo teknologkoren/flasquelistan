@@ -429,6 +429,12 @@ class EditGroupForm(flask_wtf.FlaskForm):
             validators.InputRequired()
         ]
     )
+    on_startpage = fields.BooleanField(
+        _l('På startsidan'),
+        description=_l(
+            "Om gruppen syns på startsidan eller under \"Fler...\""
+        )
+    )
 
 
 class CreditTransferForm(flask_wtf.FlaskForm):

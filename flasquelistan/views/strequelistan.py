@@ -21,10 +21,19 @@ def before_request():
 def index():
     groups = (models.Group
               .query
-              .filter(models.Group.users.any())  # Only groups with users
+              .filter(models.Group.users.any(),  # Only groups with users
+                      models.Group.on_startpage.is_(True))
               .order_by(models.Group.weight.desc())
               .all()
               )
+
+    hidden_groups = (models.Group
+                     .query
+                     .filter(models.Group.users.any(),
+                             models.Group.on_startpage.is_(False))
+                     .order_by(models.Group.weight.desc())
+                     .all()
+                     )
 
     random_quote = models.Quote.query.order_by(func.random()).first()
 
@@ -42,8 +51,26 @@ def index():
         flask.flash(_l("Det är ont om pengar på kontot. Dags att fylla på?"),
                     'warning')
 
-    return flask.render_template('strequelistan.html', groups=groups,
-                                 quote=random_quote, articles=articles)
+    return flask.render_template('strequelistan.html',
+                                 groups=groups,
+                                 hidden_groups=hidden_groups,
+                                 quote=random_quote,
+                                 articles=articles)
+
+
+@mod.route('/group/<int:group_id>')
+def show_group(group_id):
+    group = models.Group.query.get(group_id)
+
+    articles = (models.Article
+                .query
+                .filter_by(is_active=True)
+                .order_by(models.Article.weight.desc())
+                .all()
+                )
+
+    return flask.render_template('show_group.html', group=group,
+                                 articles=articles)
 
 
 @mod.route('/strequa', methods=['POST'])

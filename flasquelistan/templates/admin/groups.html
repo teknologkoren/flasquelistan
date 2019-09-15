@@ -11,6 +11,7 @@
       <tr>
         <th>{{ _("Namn") }}</th>
         <th>{{ _("Sorteringsvikt") }}</th>
+        <th>{{ _("På startsidan") }}</th>
       </tr>
       {% for group in groups %}
       <tr>
@@ -21,6 +22,9 @@
         </td>
         <td>
           {{ group.weight }}
+        </td>
+        <td>
+          {{ 'Ja' if group.on_startpage else 'Nej' }}
         </td>
       </tr>
       {% endfor %}

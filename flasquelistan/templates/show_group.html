@@ -2,7 +2,6 @@
 
 {% set active_page = "streque" %}
 
-{% from "quotes.html" import quote_inner %}
 {% from "macros.html" import profile_picture, usercard %}
 
 {% block head %}
@@ -13,46 +12,23 @@
 
 {% block body %}
 <div class="cards">
-  {% if quote %}
-    <blockquote class="quote quote-display">
-      {{ quote_inner(quote) }}
-    </blockquote>
-  {% endif %}
-
   <input id="ajax-csrf_token" type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
 
   <h2 class="user-filter">{{ _("Filtrera användare") }}</h2>
   <div class="user-filter">
-      <p><small>{{ _("Du kan söka på namn, smeknamn och telefonnummer.") }}</small></p>
+    <p><small>{{ _("Du kan söka på namn, smeknamn och telefonnummer.") }}</small></p>
     <input type="text" id="user-filter" placeholder="Namn" autocomplete="off">
     <button id="clear-filter" type="button">{{ _("Rensa") }}</button>
   </div>
 
-  <div class="group">
-    <h2>{{ _("Inloggad användare") }}</h2>
-    {{ usercard(current_user, articles) }}
-  </div>
+  <a href="{{ url_for('strequelistan.index') }}">{{ _("Gå tillbaka") }}</a>
 
-  {% for group in groups %}
   <div class="group">
     <h2>{{ group.name }}</h2>
     {% for user in group.users %}
     {{ usercard(user, articles) }}
     {% endfor %}
   </div>
-  {% endfor %}
-
-  {% for group in hidden_groups %}
-  <div class="group">
-    <h2>{{ group.name }}</h2>
-    <a href="{{ url_for('strequelistan.show_group', group_id=group.id) }}">Visa alla</a>
-    {% for user in group.users %}
-    {% if user.bac > 0 %}
-    {{ usercard(user, articles) }}
-    {% endif %}
-    {% endfor %}
-  </div>
-  {% endfor %}
 </div>
 
 {% endblock %}
