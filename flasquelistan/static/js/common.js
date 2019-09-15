@@ -5,10 +5,10 @@ function downloadEmma() {
 
   var video = document.createElement('video');
   video.id = 'emma';
-  video.preload = 'auto';
-  video.muted = '';
-  video.playsinline = '';
-  video.disableRemotePlayback = true;
+  video.setAttribute('preload', 'auto');
+  video.setAttribute('muted', '');
+  video.setAttribute('playsinline', '');
+  video.setAttribute('disableRemotePlayback', '');
 
   var webm = document.createElement('source');
   webm.src = '/static/images/emma.webm';
