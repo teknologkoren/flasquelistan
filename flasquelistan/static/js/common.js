@@ -1,27 +1,26 @@
 function downloadEmma() {
   var wrapper = document.createElement('div');
-  var video = document.createElement('video');
-
   wrapper.id = 'emma-wrapper';
   wrapper.classList.add('hidden');
+
+  var video = document.createElement('video');
   video.id = 'emma';
-  video.setAttribute('preload', 'auto');
+  video.preload = 'auto';
+  video.muted = '';
+  video.playsinline = '';
   video.disableRemotePlayback = true;
 
-  /*
   var webm = document.createElement('source');
   webm.src = '/static/images/emma.webm';
-  webm.type = 'video/webm';
+  webm.type = 'video/webm; codecs=vp9';
   video.appendChild(webm);
-  */
 
   var mp4 = document.createElement('source');
-  mp4.src = '/static/images/emma.mp4';
+  mp4.src = '/static/images/emma.compat.mp4';
   mp4.type = 'video/mp4';
   video.appendChild(mp4);
 
   wrapper.appendChild(video);
-
   document.body.appendChild(wrapper);
 }
 
@@ -40,7 +39,7 @@ function displayEmma() {
   wrapper.classList.remove('hidden');
   wrapper.classList.add('visible');
 
-  emma.play();
+  setTimeout(function () { emma.play(); }, 50);
 
   timeout = setTimeout(function () {
     wrapper.classList.remove('visible');

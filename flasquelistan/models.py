@@ -117,16 +117,18 @@ class User(flask_login.UserMixin, db.Model):
         """Generate and save password hash, update password timestamp."""
 
         if app.testing:
-            self._password_hash = (util.bcrypt
-                               .generate_password_hash(plaintext, 4)
-                               .decode()
-                               )
+            self._password_hash = (
+                util.bcrypt
+                .generate_password_hash(plaintext, 4)
+                .decode()
+            )
 
         else:
-            self._password_hash = (util.bcrypt
-                               .generate_password_hash(plaintext, 12)
-                               .decode()
-                               )
+            self._password_hash = (
+                util.bcrypt
+                .generate_password_hash(plaintext, 12)
+                .decode()
+            )
 
         # Save in UTC, password resets compare this to UTC time!
         self._password_timestamp = datetime.datetime.utcnow()
