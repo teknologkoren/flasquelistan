@@ -1,3 +1,4 @@
+from datetime import timedelta
 from pathlib import Path
 
 DEBUG = True
@@ -17,6 +18,9 @@ BABEL_DEFAULT_TIMEZONE = 'CET'
 
 UPLOADS_DEFAULT_DEST = BASEDIR.joinpath('flasquelistan/static/uploads')
 UPLOADS_DEFAULT_URL = '/static/uploads/'
+
+IMAGE_EXPIRY = timedelta(days=1)
+IMAGE_SECRET = 'verysecret'
 
 WTF_CSRF_TIME_LIMIT = 21600  # 6 hours
 

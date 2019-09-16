@@ -2,9 +2,13 @@ import ssl
 import smtplib
 import threading
 import email
+import hashlib
+import base64
+import datetime
 import flask
 import flask_bcrypt
 import flask_uploads
+import werkzeug
 from urllib.parse import urlparse, urljoin
 
 # Note that if a module imports this as only "bcrypt", it will override
@@ -19,21 +23,34 @@ profile_pictures = flask_uploads.UploadSet('profilepictures',
                                            flask_uploads.IMAGES)
 
 
+def generate_secure_path_hash(expires, url, secret):
+    data = f"{expires}{url}{flask.request.remote_addr} {secret}"
+    binary_hash = hashlib.md5(data.encode()).digest()
+    nginx_hash = base64.urlsafe_b64encode(binary_hash).decode().rstrip('=')
+    return nginx_hash
+
+
 def url_for_image(filename, imagetype, width=None):
-    if not width or flask.current_app.debug:
-        if imagetype == 'profilepicture':
-            return profile_pictures.url(filename)
-
-        if imagetype == 'image':
-            return image_uploads.url(filename)
-
     if imagetype == 'profilepicture':
         base = profile_pictures.config.base_url
-
     elif imagetype == 'image':
         base = image_uploads.config.base_url
+    else:
+        flask.abort(500)
 
-    return ''.join((base, 'img{}/'.format(width), filename))
+    if width and not flask.current_app.debug:
+        url = urljoin(base, 'img{}/'.format(width), filename)
+    else:
+        url = urljoin(base, filename)
+
+    expires = (datetime.datetime.utcnow()
+               + flask.current_app.config['IMAGE_EXPIRY'])
+    expires_posix = int(expires.timestamp())
+    secret = flask.current_app.config['IMAGE_SECRET']
+    md5 = generate_secure_path_hash(expires_posix, base, secret)
+
+    href = werkzeug.urls.Href(url)
+    return href(md5=md5, expires=expires_posix)
 
 
 def send_email(toaddr, subject, body):
