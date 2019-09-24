@@ -292,6 +292,11 @@ input[type=number] {
     margin: .5rem 0;
 }
 
+.payments {
+    max-width: 35rem;
+    width: 100%;
+}
+
 @media print {
     nav {
         display: none;
