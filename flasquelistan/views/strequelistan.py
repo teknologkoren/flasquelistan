@@ -1,3 +1,4 @@
+import os
 import flask
 from flask_login import current_user, login_required
 from sqlalchemy.sql.expression import func, not_
@@ -262,24 +263,25 @@ def admin_transaction(user_id):
 def upload_profile_picture(user_id):
     form = forms.UploadProfilePictureForm()
 
-    if form.validate_on_submit():
-        if form.upload.data:
-            user = models.User.query.get_or_404(user_id)
+    if form.validate_on_submit() and form.upload.data:
+        user = models.User.query.get_or_404(user_id)
 
-            filename = util.profile_pictures.save(
-                form.upload.data
-            )
-            profile_picture = models.ProfilePicture(
-                filename=filename,
-                user_id=user.id
-            )
+        filename = util.profile_pictures.save(form.upload.data)
 
-            user.profile_picture = profile_picture
+        if os.path.splitext(filename)[1].lower() in ('.jpg', '.jpeg'):
+            util.rotate_jpeg(util.profile_pictures.path(filename))
 
-            models.db.session.add(profile_picture)
-            models.db.session.commit()
+        profile_picture = models.ProfilePicture(
+            filename=filename,
+            user_id=user.id
+        )
 
-            flask.flash(_l("Din profilbild har ändrats!"), 'success')
+        user.profile_picture = profile_picture
+
+        models.db.session.add(profile_picture)
+        models.db.session.commit()
+
+        flask.flash(_l("Din profilbild har ändrats!"), 'success')
 
     return flask.redirect(
         flask.url_for('strequelistan.show_profile', user_id=user_id)

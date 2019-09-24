@@ -5,6 +5,8 @@ import email
 import flask
 import flask_bcrypt
 import flask_uploads
+import PIL
+import piexif
 from urllib.parse import urlparse, urljoin
 
 # Note that if a module imports this as only "bcrypt", it will override
@@ -110,3 +112,36 @@ def get_redirect_target():
             continue
         if is_safe_url(target):
             return target
+
+
+def rotate_jpeg(filename):
+    """https://piexif.readthedocs.io/en/latest/sample.html
+    Thank you!
+    """
+    img = PIL.Image.open(filename)
+    if "exif" in img.info:
+        exif_dict = piexif.load(img.info["exif"])
+
+        if piexif.ImageIFD.Orientation in exif_dict["0th"]:
+            orientation = exif_dict["0th"].pop(piexif.ImageIFD.Orientation)
+            exif_bytes = piexif.dump(exif_dict)
+
+            if orientation == 2:
+                img = img.transpose(PIL.Image.FLIP_LEFT_RIGHT)
+            elif orientation == 3:
+                img = img.rotate(180)
+            elif orientation == 4:
+                img = img.rotate(180)
+                img = img.transpose(PIL.Image.FLIP_LEFT_RIGHT)
+            elif orientation == 5:
+                img = img.rotate(-90, expand=True)
+                img = img.transpose(PIL.Image.FLIP_LEFT_RIGHT)
+            elif orientation == 6:
+                img = img.rotate(-90, expand=True)
+            elif orientation == 7:
+                img = img.rotate(90, expand=True)
+                img = img.transpose(PIL.Image.FLIP_LEFT_RIGHT)
+            elif orientation == 8:
+                img = img.rotate(90, expand=True)
+
+            img.save(filename, exif=exif_bytes)

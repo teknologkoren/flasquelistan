@@ -18,6 +18,8 @@ Flask-Uploads = "*"
 phonenumbers = "*"
 markdown = "*"
 vobject = "*"
+pillow = "*"
+piexif = "*"
 
 [requires]
 python_version = "3.7"
