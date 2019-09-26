@@ -3,49 +3,45 @@ function downloadEmma() {
   wrapper.id = 'emma-wrapper';
   wrapper.classList.add('hidden');
 
-  var video = document.createElement('video');
-  video.id = 'emma';
-  video.setAttribute('preload', 'auto');
-  video.setAttribute('muted', '');
-  video.setAttribute('playsinline', '');
-  video.setAttribute('disableRemotePlayback', '');
+  var emma = document.createElement('div');
+  emma.id = 'emma';
 
-  var webm = document.createElement('source');
-  webm.src = '/static/images/emma.webm';
-  webm.type = 'video/webm; codecs=vp9';
-  video.appendChild(webm);
+  var emmasrc = document.createElement('img');
+  emmasrc.id = 'emmasrc';
 
-  var mp4 = document.createElement('source');
-  mp4.src = '/static/images/emma.compat.mp4';
-  mp4.type = 'video/mp4';
-  video.appendChild(mp4);
+  emmasrc.src = '/static/images/emma.gif';
+  emmasrc.style.display = 'none';
 
-  wrapper.appendChild(video);
+  wrapper.appendChild(emmasrc);
+  wrapper.appendChild(emma);
   document.body.appendChild(wrapper);
 }
 
-var timeout;
-
 function displayEmma() {
-  if (typeof timeout !== 'undefined') {
-    clearTimeout(timeout);
-  }
-
   var wrapper = document.getElementById('emma-wrapper');
   var emma = document.getElementById('emma');
 
-  emma.currentTime = 0;
+  if (typeof timeout !== 'undefined') {
+    emma.innerHTML = '';
+    clearTimeout(timeout);
+  }
 
-  wrapper.classList.remove('hidden');
-  wrapper.classList.add('visible');
+  var img = document.createElement('img');
+  img.src = '/static/images/emma.gif';
+  emma.appendChild(img);
 
-  setTimeout(function () { emma.play(); }, 50);
+  setTimeout(function () {
+    wrapper.classList.remove('hidden');
+    wrapper.classList.add('visible');
 
-  timeout = setTimeout(function () {
-    wrapper.classList.remove('visible');
-    wrapper.classList.add('hidden');
-    emma.pause();
-  }, 1200);
+    timeout = setTimeout(function () {
+      wrapper.classList.remove('visible');
+      wrapper.classList.add('hidden');
+      setTimeout(function () {
+        emma.removeChild(img);
+      }, 200);
+    }, 1200);
+  }, 50) // Wait a bit if the browser does a request for the src
 }
 
 function postData(uri, data, onsuccess, onfailure, csrftoken) {

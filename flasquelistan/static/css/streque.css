@@ -276,9 +276,6 @@ ol.transaction-history li .value {
 }
 
 #emma {
-    object-fit: cover;
-    display: block;
-    border-radius: 50%;
     width: 0;
     height: 0;
     transition: width .1s, height .1s;
@@ -290,4 +287,10 @@ ol.transaction-history li .value {
     height: 100%;
     transition: width .1s, height .1s;
     transition-timing-function: linear;
+}
+
+#emma img {
+    border-radius: 50%;
+    width: 100%;
+    height: 100%;
 }
