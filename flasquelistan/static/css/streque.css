@@ -276,8 +276,8 @@ ol.transaction-history li .value {
 }
 
 #emma {
-    width: 0;
-    height: 0;
+    width: 1px;
+    height: 1px;
     transition: width .1s, height .1s;
     transition-timing-function: linear;
 }
