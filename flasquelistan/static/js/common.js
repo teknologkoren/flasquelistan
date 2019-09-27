@@ -6,13 +6,11 @@ function downloadEmma() {
   var emma = document.createElement('div');
   emma.id = 'emma';
 
-  var emmasrc = document.createElement('img');
-  emmasrc.id = 'emmasrc';
+  var img = document.createElement('img');
+  img.src = '/static/images/emma.gif';
+  img.style.display = 'none';
 
-  emmasrc.src = '/static/images/emma.gif';
-  emmasrc.style.display = 'none';
-
-  wrapper.appendChild(emmasrc);
+  emma.appendChild(img);
   wrapper.appendChild(emma);
   document.body.appendChild(wrapper);
 }
@@ -21,8 +19,9 @@ function displayEmma() {
   var wrapper = document.getElementById('emma-wrapper');
   var emma = document.getElementById('emma');
 
+  emma.innerHTML = '';
+
   if (typeof timeout !== 'undefined') {
-    emma.innerHTML = '';
     clearTimeout(timeout);
   }
 
@@ -40,8 +39,8 @@ function displayEmma() {
       setTimeout(function () {
         emma.removeChild(img);
       }, 200);
-    }, 1200);
-  }, 50) // Wait a bit if the browser does a request for the src
+    }, 1100);
+  }, 50) // Wait a bit to let the browser think or make requests
 }
 
 function postData(uri, data, onsuccess, onfailure, csrftoken) {
