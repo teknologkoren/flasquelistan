@@ -113,7 +113,10 @@ def void_streque():
         )
 
     else:
-        flask.flash(_("Ångrade %(text)s-streque på %(name)s.", text=streque.text,name=streque.user.full_name), 'success')
+        flask.flash(_("Ångrade %(text)s-streque på %(name)s.",
+                      text=streque.text,
+                      name=streque.user.full_name),
+                    'success')
         return flask.redirect(flask.url_for('strequelistan.history'))
 
 
@@ -137,7 +140,7 @@ def credit_transfer():
         flask.abort(400)
 
     redir = flask.redirect(
-        flask.url_for('strequelistan.show_profile',user_id=payee.id)
+        flask.url_for('strequelistan.show_profile', user_id=payee.id)
     )
 
     if form.validate_on_submit():
@@ -180,11 +183,11 @@ def paperlist():
 
     if flask.request.args.get("active", "false").lower() == "true":
         users = (models.User.query
-            .filter(models.User.active.is_(True))
-            .order_by(models.User.first_name))
+                 .filter(models.User.active.is_(True))
+                 .order_by(models.User.first_name))
     else:
         users = (models.User.query
-             .order_by(models.User.first_name))
+                 .order_by(models.User.first_name))
 
     groups = models.Group.query.all()
 
@@ -195,7 +198,7 @@ def paperlist():
                 )
     try:
         empty = int(flask.request.args.get("empty", "0"))
-    except:
+    except ValueError:
         empty = 0
 
     return flask.render_template('paperlist.html',
@@ -330,7 +333,8 @@ def delete_profile_picture(user_id):
         if form.profile_picture.data == 'none':
             flask.flash(_l(
                 "Du kan inte ta bort "
-                "<a href=\"https://phys.org/news/2014-08-what-is-nothing.html\">"
+                "<a href="
+                "\"https://phys.org/news/2014-08-what-is-nothing.html\">"
                 "ingenting"
                 "</a>!"), 'error'
             )
@@ -442,7 +446,8 @@ def change_email_or_password(user_id):
                                                    nopasswordvalidation=True)
 
         else:
-            flask.flash(_l("Du får bara redigera din egen profil! ಠ_ಠ"), 'error')
+            flask.flash(_l("Du får bara redigera din egen profil! ಠ_ಠ"),
+                        'error')
             return flask.redirect(flask.url_for('.show_profile',
                                                 user_id=user_id))
 
@@ -453,7 +458,9 @@ def change_email_or_password(user_id):
         if form.email.data != user.email:
             auth.verify_email(user, form.email.data)
             flask.flash(_l("En länk för att verifiera e-postadressen har "
-                         "skickats till %(email)s.", email=form.email.data), 'info')
+                           "skickats till %(email)s.",
+                           email=form.email.data),
+                        'info')
 
         if form.new_password.data:
             user.password = form.new_password.data
@@ -464,5 +471,6 @@ def change_email_or_password(user_id):
         return flask.redirect(flask.url_for('strequelistan.show_profile',
                                             user_id=user.id))
 
-    return flask.render_template('change_email_or_password.html', form=form, user=user)
-
+    return flask.render_template('change_email_or_password.html',
+                                 form=form,
+                                 user=user)

@@ -35,7 +35,8 @@ def create_app(config=None, instance_config=None):
 
 
 def register_blueprints(app):
-    from flasquelistan.views import auth, admin, more, quotes, serviceworker, strequelistan
+    from flasquelistan.views import (auth, admin, more, quotes, serviceworker,
+                                     strequelistan)
     app.register_blueprint(auth.mod)
     app.register_blueprint(admin.mod)
     app.register_blueprint(more.mod)
