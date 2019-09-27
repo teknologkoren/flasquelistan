@@ -1,46 +1,30 @@
-function downloadEmma() {
-  var wrapper = document.createElement('div');
-  wrapper.id = 'emma-wrapper';
-  wrapper.classList.add('hidden');
-
-  var emma = document.createElement('div');
-  emma.id = 'emma';
-
-  var img = document.createElement('img');
-  img.src = '/static/images/emma.gif';
-  img.style.display = 'none';
-
-  emma.appendChild(img);
-  wrapper.appendChild(emma);
-  document.body.appendChild(wrapper);
-}
+var timeout;
 
 function displayEmma() {
-  var wrapper = document.getElementById('emma-wrapper');
-  var emma = document.getElementById('emma');
-
-  emma.innerHTML = '';
-
-  if (typeof timeout !== 'undefined') {
+  if (timeout !== undefined) {
     clearTimeout(timeout);
+    document.getElementById('emma-img').remove();
   }
 
-  var img = document.createElement('img');
-  img.src = '/static/images/emma.gif';
-  emma.appendChild(img);
+  var emma = document.createElement('img');
+  emma.id = 'emma-img';
+  emma.classList.add('hidden');
 
-  setTimeout(function () {
-    wrapper.classList.remove('hidden');
-    wrapper.classList.add('visible');
-
+  emma.onload = function () {
     timeout = setTimeout(function () {
-      wrapper.classList.remove('visible');
-      wrapper.classList.add('hidden');
-      setTimeout(function () {
-        emma.removeChild(img);
-      }, 200);
-    }, 1100);
-  }, 50) // Wait a bit to let the browser think or make requests
+      emma.classList.remove('hidden');
+
+      timeout = setTimeout(function () {
+        emma.classList.add('hidden');
+        setTimeout(function () {
+          emma.remove();
+          timeout = undefined;
+        }, 100);
+      }, 1100);
+    }, 50);
+  };
+  emma.src = '/static/images/emma.gif';
+  document.body.appendChild(emma);
 }
 
 function postData(uri, data, onsuccess, onfailure, csrftoken) {
@@ -69,5 +53,3 @@ function postData(uri, data, onsuccess, onfailure, csrftoken) {
 
   return request;
 }
-
-downloadEmma();
