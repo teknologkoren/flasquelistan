@@ -68,14 +68,20 @@ def add_streque():
     streque = user.strequa(article, current_user)
 
     if flask.request.is_json:
-        return flask.jsonify(
-            user_id=user.id,
-            value=streque.value,
-            balance=user.balance
-        )
+        response = {
+            'user_id': user.id,
+            'value': streque.value,
+        }
+
+        if user == current_user:
+            response['balance'] = user.balance
+
+        return flask.jsonify(response)
 
     else:
-        flask.flash(_("%(text)s-streque på %(name)s tillagt.", text=streque.text, name=user.full_name), 'success')
+        flask.flash(_("%(text)s-streque på %(name)s tillagt.",
+                      text=streque.text, name=user.full_name),
+                    'success')
         return flask.redirect(flask.url_for('strequelistan.index'))
 
 
