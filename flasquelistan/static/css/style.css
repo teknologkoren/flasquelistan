@@ -1,14 +1,14 @@
 * {
-    box-sizing: border-box;
-    overflow-wrap: break-word;
-    word-wrap: break-word; /* legacy */
-    word-break: break-word; /* for WebKit/Chrome */
+  box-sizing: border-box;
+  overflow-wrap: break-word;
+  word-wrap: break-word; /* legacy */
+  word-break: break-word; /* for WebKit/Chrome */
 
-    /* Fixes overflowing content in flex and grid (anything other than
-     * "overflow: visible"). Won't overflow without this.
-     * Also makes wrapping inter-word if very little space left. */
-    min-width: 0;
-    max-width: 100%;
+  /* Fixes overflowing content in flex and grid (anything other than
+   * "overflow: visible"). Won't overflow without this.
+   * Also makes wrapping inter-word if very little space left. */
+  min-width: 0;
+  max-width: 100%;
 }
 
 body {
@@ -17,293 +17,293 @@ body {
 }
 
 img {
-    max-width: 100%;
-    max-height: 100%;
-    vertical-align: middle;
+  max-width: 100%;
+  max-height: 100%;
+  vertical-align: middle;
 }
 
 body {
-    font-family: sans-serif;
-    overflow-y: scroll;  /* Always show scrollbar to prevent jumping */
+  font-family: sans-serif;
+  overflow-y: scroll;  /* Always show scrollbar to prevent jumping */
 }
 
 header {
-    height: 4rem;
-    text-align: center;
+  height: 4rem;
+  text-align: center;
 }
 
 h1, h2, h3 {
-    margin-top: 2rem;
+  margin-top: 2rem;
 }
 
 a {
-    text-decoration: none;
-    color: #436cb3;
+  text-decoration: none;
+  color: #436cb3;
 }
 
 a:hover {
-    text-decoration: underline;
+  text-decoration: underline;
 }
 
 fieldset {
-    border: 1px solid #ddd;
-    border-radius: 7px;
-    margin: 1.5rem 0;
+  border: 1px solid #ddd;
+  border-radius: 7px;
+  margin: 1.5rem 0;
 }
 
 .logo {
-    height: 100%;
-    padding: .5rem;
-    display: inline-block;
-    color: #000;
+  height: 100%;
+  padding: .5rem;
+  display: inline-block;
+  color: #000;
 }
 
 .logo:hover {
-    text-decoration: none;
+  text-decoration: none;
 }
 
 .logo img {
-    margin-right: .5rem;
-    display: inline-block;
+  margin-right: .5rem;
+  display: inline-block;
 }
 
 .logo h1 {
-    margin: 0;
-    display: inline-block;
-    vertical-align: middle;
+  margin: 0;
+  display: inline-block;
+  vertical-align: middle;
 }
 
 nav {
-    position: fixed;
-    bottom: 0;
-    padding: .2rem 1.5rem;
-    width: 100vw;
-    display: flex;
-    justify-content: center;
-    background: #eee;
-    height: 3rem;
-    border-top: 1px solid #ddd;
+  position: fixed;
+  bottom: 0;
+  padding: .2rem 1.5rem;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  background: #eee;
+  height: 3rem;
+  border-top: 1px solid #ddd;
 }
 
 nav ul {
-    padding: 0;
-    margin: 0;
-    list-style: none;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    max-width: 30rem;
-    width: 100%;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 30rem;
+  width: 100%;
 }
 
 nav a,
 nav a:hover {
-    text-decoration: none;
-    color: #000;
-    font-size: 0.9em;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding-left: 0.6rem;
-    padding-right: 0.6rem;
+  text-decoration: none;
+  color: #000;
+  font-size: 0.9em;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-left: 0.6rem;
+  padding-right: 0.6rem;
 }
 
 nav svg {
-    height: 1.1rem;
-    margin-bottom: 0.2rem;
+  height: 1.1rem;
+  margin-bottom: 0.2rem;
 }
 
 nav li.active a {
-    color: #5c81c2;
-    font-weight: bold;
+  color: #5c81c2;
+  font-weight: bold;
 }
 
 nav li.active path {
-    fill: #5c81c2;
+  fill: #5c81c2;
 }
 
 main {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-items: center;
-    padding: 0 .65rem 4rem .65rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-items: center;
+  padding: 0 .65rem 4rem .65rem;
 }
 
 .non-padded {
-    padding-left: 0;
-    padding-right: 0;
+  padding-left: 0;
+  padding-right: 0;
 }
 
 .login {
-    max-width: 30rem;
+  max-width: 30rem;
 }
 
 .more {
-    max-width: 30rem;
-    width: 100%;
+  max-width: 30rem;
+  width: 100%;
 }
 
 .cards {
-    max-width: 50rem;
-    width: 100%;
+  max-width: 50rem;
+  width: 100%;
 }
 
 .card {
-    display: flex;
-    justify-content: space-between;
-    padding: .7rem;
-    margin: .65rem 0;
-    border: solid 1px #ddd;
-    border-radius: 7px;
+  display: flex;
+  justify-content: space-between;
+  padding: .7rem;
+  margin: .65rem 0;
+  border: solid 1px #ddd;
+  border-radius: 7px;
 }
 
 .tabs {
-    position: fixed;
-    bottom: 0;
-    width: 100vw;
-    border-top: 1px solid #ddd;
-    background: #eee;
+  position: fixed;
+  bottom: 0;
+  width: 100vw;
+  border-top: 1px solid #ddd;
+  background: #eee;
 }
 
 .tabs ul {
-    flex-direction: row;
-    justify-content: space-around;
+  flex-direction: row;
+  justify-content: space-around;
 }
 
 .flashes {
-    max-width: 40rem;
-    align-self: center;
-    text-align: center;
-    list-style: none;
-    margin: 1rem 1rem;
-    padding: 0;
+  max-width: 40rem;
+  align-self: center;
+  text-align: center;
+  list-style: none;
+  margin: 1rem 1rem;
+  padding: 0;
 }
 .flash {
-    min-width: 10rem;
-    padding: .5rem 1rem;
-    margin: .5rem auto;
-    border-radius: 7px;
+  min-width: 10rem;
+  padding: .5rem 1rem;
+  margin: .5rem auto;
+  border-radius: 7px;
 }
 .flash.success {
-    background-color: #C9F7DD;
-    border: 1px solid #62D895;
-    color: #004D21;
+  background-color: #C9F7DD;
+  border: 1px solid #62D895;
+  color: #004D21;
 }
 .flash.info {
-    background-color: #CBDEF5;
-    border: 1px solid #6797D0;
-    color: #042246;
+  background-color: #CBDEF5;
+  border: 1px solid #6797D0;
+  color: #042246;
 }
 .flash.warning {
-    background-color: #FFF3CC;
-    border: 1px solid #FFCF32;
-    color: #332700;
+  background-color: #FFF3CC;
+  border: 1px solid #FFCF32;
+  color: #332700;
 }
 .flash.error {
-    background-color: #FFD9D0;
-    border: 1px solid #FF9073;
-    color: #6C1600;
+  background-color: #FFD9D0;
+  border: 1px solid #FF9073;
+  color: #6C1600;
 }
 
 dt {
-    font-weight: bold;
-    margin-top: 1.5rem;
-    margin-bottom: .5rem;
+  font-weight: bold;
+  margin-top: 1.5rem;
+  margin-bottom: .5rem;
 }
 
 dd {
-    margin: 0;
+  margin: 0;
 }
 
 input[type=number] {
-    height: 1rem;
+  height: 1rem;
 }
 
 .form-entry {
-    margin-top: 1rem;
-    margin-bottom: 1rem;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
 }
 
 .form-entry label.error {
-    padding: 3px;
-    border-radius: 3px;
-    background-color: #FFD9D0;
+  padding: 3px;
+  border-radius: 3px;
+  background-color: #FFD9D0;
 }
 
 .form-field label+input,
 .form-field label+textarea {
-    display: block;
+  display: block;
 }
 
 .field-description {
-    font-size: 0.7em;
-    padding-left: 0;
-    margin-top: 0.2rem;
-    max-width: 16rem;
+  font-size: 0.7em;
+  padding-left: 0;
+  margin-top: 0.2rem;
+  max-width: 16rem;
 }
 
 .field-description:before {
-    content: "- ";
+  content: "- ";
 }
 
 .field-description.error {
-    color: red;
+  color: red;
 }
 
 .form-field input,
 .form-field select,
 .form-field textarea {
-    margin-top: 0.3rem;
+  margin-top: 0.3rem;
 }
 
 .required {
-    color: red;
+  color: red;
 }
 
 .table-wrap {
-    overflow-x: auto;
-    border-radius: 7px;
-    background-color: #f3f3f3;
-    border: 1px solid #ddd;
+  overflow-x: auto;
+  border-radius: 7px;
+  background-color: #f3f3f3;
+  border: 1px solid #ddd;
 }
 
 .table-wrap table {
-    width: 100%;
-    border-collapse: collapse;
+  width: 100%;
+  border-collapse: collapse;
 }
 
 .table-wrap th,
 .table-wrap td {
-    white-space: nowrap;
-    height: 2rem;
-    padding: 5px 10px;
+  white-space: nowrap;
+  height: 2rem;
+  padding: 5px 10px;
 }
 
 .table-wrap th {
-    text-align: start;
+  text-align: start;
 }
 
 .more ul {
-    list-style: none;
+  list-style: none;
 }
 
 .more li {
-    margin: .5rem 0;
+  margin: .5rem 0;
 }
 
 .payments {
-    max-width: 35rem;
-    width: 100%;
+  max-width: 35rem;
+  width: 100%;
 }
 
 @media print {
-    nav {
-        display: none;
-    }
+  nav {
+    display: none;
+  }
 }
 
 @page {
-    size: A4;
-    margin: 1cm;
+  size: A4;
+  margin: 1cm;
 }

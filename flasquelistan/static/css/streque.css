@@ -1,228 +1,228 @@
 .usercard {
-    align-items: center;
+  align-items: center;
 }
 
 .usercard .picture-and-name {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-right: .5rem;
-    max-width: 12rem;
-    min-width: 0;
-    flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-right: .5rem;
+  max-width: 12rem;
+  min-width: 0;
+  flex: 1;
 }
 
 .usercard .picture-and-name a {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .usercard .username {
-    text-align: center;
+  text-align: center;
 }
 
 .usercard .profile-picture {
-    object-fit: cover;
-    width: 6rem;
-    height: 6rem;
-    border-radius: 7px;
-    margin-bottom: .1rem;
+  object-fit: cover;
+  width: 6rem;
+  height: 6rem;
+  border-radius: 7px;
+  margin-bottom: .1rem;
 }
 
 .alcometer .bac {
-    display: none;
+  display: none;
 }
 
 .alcometer:hover .bac {
-    display: inline;
+  display: inline;
 }
 
 .streque-buttons {
-    display: flex;
-    justify-content: flex-end;
-    flex-wrap: wrap;
-    flex: 1;
+  display: flex;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  flex: 1;
 }
 
 .streque-button,
 .void-button {
-    border: 1px solid #ddd;
-    border-radius: 3px;
-    padding: 0.3rem;
-    margin: 0.3rem;
-    min-width: 3rem;
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  padding: 0.3rem;
+  margin: 0.3rem;
+  min-width: 3rem;
 }
 
 h2.user-filter {
-    margin-bottom: 0;
+  margin-bottom: 0;
 }
 
 div.user-filter {
-    margin-bottom: 2.5rem;
+  margin-bottom: 2.5rem;
 }
 
 .user-filter p {
-    margin: .5rem 0;
+  margin: .5rem 0;
 }
 
 .streques {
-    max-width: 30rem;
-    width: 100%;
+  max-width: 30rem;
+  width: 100%;
 }
 
 .streques ol {
-    list-style: none;
-    padding: 0;
+  list-style: none;
+  padding: 0;
 }
 
 .strequecard {
-    display: flex;
-    align-items: center;
+  display: flex;
+  align-items: center;
 
-    /* For fade out, see js */
-    opacity: 1;
-    transition: opacity 300ms linear;
+  /* For fade out, see js */
+  opacity: 1;
+  transition: opacity 300ms linear;
 }
 
 .timestamp {
-    font-style: italic;
-    color: #444;
+  font-style: italic;
+  color: #444;
 }
 
 .strequecard .username {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    justify-items: center;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-items: center;
 }
 
 .strequecard .timestamp {
-    font-size: .8em;
-    margin-top: .2rem;
+  font-size: .8em;
+  margin-top: .2rem;
 }
 
 .strequecard .text {
-    justify-self: flex-end;
-    display: flex;
-    align-items: center;
-    margin: 0 2rem 0 1rem;
+  justify-self: flex-end;
+  display: flex;
+  align-items: center;
+  margin: 0 2rem 0 1rem;
 }
 
 .quote-display {
-    border-left: 5px solid #ddd;
-    width: 100%;
-    padding-left: 1rem;
-    margin: 2rem 0;
+  border-left: 5px solid #ddd;
+  width: 100%;
+  padding-left: 1rem;
+  margin: 2rem 0;
 }
 
 .profile {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  width: 100%;
 }
 
 .profile-content {
-    padding-left: .65rem;
-    padding-right: .65rem;
-    max-width: 30rem;
+  padding-left: .65rem;
+  padding-right: .65rem;
+  max-width: 30rem;
 }
 
 .profile .profile-picture {
-    display: block;
-    max-width: 300px;
-    align-self: start;
-    margin-top: 2rem;
+  display: block;
+  max-width: 300px;
+  align-self: start;
+  margin-top: 2rem;
 }
 
 .profile .profile-picture img {
-    max-height: 200px;
+  max-height: 200px;
 }
 
 .no-profile-picture {
-    width: 100%;
-    height: 100%;
-    background: grey;
-    font-size: 1.5em;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  width: 100%;
+  height: 100%;
+  background: grey;
+  font-size: 1.5em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .usercard .no-profile-picture {
-    border-radius: 7px;
+  border-radius: 7px;
 }
 
 .profile .no-profile-picture {
-    width: 100px;
-    height: 100px;
-    margin-top: 2rem;
+  width: 100px;
+  height: 100px;
+  margin-top: 2rem;
 }
 
 .upload-and-set-profile-picture .form-field {
-    margin-bottom: .5rem;
+  margin-bottom: .5rem;
 }
 
 .upload-and-set-profile-picture,
 .change-profile-picture {
-    margin: 1.5rem 0;
+  margin: 1.5rem 0;
 }
 
 .change-profile-picture .grid-wrapper {
-    max-height: 30rem;
-    overflow-y: scroll;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-gap: 1rem;
-    align-items: center;
-    justify-items: center;
+  max-height: 30rem;
+  overflow-y: scroll;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 1rem;
+  align-items: center;
+  justify-items: center;
 }
 
 .change-profile-picture input[type=radio] {
-    display: none;
+  display: none;
 }
 
 .change-profile-picture input[type=radio]:checked + label > .label {
-    border: 5px solid #6797D0;
+  border: 5px solid #6797D0;
 }
 
 .change-profile-picture button {
-    margin-top: 1rem;
+  margin-top: 1rem;
 }
 
 .change-profile-picture .submit {
-    display: flex;
-    justify-content: space-around;
+  display: flex;
+  justify-content: space-around;
 }
 
 .change-profile-picture .form-field {
-    margin: 0;
+  margin: 0;
 }
 
 .change-profile-picture .label {
-    min-width: 5rem;
-    min-height: 5rem;
-    max-width: 9rem;
-    max-height: 9rem;
-    border: 5px solid transparent;
-    padding: 2px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  min-width: 5rem;
+  min-height: 5rem;
+  max-width: 9rem;
+  max-height: 9rem;
+  border: 5px solid transparent;
+  padding: 2px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .article-descriptions {
-    max-width: 30rem;
-    width: 100%;
+  max-width: 30rem;
+  width: 100%;
 }
 
 .article-descriptions dl div + div {
-    border-top: 1px solid #ddd;
+  border-top: 1px solid #ddd;
 }
 
 .article-descriptions .article dd:last-child {
-    margin-bottom: 1.5rem;
+  margin-bottom: 1.5rem;
 }
 
 ol.transaction-history {

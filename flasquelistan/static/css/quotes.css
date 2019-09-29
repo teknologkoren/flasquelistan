@@ -1,35 +1,35 @@
 .quote.card {
-    flex-direction: column;
+  flex-direction: column;
 }
 
 .quote-text {
-    margin-bottom: 1rem;
+  margin-bottom: 1rem;
 }
 
 .quote-meta {
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
 }
 
 .quote .lower {
-    display: flex;
-    justify-content: space-between;
-    flex-direction: row-reverse;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row-reverse;
 }
 
 .quote-permalink {
-    margin-right: .5rem;
-    font-size: small;
+  margin-right: .5rem;
+  font-size: small;
 }
 
 .quote-who {
-    margin-bottom: .5rem;
-    font-style: italic;
-    text-align: right;
+  margin-bottom: .5rem;
+  font-style: italic;
+  text-align: right;
 }
 
 .quote-when {
-    font-size: small;
-    font-style: italic;
-    text-align: right;
+  font-size: small;
+  font-style: italic;
+  text-align: right;
 }

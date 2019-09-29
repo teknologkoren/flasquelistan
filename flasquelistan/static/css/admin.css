@@ -1,58 +1,58 @@
 .date-range-form {
-    margin-bottom: 1rem;
+  margin-bottom: 1rem;
 }
 
 .bulk-transactions {
-    margin: 1rem 0;
+  margin: 1rem 0;
 }
 
 .bulk-transactions .value input {
-    max-width: 8rem;
+  max-width: 8rem;
 }
 
 .bulk-transactions td.user,
 .transactions td.user {
-    min-width: 10rem;
-    max-width: 10rem;
-    white-space: normal;
+  min-width: 10rem;
+  max-width: 10rem;
+  white-space: normal;
 }
 
 .transactions td.text {
-    min-width: 12rem;
-    max-width: 14rem;
-    white-space: normal;
+  min-width: 12rem;
+  max-width: 14rem;
+  white-space: normal;
 }
 
 .transactions p {
-    max-width: 40rem;
+  max-width: 40rem;
 }
 
 .articles td.article-description {
-    max-width: 30rem;
-    min-width: 15rem;
-    white-space: normal;
+  max-width: 30rem;
+  min-width: 15rem;
+  white-space: normal;
 }
 
 .requests {
-    max-width: 30rem;
+  max-width: 30rem;
 }
 
 .requests dl + dl {
-    border-top: 1px solid #ddd;
+  border-top: 1px solid #ddd;
 }
 
 .requests dl {
-    margin-bottom: 1.5rem;
+  margin-bottom: 1.5rem;
 }
 
 .quotes .quote {
-    white-space: normal;
-    max-width: 20rem;
-    min-width: 15rem;
+  white-space: normal;
+  max-width: 20rem;
+  min-width: 15rem;
 }
 
 .quotes .who {
-    white-space: normal;
-    max-width: 15rem;
-    min-width: 10rem;
+  white-space: normal;
+  max-width: 15rem;
+  min-width: 10rem;
 }
