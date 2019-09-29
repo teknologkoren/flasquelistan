@@ -356,10 +356,12 @@ def BulkTransactionFormFactory(active=True):
     class BulkTransactionForm(flask_wtf.FlaskForm):
         pass
 
+    query = models.User.query.order_by(models.User.first_name)
+
     if active:
-        users = models.User.query.filter_by(active=True)
-    else:
-        users = models.User.query.all()
+        query.filter_by(active=True)
+
+    users = query.all()
 
     for user in users:
         class F(UserTransactionForm):
