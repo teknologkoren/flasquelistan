@@ -349,7 +349,9 @@ class UserTransactionForm(flask_wtf.FlaskForm):
             validators.NumberRange(min=-10000, max=10000),
         ])
 
-    text = fields.StringField(_l('Meddelande'))
+    text = fields.StringField(_l('Meddelande'), validators=[
+        validators.Length(max=50)
+    ])
 
 
 def BulkTransactionFormFactory(active=True):
@@ -437,7 +439,9 @@ class CreditTransferForm(flask_wtf.FlaskForm):
     payer_id = fields.HiddenField()
     payee_id = fields.HiddenField()
 
-    message = fields.StringField(_l('Meddelande'))
+    message = fields.StringField(_l('Meddelande'), validators=[
+        validators.Length(max=50)
+    ])
 
     value = html5_fields.DecimalField(
         _l('Summa'),
