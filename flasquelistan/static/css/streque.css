@@ -24,6 +24,7 @@
 
 .usercard .profile-picture {
   object-fit: cover;
+  object-position: 50% 35%;
   width: 6rem;
   height: 6rem;
   border-radius: 7px;
