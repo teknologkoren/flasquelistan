@@ -441,7 +441,7 @@ class CreditTransfer(db.Model):
     )
 
     @classmethod
-    def create(cls, payer, payee, value, message):
+    def create(cls, payer, payee, created_by, value, message):
         if value <= 0:
             return False
 
@@ -452,6 +452,7 @@ class CreditTransfer(db.Model):
         payer_tx = (
             UserTransaction(
                 user_id=payer.id,
+                created_by_id=created_by.id,
                 value=-value,
                 text=payer_message
             )
@@ -460,6 +461,7 @@ class CreditTransfer(db.Model):
         payee_tx = (
             UserTransaction(
                 user_id=payee.id,
+                created_by_id=created_by.id,
                 value=value,
                 text=payee_message
             )

@@ -153,10 +153,12 @@ def credit_transfer():
         value = int(form.value.data*100)  # To ören
 
         message = form.message.data
-        models.CreditTransfer.create(payer, payee, value, message)
+        models.CreditTransfer.create(
+            payer, payee, current_user, value, message
+        )
 
         flask.flash(_("Förde över %(a)i pengar till %(name)s",
-                    a=value/100, name=payee.full_name),
+                      a=value/100, name=payee.full_name),
                     'success'
                     )
 
