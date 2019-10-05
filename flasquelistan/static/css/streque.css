@@ -137,7 +137,8 @@ div.user-filter {
 }
 
 .profile .profile-picture img {
-  max-height: 200px;
+  max-width: 230px;
+  max-height: 230px;
 }
 
 .no-profile-picture {
