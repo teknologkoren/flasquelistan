@@ -37,10 +37,11 @@ def test_credittransfer_model(app):
     models.db.session.commit()
 
     transfer = models.CreditTransfer.create(
-        monty,
-        brian,
-        1000,
-        "Always look on the bright side of life!"
+        payer = monty,
+        payee = brian,
+        created_by = monty,
+        value = 1000,
+        message = "Always look on the bright side of life!"
     )
 
     assert monty.balance == 9000
