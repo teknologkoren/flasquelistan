@@ -203,9 +203,10 @@ class User(flask_login.UserMixin, db.Model):
 
         return streque
 
-    def admin_transaction(self, value, message):
+    def admin_transaction(self, value, message, by_user):
         transaction = AdminTransaction(value=value,
                                        text=message,
+                                       created_by_id=by_user,
                                        user_id=self.id)
 
         self.balance += value  # Value can be negative!

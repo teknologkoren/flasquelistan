@@ -7,6 +7,7 @@ from flasquelistan import models, forms, util
 from flasquelistan.views import auth
 from flask_babel import gettext as _
 from flask_babel import lazy_gettext as _l
+from flask_login import current_user
 mod = flask.Blueprint('strequeadmin', __name__)
 
 
@@ -179,7 +180,7 @@ def confirm_bulk_transactions():
 
     for user_id, transaction in transactions.items():
         user = models.User.query.get(user_id)
-        user.admin_transaction(transaction['value'], transaction['text'])
+        user.admin_transaction(transaction['value'], transaction['text'], by_user=current_user.id)
 
     flask.flash(_l("Transaktionerna utfördes!"), 'success')
     return flask.redirect(flask.url_for('strequeadmin.bulk_transactions'))
