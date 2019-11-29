@@ -366,10 +366,22 @@ def BulkTransactionFormFactory(active=True):
     users = query.all()
 
     for user in users:
-        class F(UserTransactionForm):
+        class F(flask_wtf.FlaskForm):
             user_name = fields.HiddenField(_l('Namn'),
                                            default=user.full_name)
             user_id = fields.HiddenField('ID', default=user.id)
+
+            value = html5_fields.DecimalField(
+                _l('Transaktionsvärde'),
+                render_kw={'step': .01, 'min': -10000, 'max': 10000},
+                validators=[
+                    validators.NumberRange(min=-10000, max=10000),
+                    validators.Optional()
+                ])
+
+            text = fields.StringField(_l('Meddelande'), validators=[
+                validators.Length(max=50),
+            ])
 
         transaction_form = fields.FormField(F)
 
