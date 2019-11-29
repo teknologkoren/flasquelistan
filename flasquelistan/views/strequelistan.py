@@ -265,7 +265,11 @@ def admin_transaction(user_id):
     form = forms.UserTransactionForm()
 
     if form.validate_on_submit():
-        user.admin_transaction(int(form.value.data*100), form.text.data, by_user=current_user.id)
+        user.admin_transaction(
+            int(form.value.data*100),
+            form.text.data,
+            by_user=current_user
+        )
         flask.flash(_l("Transaktion utförd!"), 'success')
 
     elif form.is_submitted():

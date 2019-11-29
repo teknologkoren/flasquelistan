@@ -180,7 +180,11 @@ def confirm_bulk_transactions():
 
     for user_id, transaction in transactions.items():
         user = models.User.query.get(user_id)
-        user.admin_transaction(transaction['value'], transaction['text'], by_user=current_user.id)
+        user.admin_transaction(
+            transaction['value'],
+            transaction['text'],
+            by_user=current_user
+        )
 
     flask.flash(_l("Transaktionerna utfördes!"), 'success')
     return flask.redirect(flask.url_for('strequeadmin.bulk_transactions'))

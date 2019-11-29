@@ -206,7 +206,7 @@ class User(flask_login.UserMixin, db.Model):
     def admin_transaction(self, value, message, by_user):
         transaction = AdminTransaction(value=value,
                                        text=message,
-                                       created_by_id=by_user,
+                                       created_by_id=by_user.id,
                                        user_id=self.id)
 
         self.balance += value  # Value can be negative!
