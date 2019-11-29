@@ -4,10 +4,15 @@
 
 {% from "macros.html" import form_entry %}
 
+{% block head %}
+<script defer src="{{ url_for('static', filename='js/bulktransactionMessage.js') }}"></script>
+{% endblock %}
+
 {% block body %}
 <div class="transactions">
     <h2>{{ _("Gör transaktioner i bulk") }}</h2>
     <p>{{ _("Positivt transaktionsvärde innebär en insättning till användarens konto, negativt innebär ett uttag.") }}</p>
+    <input type="text" id="bulktransactionMessage" value="Admintransaktion"> <button onClick="setMessage()">{{_("Sätt meddelande")}}</button>
   <form method="POST">
     {{ form.csrf_token }}
     <div class="table-wrap bulk-transactions">
