@@ -2,9 +2,14 @@
 
 {% set active_page = "more" %}
 
+{% block scripts %}
+<script defer src="{{ url_for('static', filename='js/common.js') }}"></script>
+<script defer src="{{ url_for('static', filename='js/admin.js') }}"></script>
+{% endblock %}
+
 {% block body %}
 <div class="transactions">
-    <h2>{{ _("Gör transaktioner i bulk") }}</h2>
+  <h2>{{ _("Gör transaktioner i bulk") }}</h2>
   <p>{{ _("Positivt transaktionsvärde innebär en insättning till användarens konto, negativt innebär ett uttag.") }}</p>
   <p>{{ _("Dessa transaktioner kommer genomföras, vill du fortsätta?") }}</p>
   <p>{{ _("Använd bakåt-knappen i webbläsaren istället för \"Avbryt\" ifall du vill ha kvar värdena!") }}</p>
@@ -45,9 +50,4 @@
     </div>
   </form>
 </div>
-{% endblock %}
-
-{% block scripts %}
-<script src="{{ url_for('static', filename='js/common.js') }}"></script>
-<script src="{{ url_for('static', filename='js/admin.js') }}"></script>
 {% endblock %}

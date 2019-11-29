@@ -2,6 +2,11 @@
 
 {% set active_page = "history" %}
 
+{% block scripts %}
+<script defer src="{{ url_for('static', filename='js/common.js') }}"></script>
+<script defer src="{{ url_for('static', filename='js/history.js') }}"></script>
+{% endblock %}
+
 {% macro streque_card(streque, void_button=True) %}
 <li id="{{ streque.id }}" class="card strequecard">
   <span class="username">
@@ -33,7 +38,7 @@
 
 {% block body %}
 <div class="streques">
-    <h2>{{ _("Historik") }}</h2>
+  <h2>{{ _("Historik") }}</h2>
 
   <input id="ajax-csrf_token" type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
 
@@ -44,9 +49,4 @@
     {% endfor %}
   </ol>
 </div>
-{% endblock %}
-
-{% block scripts %}
-<script src="{{ url_for('static', filename='js/common.js') }}"></script>
-<script src="{{ url_for('static', filename='js/history.js') }}"></script>
 {% endblock %}

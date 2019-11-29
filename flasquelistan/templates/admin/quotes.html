@@ -2,6 +2,11 @@
 
 {% set active_page = "more" %}
 
+{% block scripts %}
+<script defer src="{{ url_for('static', filename='js/common.js') }}"></script>
+<script defer src="{{ url_for('static', filename='js/admin.js') }}"></script>
+{% endblock %}
+
 {% block body %}
 <div>
   <h2>{{ _("Citat") }}</h2>
@@ -39,9 +44,4 @@
     </table>
   </div>
 </div>
-{% endblock %}
-
-{% block scripts %}
-<script src="{{ url_for('static', filename='js/common.js') }}"></script>
-<script src="{{ url_for('static', filename='js/admin.js') }}"></script>
 {% endblock %}

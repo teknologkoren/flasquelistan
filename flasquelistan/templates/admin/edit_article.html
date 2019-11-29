@@ -4,9 +4,13 @@
 
 {% from "macros.html" import form_entry %}
 
+{% block scripts %}
+<script defer src="{{ url_for("static", filename="js/confirmDialog.js") }}"></script>
+{% endblock %}
+
 {% block body %}
 <div>
-    <h2>{% if article %}{{ _("Redigera") }}{% else %}{{ _("Skapa") }}{% endif %} {{ _("produkt") }}</h2>
+  <h2>{% if article %}{{ _("Redigera") }}{% else %}{{ _("Skapa") }}{% endif %} {{ _("produkt") }}</h2>
   <form method="POST">
     {{ form.csrf_token }}
 
@@ -29,8 +33,4 @@
   </form>
 </div>
 </div>
-{% endblock %}
-
-{% block scripts %}
-<script src="{{ url_for("static", filename="js/confirmDialog.js") }}">
 {% endblock %}

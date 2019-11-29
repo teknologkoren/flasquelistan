@@ -4,6 +4,11 @@
 
 {% from "macros.html" import form_entry %}
 
+{% block scripts %}
+<script defer src="{{ url_for('static', filename='js/common.js') }}"></script>
+<script defer src="{{ url_for('static', filename='js/admin.js') }}"></script>
+{% endblock %}
+
 {% block body %}
 <div class="transactions">
   <h2>{{ _("Transaktionshistorik") }}</h2>
@@ -95,9 +100,4 @@
   <p>{{ _("Inga transaktioner funna.") }}</p>
   {% endif %}
 </div>
-{% endblock %}
-
-{% block scripts %}
-<script src="{{ url_for('static', filename='js/common.js') }}"></script>
-<script src="{{ url_for('static', filename='js/admin.js') }}"></script>
 {% endblock %}
