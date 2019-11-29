@@ -88,16 +88,20 @@ def void_transaction():
         )
 
     else:
-        flask.flash(_("Ångrade %(type)s \"%(text)s\", %(value)s den %(date)s på %(user)s.",
-                        type=transaction.type,
-                        text=transaction.text,
-                        value=transaction.formatted_value,
-                        date=flask_babel.format_datetime(
-                            transaction.timestamp,
-                            "dd MMMM yyyy, HH:mm"
-                        ),
-                        user=transaction.user.full_name,
-                    ), 'success')
+        flask.flash(
+            _("Ångrade %(type)s \"%(text)s\", "
+              "%(value)s den %(date)s på %(user)s.",
+              type=transaction.type,
+              text=transaction.text,
+              value=transaction.formatted_value,
+              date=flask_babel.format_datetime(
+                  transaction.timestamp,
+                  "dd MMMM yyyy, HH:mm"
+              ),
+              user=transaction.user.full_name
+              ),
+            'success'
+        )
         return flask.redirect(flask.url_for('strequeadmin.transactions'))
 
 
