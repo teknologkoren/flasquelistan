@@ -53,6 +53,15 @@ def transactions():
     transactions = models.Transaction.query.filter(
         sqla.func.DATE(models.Transaction.timestamp) >= from_date,
         sqla.func.DATE(models.Transaction.timestamp) <= to_date,
+        sqla.or_(
+            # Only include UserTransaction if positive, which means the
+            # transaction of the payee. Include 0 too if that somehow
+            # would find its way into the database. We'll just hope we
+            # don't ever have a CreditTransfer where both sides are
+            # negative. That could be fixed in the db admin-interface.
+            models.Transaction.type.isnot('user_transaction'),
+            models.Transaction.value >= 0
+        )
     ).order_by(models.Transaction.timestamp.desc())
 
     return flask.render_template('admin/transactions.html',
@@ -77,7 +86,19 @@ def void_transaction():
     if not transaction or transaction.voided:
         flask.abort(400)
 
-    transaction.void_and_refund()
+    if transaction.type == 'user_transaction':
+        credit_transfer = models.CreditTransfer.query.filter(
+            sqla.or_(
+                # As we include potential transactions where value is 0
+                # (maybe on both sides), we'll search on both sides
+                # here.
+                models.CreditTransfer.payer_transaction_id.is_(transaction.id),
+                models.CreditTransfer.payee_transaction_id.is_(transaction.id),
+            )
+        ).first()
+        credit_transfer.void()
+    else:
+        transaction.void_and_refund()
 
     if flask.request.is_json:
         return flask.jsonify(
