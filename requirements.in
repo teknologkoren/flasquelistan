@@ -1,0 +1,16 @@
+flask
+flask-sqlalchemy
+flask-admin
+flask-login
+pytest
+pytest-xdist
+coverage
+flask-babel
+flask-bcrypt
+flask-wtf
+flask-uploads
+phonenumbers
+markdown
+vobject
+pillow
+piexif
