@@ -53,3 +53,54 @@
 </div>
 {% endif %}
 {% endmacro %}
+
+{% macro paginator_item(base_url, text, pagenum, active) %}
+  <div class="paginator-item {% if active %}active{% endif %}">
+    {% if active %}
+    <a href="{{base_url}}{{pagenum}}">{{text}}</a>
+    {% else %}
+      {{text}}
+    {% endif %}
+  </div>
+{% endmacro %}
+
+{% macro paginator(base_url, page, has_prev, has_next, last_page) %}
+  <div class="paginator">
+    {{ paginator_item(base_url, '<<', 1, has_prev) }}
+    {{ paginator_item(base_url, '<', page - 1, has_prev) }}
+
+    {% if has_prev %}
+      {% for p in range(page-2, page) %}
+      {% if p >= 1 %}
+          {{ paginator_item(base_url, p, p, True) }}
+        {% endif %}
+      {% endfor %}
+    {% endif %}
+
+    {{ paginator_item(base_url, page, page, False) }}
+
+    {% if has_next %}
+      {% for p in range(page+1, page+3) %}
+        {% if p <= last_page %}
+          {{ paginator_item(base_url, p, p, True) }}
+        {% endif %}
+      {% endfor %}
+    {% endif %}
+
+    {{ paginator_item(base_url, '>', page + 1, has_next) }}
+    {{ paginator_item(base_url, '>>', last_page, has_next) }}
+  </div>
+{% endmacro %}
+
+{% macro gallery_image_card(image) %}
+  <div class="gallery-item">
+    <a href="/static/uploads/profilepictures/{{ image.filename }}">
+      <img class="gallery-image" src="/static/uploads/profilepictures/{{ image.filename }}" alt="          {{image.filename}}">
+    </a>
+    <div class="gallery-image-description">
+        <a href="/profile/{{ image.user.id }}">{{ image.user.full_name }}</a>,
+        {{_('Uppladdad')}}: {{ image.timestamp.strftime('%d %b %Y ') }}
+    </div>
+  </div>
+{% endmacro %}
+

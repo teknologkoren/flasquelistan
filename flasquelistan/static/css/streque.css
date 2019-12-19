@@ -282,13 +282,14 @@ ol.transaction-history li .value {
   margin-top: 1rem;
 }
 
-.gallery-paginator{
-    margin-top: 2rem;
-    margin-bottom: 2rem;
+.paginator{
+    margin-top: 1.5rem;
+    margin-bottom: 1.5rem;
     display: flex;
     flex-direction: row;
+    font-size: 85%;
 }
-.gallery-paginator-item{
+.paginator-item{
   padding: 0.5rem;
   border: 1px solid #555;
   border-collapse: collapse;
