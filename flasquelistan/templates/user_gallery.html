@@ -15,9 +15,6 @@
 
 {% block body %}
 <h2>{{_('Bilder på')}} {{user.full_name}}</h2>
-<h2>{{_('Nuvarande profilbild')}}</h2>
-{{ gallery_image_card(user.profile_picture) }}
-<h2>{{_('Alla bilder')}}</h2>
 <a href="/profile/{{ user.id}}">{{_('Tillbaka till profilen')}}</a>
   {% for image in images %}
     {{ gallery_image_card(image) }}
