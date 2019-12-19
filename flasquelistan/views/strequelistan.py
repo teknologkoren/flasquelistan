@@ -224,6 +224,45 @@ def history():
     return flask.render_template('history.html', streques=streques)
 
 
+@mod.route('/gallery/')
+@mod.route('/gallery/<int:page>/')
+def gallery(page=1):
+    image_query = (models.ProfilePicture
+            .query
+            .order_by(models.ProfilePicture.timestamp.desc())
+            .paginate(
+                page=page,
+                per_page=20,
+            )
+        )
+
+    return flask.render_template(
+        'gallery.html',
+        images=image_query.items,
+        page=page,
+        has_prev=image_query.has_prev,
+        has_next=image_query.has_next,
+        last_page=image_query.pages,
+    )
+
+@mod.route('/gallery/user/<int:user_id>/')
+def user_gallery(user_id):
+    user = models.User.query.get_or_404(user_id)
+
+    images = (models.ProfilePicture
+        .query
+        .filter(
+            models.ProfilePicture.user_id.is_(user.id)
+        )
+        .order_by(models.ProfilePicture.timestamp.desc())
+        .all())
+
+    return flask.render_template(
+        'user_gallery.html',
+        user=user,
+        images=images
+    )
+
 @mod.route('/profile/<int:user_id>/')
 def show_profile(user_id):
     user = models.User.query.get_or_404(user_id)
