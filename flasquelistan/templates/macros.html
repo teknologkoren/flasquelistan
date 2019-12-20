@@ -39,7 +39,7 @@
 {% macro profile_picture(user, with_link=False) %}
 {% if user.profile_picture %}
 {% if with_link %}
-<a class="profile-picture" href="{{ url_for_image(user.profile_picture.filename, 'profilepicture') }}">
+<a class="profile-picture" href="/gallery/user/{{user.id}}">
   <img src="{{ url_for_image(user.profile_picture.filename, 'profilepicture', 600) }}">
 </a>
 {% else %}
@@ -95,7 +95,7 @@
 {% macro gallery_image_card(image) %}
   <div class="gallery-item">
     <a href="/static/uploads/profilepictures/{{ image.filename }}">
-      <img class="gallery-image" src="/static/uploads/profilepictures/{{ image.filename }}" alt="          {{image.filename}}">
+        <img class="gallery-image" alt="{{image.filename}}" src="{{ url_for_image(image.filename, 'profilepicture', 600) }}">
     </a>
     <div class="gallery-image-description">
         <a href="/profile/{{ image.user.id }}">{{ image.user.full_name }}</a>,
