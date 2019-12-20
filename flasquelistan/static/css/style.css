@@ -104,8 +104,8 @@ nav a:hover {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding-left: 0.6rem;
-  padding-right: 0.6rem;
+  padding-left: 0.2rem;
+  padding-right: 0.2rem;
 }
 
 nav svg {

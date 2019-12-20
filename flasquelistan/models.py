@@ -508,3 +508,5 @@ class ProfilePicture(db.Model):
 
     user = db.relationship('User', foreign_keys=user_id,
                            backref='profile_pictures')
+    timestamp = db.Column(db.DateTime, nullable=False,
+                          default=datetime.datetime.utcnow)

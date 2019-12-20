@@ -270,3 +270,37 @@ ol.transaction-history li .value {
 #emma-img.hidden {
   transform: translate(-50%, -50%) scale(0.0001);
 }
+
+.gallery{
+  max-width: 800px;
+}
+
+.gallery h2{
+  text-align: center;
+}
+.gallery-item{
+  margin-bottom: 5rem;
+}
+
+.gallery-image{
+  width: 100%;
+  height: 100%;
+}
+.gallery-image-description{
+  margin-top: 1rem;
+}
+
+.paginator{
+  justify-content: center;
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
+  display: flex;
+  flex-direction: row;
+  font-size: 85%;
+}
+.paginator-item{
+  padding: 0.5rem;
+  border: 1px solid #555;
+  border-collapse: collapse;
+  display: inline;
+}
