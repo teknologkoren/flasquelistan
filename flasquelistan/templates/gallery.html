@@ -6,11 +6,12 @@
 
 
 {% block body %}
-<h2>{{_('Profilbilder genom tiderna')}}</h2>
-{{ paginator(url_for('strequelistan.gallery'), page, has_prev, has_next, last_page) }}
-  {% for image in images %}
-    {{ gallery_image_card(image) }}
-  {% endfor %}
-{{ paginator(url_for('strequelistan.gallery'), page, has_prev, has_next, last_page) }}
-
+<div class="gallery">
+  <h2>{{_('Profilbilder genom tiderna')}}</h2>
+  {{ paginator(url_for('strequelistan.gallery'), page, has_prev, has_next, last_page) }}
+    {% for image in images %}
+      {{ gallery_image_card(image) }}
+    {% endfor %}
+  {{ paginator(url_for('strequelistan.gallery'), page, has_prev, has_next, last_page) }}
+</div>
 {% endblock %}
