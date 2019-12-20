@@ -2,22 +2,15 @@
 
 {% set active_page = "gallery" %}
 
-{% macro gallery_image_card(image) %}
-  <div class="gallery-item">
-    <a href="/static/uploads/profilepictures/{{ image.filename }}">
-      <img class="gallery-image" src="/static/uploads/profilepictures/{{ image.filename }}" alt="{{image.filename}}">
-    </a>
-    <div class="gallery-image-description">
-        {{_('Uppladdad')}}: {{ image.timestamp.strftime('%d %b %Y ') }}
-    </div>
-  </div>
-{% endmacro %}
+{% from "macros.html" import paginator, gallery_image_card %}
+
 
 {% block body %}
 <h2>{{_('Bilder på')}} {{user.full_name}}</h2>
-<a href="/profile/{{ user.id}}">{{_('Tillbaka till profilen')}}</a>
+{{ paginator(url_for('strequelistan.gallery'), page, has_prev, has_next, last_page) }}
   {% for image in images %}
     {{ gallery_image_card(image) }}
   {% endfor %}
+{{ paginator(url_for('strequelistan.gallery'), page, has_prev, has_next, last_page) }}
 
 {% endblock %}

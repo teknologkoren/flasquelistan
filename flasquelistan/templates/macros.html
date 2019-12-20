@@ -25,7 +25,7 @@
   <span>{{ field.label }} {% if field.flags.required %}<span class="required">*</span>{% endif %}</span>
   {% if description and field.description %}
   <div class="field-description">
-    {{ field.description }}
+    {{ field.description }} Cita
   </div>
   {% endif %}
   {% for error in field.errors %}
@@ -94,11 +94,11 @@
 
 {% macro gallery_image_card(image) %}
   <div class="gallery-item">
-    <a href="/static/uploads/profilepictures/{{ image.filename }}">
-        <img class="gallery-image" alt="{{image.filename}}" src="{{ url_for_image(image.filename, 'profilepicture', 600) }}">
+    <a href="{{ url_for_image(image.filename, 'profilepicture') }}">
+        <img class="gallery-image" src="{{ url_for_image(image.filename, 'profilepicture', 600) }}">
     </a>
     <div class="gallery-image-description">
-        <a href="/profile/{{ image.user.id }}">{{ image.user.full_name }}</a>,
+        <a href="{{ url_for('strequelistan.show_profile', user_id=image.user.id)}}">{{ image.user.full_name }}</a>,
         {{_('Uppladdad')}}: {{ image.timestamp.strftime('%d %b %Y ') }}
     </div>
   </div>

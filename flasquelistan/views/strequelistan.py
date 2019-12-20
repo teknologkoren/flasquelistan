@@ -246,21 +246,30 @@ def gallery(page=1):
     )
 
 @mod.route('/gallery/user/<int:user_id>/')
-def user_gallery(user_id):
+@mod.route('/gallery/user/<int:user_id>/<int:page>')
+def user_gallery(user_id, page=1):
     user = models.User.query.get_or_404(user_id)
 
-    images = (models.ProfilePicture
-        .query
-        .filter(
-            models.ProfilePicture.user_id.is_(user.id)
+    image_query = (models.ProfilePicture
+            .query
+            .filter(
+                models.ProfilePicture.user_id.is_(user.id)
+            )
+            .order_by(models.ProfilePicture.timestamp.desc())
+            .paginate(
+                page=page,
+                per_page=20,
+            )
         )
-        .order_by(models.ProfilePicture.timestamp.desc())
-        .all())
 
     return flask.render_template(
         'user_gallery.html',
         user=user,
-        images=images
+        images=image_query.items,
+        page=page,
+        has_prev=image_query.has_prev,
+        has_next=image_query.has_next,
+        last_page=image_query.pages,
     )
 
 @mod.route('/profile/<int:user_id>/')
