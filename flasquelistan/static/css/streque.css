@@ -282,9 +282,12 @@ ol.transaction-history li .value {
 }
 .gallery-item {
   margin-bottom: 5rem;
+  width: 100%;
 }
 .gallery-image {
   max-height: 60vh;
+  width: 100%;
+  object-fit: contain;
 }
 .gallery-image-description {
   margin-top: 1rem;
