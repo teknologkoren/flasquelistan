@@ -285,7 +285,7 @@ ol.transaction-history li .value {
   width: 100%;
 }
 .gallery-image {
-  max-height: 60vh;
+  max-height: 30rem;
   width: 100%;
   object-fit: contain;
 }
