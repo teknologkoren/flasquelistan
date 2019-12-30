@@ -3,12 +3,17 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{{ _("Site title") }}</title>
-    <link rel="manifest" href="/static/manifest.json">
+    <link rel="manifest" href="{{ url_for('static', filename="manifest.json") }}">
+
+    <link rel="shortcut icon" type="image/png" href="{{ url_for('static', filename='images/icon-192.png') }}">
+    <link rel="shortcut icon" sizes="196x196" href="{{ url_for('static', filename='images/icon-192.png') }}">
+    <link rel="apple-touch-icon" href="{{ url_for('static', filename='images/icon-192.png') }}">
 
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/streque.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/quotes.css') }}">
+
+    <title>{{ _("Site title") }}</title>
 
     {% block head %}
     {% endblock %}
