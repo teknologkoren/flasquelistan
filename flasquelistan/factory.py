@@ -36,11 +36,10 @@ def create_app(config=None, instance_config=None):
 
 
 def register_blueprints(app):
-    from flasquelistan.views import (auth, admin, more, quotes, serviceworker,
+    from flasquelistan.views import (auth, admin, quotes, serviceworker,
                                      strequelistan)
     app.register_blueprint(auth.mod)
     app.register_blueprint(admin.mod)
-    app.register_blueprint(more.mod)
     app.register_blueprint(serviceworker.mod)
     app.register_blueprint(strequelistan.mod)
     app.register_blueprint(quotes.mod)
@@ -253,6 +252,7 @@ def setup_flask_babel(app):
     app.jinja_env.globals['format_datetime'] = flask_babel.format_datetime
     app.jinja_env.globals['format_date'] = flask_babel.format_date
     app.jinja_env.globals['format_currency'] = flask_babel.format_currency
+    app.jinja_env.globals['locale'] = flask_babel.get_locale
 
     @babel.localeselector
     def get_locale():

@@ -21,6 +21,11 @@ def before_request():
     pass
 
 
+@mod.route('/admin/', methods=['GET', 'POST'])
+def index():
+    return flask.render_template('admin/index.html')
+
+
 @mod.route('/admin/transactions/', methods=['GET', 'POST'])
 def transactions():
     form = forms.DateRangeForm()

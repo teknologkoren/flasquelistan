@@ -1,0 +1,37 @@
+{% extends "admin/layout.html" %}
+
+{% block body %}
+<div class="admin-index">
+  <h2>{{ _("Admin") }}</h2>
+  <h3>{{ _("Användare") }}</h3>
+  <ul>
+    <li><a href="{{ url_for("strequeadmin.add_user") }}">{{ _("Skapa användare") }}</a></li>
+    <li><a href="{{ url_for("strequeadmin.requests") }}">{{ _("Kontoförfrågningar") }}</a></li>
+    <li><a href="{{ url_for("strequeadmin.show_users") }}">{{ _("Lista över användare") }}</a></li>
+    <li><a href="{{ url_for("strequeadmin.show_groups") }}">{{ _("Grupper") }}</a></li>
+    <li><a href="{{ url_for("strequeadmin.spam") }}">{{ _("Skicka saldopåminnelser") }}</a></li>
+  </ul>
+  <h3>{{ _("Transaktioner") }}</h3>
+  <ul>
+    <li><a href="{{ url_for("strequeadmin.transactions") }}">{{ _("Transaktionshistorik") }}</a></li>
+    <li><a href="{{ url_for("strequeadmin.bulk_transactions") }}">{{ _("Gör bulktransaktioner") }}</a></li>
+  </ul>
+  <h3>{{ _("Produkter") }}</h3>
+  <ul>
+    <li><a href="{{ url_for("strequeadmin.articles") }}">{{ _("Produkter") }}</a></li>
+  </ul>
+  <h3>{{ _("Generera en papperslista") }}</h3>
+  <form action="{{ url_for("strequelistan.paperlist") }}" method="GET">
+    <ul>
+      <li>Endast aktiva: <input type="checkbox" name="active" value="true"></li>
+      <li>Extra rader: <input type="number" name="empty" value="0"></br></li>
+      <li><input type="submit" value="{{ _("Generera") }}"></li>
+    </ul>
+  </form>
+  <h3>{{ _("Annat") }}</h3>
+  <ul>
+    <li><a href="{{ url_for("strequeadmin.show_quotes") }}">{{ _("Citat") }}</a></li>
+    <li><a href="{{ url_for("admin.index") }}">{{ _("Databas-admin") }}</a></li>
+  </ul>
+</div>
+{% endblock %}

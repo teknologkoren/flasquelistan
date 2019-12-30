@@ -1,3 +1,16 @@
+.admin-index {
+  max-width: 30rem;
+}
+
+.admin-index ul {
+  list-style: none;
+}
+
+.admin-index li {
+  margin: .5rem 0;
+}
+
+
 .date-range-form {
   margin-bottom: 1rem;
 }

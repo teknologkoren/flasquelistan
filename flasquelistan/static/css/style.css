@@ -73,7 +73,13 @@ fieldset {
   vertical-align: middle;
 }
 
-nav {
+.inline-icon img {
+  width: 1rem;
+  margin-right: .25rem;
+  vertical-align: text-bottom;
+}
+
+.bottom-nav {
   position: fixed;
   bottom: 0;
   padding: .2rem 1.5rem;
@@ -85,7 +91,7 @@ nav {
   border-top: 1px solid #ddd;
 }
 
-nav ul {
+.bottom-nav ul {
   padding: 0;
   margin: 0;
   list-style: none;
@@ -96,8 +102,8 @@ nav ul {
   width: 100%;
 }
 
-nav a,
-nav a:hover {
+.bottom-nav a,
+.bottom-nav a:hover {
   text-decoration: none;
   color: #000;
   font-size: 0.9em;
@@ -108,17 +114,17 @@ nav a:hover {
   padding-right: 0.2rem;
 }
 
-nav svg {
+.bottom-nav svg {
   height: 1.1rem;
   margin-bottom: 0.2rem;
 }
 
-nav li.active a {
+.bottom-nav li.active a {
   color: #5c81c2;
   font-weight: bold;
 }
 
-nav li.active path {
+.bottom-nav li.active path {
   fill: #5c81c2;
 }
 
@@ -137,11 +143,6 @@ main {
 
 .login {
   max-width: 30rem;
-}
-
-.more {
-  max-width: 30rem;
-  width: 100%;
 }
 
 .cards {
@@ -182,8 +183,11 @@ main {
 .flash {
   min-width: 10rem;
   padding: .5rem 1rem;
-  margin: .5rem auto;
+  margin: 0 auto;
   border-radius: 7px;
+}
+.flash + .flash {
+  margin-top: 1rem;
 }
 .flash.success {
   background-color: #C9F7DD;
@@ -284,21 +288,13 @@ input[type=number] {
   text-align: start;
 }
 
-.more ul {
-  list-style: none;
-}
-
-.more li {
-  margin: .5rem 0;
-}
-
 .payments {
   max-width: 35rem;
   width: 100%;
 }
 
 @media print {
-  nav {
+  .bottom-nav {
     display: none;
   }
 }

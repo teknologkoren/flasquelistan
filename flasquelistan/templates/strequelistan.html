@@ -75,25 +75,47 @@
 {% endblock %}
 
 {% block body %}
-<div class="cards">
+<div class="streque-top">
+  <nav class="streque-nav">
+    <ul>
+      <li><a href="{{ url_for("strequelistan.article_description") }}">{{ _("Prislista") }}</a></li>
+      <li><a href="{{ url_for("strequelistan.payments") }}">{{ _("Påfyllning av saldo") }}</a></li>
+      {% if current_user.is_admin %}
+      <li><a href="{{ url_for("strequeadmin.index") }}">Admin</a></li>
+      {% endif %}
+      <li>
+        {% if locale().language == 'sv' %}
+        <a class="lang-switch inline-icon" href="?lang=en">
+          <img src="{{ url_for('static', filename='images/lang_icon.png') }}">English
+        </a>
+        {% else %}
+        <a class="lang-switch inline-icon" href="?lang=sv_SE">
+          <img src="{{ url_for('static', filename='images/lang_icon.png') }}">Svenska
+        </a>
+        {% endif %}
+      </li>
+      <li><a href="{{ url_for("auth.logout") }}">{{ _("Logga ut") }}</a></li>
+    </ul>
+  </nav>
+
   {% if quote %}
     <blockquote class="quote quote-display">
       {{ quote_inner(quote) }}
     </blockquote>
   {% endif %}
+</div>
 
+<div class="cards">
   <input id="ajax-csrf_token" type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+
+  <h2>{{ _("Inloggad användare") }}</h2>
+  {{ usercard(current_user, articles) }}
 
   <h2 class="user-filter">{{ _("Filtrera användare") }}</h2>
   <div class="user-filter">
       <p><small>{{ _("Du kan söka på namn, smeknamn och telefonnummer.") }}</small></p>
     <input type="text" id="user-filter" placeholder="Namn" autocomplete="off">
     <button id="clear-filter" type="button">{{ _("Rensa") }}</button>
-  </div>
-
-  <div class="group">
-    <h2>{{ _("Inloggad användare") }}</h2>
-    {{ usercard(current_user, articles) }}
   </div>
 
   {% for group in groups %}
