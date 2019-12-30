@@ -134,16 +134,16 @@ def populate_testdb():
         active=True,
     )
 
-    soprano = models.Group(name='Sopran', weight='10')
-    alto = models.Group(name='Alt', weight='20')
-    tenor = models.Group(name='Tenor', weight='30')
-    bass = models.Group(name='Bas', weight='40')
+    soprano = models.Group(name='Sopran', weight='40')
+    alto = models.Group(name='Alt', weight='30')
+    tenor = models.Group(name='Tenor', weight='20')
+    bass = models.Group(name='Bas', weight='10')
 
-    beer = models.Article(name='Öl', value=1200, weight=10, standardglas=1)
-    cider = models.Article(name='Cider', value=1200, weight=20, standardglas=1)
-    wine = models.Article(name='Vin', value=1500, weight=30, standardglas=1)
-    shot = models.Article(name='4 cl', value=1600, weight=40, standardglas=1)
-    soft = models.Article(name='Alkfritt', value=1000, weight=50,
+    beer = models.Article(name='Öl', value=1600, weight=50, standardglas=1)
+    cider = models.Article(name='Cider', value=1500, weight=40, standardglas=1)
+    wine = models.Article(name='Vin', value=1400, weight=30, standardglas=1)
+    shot = models.Article(name='4 cl', value=1300, weight=20, standardglas=1)
+    soft = models.Article(name='Alkfritt', value=1200, weight=10,
                           standardglas=0)
 
     quote1 = models.Quote(
