@@ -23,7 +23,8 @@ def before_request():
 
 @mod.route('/admin/', methods=['GET', 'POST'])
 def index():
-    return flask.render_template('admin/index.html')
+    print(flask.request.url)
+    return flask.render_template('strequeadmin/index.html')
 
 
 @mod.route('/admin/transactions/', methods=['GET', 'POST'])
@@ -70,7 +71,7 @@ def transactions():
         )
     ).order_by(models.Transaction.timestamp.desc())
 
-    return flask.render_template('admin/transactions.html',
+    return flask.render_template('strequeadmin/transactions.html',
                                  transactions=transactions,
                                  form=form)
 
@@ -161,7 +162,7 @@ def bulk_transactions():
             flask.flash(_l("Inga transaktioner utförda. "
                         "Väl spenderade klockcykler, bra jobbat!"), 'info')
 
-    return flask.render_template('admin/bulk_transactions.html', form=form)
+    return flask.render_template('strequeadmin/bulk_transactions.html', form=form)
 
 
 @mod.route('/admin/transactions/bulk/confirm', methods=['POST'])
@@ -205,7 +206,7 @@ def articles():
                 )
                 .all()
                 )
-    return flask.render_template('admin/articles.html', articles=articles)
+    return flask.render_template('strequeadmin/articles.html', articles=articles)
 
 
 @mod.route('/admin/articles/new', methods=['GET', 'POST'])
@@ -243,7 +244,7 @@ def edit_article(article_id=None):
 
         return flask.redirect(flask.url_for('strequeadmin.articles'))
 
-    return flask.render_template('admin/edit_article.html', form=form,
+    return flask.render_template('strequeadmin/edit_article.html', form=form,
                                  article=article)
 
 
@@ -267,14 +268,14 @@ def spam():
     if flask.request.method == 'POST':
         subject = "Hälsning från QM"
         for user in users:
-            mail = flask.render_template('admin/negative_balance_mail.jinja2',
+            mail = flask.render_template('strequeadmin/negative_balance_mail.jinja2',
                                          user=user)
             util.send_email(user.email, subject, mail)
 
         flask.flash(_("Skickade %(nr)i saldopåminnelser!", nr=users.count()),
                     'success')
 
-    return flask.render_template('admin/spam.html', users=users)
+    return flask.render_template('strequeadmin/spam.html', users=users)
 
 
 @mod.route('/admin/add-user/', methods=['GET', 'POST'])
@@ -314,21 +315,21 @@ def add_user(request_id=None):
             # Redirect to clear form
             return flask.redirect(flask.url_for('strequeadmin.add_user'))
 
-    return flask.render_template('admin/add_user.html', form=form,
+    return flask.render_template('strequeadmin/add_user.html', form=form,
                                  is_request=bool(request_id))
 
 
 @mod.route('/admin/users')
 def show_users():
     users = models.User.query.order_by(models.User.first_name.asc()).all()
-    return flask.render_template('admin/users.html', users=users)
+    return flask.render_template('strequeadmin/users.html', users=users)
 
 
 @mod.route('/admin/requests/')
 def requests():
     requests = models.RegistrationRequest.query
 
-    return flask.render_template('admin/requests.html', requests=requests)
+    return flask.render_template('strequeadmin/requests.html', requests=requests)
 
 
 @mod.route('/admin/requests/remove/<int:request_id>', methods=['POST'])
@@ -347,7 +348,7 @@ def remove_request(request_id):
 @mod.route('/admin/groups')
 def show_groups():
     groups = models.Group.query.order_by(models.Group.weight.desc()).all()
-    return flask.render_template('admin/groups.html', groups=groups)
+    return flask.render_template('strequeadmin/groups.html', groups=groups)
 
 
 @mod.route('/admin/groups/new', methods=['GET', 'POST'])
@@ -376,7 +377,7 @@ def edit_group(group_id=None):
 
         return flask.redirect(flask.url_for('strequeadmin.show_groups'))
 
-    return flask.render_template('admin/edit_group.html',
+    return flask.render_template('strequeadmin/edit_group.html',
                                  form=form,
                                  group=group)
 
@@ -395,7 +396,7 @@ def remove_group(group_id):
 @mod.route('/admin/quotes/')
 def show_quotes():
     quotes = models.Quote.query.order_by(models.Quote.timestamp.desc()).all()
-    return flask.render_template('admin/quotes.html', quotes=quotes)
+    return flask.render_template('strequeadmin/quotes.html', quotes=quotes)
 
 
 @mod.route('/admin/quotes/edit/<int:quote_id>', methods=['GET', 'POST'])
@@ -410,7 +411,7 @@ def edit_quote(quote_id):
         models.db.session.commit()
         flask.flash(_l("Citat har ändrats!"), 'success')
 
-    return flask.render_template('admin/edit_quote.html',
+    return flask.render_template('strequeadmin/edit_quote.html',
                                  quote=quote,
                                  form=form)
 
