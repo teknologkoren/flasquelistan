@@ -24,11 +24,10 @@
   </span>
 
   {% if void_button %}
-  <form class="void-form" method="POST">
+  <form class="void-form" method="POST" action="{{ url_for('strequelistan.void_streque') }}">
     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-    <button class="void-button"
-            formaction="{{ url_for('strequelistan.void_streque', streque_id=streque.id) }}"
-            data-strequeid="{{ streque.id }}">
+    <input type="hidden" name="streque_id" value="{{ streque.id }}"/>
+    <button class="void-button" data-strequeid="{{ streque.id }}">
       Ångra
     </button>
   </form>

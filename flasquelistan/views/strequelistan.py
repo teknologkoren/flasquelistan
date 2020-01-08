@@ -52,7 +52,11 @@ def add_streque():
     if flask.request.is_json:
         data = flask.request.get_json()
     else:
-        data = flask.request.args
+        form = forms.AddStrequeForm()
+        data = {
+            'user_id': form.user_id.data,
+            'article_id': form.article_id.data
+        }
 
     try:
         user = models.User.query.get(data['user_id'])
@@ -90,7 +94,10 @@ def void_streque():
     if flask.request.is_json:
         data = flask.request.get_json()
     else:
-        data = flask.request.args
+        form = forms.VoidStrequeForm()
+        data = {
+            'streque_id': form.streque_id.data
+        }
 
     try:
         streque_id = data['streque_id']

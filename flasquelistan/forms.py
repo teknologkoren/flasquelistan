@@ -204,6 +204,19 @@ class ChangeEmailOrPasswordForm(EmailForm, PasswordForm):
             return False
 
 
+class AddStrequeForm(flask_wtf.FlaskForm):
+    user_id = fields.HiddenField()
+    article_id = fields.HiddenField()
+
+
+class VoidStrequeForm(flask_wtf.FlaskForm):
+    streque_id = fields.HiddenField()
+
+
+class VoidTransactionForm(flask_wtf.FlaskForm):
+    transaction_id = fields.HiddenField()
+
+
 class EditUserForm(flask_wtf.FlaskForm):
     nickname = fields.StringField(
         _l('Smeknamn'),

@@ -81,7 +81,10 @@ def void_transaction():
     if flask.request.is_json:
         data = flask.request.get_json()
     else:
-        data = flask.request.args
+        form = forms.VoidTransactionForm()
+        data = {
+            'transaction_id': form.transaction_id.data
+        }
 
     try:
         transaction_id = data['transaction_id']
