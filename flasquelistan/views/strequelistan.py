@@ -179,6 +179,7 @@ def credit_transfer():
 def article_description():
     articles = (models.Article
                 .query
+                .filter(models.Article.is_active.is_(True))
                 .order_by(models.Article.weight.desc())
                 .all()
                 )
