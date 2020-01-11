@@ -23,6 +23,7 @@
     </a>
     {% if user in users_with_streques %}
     {% set bac = user.bac %}
+    {% if bac >= 0.1 %}
     <div class="alcometer">
       {% if bac < 0.3 %}
       🍺
@@ -49,6 +50,7 @@
         {{ '{:.2f}'.format(bac) }}
       </span>
     </div>
+    {% endif %}
     {% endif %}
   </div>
   <div class="streque-buttons">
