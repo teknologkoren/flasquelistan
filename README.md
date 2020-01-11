@@ -25,12 +25,14 @@ pip install -r requirements.txt
 ### pip-tools
 [pip-tools](https://github.com/jazzband/pip-tools) can keep your virtual
 environment in sync with the `requirements.txt` file, as well as compiling a
-new `requirements.txt` when adding a new dependency.
+new `requirements.txt` when adding/removing a dependency in `requirements.in`.
 
 ```sh
 pip install pip-tools
-pip-tools sync
+pip-compile  # only necessary when adding/removing a dependency
+pip-sync
 ```
+
 ### Initializing the application
 
 Tell Flask where the app is located:
