@@ -1,4 +1,5 @@
 import os
+import datetime
 import flask
 from flask_login import current_user, login_required
 from sqlalchemy.sql.expression import func, not_
@@ -27,6 +28,21 @@ def index():
               .all()
               )
 
+
+    too_old = datetime.datetime.utcnow() - datetime.timedelta(days=7)
+    users_with_streques = (
+        models.User
+        .query
+        .join(models.User.transactions)
+        .filter(
+            models.Transaction.type.is_('streque'),
+            models.Streque.voided.is_(False),
+            models.Streque.timestamp >= too_old,
+            models.Streque.standardglas > 0
+        )
+        .all()
+    )
+
     random_quote = models.Quote.query.order_by(func.random()).first()
 
     articles = (models.Article
@@ -43,8 +59,14 @@ def index():
         flask.flash(_l("Det är ont om pengar på kontot. Dags att fylla på?"),
                     'warning')
 
-    return flask.render_template('strequelistan.html', groups=groups,
-                                 quote=random_quote, articles=articles)
+
+    return flask.render_template(
+        'strequelistan.html',
+        groups=groups,
+        quote=random_quote,
+        articles=articles,
+        users_with_streques=users_with_streques
+    )
 
 
 @mod.route('/strequa', methods=['POST'])

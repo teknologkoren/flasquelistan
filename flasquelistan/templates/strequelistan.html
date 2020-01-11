@@ -21,7 +21,7 @@
         {% endif %}
       </div>
     </a>
-    {% if user.bac >= 0.1 %}
+    {% if user in users_with_streques %}
     {% set bac = user.bac %}
     <div class="alcometer">
       {% if bac < 0.3 %}
