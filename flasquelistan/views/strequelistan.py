@@ -262,7 +262,7 @@ def gallery_page_for_image(image, user=None):
     )
 
     if user:
-        images.filter(models.ProfilePicture.user_id.is_(user.id))
+        images = images.filter(models.ProfilePicture.user_id.is_(user.id))
 
     pagination = images.paginate(per_page=20)
 
