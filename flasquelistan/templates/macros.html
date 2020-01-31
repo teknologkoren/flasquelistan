@@ -39,7 +39,7 @@
 {% macro profile_picture(user, with_link=False) %}
 {% if user.profile_picture %}
 {% if with_link %}
-<a class="profile-picture" href="{{url_for('strequelistan.user_gallery', user_id=user.id)}}">
+<a class="profile-picture" href="{{ url_for('strequelistan.user_gallery', user_id=user.id, page=gallery_page_for_image(user.profile_picture), _anchor=user.profile_picture.id) }}">
   <img src="{{ url_for_image(user.profile_picture.filename, 'profilepicture', 600) }}">
 </a>
 {% else %}
@@ -93,13 +93,13 @@
 {% endmacro %}
 
 {% macro gallery_image_card(image) %}
-  <div class="gallery-item">
+  <div class="gallery-item" id="{{ image.id }}">
     <a href="{{ url_for_image(image.filename, 'profilepicture') }}">
-        <img class="gallery-image" src="{{ url_for_image(image.filename, 'profilepicture', 800) }}">
+      <img class="gallery-image" src="{{ url_for_image(image.filename, 'profilepicture', 800) }}">
     </a>
     <div class="gallery-image-description">
-        <a href="{{ url_for('strequelistan.show_profile', user_id=image.user.id)}}">{{ image.user.full_name }}</a>,
-        {{_('Uppladdad')}}: {{ image.timestamp.strftime('%d %b %Y ') }}
+      <a href="{{ url_for('strequelistan.show_profile', user_id=image.user.id) }}">{{ image.user.full_name }}</a>,
+      {{_('Uppladdad')}}: {{ image.timestamp.strftime('%d %b %Y ') }}
     </div>
   </div>
 {% endmacro %}

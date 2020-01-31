@@ -13,6 +13,9 @@
 <div class="profile">
   <div class="profile-content">
     {{ profile_picture(user, with_link=True) }}
+    <div class="user-gallery-link">
+      <a href="{{ url_for('strequelistan.user_gallery', user_id=user.id) }}">{{ _("Fler bilder") }}</a>
+    </div>
   </div>
 
   <div class="profile-content">
@@ -44,7 +47,7 @@
     </dl>
 
     <p>
-      <a href="{{ url_for('strequelistan.user_vcard', user_id=user.id) }}" download>{{ _("Ladda ner kontaktfil") }}</a>
+      <a href="{{ url_for('strequelistan.user_vcard', user_id=user.id) }}" download>{{ _("Ladda ner kontaktfil") }}</a>
     </p>
     {% if user == current_user or current_user.is_admin %}
     <dl>

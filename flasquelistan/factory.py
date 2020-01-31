@@ -283,11 +283,15 @@ def setup_flask_babel(app):
 def setup_flask_uploads(app):
     import flask_uploads
     from flasquelistan import util
+    from flasquelistan.views import strequelistan
 
     flask_uploads.configure_uploads(app, util.image_uploads)
     flask_uploads.configure_uploads(app, util.profile_pictures)
 
     app.jinja_env.globals['url_for_image'] = util.url_for_image
+    app.jinja_env.globals['gallery_page_for_image'] = (
+        strequelistan.gallery_page_for_image
+    )
 
 
 def setup_csrf_protection(app):
