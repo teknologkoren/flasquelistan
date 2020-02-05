@@ -159,7 +159,7 @@ def bulk_transactions():
 
         if transactions:
             return flask.render_template(
-                'admin/confirm_bulk_transactions.html',
+                'strequeadmin/confirm_bulk_transactions.html',
                 transactions=transactions)
         else:
             flask.flash(_l("Inga transaktioner utförda. "
