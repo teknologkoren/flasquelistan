@@ -327,7 +327,15 @@ def ChangeProfilePictureFormFactory(user):
         choices = [('none', _l('Ingen'))]
         default = None
 
-        for pic in user.profile_pictures:
+        pictures = (
+            models.ProfilePicture
+            .query
+            .filter(
+                models.ProfilePicture.user_id.is_(user.id)
+            )
+            .order_by(models.ProfilePicture.timestamp.desc())
+        )
+        for pic in pictures:
             if pic == user.profile_picture:
                 default = str(pic.id)
 
