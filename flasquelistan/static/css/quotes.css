@@ -4,6 +4,7 @@
 
 .quote-text {
   margin-bottom: 1rem;
+  white-space: pre-line;
 }
 
 .quote-meta {

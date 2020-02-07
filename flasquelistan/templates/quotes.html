@@ -3,7 +3,7 @@
 {% set active_page = "quotes" %}
 
 {% macro quote_inner(quote) %}
-<div class="quote-text">{{ quote.text }}</div>
+<div class="quote-text">{{ quote.cleaned() }}</div>
 <div class="quote-meta">
   {% if quote.who %}
   <div class="quote-who">&mdash; {{ quote.who }}</div>

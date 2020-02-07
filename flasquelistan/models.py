@@ -497,6 +497,12 @@ class Quote(db.Model):
     timestamp = db.Column(db.DateTime, nullable=False,
                           default=datetime.datetime.utcnow)
 
+    def cleaned(self):
+        lines = self.text.splitlines()
+        allowed = "\n".join(lines[:4])
+        joined = "  ".join(lines[4:])
+        return "{} {}".format(allowed, joined)
+
     def __str__(self):
         return "{}... — {}".format(self.text[:20], self.who[:10] or "<None>")
 
