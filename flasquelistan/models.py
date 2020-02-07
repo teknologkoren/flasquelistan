@@ -498,10 +498,8 @@ class Quote(db.Model):
                           default=datetime.datetime.utcnow)
 
     def cleaned(self):
-        lines = self.text.splitlines()
-        allowed = "\n".join(lines[:4])
-        joined = "  ".join(lines[4:])
-        return "{} {}".format(allowed, joined)
+        lines = [l for l in self.text.splitlines() if l]
+        return "\n".join(lines)
 
     def __str__(self):
         return "{}... — {}".format(self.text[:20], self.who[:10] or "<None>")
