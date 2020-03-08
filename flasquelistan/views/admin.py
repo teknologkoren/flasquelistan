@@ -112,7 +112,7 @@ def streque_stats():
         .with_entities(
             models.User.first_name,
             models.User.last_name,
-            sqla.func.count(models.Streque.user_id)
+            sqla.func.count(models.Streque.user_id).label('count')
         )
         .filter(
             sqla.func.DATE(models.Streque.timestamp) >= from_date,
@@ -122,6 +122,7 @@ def streque_stats():
         .group_by(
             models.Streque.user_id
         )
+        .order_by(sqla.desc('count'))
     )
 
     return flask.render_template('strequeadmin/streque_stats.html',
