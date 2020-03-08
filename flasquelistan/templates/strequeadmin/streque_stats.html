@@ -1,0 +1,41 @@
+{% extends "strequeadmin/layout.html" %}
+
+{% from "macros.html" import form_entry %}
+
+{% block body %}
+<div class="transactions">
+  <h2>{{ _("Strequestatistik") }}</h2>
+  <form class="date-range-form" method="POST">
+    {{ form.csrf_token }}
+    {{ form_entry(form.start) }}
+    {{ form_entry(form.end) }}
+    <button>{{ _("Sök") }}</button>
+  </form>
+  {% if counts.count() > 0 %}
+  <div class="table-wrap">
+    <table class="transaction-history">
+      <tr>
+        <th>{{ _("Användare") }}</th>
+        <th>{{ _("Antal streque") }}</th>
+      </tr>
+      {% for c in counts %}
+      <tr>
+        <td class="user">
+          <span>
+            {{ c[0] }} {{ c[1] }}
+          </span>
+        </td>
+        <td class="count">
+          <span>
+            {{ c[2] }}
+          </span>
+        </td>
+      </tr>
+      {% endfor %}
+    </table>
+  </div>
+  {% else %}
+  <p>{{ _("Inga streque funna.") }}</p>
+  {% endif %}
+</div>
+{% endblock %}
