@@ -101,7 +101,7 @@ def streque_stats():
 
     if not (from_date and to_date):
         to_date = datetime.date.today()
-        from_date = to_date - datetime.timedelta(days=30)
+        from_date = to_date - datetime.timedelta(days=1)
 
     form.start.data = from_date
     form.end.data = to_date
@@ -117,6 +117,7 @@ def streque_stats():
         .filter(
             sqla.func.DATE(models.Streque.timestamp) >= from_date,
             sqla.func.DATE(models.Streque.timestamp) <= to_date,
+            models.Streque.voided.is_(False)
         )
         .group_by(
             models.Streque.user_id
