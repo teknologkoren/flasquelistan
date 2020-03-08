@@ -117,6 +117,7 @@ def streque_stats():
         .filter(
             sqla.func.DATE(models.Streque.timestamp) >= from_date,
             sqla.func.DATE(models.Streque.timestamp) <= to_date,
+            models.Streque.voided.is_(False)
         )
         .group_by(
             models.Streque.user_id
