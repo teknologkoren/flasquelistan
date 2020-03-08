@@ -76,6 +76,58 @@ def transactions():
                                  form=form)
 
 
+@mod.route('/admin/transactions/stats', methods=['GET', 'POST'])
+def streque_stats():
+    form = forms.DateRangeForm()
+
+    if form.validate_on_submit():
+        from_date = form.start.data
+        to_date = form.end.data
+
+        return flask.redirect(flask.url_for('strequeadmin.streque_stats',
+                                            from_date=from_date,
+                                            to_date=to_date))
+
+    from_date = flask.request.args.get('from_date', None)
+    to_date = flask.request.args.get('to_date', None)
+
+    if from_date and to_date:
+        try:
+            from_date = datetime.date.fromisoformat(from_date)
+            to_date = datetime.date.fromisoformat(to_date)
+        except ValueError:
+            flask.flash(_l("Ogiltigt datumintervall!"), 'error')
+            from_date, to_date = None, None
+
+    if not (from_date and to_date):
+        to_date = datetime.date.today()
+        from_date = to_date - datetime.timedelta(days=30)
+
+    form.start.data = from_date
+    form.end.data = to_date
+
+    counts = (
+        models.User.query
+        .join(models.Streque, models.User.id == models.Streque.user_id)
+        .with_entities(
+            models.User.first_name,
+            models.User.last_name,
+            sqla.func.count(models.Streque.user_id)
+        )
+        .filter(
+            sqla.func.DATE(models.Streque.timestamp) >= from_date,
+            sqla.func.DATE(models.Streque.timestamp) <= to_date,
+        )
+        .group_by(
+            models.Streque.user_id
+        )
+    )
+
+    return flask.render_template('strequeadmin/streque_stats.html',
+                                 counts=counts,
+                                 form=form)
+
+
 @mod.route('/admin/transactions/void', methods=['POST'])
 def void_transaction():
     if flask.request.is_json:
