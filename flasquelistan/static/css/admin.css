@@ -46,6 +46,16 @@
   white-space: normal;
 }
 
+.calculate-sg-volume,
+.calculate-sg-percent {
+  margin-right: 5px;
+}
+.calculate-sg-volume input,
+.calculate-sg-percent input {
+  width: 4rem;
+  margin-right: 2px;
+}
+
 .requests {
   max-width: 30rem;
 }
