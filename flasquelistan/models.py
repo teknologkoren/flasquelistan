@@ -502,7 +502,31 @@ class Quote(db.Model):
         return "\n".join(lines)
 
     def __str__(self):
-        return "{}... — {}".format(self.text[:20], self.who[:10] or "<None>")
+        return "{}... — {}".format(
+            self.text[:20],
+            self.who[:10] if self.who else "<None>"
+        )
+
+
+class QuoteReaction(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    reaction = db.Column(db.String(16), nullable=False)
+    quote_id = db.Column(db.Integer, db.ForeignKey('quote.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+
+    user = db.relationship(
+        'User',
+        foreign_keys=user_id
+    )
+    quote = db.relationship(
+        'Quote',
+        foreign_keys=quote_id
+    )
+
+
+class QuoteReactionItem(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    item = db.Column(db.String(16), nullable=False)
 
 
 class ProfilePicture(db.Model):

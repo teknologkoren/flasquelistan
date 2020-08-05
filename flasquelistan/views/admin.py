@@ -482,3 +482,34 @@ def remove_quote(quote_id):
 
     flask.flash(_l("Citat borttaget."), 'success')
     return flask.redirect(flask.url_for('strequeadmin.show_quotes'))
+
+
+@mod.route('/admin/quotes/reactions', methods=['GET', 'POST'])
+def quote_reactions():
+    reaction_items = models.QuoteReactionItem.query.all()
+
+    if flask.request.method == 'POST':
+        reaction_item = flask.request.form.get('reaction_item')
+        if not reaction_item:
+            flask.flash(_l("Du måste ge någonting att reagera med!"), 'error')
+            return flask.render_template(
+                'strequeadmin/quote_reactions.html',
+                reactions=reaction_items
+            )
+        new_reaction_item = models.QuoteReactionItem(item=reaction_item)
+        models.db.session.add(new_reaction_item)
+        models.db.session.commit()
+        flask.flash(_l("La till '{}'!".format(reaction_item)), 'success')
+        return flask.redirect(flask.url_for('strequeadmin.quote_reactions'))
+
+    return flask.render_template('strequeadmin/quote_reactions.html',
+                                 reactions=reaction_items)
+
+
+@mod.route('/admin/quotes/reactions/<int:reaction_item_id>/remove', methods=['POST'])
+def remove_quote_reaction(reaction_item_id):
+    reaction_item = models.QuoteReactionItem.query.get_or_404(reaction_item_id)
+    models.db.session.delete(reaction_item)
+    models.db.session.commit()
+    flask.flash(_l("Reaktionen borttagen."), 'success')
+    return flask.redirect(flask.url_for('strequeadmin.quote_reactions'))

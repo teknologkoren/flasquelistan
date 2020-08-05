@@ -1,0 +1,23 @@
+{% extends "strequeadmin/layout.html" %}
+
+{% block body %}
+<div>
+  <h2>{{ _("Citatreaktioner") }}</h2>
+  <ul>
+    {% for reaction in reactions %}
+      <li>
+        <form method="POST" action="{{ url_for('strequeadmin.remove_quote_reaction', reaction_item_id=reaction.id) }}">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+          {{ reaction.item }} - <button type="submit">{{ _("Ta bort") }}</button>
+        </form>
+      </li>
+    {% endfor %}
+    <li>
+      <form method="POST">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <input name="reaction_item">
+        - <button type="submit">{{ _("Lägg till") }}</button>
+      </form>
+    </li>
+</div>
+{% endblock %}

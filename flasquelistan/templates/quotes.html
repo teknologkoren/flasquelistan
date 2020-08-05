@@ -9,8 +9,18 @@
   <div class="quote-who">&mdash; {{ quote.who }}</div>
   {% endif %}
   <div class="lower">
-    <span class="quote-when">{{ format_datetime(quote.timestamp, "dd MMMM yyyy, HH:mm") }}</span>
-    <span class="quote-permalink"><a href="{{ url_for('quotes.quote', quote_id=quote.id) }}">{{ _("Perma&shy;länk") }}</a></span>
+    <a class="quote-when" href="{{ url_for('quotes.quote', quote_id=quote.id) }}">{{ format_datetime(quote.timestamp, "dd MMMM yyyy, HH:mm") }}</a></span>
+    <span class="reactions">
+      {% for reaction in reactions %}
+      <form method="POST" action="{{ url_for('quotes.add_reaction', quote_id=quote.id) }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <input type="hidden" name="reaction_id" value="{{ reaction.id }}">
+        <button class="react-button" type="submit" data-reactionid="{{ reaction.id }}">
+          {{ reaction.item }}
+        </button>
+      </form>
+      {% endfor %}
+    </span>
   </div>
 </div>
 {% endmacro %}

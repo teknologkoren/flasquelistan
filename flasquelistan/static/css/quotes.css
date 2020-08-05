@@ -34,3 +34,16 @@
   font-style: italic;
   text-align: right;
 }
+
+.reactions {
+  display: flex;
+}
+
+.react-button {
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  width: 2.5rem;
+  height: 1.7rem;
+  padding: 0;
+  margin: 0 .2rem;
+}
