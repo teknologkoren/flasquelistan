@@ -8,7 +8,7 @@ coverage
 flask-babel
 flask-bcrypt
 flask-wtf
-flask-uploads
+flask-reuploaded
 phonenumbers
 markdown
 vobject
