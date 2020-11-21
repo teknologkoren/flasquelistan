@@ -80,6 +80,7 @@
 {% endblock %}
 
 {% block body %}
+
 <div class="streque-top">
   <nav class="streque-nav">
     <ul>
@@ -102,6 +103,12 @@
       <li><a href="{{ url_for("auth.logout") }}">{{ _("Logga ut") }}</a></li>
     </ul>
   </nav>
+
+  <form class="scrubbcount" action="{{ url_for("strequelistan.sqrubbcount") }}">
+    <p>
+      {{ sqrubbcount['count'] or '???' }} personer i sqrubben{% if sqrubbcount['count'] %}, (uppdaterat {{ format_datetime(sqrubbcount['timestamp'], "dd MMM, HH:mm") }}){% endif %}
+    </p>
+  </form>
 
   {% if quote %}
     <blockquote class="quote quote-display">

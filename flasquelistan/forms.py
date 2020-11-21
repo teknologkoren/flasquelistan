@@ -508,3 +508,12 @@ class EditQuoteForm(flask_wtf.FlaskForm):
         ],
         format='%Y-%m-%dT%H:%M'
     )
+
+
+class SqrubbCountForm(flask_wtf.FlaskForm):
+    count = fields.IntegerField(
+        "Personer i Sqrubben",
+        validators=[
+            validators.NumberRange(min=0, max=100)
+        ]
+    )

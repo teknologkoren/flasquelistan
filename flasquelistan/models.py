@@ -514,3 +514,9 @@ class ProfilePicture(db.Model):
                            backref='profile_pictures')
     timestamp = db.Column(db.DateTime, nullable=False,
                           default=datetime.datetime.utcnow)
+
+
+class KVStore(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    key = db.Column(db.String(256), nullable=False)
+    value = db.Column(db.Text)

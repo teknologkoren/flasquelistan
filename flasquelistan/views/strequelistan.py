@@ -1,5 +1,6 @@
 import os
 import datetime
+import json
 import flask
 from flask_login import current_user, login_required
 from sqlalchemy.sql.expression import func, not_
@@ -59,13 +60,15 @@ def index():
         flask.flash(_l("Det är ont om pengar på kontot. Dags att fylla på?"),
                     'warning')
 
+    sqrubbcount = get_sqrubbcount()
 
     return flask.render_template(
         'strequelistan.html',
         groups=groups,
         quote=random_quote,
         articles=articles,
-        users_with_streques=users_with_streques
+        users_with_streques=users_with_streques,
+        sqrubbcount=sqrubbcount
     )
 
 
@@ -598,3 +601,35 @@ def change_email_or_password(user_id):
     return flask.render_template('change_email_or_password.html',
                                  form=form,
                                  user=user)
+
+@mod.route('/sqrubb-count', methods=['POST'])
+def sqrubb_count():
+    form = forms.SqrubbCountForm()
+    now = datetime.datetime.utcnow()
+
+    if form.validate_on_submit():
+        count = form.count.data
+        data = {'count': count, 'timestamp': now.timestamp()}
+        jdata = json.dumps(data)
+        kv = models.KVStore.query.filter_by(key='sqrubbcount').first()
+        if not kv:
+            kv = models.KVStore(
+                key='sqrubbcount',
+                value=jdata
+            )
+            models.db.session.add(kv)
+        kv.value = jdata
+        models.db.session.commit()
+    else:
+        forms.flash_errors(form)
+
+    return flask.redirect(flask.url_for('strequelistan.index'))
+
+
+def get_sqrubbcount():
+    kv = models.KVStore.query.filter_by(key='sqrubbcount').first()
+    if kv:
+        data = json.loads(kv.value)
+    else:
+        data = {'count': None, 'timestamp': datetime.datetime.utcnow()}
+    return data
