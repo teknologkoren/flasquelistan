@@ -29,8 +29,10 @@
 
       {{ form_entry(form.nickname) }}
       {{ form_entry(form.phone) }}
+      {% if current_user.id == user.id %}
       {{ form_entry(form.body_mass) }}
       {{ form_entry(form.y_chromosome) }}
+      {% endif %}
 
       <p><a href="{{ url_for('strequelistan.change_email_or_password', user_id=user.id) }}">{{ _("Byt e-postadress eller lösenord") }}</a></p>
 
