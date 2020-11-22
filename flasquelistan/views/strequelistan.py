@@ -63,6 +63,8 @@ def index():
         md5 = hashlib.md5(today.isoformat().encode())
         i = int.from_bytes(md5.digest(), 'little') % len(emojis)
         birthday_emoji = emojis[i]
+    else:
+        birthday_emoji = None
 
     random_quote = models.Quote.query.order_by(func.random()).first()
 
