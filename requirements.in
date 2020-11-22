@@ -14,3 +14,4 @@ markdown
 vobject
 pillow
 piexif
+wtforms[email]
