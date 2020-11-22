@@ -15,3 +15,4 @@ vobject
 pillow
 piexif
 wtforms[email]
+gunicorn

@@ -22,6 +22,7 @@ flask-reuploaded==0.3.2   # via -r requirements.in
 flask-sqlalchemy==2.4.4   # via -r requirements.in
 flask-wtf==0.14.3         # via -r requirements.in
 flask==1.1.2              # via -r requirements.in, flask-admin, flask-babel, flask-bcrypt, flask-login, flask-reuploaded, flask-sqlalchemy, flask-wtf
+gunicorn==20.0.4          # via -r requirements.in
 idna==2.10                # via email-validator
 iniconfig==1.1.1          # via pytest
 itsdangerous==1.1.0       # via flask, flask-wtf
@@ -47,3 +48,6 @@ toml==0.10.2              # via pytest
 vobject==0.9.6.1          # via -r requirements.in
 werkzeug==1.0.1           # via flask
 wtforms[email]==2.3.3     # via -r requirements.in, flask-admin, flask-wtf
+
+# The following packages are considered to be unsafe in a requirements file:
+# setuptools
