@@ -1,12 +1,16 @@
-import os
 import datetime
+import hashlib
+import os
+
 import flask
+from flask import current_app
 from flask_login import current_user, login_required
-from sqlalchemy.sql.expression import func, not_
+from sqlalchemy.sql.expression import func, not_, extract
 from flasquelistan import forms, models, util
 from flasquelistan.views import auth
 from flask_babel import gettext as _
 from flask_babel import lazy_gettext as _l
+
 mod = flask.Blueprint('strequelistan', __name__)
 
 
@@ -25,9 +29,7 @@ def index():
               .query
               .filter(models.Group.users.any())  # Only groups with users
               .order_by(models.Group.weight.desc())
-              .all()
               )
-
 
     too_old = datetime.datetime.utcnow() - datetime.timedelta(days=7)
     users_with_streques = (
@@ -40,17 +42,36 @@ def index():
             models.Streque.timestamp >= too_old,
             models.Streque.standardglas > 0
         )
+    )
+
+    current_app.jinja_env.filters['is_active'] = \
+        lambda l: [i for i in l if i.active]
+
+    today = datetime.date.today()
+    birthdays = (
+        models.User
+        .query
+        .filter(
+            extract('month', models.User.birthday) == today.month,
+            extract('day', models.User.birthday) == today.day
+        )
+        .order_by(models.User.first_name)
         .all()
     )
+    if birthdays:
+        emojis = ['🎂', '🍰', '🧁', '✨', '🍾', '🎉', '🎈']
+        md5 = hashlib.md5(today.isoformat().encode())
+        i = int.from_bytes(md5.digest(), 'little') % len(emojis)
+        birthday_emoji = emojis[i]
 
     random_quote = models.Quote.query.order_by(func.random()).first()
 
-    articles = (models.Article
-                .query
-                .filter_by(is_active=True)
-                .order_by(models.Article.weight.desc())
-                .all()
-                )
+    articles = (
+        models.Article
+        .query
+        .filter_by(is_active=True)
+        .order_by(models.Article.weight.desc())
+    )
 
     if current_user.balance <= 0:
         flask.flash(_l("Det finns inga pengar på kontot. Dags att fylla på!"),
@@ -59,13 +80,14 @@ def index():
         flask.flash(_l("Det är ont om pengar på kontot. Dags att fylla på?"),
                     'warning')
 
-
     return flask.render_template(
         'strequelistan.html',
         groups=groups,
         quote=random_quote,
         articles=articles,
-        users_with_streques=users_with_streques
+        users_with_streques=users_with_streques,
+        birthdays=birthdays,
+        birthday_emoji=birthday_emoji
     )
 
 
@@ -304,17 +326,18 @@ def gallery(page=1):
 def user_gallery(user_id, page=1):
     user = models.User.query.get_or_404(user_id)
 
-    image_query = (models.ProfilePicture
-            .query
-            .filter(
-                models.ProfilePicture.user_id.is_(user.id)
-            )
-            .order_by(models.ProfilePicture.timestamp.desc())
-            .paginate(
-                page=page,
-                per_page=20,
-            )
+    image_query = (
+        models.ProfilePicture
+        .query
+        .filter(
+            models.ProfilePicture.user_id.is_(user.id)
         )
+        .order_by(models.ProfilePicture.timestamp.desc())
+        .paginate(
+            page=page,
+            per_page=20,
+        )
+    )
 
     return flask.render_template(
         'user_gallery.html',
@@ -354,7 +377,7 @@ def show_profile(user_id):
         profile_picture_form=upload_profile_picture_form,
         change_profile_picture_form=change_profile_picture_form,
         credit_transfer_form=credit_transfer_form,
-        admin_transaction_form=admin_transaction_form
+        admin_transaction_form=admin_transaction_form,
     )
 
 
@@ -532,6 +555,7 @@ def edit_profile(user_id):
                                                    != -1) else None
 
         user.nickname = form.nickname.data
+        user.birthday = form.birthday.data
         user.phone = form.phone.data
         user.body_mass = form.body_mass.data
 

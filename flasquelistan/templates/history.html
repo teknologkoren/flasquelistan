@@ -10,11 +10,7 @@
 {% macro streque_card(streque, void_button=True) %}
 <li id="{{ streque.id }}" class="card strequecard">
   <span class="username">
-    {% if streque.user.nickname %}
-    {{ streque.user.nickname }}
-    {% else %}
-    {{ streque.user.first_name }} {{ streque.user.last_name }}
-    {% endif %}
+    {{ streque.user.displayname }}
     <div class="timestamp">
       {{ format_datetime(streque.timestamp, "dd MMMM yyyy, HH:mm") }}
     </div>

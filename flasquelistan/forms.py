@@ -226,6 +226,14 @@ class EditUserForm(flask_wtf.FlaskForm):
         ]
     )
 
+    birthday = html5_fields.DateField(
+        _l('Datum'),
+        description=_l("Din födelsedags datum."),
+        validators=[
+            validators.Optional()
+        ]
+    )
+
     phone = html5_fields.TelField(
         _l('Telefon'),
         description=_l("Ett telefonnummer, med eller utan landskod.")

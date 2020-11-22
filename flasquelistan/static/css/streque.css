@@ -23,8 +23,17 @@
   padding: .2rem .5rem;
 }
 
+.birthdays {
+  text-align: center;
+}
+
 .usercard {
   align-items: center;
+}
+
+.usercard.birthday-party {
+  background-image: url("/static/images/confetti.png");
+  background-size: cover;
 }
 
 .usercard .picture-and-name {
@@ -35,6 +44,12 @@
   max-width: 12rem;
   min-width: 0;
   flex: 1;
+}
+
+.usercard.birthday-party .username {
+  background: #fffd;
+  padding: 2px;
+  border-radius: 3px;
 }
 
 .usercard .picture-and-name a {

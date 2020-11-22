@@ -23,6 +23,9 @@
       {{ user.first_name }}
       {% if user.nickname %}"{{ user.nickname }}"{% endif %}
       {{ user.last_name }}
+      {% if user.has_birthday %}
+      🎂
+      {% endif %}
     </h2>
     {% if user == current_user or current_user.is_admin %}
     <p>
@@ -43,6 +46,10 @@
       {{ user.phone }}
       {% endif %}
       </dd>
+      {% endif %}
+      {% if user.birthday %}
+      <dt>{{ _("Födelsedag") }}</dt>
+      <dd>{{ format_date(user.birthday) }}</dd>
       {% endif %}
     </dl>
 

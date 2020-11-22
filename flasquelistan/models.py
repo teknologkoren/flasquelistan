@@ -22,6 +22,7 @@ class User(flask_login.UserMixin, db.Model):
     first_name = db.Column(db.String(50))
     last_name = db.Column(db.String(50))
     nickname = db.Column(db.String(50))
+    birthday = db.Column(db.Date, nullable=True)
     phone = db.Column(db.String(20), nullable=True)
     balance = db.Column(db.Integer, default=0)  # Ören (1/100kr)
     is_admin = db.Column(db.Boolean, nullable=False, default=False)
@@ -77,11 +78,31 @@ class User(flask_login.UserMixin, db.Model):
             j.add('tel')
             j.tel.type_param = 'cell'
             j.tel.value = self.formatted_phone()
+        if self.birthday:
+            j.add('bday')
+            j.bday.value = self.birthday.strftime('%Y%m%d')
         return j.serialize()
 
     @property
     def full_name(self):
         return f"{self.first_name} {self.last_name}"
+
+    @property
+    def displayname(self):
+        name = self.nickname or self.full_name
+        if self.has_birthday:
+            return f"{name} 🎂"
+        else:
+            return name
+
+    @property
+    def has_birthday(self):
+        today = datetime.date.today()
+        return (
+            self.birthday
+            and self.birthday.month == today.month
+            and self.birthday.day == today.day
+        )
 
     @property
     def formatted_balance(self):

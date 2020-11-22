@@ -28,6 +28,7 @@
       {% endif %}
 
       {{ form_entry(form.nickname) }}
+      {{ form_entry(form.birthday) }}
       {{ form_entry(form.phone) }}
       {% if current_user.id == user.id %}
       {{ form_entry(form.body_mass) }}

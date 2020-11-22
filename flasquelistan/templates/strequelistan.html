@@ -6,7 +6,7 @@
 {% from "macros.html" import profile_picture %}
 
 {% macro usercard(user, articles) %}
-<div class="card usercard">
+<div id="usercard-{{ user.id }}" class="card usercard{% if user in birthdays %} birthday-party{% endif %}">
   <div class="picture-and-name">
     <a href="{{ url_for('strequelistan.show_profile', user_id=user.id) }}">
       {{ profile_picture(user) }}
@@ -14,11 +14,7 @@
                             data-lastname="{{ user.last_name }}"
                             data-nickname="{{ user.nickname or '' }}"
                             data-phonenumber="{{ user.formatted_phone(e164=True) }}">
-        {% if user.nickname %}
-        {{ user.nickname }}
-        {% else %}
-        {{ user.first_name }} {{ user.last_name }}
-        {% endif %}
+        {{ user.displayname }}
       </div>
     </a>
     {% if user in users_with_streques %}
@@ -103,11 +99,29 @@
     </ul>
   </nav>
 
+  {% set active_birthdays = birthdays|is_active %}
+  {% if active_birthdays %}
+  <div class="birthdays">
+    <p>{{ birthday_emoji }}
+      {% if active_birthdays|length > 1 %}
+        {% for birthday in active_birthdays %}{# comment to remove whitespace
+        #}{% if loop.first %}{% elif loop.last %} {{ _("och") }} {% else %}, {% endif %}
+        <a href="#usercard-{{ birthday.id }}">{{ birthday.nickname or birthday.full_name }}</a>{#
+        #}{% endfor %}
+      {% else %}
+        <a href="#usercard-{{ active_birthdays[0].id }}">{{ active_birthdays[0].nickname or active_birthdays[0].full_name }}</a>
+      {% endif %}
+      {{ _("fyller år idag!!!") }} {{ birthday_emoji }}
+    </p>
+  </div>
+  {% endif %}
+
   {% if quote %}
     <blockquote class="quote quote-display">
       {{ quote_inner(quote) }}
     </blockquote>
   {% endif %}
+
 </div>
 
 <div class="cards">
