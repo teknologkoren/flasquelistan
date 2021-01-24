@@ -13,6 +13,5 @@ phonenumbers
 markdown
 vobject
 pillow
-piexif
 wtforms[email]
 gunicorn
