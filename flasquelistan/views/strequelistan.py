@@ -29,7 +29,8 @@ def index():
               .query
               .filter(models.Group.users.any())  # Only groups with users
               .order_by(models.Group.weight.desc())
-              ).all()
+              .all()
+              )
 
     too_old = datetime.datetime.utcnow() - datetime.timedelta(days=7)
     users_with_streques = (
@@ -42,7 +43,8 @@ def index():
             models.Streque.timestamp >= too_old,
             models.Streque.standardglas > 0
         )
-    ).all()
+        .all()
+    )
 
     current_app.jinja_env.filters['is_active'] = \
         lambda l: [i for i in l if i.active]
@@ -56,7 +58,8 @@ def index():
             extract('day', models.User.birthday) == today.day
         )
         .order_by(models.User.first_name)
-    ).all()
+        .all()
+    )
     if birthdays:
         emojis = ['🎂', '🍰', '🧁', '✨', '🍾', '🎉', '🎈']
         md5 = hashlib.md5(today.isoformat().encode())
@@ -72,7 +75,8 @@ def index():
         .query
         .filter_by(is_active=True)
         .order_by(models.Article.weight.desc())
-    ).all()
+        .all()
+    )
 
     if current_user.balance <= 0:
         flask.flash(_l("Det finns inga pengar på kontot. Dags att fylla på!"),
