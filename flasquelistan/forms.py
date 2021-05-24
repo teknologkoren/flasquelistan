@@ -71,7 +71,7 @@ class RedirectForm(flask_wtf.FlaskForm):
 
 def AreYouARobotFormFactory(*args, **kwargs):
     def make_hash(n):
-        s = (flask.current_app.config['SECRET_KEY']+str(n)).encode()
+        s = (flask.current_app.config['SECRET_KEY'] + str(n)).encode()
         h = hashlib.sha256(s).hexdigest()
         return h
 
@@ -88,7 +88,7 @@ def AreYouARobotFormFactory(*args, **kwargs):
             return True
 
     x, y = random.randint(1, 9), random.randint(1, 9)
-    answer = x+y
+    answer = x + y
     ans_hash = make_hash(answer)
 
     F.question = html5_fields.IntegerField(

@@ -34,8 +34,9 @@ def admin_required():
 
             flask.flash(_l("Du måste vara admin för att komma åt den sidan."),
                         'error')
-            return flask.redirect(flask.request.referrer
-                                  or flask.url_for('strequelistan.index'))
+            return flask.redirect(
+                flask.request.referrer or flask.url_for('strequelistan.index')
+            )
         return decorated_function
     return decorator
 
@@ -45,6 +46,7 @@ def robots():
     """Serve the robots.txt file
     """
     return flask.render_template('auth/robots.txt')
+
 
 @mod.route('/login', methods=['GET', 'POST'])
 def login():
@@ -64,8 +66,10 @@ def login():
         flask_login.login_user(user, remember=form.remember.data)
         return form.redirect('strequelistan.index')
     elif form.is_submitted():
-        flask.flash(_l("E-postadressen eller lösenordet du angav stämmer inte."),
-                    'error')
+        flask.flash(
+            _l("E-postadressen eller lösenordet du angav stämmer inte."),
+            'error'
+        )
 
     return flask.render_template('auth/login.html', form=form)
 
@@ -196,10 +200,9 @@ def reset():
         recover_url = flask.url_for('.reset_token', token=token,
                                     _external=True)
 
-        email_body = flask.render_template(
-            'auth/password_reset_email.jinja2',
-            name=user.first_name,
-            link=recover_url)
+        email_body = flask.render_template('auth/password_reset_email.jinja2',
+                                           name=user.first_name,
+                                           link=recover_url)
 
         subject = "Återställ ditt lösenord hos Strequelistan"
 

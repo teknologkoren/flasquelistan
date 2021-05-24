@@ -202,21 +202,23 @@ def credit_transfer():
     if form.validate_on_submit():
         if payer != current_user:
             flask.flash(
-                _l("Du kan bara föra över pengar från dig själv! >:("), 'error'
+                _l("Du kan bara föra över pengar från dig själv! >:("),
+                'error'
             )
             return redir
 
-        value = int(form.value.data*100)  # To ören
+        value = int(form.value.data * 100)  # To ören
 
         message = form.message.data
         models.CreditTransfer.create(
             payer, payee, current_user, value, message
         )
 
-        flask.flash(_("Förde över %(a)i pengar till %(name)s",
-                      a=value/100, name=payee.full_name),
-                    'success'
-                    )
+        flask.flash(
+            _("Förde över %(a)i pengar till %(name)s",
+              a=value/100, name=payee.full_name),
+            'success'
+        )
 
     elif form.is_submitted():
         forms.flash_errors(form)
@@ -307,14 +309,15 @@ def gallery_page_for_image(image, user=None):
 @mod.route('/gallery/')
 @mod.route('/gallery/<int:page>/')
 def gallery(page=1):
-    image_query = (models.ProfilePicture
-            .query
-            .order_by(models.ProfilePicture.timestamp.desc())
-            .paginate(
-                page=page,
-                per_page=20,
-            )
+    image_query = (
+        models.ProfilePicture
+        .query
+        .order_by(models.ProfilePicture.timestamp.desc())
+        .paginate(
+            page=page,
+            per_page=20
         )
+    )
 
     return flask.render_template(
         'gallery.html',
@@ -397,7 +400,7 @@ def admin_transaction(user_id):
 
     if form.validate_on_submit():
         user.admin_transaction(
-            int(form.value.data*100),
+            int(form.value.data * 100),
             form.text.data,
             by_user=current_user
         )

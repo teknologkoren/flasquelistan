@@ -57,8 +57,9 @@ class User(flask_login.UserMixin, db.Model):
 
     def __init__(self, *args, **kwargs):
         if 'password' not in kwargs:
-            password = ''.join(random.choice(string.ascii_letters +
-                                             string.digits) for _ in range(30))
+            password = ''.join(
+                random.choice(string.ascii_letters + string.digits) for _ in range(30)
+            )
             kwargs['password'] = password
 
         super().__init__(*args, **kwargs)
@@ -106,7 +107,7 @@ class User(flask_login.UserMixin, db.Model):
 
     @property
     def formatted_balance(self):
-        return flask_babel.format_currency(self.balance/100, 'SEK')
+        return flask_babel.format_currency(self.balance / 100, 'SEK')
 
     def formatted_phone(self, e164=False):
         """Returns formatted number or False if not a valid number."""
@@ -116,8 +117,8 @@ class User(flask_login.UserMixin, db.Model):
         except phonenumbers.phonenumberutil.NumberParseException:
             return False
 
-        if not (phonenumbers.is_possible_number(parsed) and
-                phonenumbers.is_valid_number(parsed)):
+        if not (phonenumbers.is_possible_number(parsed)
+                and phonenumbers.is_valid_number(parsed)):
             return False
 
         formatted = phonenumbers.format_number(
@@ -289,8 +290,8 @@ class User(flask_login.UserMixin, db.Model):
             if alcohol_in_body < 0:
                 alcohol_in_body = 0
 
-            alcohol_in_body += (streque.standardglas *
-                                standardglas_alcohol_content)
+            alcohol_in_body += (streque.standardglas
+                                * standardglas_alcohol_content)
 
             previous_streque_time = streque.timestamp
 
@@ -361,7 +362,7 @@ class Article(db.Model):
 
     @property
     def formatted_value(self):
-        return flask_babel.format_currency(self.value/100, 'SEK')
+        return flask_babel.format_currency(self.value / 100, 'SEK')
 
     @property
     def html_description(self):
@@ -397,7 +398,7 @@ class Transaction(db.Model):
 
     @property
     def formatted_value(self):
-        return flask_babel.format_currency(self.value/100, 'SEK')
+        return flask_babel.format_currency(self.value / 100, 'SEK')
 
     def void_and_refund(self):
         if self.voided:

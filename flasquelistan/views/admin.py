@@ -207,7 +207,7 @@ def bulk_transactions():
                     transactions.append({
                         'user_id': user.id,
                         'user_name': user.full_name,
-                        'value': int(form_field.value.data*100),
+                        'value': int(form_field.value.data * 100),
                         'text': form_field.text.data or _l('Admintransaktion')
                     })
 
@@ -395,9 +395,12 @@ def remove_request(request_id):
     models.db.session.delete(request)
     models.db.session.commit()
 
-    flask.flash(_("Förfrågan från %(first)s %(last)s borttagen.", first=request.first_name,
-                                                         last=request.last_name),
-                'success')
+    flask.flash(
+        _("Förfrågan från %(first)s %(last)s borttagen.",
+          first=request.first_name,
+          last=request.last_name),
+        'success'
+    )
 
     return flask.redirect(flask.url_for('strequeadmin.requests'))
 
@@ -430,7 +433,10 @@ def edit_group(group_id=None):
 
         models.db.session.commit()
 
-        flask.flash(_("Grupp \"%(group_name)s\" skapad.", group_name=group.name), 'success')
+        flask.flash(
+            _("Grupp \"%(group_name)s\" skapad.", group_name=group.name),
+            'success'
+        )
 
         return flask.redirect(flask.url_for('strequeadmin.show_groups'))
 
@@ -446,7 +452,10 @@ def remove_group(group_id):
     models.db.session.delete(group)
     models.db.session.commit()
 
-    flask.flash(_("Grupp \"%(group_name)s\" borttagen.", group_name=group.name), 'success')
+    flask.flash(
+        _("Grupp \"%(group_name)s\" borttagen.", group_name=group.name),
+        'success'
+    )
     return flask.redirect(flask.url_for('strequeadmin.show_groups'))
 
 
