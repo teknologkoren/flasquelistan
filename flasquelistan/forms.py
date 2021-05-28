@@ -325,9 +325,13 @@ class QuoteForm(flask_wtf.FlaskForm):
             validators.InputRequired(),
             validators.Length(max=150)
         ])
-    who = fields.StringField(_l('Upphovsman'), validators=[
-        validators.Length(max=150)
-    ])
+    who = fields.StringField(
+        _l('Upphovsman'),
+        description=_l("'–' läggs till automatiskt"),
+        validators=[
+            validators.Length(max=150)
+        ]
+    )
 
 
 def ChangeProfilePictureFormFactory(user):
