@@ -10,7 +10,13 @@
   {% endif %}
   <div class="lower">
     <span class="quote-when">
-      <a href="{{ url_for('quotes.index', _anchor=('quote-%s'|format(quote.id))) }}">{{ format_datetime(quote.timestamp, "dd MMMM yyyy, HH:mm") }}</a>
+      <a href="{{ url_for('quotes.index', _anchor=('quote-%s'|format(quote.id))) }}">
+        {% if quote.has_time() %}
+        {{ format_datetime(quote.timestamp, "dd MMMM yyyy, HH:mm") }}
+        {% else %}
+        {{ format_datetime(quote.timestamp, "dd MMMM yyyy") }}
+        {% endif %}
+      </a>
     </span>
   </div>
 </div>

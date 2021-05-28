@@ -519,6 +519,9 @@ class Quote(db.Model):
     timestamp = db.Column(db.DateTime, nullable=False,
                           default=datetime.datetime.utcnow)
 
+    def has_time(self):
+        return self.timestamp >= datetime.datetime(2019, 7, 7)
+
     def cleaned(self):
         lines = [l for l in self.text.splitlines() if l]
         return "\n".join(lines)

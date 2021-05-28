@@ -1,6 +1,5 @@
 import flask
 import flask_login
-from flask_babel import gettext as _
 from flask_babel import lazy_gettext as _l
 from flasquelistan import models, forms
 
