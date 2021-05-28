@@ -9,7 +9,9 @@
   <div class="quote-who">&ndash; {{ quote.who }}</div>
   {% endif %}
   <div class="lower">
-    <span class="quote-when"><a href="#quote-{{quote.id}}">{{ format_datetime(quote.timestamp, "dd MMMM yyyy, HH:mm") }}</a></span>
+    <span class="quote-when">
+      <a href="{{ url_for('quotes.index', _anchor=('quote-%s'|format(quote.id))) }}">{{ format_datetime(quote.timestamp, "dd MMMM yyyy, HH:mm") }}</a>
+    </span>
   </div>
 </div>
 {% endmacro %}
