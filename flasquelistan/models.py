@@ -519,6 +519,9 @@ class Quote(db.Model):
     timestamp = db.Column(db.DateTime, nullable=False,
                           default=datetime.datetime.utcnow)
 
+    def has_date(self):
+        return self.timestamp >= datetime.datetime(2016, 11, 2)
+
     def has_time(self):
         return self.timestamp >= datetime.datetime(2019, 7, 7)
 
