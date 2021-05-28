@@ -159,6 +159,10 @@ main {
   border-radius: 7px;
 }
 
+.card:target {
+  border: solid 2px #333;
+}
+
 .tabs {
   position: fixed;
   bottom: 0;
