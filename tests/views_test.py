@@ -391,11 +391,11 @@ class TestHistoryPage:
             assert current_user.full_name not in text
 
 
-class TestMorePage:
-    """Tests for the 'More' page"""
+class TestAdminPage:
+    """Tests for the 'Admin' page"""
     def test_status(self, client):
-        with logged_in(client):
-            response = client.get(url_for('more.index'))
+        with logged_in_admin(client):
+            response = client.get(url_for('admin.index'))
             assert response.status_code == 200
 
 

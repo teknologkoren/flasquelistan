@@ -21,9 +21,8 @@ def before_request():
     pass
 
 
-@mod.route('/admin/', methods=['GET', 'POST'])
+@mod.route('/admin/')
 def index():
-    print(flask.request.url)
     return flask.render_template('strequeadmin/index.html')
 
 
