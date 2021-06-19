@@ -5,6 +5,10 @@
 {% from "quotes.html" import quote_inner %}
 {% from "macros.html" import profile_picture %}
 
+{# these will be used many times, call only once #}
+{% set add_streque_endpoint = url_for('strequelistan.add_streque') %}
+{% set csrf_token = csrf_token() %}  {# seems to be quite slow despite token being cached #}
+
 {% macro usercard(user, articles) %}
 <div id="usercard-{{ user.id }}" class="card usercard{% if user in birthdays %} birthday-party{% endif %}">
   <div class="picture-and-name">
@@ -51,10 +55,8 @@
   </div>
   <div class="streque-buttons">
     {% for article in articles %}
-    <form class="streque-form" method="POST" action="{{ url_for('strequelistan.add_streque') }}">
-      {# CSRF token is cached during the request, all calls to csrf_token() will
-      return the same one #}
-      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+    <form class="streque-form" method="POST" action="{{ add_streque_endpoint }}">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token }}"/>
       <input type="hidden" name="user_id" value="{{ user.id }}">
       <input type="hidden" name="article_id" value="{{ article.id }}">
       <button class="streque-button"
@@ -125,7 +127,7 @@
 </div>
 
 <div class="cards">
-  <input id="ajax-csrf_token" type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+  <input id="ajax-csrf_token" type="hidden" name="csrf_token" value="{{ csrf_token }}"/>
 
   <h2>{{ _("Inloggad användare") }}</h2>
   {{ usercard(current_user, articles) }}
