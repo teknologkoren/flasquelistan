@@ -1,6 +1,7 @@
 {% extends "layout.html" %}
 
 {% set active_page = "quotes" %}
+{% set quotes_index_endpoint = url_for('quotes.index') %}
 
 {% macro quote_inner(quote) %}
 <div class="quote-text">{{ quote.cleaned() }}</div>
@@ -10,7 +11,7 @@
   {% endif %}
   <div class="lower">
     <span class="quote-when">
-      <a href="{{ url_for('quotes.index', _anchor=('quote-%s'|format(quote.id))) }}">
+      <a href="{{ quotes_index_endpoint + '#quote-%s'|format(quote.id) }}">
         {% if quote.has_date() %}
         {% if quote.has_time() %}
         {{ format_datetime(quote.timestamp, "dd MMMM yyyy, HH:mm") }}
