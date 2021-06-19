@@ -13,7 +13,7 @@
 <div id="usercard-{{ user.id }}" class="card usercard{% if user in birthdays %} birthday-party{% endif %}">
   <div class="picture-and-name">
     <a href="{{ url_for('strequelistan.show_profile', user_id=user.id) }}">
-      {{ profile_picture(user) }}
+      {{ profile_picture(user, lazy=True) }}
       <div class="username" data-firstname="{{ user.first_name }}"
                             data-lastname="{{ user.last_name }}"
                             data-nickname="{{ user.nickname or '' }}"
