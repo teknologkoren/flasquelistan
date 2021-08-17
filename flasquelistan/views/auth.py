@@ -1,12 +1,14 @@
+import datetime
 import functools
+
 import flask
+from flask_babel import gettext as _
+from flask_babel import lazy_gettext as _l
 import flask_login
 from flask_login import current_user
 from itsdangerous import SignatureExpired, URLSafeTimedSerializer
-from flasquelistan import forms, models, util
 
-from flask_babel import gettext as _
-from flask_babel import lazy_gettext as _l
+from flasquelistan import forms, models, util
 
 mod = flask.Blueprint('auth', __name__)
 
@@ -250,7 +252,10 @@ def reset_token(token):
         flask.flash(invalid, 'error')
         return flask.redirect(flask.url_for('.login'))
 
-    if timestamp < user._password_timestamp:
+    pw_timestamp_tzaware = \
+        user._password_timestamp.replace(tzinfo=datetime.timezone.utc)
+
+    if timestamp < pw_timestamp_tzaware:
         flask.flash(expired, 'error')
         return flask.redirect(flask.url_for('.login'))
 
