@@ -19,6 +19,9 @@ def create_app(config=None, instance_config=None):
 
     from flasquelistan import models, views, util
 
+    if app.testing:
+        models.TESTING = True
+
     models.db.init_app(app)
     init_db(app)
 

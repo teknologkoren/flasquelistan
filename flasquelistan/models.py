@@ -11,7 +11,8 @@ import phonenumbers
 import vobject
 from sqlalchemy.ext.hybrid import hybrid_method, hybrid_property
 from flasquelistan import util
-from flask import current_app as app
+
+TESTING = False
 
 db = flask_sqlalchemy.SQLAlchemy()
 
@@ -138,7 +139,7 @@ class User(flask_login.UserMixin, db.Model):
     def password(self, plaintext):
         """Generate and save password hash, update password timestamp."""
 
-        if app.testing:
+        if TESTING:
             self._password_hash = (
                 util.bcrypt
                 .generate_password_hash(plaintext, 4)
