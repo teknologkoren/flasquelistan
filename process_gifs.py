@@ -7,8 +7,8 @@ def gif_to_webp(in_filename):
     in_path = pathlib.PurePath(in_filename)
     out_path = in_path.with_suffix('.webp')
     ff = ffmpy.FFmpeg(
-        inputs={in_path: None},
-        outputs={out_path: '-loop 0'}
+        inputs={str(in_path): None},
+        outputs={str(out_path): '-loop 0'}
     )
     ff.run()
     return out_path
@@ -21,7 +21,7 @@ def process_oldest_gif():
         .filter(
             models.ProfilePicture.filename.like("%.gif")
         )
-        .order_by(models.ProfilePicture.timestamp.desc())
+        .order_by(models.ProfilePicture.timestamp)
         .first()
     )
     if not profile_picture:
