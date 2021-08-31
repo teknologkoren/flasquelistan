@@ -49,7 +49,8 @@ class User(flask_login.UserMixin, db.Model):
     )
     profile_picture = db.relationship(
         'ProfilePicture',
-        foreign_keys=profile_picture_id
+        foreign_keys=profile_picture_id,
+        lazy='joined'
     )
 
     # Do not change the following directly, use User.password
