@@ -258,6 +258,19 @@ div.user-filter {
   align-items: center;
 }
 
+.article-name, .article-price {
+  display: inline-block;
+}
+
+.article:first-child .article-name {
+  margin-top: 0;
+}
+
+.article-price::before {
+  content: "-";
+  margin: 0 .5rem;
+}
+
 .article-descriptions {
   max-width: 30rem;
   width: 100%;
