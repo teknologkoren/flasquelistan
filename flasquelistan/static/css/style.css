@@ -87,7 +87,6 @@ fieldset {
   display: flex;
   justify-content: center;
   background: #eee;
-  height: 3rem;
   border-top: 1px solid #ddd;
 }
 
