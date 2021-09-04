@@ -266,6 +266,10 @@ div.user-filter {
   margin-top: 0;
 }
 
+.article dt {
+  margin-bottom: 0
+}
+
 .article-price::before {
   content: "-";
   margin: 0 .5rem;
