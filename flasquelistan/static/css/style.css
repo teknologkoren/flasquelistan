@@ -153,7 +153,7 @@ main {
 .card {
   display: flex;
   justify-content: space-between;
-  padding: .7rem;
+  padding: .4rem .7rem;
   margin: .65rem 0;
   border: solid 1px #ddd;
   border-radius: 7px;
