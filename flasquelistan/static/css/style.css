@@ -28,7 +28,6 @@ body {
 }
 
 header {
-  height: 4rem;
   text-align: center;
 }
 
@@ -63,8 +62,9 @@ fieldset {
 }
 
 .logo img {
-  margin-right: .5rem;
   display: inline-block;
+  height: 3rem;
+  margin-right: .3rem;
 }
 
 .logo h1 {
