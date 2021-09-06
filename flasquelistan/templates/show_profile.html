@@ -20,11 +20,14 @@
 
   <div class="profile-content">
     <h2>
-      {{ user.first_name }}
-      {% if user.nickname %}"{{ user.nickname }}"{% endif %}
-      {{ user.last_name }}
-      {% if user.has_birthday %}
-      🎂
+      {% if user.nickname %}
+      <span class="nickname">
+        {{ user.nickname }} {% if user.has_birthday %}🎂{% endif %}
+      </span>
+      <small class="real-name">{{ user.full_name }}</small>
+      {% else %}
+      {{ user.full_name }}
+      {% if user.has_birthday %}🎂{% endif %}
       {% endif %}
     </h2>
     {% if user == current_user or current_user.is_admin %}
