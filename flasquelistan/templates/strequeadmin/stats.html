@@ -1,0 +1,61 @@
+{% extends "strequeadmin/layout.html" %}
+
+{% from "macros.html" import form_entry %}
+
+{% block scripts %}
+<script defer src="{{ url_for('static', filename='js/common.js') }}"></script>
+<script defer src="{{ url_for('static', filename='js/admin.js') }}"></script>
+{% endblock %}
+
+{% macro user_row(id, name, balance) %}
+<tr>
+  <td class="name">
+    <span>
+      <a href="{{ url_for('strequelistan.show_profile', user_id=id) }}">
+        {{ name }}
+      </a>
+    </span>
+  </td>
+  <td class="balance">
+    <span>
+      {{ balance }}
+    </span>
+  </td>
+</tr>
+{% endmacro %}
+
+{% block body %}
+<div>
+  <h2>{{ _("Inlåning och utlåning") }}</h2>
+  <h3>{{ _("Inlåning") }}</h3>
+  <div class="table-wrap">
+    <table class="users">
+      <tr>
+        <th>{{ _("Namn") }}</th>
+        <th>{{ _("Saldo") }}</th>
+      </tr>
+      {% for user in positive_balance %}
+      {{ user_row(user.id, user.full_name, user.formatted_balance) }}
+      {% endfor %}
+    </table>
+  </div>
+  <h3>{{ _("Utlåning") }}</h3>
+  <div class="table-wrap">
+    <table class="users">
+      <tr>
+        <th>{{ _("Namn") }}</th>
+        <th>{{ _("Saldo") }}</th>
+      </tr>
+      {% for user in negative_balance %}
+      {{ user_row(user.id, user.full_name, user.formatted_balance) }}
+      {% endfor %}
+    </table>
+  </div>
+  <h3>{{ _("Totaler") }}</h3>
+  <ul>
+    <li>{{ _("Inlånat") + ": " + format_currency(deposits/100, "SEK") }}</li>
+    <li>{{ _("Utlånat") + ": " + format_currency(loans/100, "SEK") }}</li>
+    <li>{{ _("Summa") + ": " + format_currency((deposits + loans)/100, "SEK") }}</li>
+  </ul>
+</div>
+{% endblock %}

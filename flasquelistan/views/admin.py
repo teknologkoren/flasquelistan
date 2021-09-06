@@ -1,13 +1,16 @@
 import datetime
+
 import flask
 import flask_login
 import flask_babel
 import sqlalchemy as sqla
-from flasquelistan import models, forms, util
+
+from flasquelistan import forms, models, util
 from flasquelistan.views import auth
 from flask_babel import gettext as _
 from flask_babel import lazy_gettext as _l
 from flask_login import current_user
+
 mod = flask.Blueprint('strequeadmin', __name__)
 
 
@@ -490,3 +493,26 @@ def remove_quote(quote_id):
 
     flask.flash(_l("Citat borttaget."), 'success')
     return flask.redirect(flask.url_for('strequeadmin.show_quotes'))
+
+
+@mod.route('/admin/stats')
+def stats():
+    positive_balance = (
+        models.User.query
+        .filter(models.User.balance > 0)
+        .order_by(models.User.balance.desc())
+    )
+    negative_balance = (
+        models.User.query
+        .filter(models.User.balance < 0)
+        .order_by(models.User.balance)
+    )
+    deposits = sum(user.balance for user in positive_balance)
+    loans = sum(user.balance for user in negative_balance)
+    return flask.render_template(
+        'strequeadmin/stats.html',
+        positive_balance=positive_balance,
+        negative_balance=negative_balance,
+        deposits=deposits,
+        loans=loans
+    )
