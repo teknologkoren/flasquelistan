@@ -49,12 +49,13 @@ def send_email(toaddr, subject, body):
     certificates, enable certificate validation and hostname checking, and try
     to choose reasonably secure protocol and cipher settings."
     """
+    config = flask.current_app.config
 
     msg = email.message.EmailMessage()
     msg.set_content(body)
 
     msg['Subject'] = subject
-    msg['From'] = flask.current_app.config['SMTP_SENDADDR']
+    msg['From'] = config['SMTP_SENDADDR']
     msg['To'] = toaddr
 
     @flask.copy_current_request_context
@@ -68,15 +69,18 @@ def send_email(toaddr, subject, body):
             print("===== END DEBUG =====\n")
             return
 
-        with smtplib.SMTP(flask.current_app.config['SMTP_MAILSERVER'],
-                          port=flask.current_app.config['SMTP_STARTTLS_PORT']
+        with smtplib.SMTP(config['SMTP_MAILSERVER'],
+                          port=config['SMTP_PORT']
                           ) as smtp:
 
-            context = ssl.create_default_context()
-            smtp.starttls(context=context)
+            if config['SMTP_USE_STARTTLS']:
+                context = ssl.create_default_context()
+                smtp.starttls(context=context)
 
-            smtp.login(flask.current_app.config['SMTP_USERNAME'],
-                       flask.current_app.config['SMTP_PASSWORD'])
+            username = config.get('SMTP_USERNAME')
+            password = config.get('SMTP_PASSWORD')
+            if username and password:
+                smtp.login(username, password)
 
             smtp.send_message(msg)
 

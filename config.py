@@ -22,7 +22,8 @@ WTF_CSRF_TIME_LIMIT = 21600  # 6 hours
 
 # Email settings
 SMTP_MAILSERVER = 'smtp.example.com'
-SMTP_STARTTLS_PORT = 587
+SMTP_PORT = 587
+SMTP_USE_STARTTLS = True
 SMTP_USERNAME = 'webmaster@example.com'
 SMTP_PASSWORD = 'smtpsecretpassword'
 SMTP_SENDADDR = 'webmaster@example.com'
