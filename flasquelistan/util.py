@@ -73,7 +73,7 @@ def send_email(toaddr, subject, body):
                           port=config['SMTP_PORT']
                           ) as smtp:
 
-            if config['SMTP_USE_STARTTLS']:
+            if config.get('SMTP_USE_STARTTLS'):
                 context = ssl.create_default_context()
                 smtp.starttls(context=context)
 
