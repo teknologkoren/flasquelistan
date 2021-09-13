@@ -436,7 +436,7 @@ def upload_profile_picture(user_id):
         models.db.session.add(profile_picture)
         models.db.session.commit()
 
-        flask.flash(_l("Din profilbild har ändrats!"), 'success')
+        flask.flash(_l("Profilbilden har ändrats!"), 'success')
 
     elif form.is_submitted():
         forms.flash_errors(form)
