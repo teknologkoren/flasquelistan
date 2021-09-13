@@ -70,8 +70,8 @@ function stupidCatButton() {
     cuteCat.src = stupidSrc;
     cuteCat.style['z-index'] = '1000';
     cuteCat.style.position = 'fixed';
-    cuteCat.style.top = Math.floor(Math.random() * 90) + -10 + '%';
-    cuteCat.style.left = Math.floor(Math.random() * 90) + -10 + '%';
+    cuteCat.style.top = Math.floor(Math.random() * 90) + -15 + '%';
+    cuteCat.style.left = Math.floor(Math.random() * 90) + -15 + '%';
     cuteCat.style.transform = 'rotate(' + (-20 + Math.floor(Math.random() * 41)) + 'deg)';
     document.body.appendChild(cuteCat);
   });
