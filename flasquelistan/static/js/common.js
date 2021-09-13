@@ -53,3 +53,41 @@ function postData(uri, data, onsuccess, onfailure, csrftoken) {
 
   return request;
 }
+
+function hidenojs() {
+  var nojs = document.getElementsByClassName("no-js");
+  for (var i = 0; i < nojs.length; i++) {
+    nojs[i].style.display = "none";
+  }
+}
+
+function stupidCatButton() {
+  var stupidButton = document.createElement('button');
+  stupidButton.addEventListener('click', function () {
+    var cuteCat = document.createElement('img');
+    var stupidInt = Math.floor(Math.random() * 10) + 1;
+    var stupidSrc = '/static/images/stupid/cats/cat-' + stupidInt + '.png';
+    cuteCat.src = stupidSrc;
+    cuteCat.style['z-index'] = '1000';
+    cuteCat.style.position = 'fixed';
+    cuteCat.style.top = Math.floor(Math.random() * 80) + 0 + '%';
+    cuteCat.style.left = Math.floor(Math.random() * 80) + 0 + '%';
+    cuteCat.style.transform = 'rotate(' + (-20 + Math.floor(Math.random() * 41)) + 'deg)';
+    document.body.appendChild(cuteCat);
+  });
+  stupidButton.innerHTML = '🐱';
+  return stupidButton;
+}
+
+function addStupidButtons() {
+  var stupidButtons = [
+    stupidCatButton()
+  ];
+  stupidDiv = document.getElementById('stupid-buttons');
+  for (var i = 0; i < stupidButtons.length; i++) {
+    stupidDiv.appendChild(stupidButtons[i]);
+  }
+}
+
+hidenojs();
+addStupidButtons();
