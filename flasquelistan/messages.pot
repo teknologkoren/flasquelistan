@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2021-09-13 17:11+0200\n"
+"POT-Creation-Date: 2021-09-15 19:26+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -443,6 +443,14 @@ msgstr ""
 
 #: templates/strequelistan.html:139
 msgid "Rensa"
+msgstr ""
+
+#: templates/strequelistan.html:142
+msgid "Hoppa till"
+msgstr ""
+
+#: templates/strequelistan.html:151
+msgid "Gå till toppen"
 msgstr ""
 
 #: templates/user_gallery.html:10

@@ -132,6 +132,12 @@
   <h2>{{ _("Inloggad användare") }}</h2>
   {{ usercard(current_user, articles) }}
 
+  <h2>{{ _("Hoppa till") }}</h2>
+  {% for group in groups %}
+  <a href="#group-{{ group.id }}">{{ group.name }}</a>
+  {% if not loop.last %} - {% endif %}
+  {% endfor %}
+
   <h2 class="user-filter">{{ _("Filtrera användare") }}</h2>
   <div class="user-filter">
       <p><small>{{ _("Du kan söka på namn, smeknamn och telefonnummer.") }}</small></p>
@@ -140,8 +146,9 @@
   </div>
 
   {% for group in groups %}
-  <div class="group">
+  <div id="group-{{ group.id }}" class="group">
     <h2>{{ group.name }}</h2>
+    <a href="#">{{ _("Gå till toppen") }}</a>
     {% for user in group.users %}
     {{ usercard(user, articles) }}
     {% endfor %}
