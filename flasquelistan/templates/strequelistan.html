@@ -132,9 +132,9 @@
   <h2>{{ _("Inloggad användare") }}</h2>
   {{ usercard(current_user, articles) }}
 
-  <h2>{{ _("Hoppa till") }}</h2>
+  <h2 class="jump-to-group">{{ _("Hoppa till") }}</h2>
   {% for group in groups %}
-  <a href="#group-{{ group.id }}">{{ group.name }}</a>
+  <a class="jump-to-group" href="#group-{{ group.id }}">{{ group.name }}</a>
   {% if not loop.last %} - {% endif %}
   {% endfor %}
 

@@ -19,6 +19,14 @@
   text-align: center;
 }
 
+h2.jump-to-group {
+  margin-bottom: .5rem;
+}
+
+a.jump-to-group {
+  line-height: 2em;
+}
+
 .cards .group h2 {
   margin-bottom: .3rem;
 }
@@ -101,11 +109,8 @@
 }
 
 h2.user-filter {
+  margin-top: 1.5rem;
   margin-bottom: 0;
-}
-
-div.user-filter {
-  margin-bottom: 2.5rem;
 }
 
 .user-filter p {
