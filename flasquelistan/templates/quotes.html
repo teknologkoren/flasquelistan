@@ -11,18 +11,19 @@
   {% endif %}
   <div class="lower">
     <span class="quote-when">
-      <a href="{{ quotes_index_endpoint + '#quote-%s'|format(quote.id) }}">
-        {% if quote.has_date() %}
-        {% if quote.has_time() %}
-        {{ format_datetime(quote.timestamp, "dd MMMM yyyy, HH:mm") }}
-        {% else %}
-        {{ format_datetime(quote.timestamp, "dd MMMM yyyy") }}
-        {% endif %}
-        {% else %}
-        {{ _("före tidens början...") }}
-        {% endif %}
-      </a>
+      {% if quote.has_date() %}
+      {% if quote.has_time() %}
+      {{ format_datetime(quote.timestamp, "dd MMMM yyyy, HH:mm") }}
+      {% else %}
+      {{ format_datetime(quote.timestamp, "dd MMMM yyyy") }}
+      {% endif %}
+      {% else %}
+      {{ _("före tidens början...") }}
+      {% endif %}
     </span>
+    <a class="quote-id" href="{{ quotes_index_endpoint + '#quote-%s'|format(quote.id) }}">
+      #{{ quote.id }}
+    </a>
   </div>
 </div>
 {% endmacro %}

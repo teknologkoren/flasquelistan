@@ -29,7 +29,7 @@
   text-align: right;
 }
 
-.quote-when {
+.quote-id, .quote-when {
   font-size: small;
   font-style: italic;
   text-align: right;
