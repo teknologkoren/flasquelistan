@@ -1,8 +1,8 @@
-import ssl
-import smtplib
-import threading
 import email
-from urllib.parse import urlparse, urljoin
+import smtplib
+import ssl
+import threading
+from urllib.parse import urljoin, urlparse
 
 import flask
 import flask_bcrypt

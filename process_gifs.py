@@ -1,5 +1,7 @@
 import pathlib
+
 import ffmpy
+
 from flasquelistan import factory, models, util
 
 

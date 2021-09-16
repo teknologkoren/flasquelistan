@@ -2,9 +2,9 @@ import datetime
 import functools
 
 import flask
+import flask_login
 from flask_babel import gettext as _
 from flask_babel import lazy_gettext as _l
-import flask_login
 from flask_login import current_user
 from itsdangerous import SignatureExpired, URLSafeTimedSerializer
 

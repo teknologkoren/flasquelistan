@@ -4,12 +4,13 @@ import os
 
 import flask
 from flask import current_app
-from flask_login import current_user, login_required
-from sqlalchemy.sql.expression import func, not_, extract
-from flasquelistan import forms, models, util
-from flasquelistan.views import auth
 from flask_babel import gettext as _
 from flask_babel import lazy_gettext as _l
+from flask_login import current_user, login_required
+from sqlalchemy.sql.expression import extract, func, not_
+
+from flasquelistan import forms, models, util
+from flasquelistan.views import auth
 
 mod = flask.Blueprint('strequelistan', __name__)
 
@@ -492,7 +493,6 @@ def delete_profile_picture(user_id):
             )
 
         elif form.profile_picture.data:
-            # The "none" choice seems to work. Not sure why.
             profile_picture = (models.ProfilePicture
                                .query
                                .get_or_404(form.profile_picture.data)

@@ -1,15 +1,15 @@
 import datetime
 
 import flask
-import flask_login
 import flask_babel
+import flask_login
 import sqlalchemy as sqla
-
-from flasquelistan import forms, models, util
-from flasquelistan.views import auth
 from flask_babel import gettext as _
 from flask_babel import lazy_gettext as _l
 from flask_login import current_user
+
+from flasquelistan import forms, models, util
+from flasquelistan.views import auth
 
 mod = flask.Blueprint('strequeadmin', __name__)
 

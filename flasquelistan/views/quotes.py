@@ -1,7 +1,8 @@
 import flask
 import flask_login
 from flask_babel import lazy_gettext as _l
-from flasquelistan import models, forms
+
+from flasquelistan import forms, models
 
 mod = flask.Blueprint('quotes', __name__)
 

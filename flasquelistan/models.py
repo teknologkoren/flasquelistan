@@ -1,8 +1,9 @@
 import base64
 import datetime
+import hashlib
 import random
 import string
-import hashlib
+
 import flask_babel
 import flask_login
 import flask_sqlalchemy
@@ -10,6 +11,7 @@ import markdown
 import phonenumbers
 import vobject
 from sqlalchemy.ext.hybrid import hybrid_method, hybrid_property
+
 from flasquelistan import util
 
 TESTING = False

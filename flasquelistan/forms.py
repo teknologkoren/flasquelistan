@@ -1,13 +1,15 @@
+import hashlib
+import random
+
 import flask
 import flask_wtf
-import random
-import hashlib
+import wtforms.fields.html5 as html5_fields
+from flask_babel import gettext as _
+from flask_babel import lazy_gettext as _l
 from flask_wtf.file import FileAllowed
 from wtforms import fields, validators
-import wtforms.fields.html5 as html5_fields
+
 from flasquelistan import models, util
-from flask_babel import lazy_gettext as _l
-from flask_babel import gettext as _
 
 
 def flash_errors(form):

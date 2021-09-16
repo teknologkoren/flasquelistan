@@ -1,4 +1,5 @@
 from pathlib import Path
+
 from flasquelistan import factory
 
 path = Path(__file__).parent.resolve()
