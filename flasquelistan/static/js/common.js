@@ -76,12 +76,24 @@ function stupidCatButton() {
     document.body.appendChild(cuteCat);
   });
   stupidButton.innerHTML = '🐱';
+  stupidButton.classList.add('stupid-button');
+  return stupidButton;
+}
+
+function stupidConfettiButton() {
+  var stupidButton = document.createElement('button');
+  stupidButton.addEventListener('click', function () {
+    confetti();
+  });
+  stupidButton.innerHTML = '🎉';
+  stupidButton.classList.add('stupid-button');
   return stupidButton;
 }
 
 function addStupidButtons() {
   var stupidButtons = [
-    stupidCatButton()
+    stupidCatButton(),
+    stupidConfettiButton()
   ];
   stupidDiv = document.getElementById('stupid-buttons');
   for (var i = 0; i < stupidButtons.length; i++) {

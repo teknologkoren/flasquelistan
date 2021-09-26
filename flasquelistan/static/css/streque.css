@@ -384,3 +384,7 @@ ol.transaction-history li .value {
   border-collapse: collapse;
   display: inline;
 }
+
+.stupid-button {
+  margin: 0 .5rem;
+}
