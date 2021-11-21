@@ -5,8 +5,6 @@ from flask_babel import lazy_gettext as _l
 from flasquelistan import forms, models
 
 mod = flask.Blueprint('quotes', __name__)
-
-
 mod.before_request(flask_login.login_required(lambda: None))
 
 

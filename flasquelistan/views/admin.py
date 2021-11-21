@@ -12,8 +12,6 @@ from flasquelistan import forms, models, util
 from flasquelistan.views import auth
 
 mod = flask.Blueprint('strequeadmin', __name__)
-
-
 mod.before_request(
     flask_login.login_required(
         auth.admin_required(lambda: None)

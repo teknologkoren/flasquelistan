@@ -13,8 +13,6 @@ from flasquelistan import forms, models, util
 from flasquelistan.views import auth
 
 mod = flask.Blueprint('strequelistan', __name__)
-
-
 mod.before_request(login_required(lambda: None))
 
 
