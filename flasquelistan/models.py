@@ -4,6 +4,7 @@ import hashlib
 import random
 import string
 
+import bcrypt
 import flask_babel
 import flask_login
 import flask_sqlalchemy
@@ -143,18 +144,12 @@ class User(flask_login.UserMixin, db.Model):
         """Generate and save password hash, update password timestamp."""
 
         if TESTING:
-            self._password_hash = (
-                util.bcrypt
-                .generate_password_hash(plaintext, 4)
-                .decode()
-            )
-
+            rounds = 4
         else:
-            self._password_hash = (
-                util.bcrypt
-                .generate_password_hash(plaintext, 12)
-                .decode()
-            )
+            rounds = 12
+
+        hash = bcrypt.hashpw(plaintext.encode(), bcrypt.gensalt(rounds))
+        self._password_hash = hash.decode()
 
         # Save in UTC, password resets compare this to UTC time!
         self._password_timestamp = datetime.datetime.utcnow()
@@ -187,9 +182,9 @@ class User(flask_login.UserMixin, db.Model):
                 db.session.commit()
 
         else:
-            correct = util.bcrypt.check_password_hash(
-                self._password_hash,
-                plaintext
+            correct = bcrypt.checkpw(
+                plaintext.encode(),
+                self._password_hash.encode()
             )
 
         return correct

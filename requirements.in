@@ -1,9 +1,9 @@
+bcrypt
 coverage
 ffmpy
 flask
 flask-admin
 flask-babel
-flask-bcrypt
 flask-login
 flask-reuploaded
 flask-sqlalchemy

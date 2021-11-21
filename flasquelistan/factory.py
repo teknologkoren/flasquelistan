@@ -25,8 +25,6 @@ def create_app(config=None, instance_config=None):
     models.db.init_app(app)
     init_db(app)
 
-    util.bcrypt.init_app(app)
-
     views.auth.login_manager.init_app(app)
 
     setup_flask_admin(app, models.db)
