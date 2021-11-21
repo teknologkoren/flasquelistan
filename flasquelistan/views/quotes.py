@@ -7,13 +7,7 @@ from flasquelistan import forms, models
 mod = flask.Blueprint('quotes', __name__)
 
 
-@mod.before_request
-@flask_login.login_required
-def before_request():
-    """Make sure user is logged in before request.
-    This function does nothing, but the decorators do.
-    """
-    pass
+mod.before_request(flask_login.login_required(lambda: None))
 
 
 @mod.route('/quotes/', methods=['GET', 'POST'])

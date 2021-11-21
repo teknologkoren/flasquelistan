@@ -23,24 +23,22 @@ def load_user(user_id):
     return models.User.query.get(user_id)
 
 
-def admin_required():
-    def decorator(func):
-        @functools.wraps(func)
-        def decorated_function(*args, **kwargs):
-            if current_user.is_admin:
-                return func(*args, **kwargs)
+def admin_required(func):
+    @functools.wraps(func)
+    def wrapper(*args, **kwargs):
+        if current_user.is_admin:
+            return func(*args, **kwargs)
 
-            if flask.request.get_json():
-                # Request is AJAX
-                return flask.abort(403)
+        if flask.request.get_json():
+            # Request is AJAX
+            return flask.abort(403)
 
-            flask.flash(_l("Du måste vara admin för att komma åt den sidan."),
-                        'error')
-            return flask.redirect(
-                flask.request.referrer or flask.url_for('strequelistan.index')
-            )
-        return decorated_function
-    return decorator
+        flask.flash(_l("Du måste vara admin för att komma åt den sidan."),
+                    'error')
+        return flask.redirect(
+            flask.request.referrer or flask.url_for('strequelistan.index')
+        )
+    return wrapper
 
 
 @mod.route('/robots.txt')

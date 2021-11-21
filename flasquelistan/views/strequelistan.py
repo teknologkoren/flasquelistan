@@ -15,13 +15,7 @@ from flasquelistan.views import auth
 mod = flask.Blueprint('strequelistan', __name__)
 
 
-@mod.before_request
-@login_required
-def before_request():
-    """Make sure user is logged in before request.
-    This function does nothing, but the decorators do.
-    """
-    pass
+mod.before_request(login_required(lambda: None))
 
 
 @mod.route('/')
