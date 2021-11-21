@@ -3,6 +3,10 @@ from pathlib import Path
 DEBUG = True
 SECRET_KEY = 'super secret secret'
 
+SESSION_COOKIE_SECURE = False  # Change to True in production instance config
+SESSION_COOKIE_HTTPONLY = True
+SESSION_COOKIE_SAMESITE = 'Lax'
+
 BASEDIR = Path(__file__).parent.resolve()
 
 SQLALCHEMY_DATABASE_URI = 'sqlite:///' + str(BASEDIR.joinpath('db.sqlite'))
