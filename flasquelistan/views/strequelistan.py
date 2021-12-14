@@ -7,6 +7,7 @@ from flask import current_app
 from flask_babel import gettext as _
 from flask_babel import lazy_gettext as _l
 from flask_login import current_user, login_required
+from flask_uploads import UploadNotAllowed
 from sqlalchemy.sql.expression import extract, func, not_
 
 from flasquelistan import forms, models, util
@@ -414,7 +415,17 @@ def upload_profile_picture(user_id):
     if form.validate_on_submit() and form.upload.data:
         user = models.User.query.get_or_404(user_id)
 
-        filename = util.profile_pictures.save(form.upload.data)
+        try:
+            filename = util.profile_pictures.save(form.upload.data)
+        except UploadNotAllowed:
+            flask.flash(
+                _l("Kunde inte ladda upp bilden, försök med ett annat "
+                   "filnamn eller filformat."),
+                'error'
+            )
+            return flask.redirect(
+                flask.url_for('strequelistan.show_profile', user_id=user_id)
+            )
 
         if os.path.splitext(filename)[1].lower() in ('.jpg', '.jpeg'):
             util.rotate_jpeg(util.profile_pictures.path(filename))
