@@ -36,6 +36,10 @@
     </p>
     {% endif %}
 
+    <p>
+      <a href="{{ url_for('strequelistan.user_vcard', user_id=user.id) }}" download>{{ _("Ladda ner kontaktfil") }}</a>
+    </p>
+
     <dl>
       <dt>{{ _("E-postadress") }}</dt>
       <dd><a href="mailto:{{ user.email }}">{{ user.email }}</a></dd>
@@ -56,9 +60,6 @@
       {% endif %}
     </dl>
 
-    <p>
-      <a href="{{ url_for('strequelistan.user_vcard', user_id=user.id) }}" download>{{ _("Ladda ner kontaktfil") }}</a>
-    </p>
     {% if user == current_user or current_user.is_admin %}
     <dl>
       <dt>{{ _("Saldo") }}</dt>
