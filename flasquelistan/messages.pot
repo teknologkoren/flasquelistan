@@ -326,14 +326,6 @@ msgstr ""
 msgid "Uppladdad"
 msgstr ""
 
-#: templates/payments.html:7 templates/strequelistan.html:85
-msgid "Påfyllning av saldo"
-msgstr ""
-
-#: templates/payments.html:8
-msgid "Beskrivning hur man sätter in pengar"
-msgstr ""
-
 #: templates/quote.html:11
 msgid "Alla citat"
 msgstr ""
@@ -375,6 +367,14 @@ msgstr ""
 #: templates/strequeadmin/stats.html:35 templates/strequeadmin/stats.html:47
 #: templates/strequeadmin/users.html:19
 msgid "Saldo"
+msgstr ""
+
+#: templates/show_profile.html:68
+#, python-format
+msgid ""
+"Fyll på ditt saldo genom att göra en betalning till PG 20 74-3, märk "
+"betalningen med \"Streque %(namn)s\". Prata med QM om du inte har "
+"möjlighet att göra detta."
 msgstr ""
 
 #: templates/show_profile.html:93

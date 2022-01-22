@@ -329,18 +329,6 @@ msgstr "Error:"
 msgid "Uppladdad"
 msgstr "Uploaded"
 
-#: templates/payments.html:7 templates/strequelistan.html:85
-msgid "Påfyllning av saldo"
-msgstr "Refilling your balance"
-
-#: templates/payments.html:8
-msgid "Beskrivning hur man sätter in pengar"
-msgstr ""
-"To add money to your balance you make a bank transaction to PlusGiro (PG) 20 "
-"74-3 with your name and the word \"streque\" as the comment. If you for some "
-"reason can't do this (if for example you don't have a Swedish bank account) "
-"you can give QM cash."
-
 #: templates/quote.html:11
 msgid "Alla citat"
 msgstr "All quotes"
@@ -383,6 +371,16 @@ msgstr "Birthday"
 #: templates/strequeadmin/users.html:19
 msgid "Saldo"
 msgstr "Balance"
+
+#: templates/show_profile.html:68
+#, python-format
+msgid ""
+"Fyll på ditt saldo genom att göra en betalning till PG 20 74-3, märk "
+"betalningen med \"Streque %(namn)s\". Prata med QM om du inte har möjlighet att "
+"göra detta."
+msgstr ""
+"Top up your balance by making a payment to PG 20 74-3 with message \"Streque "
+"%(namn)s\". Talk to QM if you are unable to do this."
 
 #: templates/show_profile.html:93
 msgid "Överför pengar"
@@ -994,3 +992,13 @@ msgstr "Password changed!"
 
 #~ msgid "Perma&shy;länk"
 #~ msgstr "Permanent link"
+
+#~ msgid "Påfyllning av saldo"
+#~ msgstr "Refilling your balance"
+
+#~ msgid "Beskrivning hur man sätter in pengar"
+#~ msgstr ""
+#~ "To add money to your balance you make a bank transaction to PlusGiro (PG) 20 "
+#~ "74-3 with your name and the word \"streque\" as the comment. If you for some "
+#~ "reason can't do this (if for example you don't have a Swedish bank account) "
+#~ "you can give QM cash."

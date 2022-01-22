@@ -327,18 +327,6 @@ msgstr ""
 msgid "Uppladdad"
 msgstr ""
 
-#: templates/payments.html:7 templates/strequelistan.html:85
-msgid "Påfyllning av saldo"
-msgstr ""
-
-#: templates/payments.html:8
-msgid "Beskrivning hur man sätter in pengar"
-msgstr ""
-"För att sätta in pengar på strequelistan gör du en banköverföring till PG"
-" 20 74-3 med ditt namn och \"strequelistan\" som kommentar. Ex: Kor Ist -"
-" Strequelistan. Om du av någon anledning inte kan sätta in pengar via PG "
-"kan du även ge QM kontanter"
-
 #: templates/quote.html:11
 msgid "Alla citat"
 msgstr ""
@@ -1015,4 +1003,18 @@ msgstr ""
 
 #~ msgid "Hoppa till toppen"
 #~ msgstr ""
+
+#~ msgid "Påfyllning av saldo"
+#~ msgstr ""
+
+#~ msgid "Beskrivning hur man sätter in pengar"
+#~ msgstr ""
+#~ "För att sätta in pengar på "
+#~ "strequelistan gör du en banköverföring "
+#~ "till PG 20 74-3 med ditt namn "
+#~ "och \"strequelistan\" som kommentar. Ex: "
+#~ "Kor Ist - Strequelistan. Om du av"
+#~ " någon anledning inte kan sätta in"
+#~ " pengar via PG kan du även ge"
+#~ " QM kontanter"
 

@@ -219,6 +219,10 @@ h2.user-filter {
   margin-top: 2rem;
 }
 
+.balance-refill-instructions {
+  margin-top: .5rem;
+}
+
 .upload-and-set-profile-picture .form-field {
   margin-bottom: .5rem;
 }

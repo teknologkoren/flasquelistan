@@ -82,7 +82,6 @@
 <div class="streque-top">
   <nav class="streque-nav">
     <ul>
-      <li><a href="{{ url_for("strequelistan.payments") }}">{{ _("Påfyllning av saldo") }}</a></li>
       {% if "PHONENUMBER" in config %}
       <li><a href="tel:{{ config["PHONENUMBER"] }}">☎️ {{ _("Ring Sqrubben") }}</a></li>
       {% endif %}
