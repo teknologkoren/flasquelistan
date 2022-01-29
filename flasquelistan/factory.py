@@ -1,5 +1,6 @@
 import click
 import flask
+from werkzeug.middleware.proxy_fix import ProxyFix
 
 
 def create_app(config=None, instance_config=None):
@@ -17,7 +18,7 @@ def create_app(config=None, instance_config=None):
     register_blueprints(app)
     register_cli(app)
 
-    from flasquelistan import models, views, util
+    from flasquelistan import models, views
 
     if app.testing:
         models.TESTING = True
@@ -32,6 +33,8 @@ def create_app(config=None, instance_config=None):
     setup_flask_uploads(app)
     setup_csrf_protection(app)
     setup_cache_busting(app)
+
+    app = ProxyFix(app, x_host=1)
 
     return app
 

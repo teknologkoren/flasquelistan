@@ -34,18 +34,19 @@ def url_for_image(filename, imagetype, width=None):
     else:
         flask.abort(500)
 
+    href = werkzeug.urls.Href(base)
     if width and not flask.current_app.debug:
-        url = urljoin(base, 'img{}/'.format(width), filename)
+        url = href('img{}'.format(width), filename)
     else:
-        url = urljoin(base, filename)
+        url = href(filename)
 
     secret = flask.current_app.config['IMAGE_SECRET']
     expiry = flask.current_app.config['IMAGE_EXPIRY']
     expires = int(datetime.datetime.now().timestamp() + expiry)
     md5 = generate_secure_path_hash(expires, url, secret)
 
-    href = werkzeug.urls.Href(url)
-    return href(md5=md5, expires=expires)
+    full_href = werkzeug.urls.Href(url)
+    return full_href(md5=md5, expires=expires)
 
 
 def send_email(toaddr, subject, body):
