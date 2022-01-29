@@ -64,9 +64,11 @@
     <dl>
       <dt>{{ _("Saldo") }}</dt>
       <dd>{{ user.formatted_balance }}</dd>
+      {% if user == current_user %}
       <dd class="balance-refill-instructions">
-        {{ _("Fyll på ditt saldo genom att göra en betalning till PG 20 74-3, märk betalningen med \"Streque %(namn)s\". Prata med QM om du inte har möjlighet att göra detta.", namn=current_user.full_name) }}
+        {{ _("Fyll på ditt saldo genom att göra en betalning till PG 20 74-3, märk betalningen med \"Streque %(namn)s\". Prata med QM om du inte har möjlighet att göra detta.", namn=user.full_name) }}
       </dd>
+      {% endif %}
     </dl>
     {% endif %}
 
