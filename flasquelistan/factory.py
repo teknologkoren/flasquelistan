@@ -34,7 +34,7 @@ def create_app(config=None, instance_config=None):
     setup_csrf_protection(app)
     setup_cache_busting(app)
 
-    app = ProxyFix(app, x_host=1)
+    ProxyFix(app, x_host=1)
 
     return app
 
