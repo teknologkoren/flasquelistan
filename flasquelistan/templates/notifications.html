@@ -1,0 +1,26 @@
+{% extends "layout.html" %}
+
+{% set active_page = "streque" %}
+
+{% block body %}
+  <div class="notifications">
+    <div>
+      <h2>{{ _("Notifikationer") }}</h2>
+      {% if not notifications %}
+        <p>{{ _("Här var det tomt.") }}</p>
+      {% else %}
+        <a href="{{ url_for('strequelistan.mark_notifications_read') }}">{{ _("Markera alla som lästa") }}</a>
+        <ol class="notification-history">
+          {% for notification in notifications %}
+            <li>
+              <div>{{ notification.text }}</div>
+              <div class="timestamp">
+                {{ format_datetime(notification.timestamp, "dd MMMM yyyy, HH:mm") }}
+              </div>
+            </li>
+          {% endfor %}
+        </ol>
+      {% endif %}
+    </div>
+  </div>
+{% endblock %}

@@ -305,12 +305,18 @@ h2.user-filter {
   margin-bottom: 1.5rem;
 }
 
+ol.notification-history {
+  padding: 0;
+  max-width: 40rem;
+}
+
 ol.transaction-history {
   padding: 0;
   max-width: 30rem;
 }
 
-ol.transaction-history li {
+ol.transaction-history li,
+ol.notification-history li {
   display: block;
   border: 1px solid #ddd;
   border-radius: 7px;

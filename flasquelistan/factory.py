@@ -240,6 +240,8 @@ def setup_flask_admin(app, db):
                                   name='ProfilePicture'))
     admin.add_view(LoginModelView(models.RegistrationRequest, db.session,
                                   name='RegistrationRequest'))
+    admin.add_view(LoginModelView(models.Notification, db.session,
+                                  name='Notification'))
 
     return admin
 

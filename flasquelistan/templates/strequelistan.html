@@ -133,6 +133,13 @@
   <input id="ajax-csrf_token" type="hidden" name="csrf_token" value="{{ csrf_token }}"/>
 
   <h2>{{ _("Inloggad användare") }}</h2>
+  {% if notification_count %}
+  <p>
+    <a href="{{ url_for('strequelistan.notifications') }}">
+      {{ _("Du har %(num)d notifikation(er)!", num=notification_count) }}
+    </a>
+  </p>
+  {% endif %}
   {{ usercard(current_user, articles) }}
 
   <h2 class="jump-to-group">{{ _("Hoppa till") }}</h2>

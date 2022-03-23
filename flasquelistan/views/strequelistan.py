@@ -3,6 +3,7 @@ import hashlib
 import os
 
 import flask
+import flask_babel
 from flask import current_app
 from flask_babel import gettext as _
 from flask_babel import lazy_gettext as _l
@@ -79,11 +80,22 @@ def index():
         flask.flash(_l("Det är ont om pengar på kontot. Dags att fylla på?"),
                     'warning')
 
+    notification_count = (
+        models.Notification
+        .query
+        .filter_by(
+            user_id=current_user.id,
+            is_acknowledged=False
+        )
+        .count()
+    )
+
     return flask.render_template(
         'strequelistan.html',
         groups=groups,
         quote=random_quote,
         articles=articles,
+        notification_count=notification_count,
         users_with_streques=users_with_streques,
         birthdays=birthdays,
         birthday_emoji=birthday_emoji
@@ -113,6 +125,18 @@ def add_streque():
         flask.abort(400)
 
     streque = user.strequa(article, current_user)
+
+    if user != current_user:
+        text = _("%(name)s strequade en %(article)s på dig.",
+                 name=current_user.displayname, article=article.name)
+        notification = models.Notification(
+            text=text,
+            user_id=user.id,
+            type='streque',
+            reference=str(streque.id)
+        )
+        models.db.session.add(notification)
+        models.db.session.commit()
 
     if flask.request.is_json:
         response = {
@@ -154,6 +178,35 @@ def void_streque():
 
     streque.void_and_refund()
 
+    streque_notification = (
+        models.Notification
+        .query
+        .filter_by(
+            user_id=streque.user.id,
+            type='streque',
+            reference=str(streque.id),
+            is_sent=False
+        )
+        .first()
+    )
+    if streque_notification:
+        # Found a notification, and it has not been sent.
+        # Remove it as if nothing happened! :O
+        models.db.session.delete(streque_notification)
+    else:
+        # The notification has been sent and potentially read, we must
+        # send a new notification that the streque was voided.
+        text = _("%(name)s ångrade ett av dina %(streque)s-streque.",
+                 name=current_user.displayname, streque=streque.text)
+        void_notification = models.Notification(
+            text=text,
+            user_id=streque.user_id,
+            type='streque-void',
+            reference=str(streque.id)
+        )
+        models.db.session.add(void_notification)
+    models.db.session.commit()
+
     if flask.request.is_json:
         return flask.jsonify(
             streque_id=streque.id,
@@ -168,6 +221,51 @@ def void_streque():
                       name=streque.user.full_name),
                     'success')
         return flask.redirect(flask.url_for('strequelistan.history'))
+
+
+@mod.route('/notifications')
+def notifications():
+    notifications = (
+        models.Notification
+        .query
+        .filter_by(
+            user_id=current_user.id,
+            is_acknowledged=False
+        )
+        .order_by(models.Notification.timestamp.desc())
+        .all()
+    )
+
+    if notifications:
+        for notification in notifications:
+            notification.is_sent = True
+        models.db.session.commit()
+
+    return flask.render_template(
+        'notifications.html',
+        notifications=notifications
+    )
+
+
+@mod.route('/notifications/mark-read')
+def mark_notifications_read():
+    # Mark all *sent* notifications as acknowledged.
+    notifications = (
+        models.Notification
+        .query
+        .filter_by(
+            user_id=current_user.id,
+            is_sent=True
+        )
+        .all()
+    )
+
+    if notifications:
+        for notification in notifications:
+            notification.is_acknowledged = True
+        models.db.session.commit()
+
+    return flask.redirect(flask.url_for('strequelistan.notifications'))
 
 
 @mod.route('/transfer', methods=['POST'])
@@ -204,7 +302,7 @@ def credit_transfer():
         value = int(form.value.data * 100)  # To ören
 
         message = form.message.data
-        models.CreditTransfer.create(
+        credit_transfer = models.CreditTransfer.create(
             payer, payee, current_user, value, message
         )
 
@@ -213,6 +311,21 @@ def credit_transfer():
               a=value/100, name=payee.full_name),
             'success'
         )
+
+        notification_text = _(
+            "Streque Pay - %(money)s från %(name)s: %(message)s",
+            money=flask_babel.format_currency(value / 100, 'SEK'),
+            name=payer.displayname,
+            message=message
+        )
+        payee_notification = models.Notification(
+            text=notification_text,
+            user_id=payee.id,
+            type='streque-pay',
+            reference=str(credit_transfer.id)
+        )
+        models.db.session.add(payee_notification)
+        models.db.session.commit()
 
     elif form.is_submitted():
         forms.flash_errors(form)

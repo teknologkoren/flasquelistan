@@ -544,3 +544,32 @@ class ProfilePicture(db.Model):
 
     def __str__(self):
         return "ProfilePicture {self.filename} {self.user_id}"
+
+
+class Notification(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    text = db.Column(db.String(200), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    is_sent = db.Column(db.Boolean, nullable=False, default=False)
+    is_acknowledged = db.Column(db.Boolean, nullable=False, default=False)
+
+    # So the following is not exactly best practice. E.g., for a streque we
+    # would save type='streque' and reference=str(<streque primary key>), to be
+    # able to recall and remove the notification if it was voided before the
+    # notification was sent.
+    # The use case, IMO, calls for this simplicity. It could be used for:
+    #  * Removing obsolete notifications
+    #  * Grouping notifications of the same type
+    #  * Probably some other, non-critical things
+    # It is not needed for the object's own integrity. If we can't figure out
+    # what the type means, or the type or reference otherwise does not make
+    # sense, we just display the notification as is. It is then a generic,
+    # potentially obsolete notification. And that's ok ¯\_(ツ)_/¯
+    type = db.Column(db.String(50), nullable=True)
+    reference = db.Column(db.String(50), nullable=True)
+
+    user = db.relationship('User', foreign_keys=user_id, backref='notifications')
+    timestamp = db.Column(db.DateTime, nullable=False, default=datetime.datetime.utcnow)
+
+    def __str__(self):
+        return "Notification \"{}...\" to user {}".format(self.text[:20], self.user_id)
