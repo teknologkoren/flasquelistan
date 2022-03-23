@@ -13,10 +13,7 @@ import phonenumbers
 import vobject
 from sqlalchemy.ext.hybrid import hybrid_method, hybrid_property
 
-from flasquelistan import util
-
 TESTING = False
-
 db = flask_sqlalchemy.SQLAlchemy()
 
 
@@ -321,7 +318,7 @@ class User(flask_login.UserMixin, db.Model):
         return chr(0x1f600 + i)
 
     def __str__(self):
-        return "{} {} <{}>".format(self.first_name, self.last_name, self.email)
+        return f"User {self.first_name} {self.last_name} <{self.email}>"
 
 
 class RegistrationRequest(db.Model):
@@ -333,9 +330,7 @@ class RegistrationRequest(db.Model):
     message = db.Column(db.Text)
 
     def __str__(self):
-        return "Registration request {} {} <{}>".format(self.first_name,
-                                                        self.last_name,
-                                                        self.email)
+        return f"RegistrationRequest {self.first_name} {self.last_name} <{self.email}>"
 
 
 class Group(db.Model):
@@ -346,7 +341,7 @@ class Group(db.Model):
     users = db.relationship('User', back_populates='group')
 
     def __str__(self):
-        return self.name
+        return f"Group {self.name}"
 
 
 class Article(db.Model):
@@ -366,6 +361,9 @@ class Article(db.Model):
     @property
     def html_description(self):
         return markdown.markdown(self.description)
+
+    def __str__(self):
+        return f"Article {self.name}"
 
 
 class Transaction(db.Model):
@@ -411,8 +409,7 @@ class Transaction(db.Model):
         return True
 
     def __str__(self):
-        return "{}: {} @ {}".format(self.__class__.__name__,
-                                    self.value, self.user)
+        return "f{self.__class__.__name__}: {self.value} @ {self.user}"
 
 
 class Streque(Transaction):
@@ -510,6 +507,9 @@ class CreditTransfer(db.Model):
         self.payer_transaction.void_and_refund()
         self.payee_transaction.void_and_refund()
 
+    def __str__(self):
+        return f"CreditTransfer {self.payer_transaction_id} -> {self.payee_transaction_id}"
+
 
 class Quote(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -525,11 +525,11 @@ class Quote(db.Model):
         return self.timestamp >= datetime.datetime(2019, 7, 7)
 
     def cleaned(self):
-        lines = [l for l in self.text.splitlines() if l]
+        lines = [line for line in self.text.splitlines() if line]
         return "\n".join(lines)
 
     def __str__(self):
-        return "{}... — {}".format(self.text[:20], self.who[:10] or "<None>")
+        return "Quote \"{}...\" — {}".format(self.text[:20], self.who[:10] or "<None>")
 
 
 class ProfilePicture(db.Model):
@@ -541,3 +541,6 @@ class ProfilePicture(db.Model):
                            backref='profile_pictures')
     timestamp = db.Column(db.DateTime, nullable=False,
                           default=datetime.datetime.utcnow)
+
+    def __str__(self):
+        return "ProfilePicture {self.filename} {self.user_id}"
