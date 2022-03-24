@@ -313,7 +313,7 @@ def credit_transfer():
         )
 
         notification_text = _(
-            "Streque Pay - %(money)s från %(name)s: %(message)s",
+            "Streque Pay! %(money)s från %(name)s: %(message)s",
             money=flask_babel.format_currency(value / 100, 'SEK'),
             name=payer.displayname,
             message=message
