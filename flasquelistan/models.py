@@ -9,9 +9,10 @@ import flask_babel
 import flask_login
 import flask_sqlalchemy
 import markdown
-import phonenumbers
 import vobject
 from sqlalchemy.ext.hybrid import hybrid_method, hybrid_property
+
+from flasquelistan import util
 
 TESTING = False
 db = flask_sqlalchemy.SQLAlchemy()
@@ -24,7 +25,7 @@ class User(flask_login.UserMixin, db.Model):
     last_name = db.Column(db.String(50))
     nickname = db.Column(db.String(50))
     birthday = db.Column(db.Date, nullable=True)
-    phone = db.Column(db.String(20), nullable=True)
+    _phone = db.Column("phone", db.String(20), nullable=True)
     balance = db.Column(db.Integer, default=0)  # Ören (1/100kr)
     is_admin = db.Column(db.Boolean, nullable=False, default=False)
     active = db.Column(db.Boolean, nullable=False, default=False)
@@ -107,29 +108,29 @@ class User(flask_login.UserMixin, db.Model):
             and self.birthday.day == today.day
         )
 
+    @hybrid_property
+    def phone(self):
+        return self._phone
+
+    @phone.setter
+    def phone(self, phone):
+        """Set phone number, but normalize it first (if non-empty)."""
+        if not phone:
+            self._phone = phone
+            return
+
+        normalized = util.format_phone_number(phone, e164=True)
+        if normalized:
+            self._phone = normalized
+        else:
+            raise AssertionError('The phone number is invalid.')
+
+    def formatted_phone(self, e164=False):
+        return util.format_phone_number(self.phone, e164)
+
     @property
     def formatted_balance(self):
         return flask_babel.format_currency(self.balance / 100, 'SEK')
-
-    def formatted_phone(self, e164=False):
-        """Returns formatted number or False if not a valid number."""
-        try:
-            # If no country code, assume Swedish
-            parsed = phonenumbers.parse(self.phone, 'SE')
-        except phonenumbers.phonenumberutil.NumberParseException:
-            return False
-
-        if not (phonenumbers.is_possible_number(parsed)
-                and phonenumbers.is_valid_number(parsed)):
-            return False
-
-        formatted = phonenumbers.format_number(
-            parsed,
-            phonenumbers.PhoneNumberFormat.E164 if e164
-            else phonenumbers.PhoneNumberFormat.INTERNATIONAL
-        )
-
-        return formatted
 
     @hybrid_property
     def password(self):

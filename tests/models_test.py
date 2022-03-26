@@ -214,13 +214,20 @@ def test_user_model(app):
         email='monty@python.tld',
         first_name='Monty',
         last_name='Python',
-        phone='0700011223',
+        phone='074-345 32 10',
     )
 
     models.db.session.add(user)
     models.db.session.commit()
 
     assert user.id > 0
+    assert user.phone == '+46743453210'
+
+    # Phone number is not required.
+    user.phone = ''
+    models.db.session.commit()
+
+    assert user.phone == ''
 
 
 def test_usertransaction_model(app):

@@ -9,6 +9,7 @@ from urllib.parse import urljoin, urlparse
 
 import flask
 import flask_uploads
+import phonenumbers
 import werkzeug
 from PIL import Image, ImageOps
 
@@ -134,3 +135,24 @@ def rotate_jpeg(filename):
     if 'exif' in img.info:
         rotated = ImageOps.exif_transpose(img)
         rotated.save(filename, exif=rotated.info.get('exif'))
+
+
+def format_phone_number(phone, e164=False):
+    """Returns formatted number or False if not a valid number."""
+    try:
+        # If no country code, assume Swedish
+        parsed = phonenumbers.parse(phone, 'SE')
+    except phonenumbers.phonenumberutil.NumberParseException:
+        return False
+
+    if not (phonenumbers.is_possible_number(parsed)
+            and phonenumbers.is_valid_number(parsed)):
+        return False
+
+    formatted = phonenumbers.format_number(
+        parsed,
+        phonenumbers.PhoneNumberFormat.E164 if e164
+        else phonenumbers.PhoneNumberFormat.INTERNATIONAL
+    )
+
+    return formatted
