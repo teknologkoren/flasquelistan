@@ -17,6 +17,8 @@ from pathlib import Path
 
 DEBUG = True
 SECRET_KEY = 'not the default secret!'
+IMAGE_SECRET = 'also not the default secret!'
+IMAGE_EXPIRY = 60 * 60 *6
 
 BASEDIR = Path(__file__).parent.resolve() # is now `instance/`
 

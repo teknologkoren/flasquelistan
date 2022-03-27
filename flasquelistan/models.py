@@ -61,10 +61,36 @@ class User(flask_login.UserMixin, db.Model):
         foreign_keys='ApiKey.user_id'
     )
 
-
     # Do not change the following directly, use User.password
     _password_hash = db.Column(db.String(128))
     _password_timestamp = db.Column(db.DateTime)
+
+    @property
+    def api_dict(self):
+        data = dict()
+        data['id'] = self.id
+        data['email'] = self.email
+        data['first_name'] = self.first_name
+        data['last_name'] = self.last_name
+        data['full_name'] = self.full_name
+        data['nickname'] = self.nickname
+        data['birthday'] = self.birthday
+        data['phone'] = self.phone
+        data['balance'] = self.balance
+        data['is_admin'] = self.is_admin
+        data['active'] = self.active
+        data['group'] = {'id': self.group_id,
+                         'name': self.group.name} if self.group else None
+        data['lang'] = self.lang
+        if self.profile_picture:
+            data['profile_picture'] = {
+                'id': self.profile_picture_id,
+                'url': util.url_for_image(
+                    self.profile_picture.filename, 'profilepicture'
+                )}
+        else:
+            data['profile_picture'] = None
+        return data
 
     def __init__(self, *args, **kwargs):
         if 'password' not in kwargs:
@@ -375,6 +401,18 @@ class Article(db.Model):
     def html_description(self):
         return markdown.markdown(self.description)
 
+    @property
+    def api_dict(self):
+        data = dict()
+        data['id'] = self.id
+        data['weight'] = self.weight
+        data['name'] = self.name
+        data['value'] = self.value
+        data['description'] = self.description
+        data['standardglas'] = self.standardglas
+        data['is_active'] = self.is_active
+        return data
+
     def __str__(self):
         return f"{self.name}"
 
@@ -429,6 +467,21 @@ class Transaction(db.Model):
         db.session.commit()
 
         return True
+
+    @property
+    def api_dict(self):
+        data = dict()
+        data['id'] = self.id
+        data['text'] = self.text
+        data['value'] = self.value
+        data['voided'] = self.voided
+        data['user_id'] = self.user_id
+        data['created_by_id'] = self.created_by_id
+        data['api_key_id'] = self.api_key_id
+        data['timestamp'] = self.timestamp
+        data['type'] = self.type
+        data['formatted_value'] = self.formatted_value
+        return data
 
     def __str__(self):
         return f"{self.__class__.__name__}: {self.value} @ {self.user}"
@@ -629,8 +682,10 @@ class Notification(db.Model):
     type = db.Column(db.String(50), nullable=True)
     reference = db.Column(db.String(50), nullable=True)
 
-    user = db.relationship('User', foreign_keys=user_id, backref='notifications')
-    timestamp = db.Column(db.DateTime, nullable=False, default=datetime.datetime.utcnow)
+    user = db.relationship('User', foreign_keys=user_id,
+                           backref='notifications')
+    timestamp = db.Column(db.DateTime, nullable=False,
+                          default=datetime.datetime.utcnow)
 
     def __str__(self):
         return "{} \"{}...\"".format(self.user_id, self.text[:20])
@@ -642,9 +697,10 @@ class Notification(db.Model):
 class ApiKey(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    _api_key_hash = db.Column(db.String(50), nullable=False, unique=True, index=True)
+    _api_key_hash = db.Column(
+        db.String(50), nullable=False, unique=True, index=True)
     created_timestamp = db.Column(db.DateTime, nullable=False,
-                          default=datetime.datetime.utcnow)
+                                  default=datetime.datetime.utcnow)
     last_used_timestamp = db.Column(db.DateTime)
     is_enabled = db.Column(db.Boolean, nullable=False, default=True)
 
@@ -716,7 +772,8 @@ class ApiKey(db.Model):
         """If key is a valid and active api key, return the corresponding
         ApiKey. If not, return None."""
         try:
-            api_key = ApiKey.query.filter_by(api_key=ApiKey.hash_key(key)).one()
+            api_key = ApiKey.query.filter_by(
+                _api_key_hash=ApiKey.hash_key(key)).one()
         except:
             return None
 

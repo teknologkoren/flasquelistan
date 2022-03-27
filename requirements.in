@@ -4,6 +4,7 @@ ffmpy
 flask
 flask-admin
 flask-babel
+flask-HTTPAuth
 flask-login
 flask-reuploaded
 flask-sqlalchemy
