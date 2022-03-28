@@ -1,10 +1,11 @@
 import datetime
 import hashlib
 import os
+import secrets
 
 import flask
 import flask_babel
-from flask import current_app
+from flask import current_app, abort
 from flask_babel import gettext as _
 from flask_babel import lazy_gettext as _l
 from flask_login import current_user, login_required
@@ -706,6 +707,99 @@ def edit_profile(user_id):
             form.y_chromosome.data = 'n/a'
 
     return flask.render_template('edit_profile.html', form=form, user=user)
+
+
+@mod.route('/profile/<int:user_id>/api-keys', methods=['GET'])
+def api_keys(user_id):
+    user = models.User.query.get_or_404(user_id)
+
+    if current_user.id != user.id and not current_user.is_admin:
+        flask.flash(
+            _l("Du får bara hantera din egna API-nycklar! ಠ_ಠ"), 'error')
+        return flask.redirect(flask.url_for('.show_profile', user_id=user_id))
+
+    return flask.render_template('api_keys.html', user=user)
+
+
+@mod.route('/profile/<int:user_id>/api-keys/new', methods=['GET', 'POST'])
+@mod.route('/profile/<int:user_id>/api-keys/edit/<int:api_key_id>', methods=['GET', 'POST'])
+def edit_api_key(user_id, api_key_id=None):
+    user = models.User.query.get_or_404(user_id)
+
+    if current_user.id != user.id and not current_user.is_admin:
+        flask.flash(
+            _l("Du får bara hantera din egna API-nycklar! ಠ_ಠ"), 'error')
+        return flask.redirect(flask.url_for('.show_profile', user_id=user_id))
+
+    if api_key_id:
+        api_key = models.ApiKey.query.get_or_404(api_key_id)
+        can_be_deleted = api_key.can_be_deleted
+        form = forms.EditApiKeyForm(obj=api_key)
+    else:
+        api_key = None
+        can_be_deleted = False
+        form = forms.EditApiKeyForm()
+
+    if form.validate_on_submit():
+        if not api_key:
+            api_key = models.ApiKey()
+
+        # Only admins are allowed to create keys with the admin bit set.
+        if form.has_admin_privileges.data:
+            if not user.is_admin:
+                abort(400)
+        api_key.has_admin_privileges = form.has_admin_privileges.data
+
+        # If it's a new api key or if the user opted to reset the key,
+        # generate a new key.
+        if form.reset_key.data or not api_key_id:
+            secret = models.ApiKey.generate_key()
+            api_key.api_key = secret
+        else:
+            secret = None
+
+        api_key.name = form.name.data
+        api_key.short_name = form.short_name.data if form.short_name.data else None
+        api_key.is_enabled = form.is_enabled.data
+
+        if not api_key_id:
+            user.api_keys.append(api_key)
+
+        models.db.session.commit()
+
+        if secret:
+            flask.flash(
+                _l(
+                    "Din API-nyckel med namnet \"%(name)s\" är: \"%(secret)s\"."
+                    " Du kommer inte kunna se den igen, så se till att spara den nu.",
+                    secret=secret,
+                    name=form.name.data
+                ),
+                'success')
+        return flask.redirect(flask.url_for('strequelistan.api_keys',
+                                            user_id=user.id))
+
+    return flask.render_template('edit_api_key.html',
+                                 form=form,
+                                 user=user,
+                                 api_key=api_key,
+                                 can_be_deleted=can_be_deleted)
+
+
+@mod.route('/profile/<int:user_id>/edit/api-keys/delete/<int:api_key_id>', methods=['POST'])
+def delete_api_key(user_id, api_key_id):
+    api_key = models.ApiKey.query.get_or_404(api_key_id)
+    if api_key.user.id != user_id:
+        abort(404)
+
+    if not api_key.can_be_deleted:
+        abort(400)
+
+    models.db.session.delete(api_key)
+    models.db.session.commit()
+
+    flask.flash(_l("Api-nyckeln \"%(name)s\" är borttagen.", name=api_key.name), 'success')
+    return flask.redirect(flask.url_for('strequelistan.api_keys', user_id=user_id))
 
 
 @mod.route('/profile/<int:user_id>/edit/password', methods=['GET', 'POST'])

@@ -141,6 +141,16 @@ h2.user-filter {
   color: #444;
 }
 
+.api-key {
+  font-style: italic;
+  color: #444;
+}
+
+.separator {
+  color: #444;
+  padding-left: .2rem
+}
+
 .strequecard .username {
   flex: 1;
   display: flex;
@@ -149,6 +159,16 @@ h2.user-filter {
 }
 
 .strequecard .timestamp {
+  font-size: .8em;
+  margin-top: .2rem;
+}
+
+.strequecard .separator {
+  font-size: .8em;
+  margin-top: .2rem;
+}
+
+.strequecard .api-key {
   font-size: .8em;
   margin-top: .2rem;
 }
@@ -305,6 +325,10 @@ h2.user-filter {
   margin-bottom: 1.5rem;
 }
 
+.api-info {
+  max-width: 40rem;
+}
+
 ol.notification-history {
   padding: 0;
   max-width: 40rem;
@@ -327,6 +351,10 @@ ol.notification-history li {
 ol.transaction-history li .upper {
   display: flex;
   justify-content: space-between;
+}
+
+ol.transaction-history li .lower {
+  display: flex;
 }
 
 ol.transaction-history li .value {
