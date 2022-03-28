@@ -143,21 +143,6 @@ class UniqueEmailForm(flask_wtf.FlaskForm):
     ])
 
 
-class PhoneForm(flask_wtf.FlaskForm):
-    phone = html5_fields.TelField(
-        _l('Telefon'),
-        description=_l("Ett telefonnummer, med eller utan landskod.")
-    )
-
-    def validate_phone(form, field):
-        if not field.data:
-            # Empty/unset phone numbers are allowed.
-            return True
-        elif not util.format_phone_number(field.data, e164=True):
-            raise validators.ValidationError("Telefonnummret är ogiltigt.")
-        return True
-
-
 class PasswordForm(flask_wtf.FlaskForm):
     password = fields.PasswordField(
         _l('Lösenord'),
@@ -234,7 +219,7 @@ class VoidTransactionForm(flask_wtf.FlaskForm):
     transaction_id = fields.HiddenField()
 
 
-class EditUserForm(PhoneForm):
+class EditUserForm(flask_wtf.FlaskForm):
     nickname = fields.StringField(
         _l('Smeknamn'),
         description=_l("Något roligt."),
@@ -249,6 +234,12 @@ class EditUserForm(PhoneForm):
         validators=[
             validators.Optional()
         ]
+    )
+
+    phone = html5_fields.TelField(
+        _l('Telefon'),
+        description=_l("Ett telefonnummer. Landskod kan utelämnas för svenska"
+                       " nummer, men behövs för utländska nummer.")
     )
 
     body_mass = html5_fields.IntegerField(
@@ -305,7 +296,7 @@ class AddUserForm(UniqueEmailForm, FullEditUserForm):
     pass
 
 
-class RegistrationRequestForm(UniqueEmailForm, PhoneForm):
+class RegistrationRequestForm(UniqueEmailForm):
     first_name = fields.StringField(
         _l('Förnamn'),
         validators=[
@@ -319,6 +310,11 @@ class RegistrationRequestForm(UniqueEmailForm, PhoneForm):
             validators.InputRequired(),
             validators.Length(max=50)
         ],
+    )
+    phone = html5_fields.TelField(
+        _l('Telefon'),
+        description=_l("Ett telefonnummer. Landskod kan utelämnas för svenska"
+                       " nummer, men behövs för utländska nummer.")
     )
     message = fields.TextAreaField(_l('Meddelande till QM'))
 

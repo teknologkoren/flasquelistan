@@ -114,16 +114,13 @@ class User(flask_login.UserMixin, db.Model):
 
     @phone.setter
     def phone(self, phone):
-        """Set phone number, but normalize it first (if non-empty)."""
-        if not phone:
-            self._phone = phone
-            return
+        """Set phone number, but normalize it first if possible."""
 
         normalized = util.format_phone_number(phone, e164=True)
         if normalized:
             self._phone = normalized
         else:
-            raise AssertionError('The phone number is invalid.')
+            self._phone = phone
 
     def formatted_phone(self, e164=False):
         return util.format_phone_number(self.phone, e164)

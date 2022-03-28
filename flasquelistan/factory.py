@@ -94,7 +94,7 @@ def populate_testdb():
         email='monty@python.tld',
         first_name='Monty',
         last_name='Python',
-        phone='070-1740605',
+        phone='+468-46500400',
         balance=10000,
         active=True,
     )
@@ -104,7 +104,7 @@ def populate_testdb():
         first_name='Rick',
         nickname='The Roll',
         last_name='Astley',
-        phone='+468-46500400',
+        phone='0710001122', # Invalid phone number
         balance=20050,
         active=True,
     )
