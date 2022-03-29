@@ -238,7 +238,8 @@ class EditUserForm(flask_wtf.FlaskForm):
 
     phone = html5_fields.TelField(
         _l('Telefon'),
-        description=_l("Ett telefonnummer, med eller utan landskod.")
+        description=_l("Ett telefonnummer. Landskod kan utelämnas för svenska"
+                       " nummer, men behövs för utländska nummer.")
     )
 
     body_mass = html5_fields.IntegerField(
@@ -312,7 +313,8 @@ class RegistrationRequestForm(UniqueEmailForm):
     )
     phone = html5_fields.TelField(
         _l('Telefon'),
-        description=_l("Ett telefonnummer, med eller utan landskod.")
+        description=_l("Ett telefonnummer. Landskod kan utelämnas för svenska"
+                       " nummer, men behövs för utländska nummer.")
     )
     message = fields.TextAreaField(_l('Meddelande till QM'))
 

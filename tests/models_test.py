@@ -214,13 +214,27 @@ def test_user_model(app):
         email='monty@python.tld',
         first_name='Monty',
         last_name='Python',
-        phone='0700011223',
+        phone='074-345 32 10',
     )
 
     models.db.session.add(user)
     models.db.session.commit()
 
     assert user.id > 0
+
+    # Valid phone numbers are automatically normalized.
+    assert user.phone == '+46743453210'
+
+    # Invalid phone numbers are allowed as well (but not normalized).
+    invalid_example_number = '+4674-876 543 226 189 416 854 65'
+    user.phone = invalid_example_number
+    models.db.session.commit()
+    assert user.phone == invalid_example_number
+
+    # Phone number is not required.
+    user.phone = ''
+    models.db.session.commit()
+    assert user.phone == ''
 
 
 def test_usertransaction_model(app):

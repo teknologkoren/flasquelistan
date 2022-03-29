@@ -42,11 +42,13 @@ def create_app(config=None, instance_config=None):
 def register_blueprints(app):
     from flasquelistan.views import (auth, admin, quotes, serviceworker,
                                      strequelistan)
+    from flasquelistan import scripts
     app.register_blueprint(auth.mod)
     app.register_blueprint(admin.mod)
     app.register_blueprint(serviceworker.mod)
     app.register_blueprint(strequelistan.mod)
     app.register_blueprint(quotes.mod)
+    app.register_blueprint(scripts.mod)
 
 
 def register_cli(app):
@@ -92,7 +94,7 @@ def populate_testdb():
         email='monty@python.tld',
         first_name='Monty',
         last_name='Python',
-        phone='0710001122',
+        phone='+468-46500400',
         balance=10000,
         active=True,
     )
@@ -102,7 +104,7 @@ def populate_testdb():
         first_name='Rick',
         nickname='The Roll',
         last_name='Astley',
-        phone='0713322110',
+        phone='0710001122', # Invalid phone number
         balance=20050,
         active=True,
     )
@@ -132,7 +134,7 @@ def populate_testdb():
         first_name='Malvina',
         last_name='Teknolog',
         nickname='Osqulda',
-        phone='074-345 32 10',
+        phone='',
         balance=-10000,
         active=True,
     )

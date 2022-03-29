@@ -49,6 +49,9 @@
       <dd>
       {% if user.formatted_phone() %}
       <a href="tel:{{ user.formatted_phone(e164=True) }}">{{ user.formatted_phone() }}</a>
+      {% elif user == current_user or current_user.is_admin %}
+      {{ user.phone }}<br />
+      <em>{{ _("(varning: telefonnumret ser ogiltigt ut)") }}</em>
       {% else %}
       {{ user.phone }}
       {% endif %}
