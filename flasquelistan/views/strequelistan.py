@@ -193,7 +193,7 @@ def void_streque():
         # Found a notification, and it has not been sent.
         # Remove it as if nothing happened! :O
         models.db.session.delete(streque_notification)
-    else:
+    elif streque.user_id != current_user.id:
         # The notification has been sent and potentially read, we must
         # send a new notification that the streque was voided.
         text = _("%(name)s ångrade ett av dina %(streque)s-streque.",
