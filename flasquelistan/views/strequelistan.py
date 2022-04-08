@@ -127,8 +127,10 @@ def add_streque():
     streque = user.strequa(article, current_user)
 
     if user != current_user:
-        text = _("%(name)s strequade en %(article)s på dig.",
-                 name=current_user.displayname, article=article.name)
+        text = "{name} strequade en {article} på dig.".format(
+            name=current_user.displayname,
+            article=article.name
+        )
         notification = models.Notification(
             text=text,
             user_id=user.id,
@@ -196,8 +198,10 @@ def void_streque():
     elif streque.user_id != current_user.id:
         # The notification has been sent and potentially read, we must
         # send a new notification that the streque was voided.
-        text = _("%(name)s ångrade ett av dina %(streque)s-streque.",
-                 name=current_user.displayname, streque=streque.text)
+        text = "{name} ångrade ett av dina {article}-streque.".format(
+            name=current_user.displayname,
+            article=streque.text
+        )
         void_notification = models.Notification(
             text=text,
             user_id=streque.user_id,
@@ -312,11 +316,12 @@ def credit_transfer():
             'success'
         )
 
-        notification_text = _(
-            "Streque Pay! %(money)s från %(name)s: %(message)s",
-            money=flask_babel.format_currency(value / 100, 'SEK'),
-            name=payer.displayname,
-            message=message
+        notification_text = (
+            "Streque Pay!\n{money} från {name}: {message}".format(
+                money=flask_babel.format_currency(value / 100, 'SEK'),
+                name=payer.displayname,
+                message=message
+            )
         )
         payee_notification = models.Notification(
             text=notification_text,
