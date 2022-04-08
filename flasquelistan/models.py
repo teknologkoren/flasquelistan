@@ -429,6 +429,35 @@ class AdminTransaction(Transaction):
         'polymorphic_identity': 'admin_transaction',
     }
 
+    def create_notification(self):
+        if self.value >= 0:
+            text = (
+                "Insättning!\n{money}: {message}".format(
+                    money=flask_babel.format_currency(
+                        self.value / 100, 'SEK'
+                    ),
+                    message=self.text
+                )
+            )
+        elif self.value < 0:
+            text = (
+                "Uttag!\n{money}: {message}".format(
+                    money=flask_babel.format_currency(
+                        self.value / 100, 'SEK'
+                    ),
+                    message=self.text
+                )
+            )
+
+        notification = Notification(
+            text=text,
+            user_id=self.user_id,
+            type='admintransaction',
+            reference=str(self.id)
+        )
+        db.session.add(notification)
+        db.session.commit()
+
 
 class UserTransaction(Transaction):
     __mapper_args__ = {

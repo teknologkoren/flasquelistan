@@ -506,11 +506,12 @@ def admin_transaction(user_id):
     form = forms.UserTransactionForm()
 
     if form.validate_on_submit():
-        user.admin_transaction(
+        transaction = user.admin_transaction(
             int(form.value.data * 100),
             form.text.data,
             by_user=current_user
         )
+        transaction.create_notification()
         flask.flash(_l("Transaktion utförd!"), 'success')
 
     elif form.is_submitted():

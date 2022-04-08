@@ -238,13 +238,14 @@ def confirm_bulk_transactions():
         else:
             flask.abort(400)
 
-    for user_id, transaction in transactions.items():
+    for user_id, transaction_data in transactions.items():
         user = models.User.query.get(user_id)
-        user.admin_transaction(
-            transaction['value'],
-            transaction['text'],
+        transaction = user.admin_transaction(
+            transaction_data['value'],
+            transaction_data['text'],
             by_user=current_user
         )
+        transaction.create_notification()
 
     flask.flash(_l("Transaktionerna utfördes!"), 'success')
     return flask.redirect(flask.url_for('strequeadmin.bulk_transactions'))
