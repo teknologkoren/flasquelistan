@@ -13,7 +13,7 @@
         <ol class="notification-history">
           {% for notification in notifications %}
             <li>
-              <div>{{ notification.text }}</div>
+              <div class="notification-text">{{ notification.text }}</div>
               <div class="timestamp">
                 {{ format_datetime(notification.timestamp, "dd MMMM yyyy, HH:mm") }}
               </div>

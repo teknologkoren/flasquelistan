@@ -324,6 +324,10 @@ ol.notification-history li {
   padding: .5rem;
 }
 
+ol.notification-history li .notification-text {
+  white-space: pre-line;
+}
+
 ol.transaction-history li .upper {
   display: flex;
   justify-content: space-between;
