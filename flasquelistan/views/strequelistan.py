@@ -318,7 +318,11 @@ def credit_transfer():
 
         notification_text = (
             "Streque Pay!\n{money} från {name}: {message}".format(
-                money=flask_babel.format_currency(value / 100, 'SEK'),
+                money=flask_babel.format_currency(
+                    value / 100,
+                    'SEK',
+                    locale='sv_SE'
+                ),
                 name=payer.displayname,
                 message=message
             )

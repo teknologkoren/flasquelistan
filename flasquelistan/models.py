@@ -446,7 +446,7 @@ class AdminTransaction(Transaction):
             text = (
                 "Insättning!\n{money}: {message}".format(
                     money=flask_babel.format_currency(
-                        self.value / 100, 'SEK'
+                        self.value / 100, 'SEK', locale='sv_SE'
                     ),
                     message=self.text
                 )
@@ -455,7 +455,7 @@ class AdminTransaction(Transaction):
             text = (
                 "Uttag!\n{money}: {message}".format(
                     money=flask_babel.format_currency(
-                        self.value / 100, 'SEK'
+                        self.value / 100, 'SEK', locale='sv_SE'
                     ),
                     message=self.text
                 )
