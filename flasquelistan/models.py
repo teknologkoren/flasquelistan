@@ -316,6 +316,9 @@ class User(flask_login.UserMixin, db.Model):
         return chr(0x1f600 + i)
 
     def __str__(self):
+        return f"{self.first_name} {self.last_name} <{self.email}>"
+
+    def __repr__(self):
         return f"User {self.first_name} {self.last_name} <{self.email}>"
 
 
@@ -339,6 +342,9 @@ class Group(db.Model):
     users = db.relationship('User', back_populates='group')
 
     def __str__(self):
+        return f"{self.name}"
+
+    def __repr__(self):
         return f"Group {self.name}"
 
 
@@ -361,6 +367,9 @@ class Article(db.Model):
         return markdown.markdown(self.description)
 
     def __str__(self):
+        return f"{self.name}"
+
+    def __repr__(self):
         return f"Article {self.name}"
 
 
@@ -407,7 +416,10 @@ class Transaction(db.Model):
         return True
 
     def __str__(self):
-        return "f{self.__class__.__name__}: {self.value} @ {self.user}"
+        return f"{self.__class__.__name__}: {self.value} @ {self.user}"
+
+    def __repr__(self):
+        return f"{self.__class__.__name__}: {self.value} @ {self.user_id}"
 
 
 class Streque(Transaction):
@@ -535,6 +547,9 @@ class CreditTransfer(db.Model):
         self.payee_transaction.void_and_refund()
 
     def __str__(self):
+        return f"{self.payer_transaction_id} -> {self.payee_transaction_id}"
+
+    def __repr__(self):
         return f"CreditTransfer {self.payer_transaction_id} -> {self.payee_transaction_id}"
 
 
@@ -556,6 +571,9 @@ class Quote(db.Model):
         return "\n".join(lines)
 
     def __str__(self):
+        return "\"{}...\" — {}".format(self.text[:20], self.who[:10] or "<None>")
+
+    def __repr__(self):
         return "Quote \"{}...\" — {}".format(self.text[:20], self.who[:10] or "<None>")
 
 
@@ -570,6 +588,9 @@ class ProfilePicture(db.Model):
                           default=datetime.datetime.utcnow)
 
     def __str__(self):
+        return "{self.user_id}: {self.filename}"
+
+    def __repr__(self):
         return "ProfilePicture {self.filename} {self.user_id}"
 
 
@@ -599,4 +620,7 @@ class Notification(db.Model):
     timestamp = db.Column(db.DateTime, nullable=False, default=datetime.datetime.utcnow)
 
     def __str__(self):
+        return "{} \"{}...\"".format(self.user_id, self.text[:20])
+
+    def __repr__(self):
         return "Notification \"{}...\" to user {}".format(self.text[:20], self.user_id)
