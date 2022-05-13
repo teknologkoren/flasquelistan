@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2022-01-22 17:38+0100\n"
+"POT-Creation-Date: 2022-05-13 19:02+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -91,114 +91,126 @@ msgstr ""
 msgid "Din födelsedags datum."
 msgstr ""
 
-#: forms.py:240 forms.py:314
+#: forms.py:240 forms.py:318
 msgid "Telefon"
 msgstr ""
 
-#: forms.py:241 forms.py:315
-msgid "Ett telefonnummer, med eller utan landskod."
-msgstr ""
-
-#: forms.py:245
-msgid "Kroppsvikt"
+#: forms.py:241 forms.py:319
+msgid ""
+"Ett telefonnummer. Landskod kan utelämnas för svenska nummer, men behövs "
+"för utländska nummer."
 msgstr ""
 
 #: forms.py:246
+msgid "Kroppsvikt"
+msgstr ""
+
+#: forms.py:247
 msgid ""
 "Din vikt i kg. Används för att mer precist räkna ut "
 "alkoholkoncentrationen i blodet. Fältet kan lämnas tomt"
 msgstr ""
 
-#: forms.py:257
+#: forms.py:258
 msgid "Har du en Y-kromosom?"
 msgstr ""
 
-#: forms.py:258
+#: forms.py:259
 msgid "Används för att mer precist räkna ut alkoholkoncentrationen i blodet."
 msgstr ""
 
-#: forms.py:261
+#: forms.py:262
 msgid "Vill ej uppge"
 msgstr ""
 
-#: forms.py:262
+#: forms.py:263
 msgid "Ja"
 msgstr ""
 
-#: forms.py:263
+#: forms.py:264
 msgid "Nej"
 msgstr ""
 
-#: forms.py:273 forms.py:300
+#: forms.py:274 forms.py:304
 msgid "Förnamn"
 msgstr ""
 
-#: forms.py:280 forms.py:307
+#: forms.py:281 forms.py:311
 msgid "Efternamn"
 msgstr ""
 
-#: forms.py:287 forms.py:465 templates/strequeadmin/articles.html:15
+#: forms.py:288 forms.py:470 templates/strequeadmin/articles.html:15
 #: templates/strequeadmin/articles.html:38 templates/strequeadmin/users.html:20
 #: templates/strequeadmin/users.html:50
 msgid "Aktiv"
 msgstr ""
 
-#: forms.py:288
+#: forms.py:289
 msgid "Om medlemmen är aktiv i föreningen."
 msgstr ""
 
-#: forms.py:290
+#: forms.py:291
 msgid "Grupp"
 msgstr ""
 
-#: forms.py:317
+#: forms.py:293 templates/strequeadmin/index.html:5
+#: templates/strequeadmin/transactions.html:55
+#: templates/strequeadmin/users.html:21 templates/strequeadmin/users.html:59
+msgid "Admin"
+msgstr ""
+
+#: forms.py:294
+msgid "Medlemmen är administratör för Strequelistan."
+msgstr ""
+
+#: forms.py:322
 msgid "Meddelande till QM"
 msgstr ""
 
-#: forms.py:324 forms.py:504 templates/layout.html:33 templates/quote.html:9
-#: templates/quotes.html:39 templates/strequeadmin/index.html:34
+#: forms.py:329 forms.py:509 templates/layout.html:33 templates/quote.html:9
+#: templates/quotes.html:44 templates/strequeadmin/index.html:34
 #: templates/strequeadmin/quotes.html:10 templates/strequeadmin/quotes.html:14
 msgid "Citat"
 msgstr ""
 
-#: forms.py:325 forms.py:505
+#: forms.py:330 forms.py:510
 msgid "Max 150 tecken."
 msgstr ""
 
-#: forms.py:331 forms.py:512 templates/strequeadmin/quotes.html:15
+#: forms.py:336 forms.py:517 templates/strequeadmin/quotes.html:15
 msgid "Upphovsman"
 msgstr ""
 
-#: forms.py:332
+#: forms.py:337
 msgid "'–' läggs till automatiskt"
 msgstr ""
 
-#: forms.py:341 views/admin.py:344
+#: forms.py:346 views/admin.py:345
 msgid "Ingen"
 msgstr ""
 
-#: forms.py:365
+#: forms.py:370
 msgid "Ladda upp ny profilbild"
 msgstr ""
 
-#: forms.py:366
+#: forms.py:371
 msgid "Endast bilder!"
 msgstr ""
 
-#: forms.py:371
+#: forms.py:376
 msgid "Från"
 msgstr ""
 
-#: forms.py:374
+#: forms.py:379
 msgid "Till"
 msgstr ""
 
-#: forms.py:381 forms.py:410 templates/strequeadmin/bulk_transactions.html:23
+#: forms.py:386 forms.py:415 templates/strequeadmin/bulk_transactions.html:23
 #: templates/strequeadmin/confirm_bulk_transactions.html:20
 msgid "Transaktionsvärde"
 msgstr ""
 
-#: forms.py:387 forms.py:417 forms.py:489
+#: forms.py:392 forms.py:422 forms.py:494
 #: templates/strequeadmin/bulk_transactions.html:24
 #: templates/strequeadmin/confirm_bulk_transactions.html:21
 #: templates/strequeadmin/requests.html:19
@@ -206,7 +218,7 @@ msgstr ""
 msgid "Meddelande"
 msgstr ""
 
-#: forms.py:405 forms.py:431 forms.py:472 templates/paperlist.html:31
+#: forms.py:410 forms.py:436 forms.py:477 templates/paperlist.html:31
 #: templates/strequeadmin/articles.html:10
 #: templates/strequeadmin/groups.html:10
 #: templates/strequeadmin/requests.html:13 templates/strequeadmin/stats.html:34
@@ -214,48 +226,48 @@ msgstr ""
 msgid "Namn"
 msgstr ""
 
-#: forms.py:436 templates/strequeadmin/articles.html:11
+#: forms.py:441 templates/strequeadmin/articles.html:11
 msgid "Pris"
 msgstr ""
 
-#: forms.py:445
+#: forms.py:450
 msgid "Standardglas"
 msgstr ""
 
-#: forms.py:453 templates/strequeadmin/articles.html:13
+#: forms.py:458 templates/strequeadmin/articles.html:13
 msgid "Beskrivning"
 msgstr ""
 
-#: forms.py:454
+#: forms.py:459
 msgid "Vilka produkter som ingår och/eller beskrivning. Markdown."
 msgstr ""
 
-#: forms.py:458 forms.py:477 templates/strequeadmin/articles.html:14
+#: forms.py:463 forms.py:482 templates/strequeadmin/articles.html:14
 #: templates/strequeadmin/groups.html:11
 msgid "Sorteringsvikt"
 msgstr ""
 
-#: forms.py:459 forms.py:478
+#: forms.py:464 forms.py:483
 msgid "Heltal. En högre vikt stiger."
 msgstr ""
 
-#: forms.py:466
+#: forms.py:471
 msgid "Produkten är synlig och går att strequa på."
 msgstr ""
 
-#: forms.py:494 templates/strequeadmin/stats.html:58
+#: forms.py:499 templates/strequeadmin/stats.html:58
 msgid "Summa"
 msgstr ""
 
-#: forms.py:518 templates/strequeadmin/quotes.html:16
+#: forms.py:523 templates/strequeadmin/quotes.html:16
 msgid "Tid"
 msgstr ""
 
-#: forms.py:519
+#: forms.py:524
 msgid "Tidszon UTC."
 msgstr ""
 
-#: templates/add_quote.html:9 templates/quotes.html:40
+#: templates/add_quote.html:9 templates/quotes.html:45
 msgid "Lägg till citat"
 msgstr ""
 
@@ -263,7 +275,7 @@ msgstr ""
 msgid "Lägg till"
 msgstr ""
 
-#: templates/add_quote.html:15 templates/edit_profile.html:41
+#: templates/add_quote.html:15 templates/edit_profile.html:42
 #: templates/strequeadmin/add_user.html:20
 #: templates/strequeadmin/confirm_bulk_transactions.html:47
 #: templates/strequeadmin/edit_article.html:30
@@ -285,12 +297,12 @@ msgstr ""
 msgid "Site heading"
 msgstr ""
 
-#: templates/edit_profile.html:38
+#: templates/edit_profile.html:39
 msgid "Byt e-postadress eller lösenord"
 msgstr ""
 
-#: templates/edit_profile.html:41 templates/show_profile.html:83
-#: templates/show_profile.html:140 templates/strequeadmin/add_user.html:19
+#: templates/edit_profile.html:42 templates/show_profile.html:88
+#: templates/show_profile.html:145 templates/strequeadmin/add_user.html:19
 #: templates/strequeadmin/edit_article.html:30
 #: templates/strequeadmin/edit_group.html:25
 #: templates/strequeadmin/edit_quote.html:24
@@ -302,7 +314,7 @@ msgid "Profilbilder genom tiderna"
 msgstr ""
 
 #: templates/history.html:36 templates/layout.html:23
-#: templates/show_profile.html:146
+#: templates/show_profile.html:151
 msgid "Historik"
 msgstr ""
 
@@ -310,7 +322,7 @@ msgstr ""
 msgid "Inga transaktioner de senaste 15 minuterna!"
 msgstr ""
 
-#: templates/layout.html:13 templates/strequeadmin/transactions.html:49
+#: templates/layout.html:13 templates/strequeadmin/transactions.html:53
 msgid "Streque"
 msgstr ""
 
@@ -326,6 +338,18 @@ msgstr ""
 msgid "Uppladdad"
 msgstr ""
 
+#: templates/notifications.html:8
+msgid "Notifikationer"
+msgstr ""
+
+#: templates/notifications.html:10
+msgid "Här var det tomt."
+msgstr ""
+
+#: templates/notifications.html:12
+msgid "Markera alla som lästa"
+msgstr ""
+
 #: templates/quote.html:11
 msgid "Alla citat"
 msgstr ""
@@ -334,7 +358,11 @@ msgstr ""
 msgid "före tidens början..."
 msgstr ""
 
-#: templates/quotes.html:42
+#: templates/quotes.html:29
+msgid "redigera"
+msgstr ""
+
+#: templates/quotes.html:47
 msgid "No quotes yet!"
 msgstr ""
 
@@ -359,17 +387,21 @@ msgstr ""
 msgid "Telefonnummer"
 msgstr ""
 
-#: templates/show_profile.html:58
+#: templates/show_profile.html:54
+msgid "(varning: telefonnumret ser ogiltigt ut)"
+msgstr ""
+
+#: templates/show_profile.html:61
 msgid "Födelsedag"
 msgstr ""
 
-#: templates/show_profile.html:65 templates/strequeadmin/spam.html:11
+#: templates/show_profile.html:68 templates/strequeadmin/spam.html:11
 #: templates/strequeadmin/stats.html:35 templates/strequeadmin/stats.html:47
 #: templates/strequeadmin/users.html:19
 msgid "Saldo"
 msgstr ""
 
-#: templates/show_profile.html:68
+#: templates/show_profile.html:72
 #, python-format
 msgid ""
 "Fyll på ditt saldo genom att göra en betalning till PG 20 74-3, märk "
@@ -377,39 +409,39 @@ msgid ""
 "möjlighet att göra detta."
 msgstr ""
 
-#: templates/show_profile.html:93
+#: templates/show_profile.html:98
 msgid "Överför pengar"
 msgstr ""
 
 #: templates/auth/register.html:22 templates/auth/reset.html:15
-#: templates/auth/reset_token.html:15 templates/show_profile.html:96
-#: templates/show_profile.html:108
+#: templates/auth/reset_token.html:15 templates/show_profile.html:101
+#: templates/show_profile.html:113
 #: templates/strequeadmin/bulk_transactions.html:49
 #: templates/strequeadmin/confirm_bulk_transactions.html:47
 #: templates/strequeadmin/spam.html:33
 msgid "Skicka"
 msgstr ""
 
-#: templates/show_profile.html:104
+#: templates/show_profile.html:109
 #: templates/strequeadmin/bulk_transactions.html:42 views/admin.py:208
 msgid "Admintransaktion"
 msgstr ""
 
-#: templates/show_profile.html:122
+#: templates/show_profile.html:127
 msgid "Uppladdade profilbilder"
 msgstr ""
 
-#: templates/show_profile.html:141
+#: templates/show_profile.html:146
 #: templates/strequeadmin/quote_reactions.html:11
 #: templates/strequeadmin/requests.html:31
 msgid "Ta bort"
 msgstr ""
 
-#: templates/show_profile.html:148
+#: templates/show_profile.html:153
 msgid "All historik"
 msgstr ""
 
-#: templates/show_profile.html:168
+#: templates/show_profile.html:173
 msgid "Det är tomt här, strequa mer!"
 msgstr ""
 
@@ -437,23 +469,28 @@ msgstr ""
 msgid "Inloggad användare"
 msgstr ""
 
-#: templates/strequelistan.html:138
+#: templates/strequelistan.html:139
+#, python-format
+msgid "Du har %(num)d notifikation(er)!"
+msgstr ""
+
+#: templates/strequelistan.html:145
 msgid "Hoppa till"
 msgstr ""
 
-#: templates/strequelistan.html:144
+#: templates/strequelistan.html:151
 msgid "Filtrera användare"
 msgstr ""
 
-#: templates/strequelistan.html:146
+#: templates/strequelistan.html:153
 msgid "Du kan söka på namn, smeknamn och telefonnummer."
 msgstr ""
 
-#: templates/strequelistan.html:148
+#: templates/strequelistan.html:155
 msgid "Rensa"
 msgstr ""
 
-#: templates/strequelistan.html:154
+#: templates/strequelistan.html:161
 msgid "Gå till toppen"
 msgstr ""
 
@@ -597,12 +634,6 @@ msgstr ""
 msgid "Ny grupp"
 msgstr ""
 
-#: templates/strequeadmin/index.html:5
-#: templates/strequeadmin/transactions.html:51
-#: templates/strequeadmin/users.html:21 templates/strequeadmin/users.html:59
-msgid "Admin"
-msgstr ""
-
 #: templates/strequeadmin/index.html:9 templates/strequeadmin/requests.html:5
 msgid "Kontoförfrågningar"
 msgstr ""
@@ -739,23 +770,23 @@ msgstr ""
 msgid "Värde"
 msgstr ""
 
-#: templates/strequeadmin/transactions.html:42
+#: templates/strequeadmin/transactions.html:46
 msgid "Okänt"
 msgstr ""
 
-#: templates/strequeadmin/transactions.html:53
+#: templates/strequeadmin/transactions.html:57
 msgid "Pay"
 msgstr ""
 
-#: templates/strequeadmin/transactions.html:87
+#: templates/strequeadmin/transactions.html:91
 msgid "Ångra"
 msgstr ""
 
-#: templates/strequeadmin/transactions.html:91
+#: templates/strequeadmin/transactions.html:95
 msgid "Ångrad"
 msgstr ""
 
-#: templates/strequeadmin/transactions.html:99
+#: templates/strequeadmin/transactions.html:103
 msgid "Inga transaktioner funna."
 msgstr ""
 
@@ -776,58 +807,58 @@ msgstr ""
 msgid "Inga transaktioner utförda. Väl spenderade klockcykler, bra jobbat!"
 msgstr ""
 
-#: views/admin.py:249
+#: views/admin.py:250
 msgid "Transaktionerna utfördes!"
 msgstr ""
 
-#: views/admin.py:281
+#: views/admin.py:282
 msgid "Produkt \"{}\" skapad."
 msgstr ""
 
-#: views/admin.py:283
+#: views/admin.py:284
 msgid "Produkt \"{}\" ändrad."
 msgstr ""
 
-#: views/admin.py:312
+#: views/admin.py:313
 #, python-format
 msgid "Produkt \"%(name)s\" borttagen."
 msgstr ""
 
-#: views/admin.py:329
+#: views/admin.py:330
 #, python-format
 msgid "Skickade %(nr)i saldopåminnelser!"
 msgstr ""
 
-#: views/admin.py:363
+#: views/admin.py:364
 #, python-format
 msgid "%(user_name)s skapad och förfrågan borttagen!"
 msgstr ""
 
-#: views/admin.py:368
+#: views/admin.py:369
 #, python-format
 msgid "%(user_name)s skapad!"
 msgstr ""
 
-#: views/admin.py:396
+#: views/admin.py:397
 #, python-format
 msgid "Förfrågan från %(first)s %(last)s borttagen."
 msgstr ""
 
-#: views/admin.py:434
+#: views/admin.py:435
 #, python-format
 msgid "Grupp \"%(group_name)s\" skapad."
 msgstr ""
 
-#: views/admin.py:453
+#: views/admin.py:454
 #, python-format
 msgid "Grupp \"%(group_name)s\" borttagen."
 msgstr ""
 
-#: views/admin.py:475
+#: views/admin.py:476
 msgid "Citat har ändrats!"
 msgstr ""
 
-#: views/admin.py:489
+#: views/admin.py:490
 msgid "Citat borttaget."
 msgstr ""
 
@@ -876,78 +907,78 @@ msgstr ""
 msgid "Citat tillagt!"
 msgstr ""
 
-#: views/strequelistan.py:76
+#: views/strequelistan.py:77
 msgid "Det finns inga pengar på kontot. Dags att fylla på!"
 msgstr ""
 
-#: views/strequelistan.py:79
+#: views/strequelistan.py:80
 msgid "Det är ont om pengar på kontot. Dags att fylla på?"
 msgstr ""
 
-#: views/strequelistan.py:129
+#: views/strequelistan.py:155
 #, python-format
 msgid "%(text)s-streque på %(name)s tillagt."
 msgstr ""
 
-#: views/strequelistan.py:166
+#: views/strequelistan.py:223
 #, python-format
 msgid "Ångrade %(text)s-streque på %(name)s."
 msgstr ""
 
-#: views/strequelistan.py:199
+#: views/strequelistan.py:301
 msgid "Du kan bara föra över pengar från dig själv! >:("
 msgstr ""
 
-#: views/strequelistan.py:212
+#: views/strequelistan.py:314
 #, python-format
 msgid "Förde över %(a)i pengar till %(name)s"
 msgstr ""
 
-#: views/strequelistan.py:389
+#: views/strequelistan.py:511
 msgid "Du måste vara admin för att göra det!"
 msgstr ""
 
-#: views/strequelistan.py:401
+#: views/strequelistan.py:524
 msgid "Transaktion utförd!"
 msgstr ""
 
-#: views/strequelistan.py:422
+#: views/strequelistan.py:545
 msgid "Kunde inte ladda upp bilden, försök med ett annat filnamn eller filformat."
 msgstr ""
 
-#: views/strequelistan.py:443
+#: views/strequelistan.py:566
 msgid "Profilbilden har ändrats!"
 msgstr ""
 
-#: views/strequelistan.py:458 views/strequelistan.py:483
-#: views/strequelistan.py:550 views/strequelistan.py:608
+#: views/strequelistan.py:581 views/strequelistan.py:606
+#: views/strequelistan.py:673 views/strequelistan.py:734
 msgid "Du får bara redigera din egen profil! ಠ_ಠ"
 msgstr ""
 
-#: views/strequelistan.py:468
+#: views/strequelistan.py:591
 msgid "Din profilbild har ändrats!"
 msgstr ""
 
-#: views/strequelistan.py:490
+#: views/strequelistan.py:613
 msgid ""
 "Du kan inte ta bort <a href=\"https://phys.org/news/2014-08-what-is-"
 "nothing.html\">ingenting</a>!"
 msgstr ""
 
-#: views/strequelistan.py:507
+#: views/strequelistan.py:630
 msgid "Profilbilden har tagits bort!"
 msgstr ""
 
-#: views/strequelistan.py:583
+#: views/strequelistan.py:709
 msgid "Ändringarna har sparats!"
 msgstr ""
 
-#: views/strequelistan.py:619
+#: views/strequelistan.py:745
 #, python-format
 msgid "En länk för att verifiera e-postadressen har skickats till %(email)s."
 msgstr ""
 
-#: views/strequelistan.py:626
+#: views/strequelistan.py:752
 msgid "Lösenordet har ändrats!"
 msgstr ""
 
