@@ -31,13 +31,17 @@
       <tr>
         <td class="user">
           <span>
-            {{ transaction.user.full_name }}
+            <a href="{{ url_for('strequelistan.show_profile', user_id=transaction.user_id) }}">
+              {{ transaction.user.full_name }}
+            </a>
           </span>
         </td>
         <td class="user">
           <span>
             {% if transaction.created_by %}
-            {{ transaction.created_by.full_name }}
+            <a href="{{ url_for('strequelistan.show_profile', user_id=transaction.created_by_id) }}">
+              {{ transaction.created_by.full_name }}
+            </a>
             {% else %}
             {{ _("Okänt") }}
             {% endif %}

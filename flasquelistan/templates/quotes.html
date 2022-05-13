@@ -21,9 +21,14 @@
       {{ _("före tidens början...") }}
       {% endif %}
     </span>
-    <a class="quote-id" href="{{ quotes_index_endpoint + '#quote-%s'|format(quote.id) }}">
-      #{{ quote.id }}
-    </a>
+    <span class="quote-left">
+      <a href="{{ quotes_index_endpoint + '#quote-%s'|format(quote.id) }}">
+        #{{ quote.id }}
+      </a>
+      <a href="{{ url_for('strequeadmin.edit_quote', quote_id=quote.id) }}">
+        ({{ _("redigera") }})
+      </a>
+    </span>
   </div>
 </div>
 {% endmacro %}
