@@ -288,8 +288,11 @@ class FullEditUserForm(EditUserForm):
         _l('Aktiv'),
         description=_l("Om medlemmen är aktiv i föreningen.")
     )
-    group_id = fields.SelectField(_l('Grupp'), coerce=int)
-    # Populate .choices in view!
+    group_id = fields.SelectField(_l('Grupp'), coerce=int)  # Populate .choices in view!
+    is_admin = fields.BooleanField(
+        _l('Admin'),
+        description=_l("Medlemmen är administratör för Strequelistan.")
+    )
 
 
 class AddUserForm(UniqueEmailForm, FullEditUserForm):

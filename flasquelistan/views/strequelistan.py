@@ -681,12 +681,15 @@ def edit_profile(user_id):
         form = forms.EditUserForm(obj=user)
 
     if form.validate_on_submit():
-        if isinstance(form, forms.FullEditUserForm):
+        if current_user.is_admin:
             user.first_name = form.first_name.data
             user.last_name = form.last_name.data
             user.active = form.active.data
-            user.group_id = form.group_id.data if (form.group_id.data
-                                                   != -1) else None
+            user.is_admin = form.is_admin.data
+            if form.group_id.data != -1:
+                user.group_id = form.group_id.data
+            else:
+                user.group_id = None
 
         user.nickname = form.nickname.data
         user.birthday = form.birthday.data
