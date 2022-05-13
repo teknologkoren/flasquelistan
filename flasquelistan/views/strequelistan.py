@@ -269,7 +269,7 @@ def mark_notifications_read():
             notification.is_acknowledged = True
         models.db.session.commit()
 
-    return flask.redirect(flask.url_for('strequelistan.notifications'))
+    return flask.redirect(flask.url_for('strequelistan.index'))
 
 
 @mod.route('/transfer', methods=['POST'])
