@@ -155,6 +155,15 @@
     <button id="clear-filter" type="button">{{ _("Rensa") }}</button>
   </div>
 
+  {% if vip %}
+  <div id="group-vip" class="group">
+    <h2>VIP</h2>
+    {% for user in vip %}
+    {{ usercard(user, articles) }}
+    {% endfor %}
+  </div>
+  {% endif %}
+
   {% for group in groups %}
   <div id="group-{{ group.id }}" class="group">
     <h2>{{ group.name }}</h2>

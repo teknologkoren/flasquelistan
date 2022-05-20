@@ -27,6 +27,16 @@ def index():
               .all()
               )
 
+    vip = (
+        models.User
+        .query
+        .filter(
+            models.User.active.is_(True),
+            models.User.balance >= 1000 * 100,
+        )
+        .all()
+    )
+
     too_old = datetime.datetime.utcnow() - datetime.timedelta(days=7)
     users_with_streques = (
         models.User
@@ -98,7 +108,8 @@ def index():
         notification_count=notification_count,
         users_with_streques=users_with_streques,
         birthdays=birthdays,
-        birthday_emoji=birthday_emoji
+        birthday_emoji=birthday_emoji,
+        vip=vip
     )
 
 
