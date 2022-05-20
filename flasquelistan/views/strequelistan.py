@@ -34,6 +34,7 @@ def index():
             models.User.active.is_(True),
             models.User.balance >= 1000 * 100,
         )
+        .order_by(models.User.balance.desc())
         .all()
     )
 
