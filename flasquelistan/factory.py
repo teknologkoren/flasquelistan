@@ -28,6 +28,8 @@ def create_app(config=None, instance_config=None):
 
     views.auth.login_manager.init_app(app)
 
+    setup_logging()
+    setup_error_emails(app)
     setup_flask_admin(app, models.db)
     setup_flask_babel(app)
     setup_flask_uploads(app)
@@ -37,6 +39,52 @@ def create_app(config=None, instance_config=None):
     app.wsgi_app = ProxyFix(app.wsgi_app, x_host=1)
 
     return app
+
+
+def setup_logging():
+    from flask.logging import default_handler
+    from flasquelistan import log
+
+    default_handler.setFormatter(log.formatter)
+
+
+def setup_error_emails(app):
+    import logging
+    from logging.handlers import SMTPHandler
+    from flasquelistan import log
+
+    if 'ERROR_EMAIL_TOADDRS' not in app.config:
+        app.logger.warning(
+            "ERROR_EMAIL_TOADDRS not in config, not setting up error emails."
+        )
+        return
+
+    username = app.config.get('SMTP_USERNAME')
+    password = app.config.get('SMTP_PASSWORD')
+
+    if username and password:
+        credentials = (username, password)
+    else:
+        credentials = None
+
+    if app.config.get('SMTP_USE_STARTTLS'):
+        secure = ()
+    else:
+        secure = None
+
+    mail_handler = SMTPHandler(
+        mailhost=(app.config['SMTP_MAILSERVER'], app.config['SMTP_PORT']),
+        fromaddr=app.config['ERROR_EMAIL_FROMADDR'],
+        toaddrs=app.config['ERROR_EMAIL_TOADDRS'],
+        subject="Flasquelistan application error",
+        credentials=credentials,
+        secure=secure
+    )
+    mail_handler.setLevel(logging.ERROR)
+    mail_handler.setFormatter(log.formatter)
+
+    if not app.debug:
+        app.logger.addHandler(mail_handler)
 
 
 def register_blueprints(app):
