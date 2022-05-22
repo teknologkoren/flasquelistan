@@ -443,23 +443,21 @@ class AdminTransaction(Transaction):
 
     def create_notification(self):
         if self.value >= 0:
-            text = (
-                "Insättning!\n{money}: {message}".format(
-                    money=flask_babel.format_currency(
-                        self.value / 100, 'SEK', locale='sv_SE'
-                    ),
-                    message=self.text
+            with flask_babel.force_locale('sv_SE'):
+                text = (
+                    "Insättning!\n{money}: {message}".format(
+                        money=flask_babel.format_currency(self.value / 100, 'SEK'),
+                        message=self.text
+                    )
                 )
-            )
         elif self.value < 0:
-            text = (
-                "Uttag!\n{money}: {message}".format(
-                    money=flask_babel.format_currency(
-                        self.value / 100, 'SEK', locale='sv_SE'
-                    ),
-                    message=self.text
+            with flask_babel.force_locale('sv_SE'):
+                text = (
+                    "Uttag!\n{money}: {message}".format(
+                        money=flask_babel.format_currency(self.value / 100, 'SEK'),
+                        message=self.text
+                    )
                 )
-            )
 
         notification = Notification(
             text=text,

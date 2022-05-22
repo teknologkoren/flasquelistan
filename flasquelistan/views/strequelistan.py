@@ -328,17 +328,14 @@ def credit_transfer():
             'success'
         )
 
-        notification_text = (
-            "Streque Pay!\n{money} från {name}: {message}".format(
-                money=flask_babel.format_currency(
-                    value / 100,
-                    'SEK',
-                    locale='sv_SE'
-                ),
-                name=payer.displayname,
-                message=message
+        with flask_babel.force_locale('sv_SE'):
+            notification_text = (
+                "Streque Pay!\n{money} från {name}: {message}".format(
+                    money=flask_babel.format_currency(value / 100, 'SEK'),
+                    name=payer.displayname,
+                    message=message
+                )
             )
-        )
         payee_notification = models.Notification(
             text=notification_text,
             user_id=payee.id,
