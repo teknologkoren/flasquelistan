@@ -3,7 +3,7 @@
 {% set active_page = "quotes" %}
 {% set quotes_index_endpoint = url_for('quotes.index') %}
 
-{% macro quote_inner(quote) %}
+{% macro quote_inner(quote, edit_link=False) %}
 <div class="quote-text">{{ quote.cleaned() }}</div>
 <div class="quote-meta">
   {% if quote.who %}
@@ -22,20 +22,20 @@
       {% endif %}
     </span>
     <span class="quote-left">
-      <a href="{{ quotes_index_endpoint + '#quote-%s'|format(quote.id) }}">
-        #{{ quote.id }}
-      </a>
+      <a href="{{ quotes_index_endpoint + '#quote-%s'|format(quote.id) }}">#{{ quote.id }}</a>
+      {% if edit_link %}
       <a href="{{ url_for('strequeadmin.edit_quote', quote_id=quote.id) }}">
         ({{ _("redigera") }})
       </a>
+      {% endif %}
     </span>
   </div>
 </div>
 {% endmacro %}
 
-{% macro quote_card(quote) %}
+{% macro quote_card(quote, edit_link=False) %}
 <div id="quote-{{ quote.id }}" class="quote card">
-  {{ quote_inner(quote) }}
+  {{ quote_inner(quote, edit_link) }}
 </div>
 {% endmacro %}
 
@@ -47,7 +47,7 @@
   <p>{{ _("No quotes yet!") }}</p>
   {% endif %}
   {% for quote in quotes %}
-  {{ quote_card(quote) }}
+  {{ quote_card(quote, edit_link=current_user.is_admin) }}
   {% endfor %}
 </div>
 {% endblock %}
