@@ -586,10 +586,10 @@ class ProfilePicture(db.Model):
                           default=datetime.datetime.utcnow)
 
     def __str__(self):
-        return "{self.user_id}: {self.filename}"
+        return f"{self.user_id}: {self.filename}"
 
     def __repr__(self):
-        return "ProfilePicture {self.filename} {self.user_id}"
+        return f"ProfilePicture {self.filename} {self.user_id}"
 
 
 class Notification(db.Model):
