@@ -30,6 +30,7 @@ def create_app(config=None, instance_config=None):
 
     setup_logging()
     setup_error_emails(app)
+    setup_jinja(app)
     setup_flask_admin(app, models.db)
     setup_flask_babel(app)
     setup_flask_uploads(app)
@@ -234,6 +235,11 @@ def populate_testdb():
 def init_db(app):
     from flasquelistan import models
     models.db.create_all(app=app)
+
+
+def setup_jinja(app):
+    app.jinja_env.globals['site_title'] = \
+        lambda: app.config.get('SITE_TITLE', 'Strequelistan')
 
 
 def setup_flask_admin(app, db):

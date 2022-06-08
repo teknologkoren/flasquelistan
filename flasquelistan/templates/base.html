@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/streque.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/quotes.css') }}">
 
-    <title>{{ _("Site title") }}</title>
+    <title>{{ site_title() }}</title>
 
     {% block head %}
     {% endblock %}
@@ -26,7 +26,7 @@
     <header>
       <a class="logo" href="{{ url_for('strequelistan.index') }}">
         <img src="{{ url_for('static', filename='images/icon-192.png') }}" alt="">
-        <h1>{{ _("Site heading") }}</h1>
+        <h1>{{ site_title() }}</h1>
       </a>
     </header>
     {% block nav %}

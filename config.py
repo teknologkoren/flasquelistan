@@ -3,6 +3,9 @@ from pathlib import Path
 DEBUG = True
 SECRET_KEY = 'super secret secret'
 
+SITE_TITLE = "Strequelistan"
+DISPLAY_BALANCE_WARNINGS = True
+
 SESSION_COOKIE_SECURE = False  # Change to True in production instance config
 SESSION_COOKIE_HTTPONLY = True
 SESSION_COOKIE_SAMESITE = 'Lax'

@@ -84,12 +84,17 @@ def index():
         .all()
     )
 
-    if current_user.balance <= 0:
-        flask.flash(_l("Det finns inga pengar på kontot. Dags att fylla på!"),
-                    'error')
-    elif current_user.balance < 10000:
-        flask.flash(_l("Det är ont om pengar på kontot. Dags att fylla på?"),
-                    'warning')
+    if current_app.config.get('DISPLAY_BALANCE_WARNINGS', True):
+        if current_user.balance <= 0:
+            flask.flash(
+                _l("Det finns inga pengar på kontot. Dags att fylla på!"),
+                'error'
+            )
+        elif current_user.balance < 10000:
+            flask.flash(
+                _l("Det är ont om pengar på kontot. Dags att fylla på?"),
+                'warning'
+            )
 
     notification_count = (
         models.Notification
