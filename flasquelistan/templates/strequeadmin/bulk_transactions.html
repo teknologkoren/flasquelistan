@@ -12,6 +12,11 @@
 <div class="transactions">
   <h2>{{ _("Gör transaktioner i bulk") }}</h2>
   <p>{{ _("Positivt transaktionsvärde innebär en insättning till användarens konto, negativt innebär ett uttag.") }}</p>
+  {% if only_active %}
+  <p><a href="{{ url_for('strequeadmin.bulk_transactions', active='False') }}">{{ _("Visa alla användare") }}</a><p>
+  {% else %}
+  <p><a href="{{ url_for('strequeadmin.bulk_transactions', active='True') }}">{{ _("Visa endast aktiva användare") }}</a><p>
+  {% endif %}
   <input type="text" id="bulktransaction-message" value="Admintransaktion">
   <button id="set-bulktransaction-message">{{ _("Sätt meddelande") }}</button>
   <form method="POST">

@@ -189,7 +189,11 @@ def void_transaction():
 
 @mod.route('/admin/transactions/bulk', methods=['GET', 'POST'])
 def bulk_transactions():
-    form = forms.BulkTransactionFormFactory(active=False)
+    if flask.request.args.get('active') == 'True':
+        only_active = True
+    else:
+        only_active = False
+    form = forms.BulkTransactionFormFactory(only_active=only_active)
 
     if form.validate_on_submit():
         transactions = []
@@ -216,7 +220,11 @@ def bulk_transactions():
             flask.flash(_l("Inga transaktioner utförda. "
                         "Väl spenderade klockcykler, bra jobbat!"), 'info')
 
-    return flask.render_template('strequeadmin/bulk_transactions.html', form=form)
+    return flask.render_template(
+        'strequeadmin/bulk_transactions.html',
+        form=form,
+        only_active=only_active
+    )
 
 
 @mod.route('/admin/transactions/bulk/confirm', methods=['POST'])
