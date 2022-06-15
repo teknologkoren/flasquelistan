@@ -61,45 +61,4 @@ function hidenojs() {
   }
 }
 
-function stupidCatButton() {
-  var stupidButton = document.createElement('button');
-  stupidButton.addEventListener('click', function () {
-    var cuteCat = document.createElement('img');
-    var stupidInt = Math.floor(Math.random() * 10) + 1;
-    var stupidSrc = '/static/images/stupid/cats/cat-' + stupidInt + '.png';
-    cuteCat.src = stupidSrc;
-    cuteCat.style['z-index'] = '1000';
-    cuteCat.style.position = 'fixed';
-    cuteCat.style.top = Math.floor(Math.random() * 90) + -15 + '%';
-    cuteCat.style.left = Math.floor(Math.random() * 100) + -15 + '%';
-    cuteCat.style.transform = 'rotate(' + (-20 + Math.floor(Math.random() * 41)) + 'deg)';
-    document.body.appendChild(cuteCat);
-  });
-  stupidButton.innerHTML = '🐱';
-  stupidButton.classList.add('stupid-button');
-  return stupidButton;
-}
-
-function stupidConfettiButton() {
-  var stupidButton = document.createElement('button');
-  stupidButton.addEventListener('click', function () {
-    confetti();
-  });
-  stupidButton.innerHTML = '🎉';
-  stupidButton.classList.add('stupid-button');
-  return stupidButton;
-}
-
-function addStupidButtons() {
-  var stupidButtons = [
-    stupidCatButton(),
-    stupidConfettiButton()
-  ];
-  stupidDiv = document.getElementById('stupid-buttons');
-  for (var i = 0; i < stupidButtons.length; i++) {
-    stupidDiv.appendChild(stupidButtons[i]);
-  }
-}
-
 hidenojs();
-addStupidButtons();
