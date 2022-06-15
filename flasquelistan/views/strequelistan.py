@@ -322,7 +322,10 @@ def credit_transfer():
 
         value = int(form.value.data * 100)  # To ören
 
-        message = form.message.data
+        message = form.message.data.strip()
+        if not message:
+            message = None
+
         credit_transfer = models.CreditTransfer.create(
             payer, payee, current_user, value, message
         )
@@ -335,12 +338,13 @@ def credit_transfer():
 
         with flask_babel.force_locale('sv_SE'):
             notification_text = (
-                "Streque Pay!\n{money} från {name}: {message}".format(
+                "Streque Pay!\n{money} från {name}".format(
                     money=flask_babel.format_currency(value / 100, 'SEK'),
                     name=payer.displayname,
-                    message=message
                 )
             )
+            if message:
+                notification_text += ": {}".format(message)
         payee_notification = models.Notification(
             text=notification_text,
             user_id=payee.id,
