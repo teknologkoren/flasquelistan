@@ -17,6 +17,7 @@
       <table>
         <tr>
           <th>{{ _("Användare") }}</th>
+          <th>{{ _("Typ") }}</th>
           <th>{{ _("Transaktionsvärde") }}</th>
           <th>{{ _("Meddelande") }}</th>
         </tr>
@@ -26,6 +27,17 @@
             <span class="user">
               {{ transaction.user_name }}
             </span>
+          </td>
+          <td>
+            {% if transaction.value > 0 %}
+            <span class="type deposit">
+              {{ _("Insättning") }}
+            </span>
+            {% else %}
+            <span class="type withdrawal">
+              {{ _("Uttag") }}
+            </span>
+            {% endif %}
           </td>
           <td>
             <span class="value">

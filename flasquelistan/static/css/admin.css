@@ -30,6 +30,14 @@
   white-space: normal;
 }
 
+.bulk-transactions .type.deposit {
+  color: green;
+}
+
+.bulk-transactions .type.withdrawal {
+  color: red;
+}
+
 .transactions td.text {
   min-width: 12rem;
   max-width: 14rem;
