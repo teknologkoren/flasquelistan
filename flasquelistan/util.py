@@ -69,6 +69,7 @@ def send_email(toaddr, subject, body):
     msg['Subject'] = subject
     msg['From'] = config['SMTP_SENDADDR']
     msg['To'] = toaddr
+    msg['Date'] = email.utils.formatdate(localtime=True)
 
     @flask.copy_current_request_context
     def thread_func():
