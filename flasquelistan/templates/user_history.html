@@ -30,8 +30,16 @@
               {{ transaction.formatted_value }}
             </span>
           </div>
-          <div class="timestamp">
-            {{ format_datetime(transaction.timestamp, "dd MMMM yyyy, HH:mm") }}
+          <div class="lower">
+            <span class="timestamp">
+              {{ format_datetime(transaction.timestamp, "dd MMMM yyyy, HH:mm") }}
+            </span>
+            {% if transaction.api_key and transaction.api_key.short_name %}
+            <span class="separator">|</span>
+            <span class="api-key" title="{{ _('Streckat genom ')}}{{ transaction.api_key.name }}">
+              {{ transaction.api_key.short_name }}
+            </span>
+            {% endif %}
           </div>
         </li>
       {% endfor %}

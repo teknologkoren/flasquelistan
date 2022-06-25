@@ -37,6 +37,7 @@
       {% endif %}
 
       <p><a href="{{ url_for('strequelistan.change_email_or_password', user_id=user.id) }}">{{ _("Byt e-postadress eller lösenord") }}</a></p>
+      <p><a href="{{ url_for('strequelistan.api_keys', user_id=user.id) }}">{{ _("Hantera API-nycklar") }}</a></p>
 
       <div class="form-field">
           <button>{{ _("Spara") }}</button> | <a href="{{ url_for('strequelistan.show_profile', user_id=user.id) }}">{{ _("Avbryt") }}</a>

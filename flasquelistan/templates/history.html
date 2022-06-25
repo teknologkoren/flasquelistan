@@ -11,8 +11,16 @@
 <li id="{{ streque.id }}" class="card strequecard">
   <span class="username">
     {{ streque.user.displayname }}
-    <div class="timestamp">
-      {{ format_datetime(streque.timestamp, "dd MMMM yyyy, HH:mm") }}
+    <div class="lower">
+      <span class="timestamp">
+        {{ format_datetime(streque.timestamp, "dd MMMM yyyy, HH:mm") }}
+      </span>
+      {% if streque.api_key and streque.api_key.short_name %}
+      <span class="separator">|</span>
+      <span class="api-key" title="{{ _('Streckat genom ')}}{{ streque.api_key.name }}">
+        {{ streque.api_key.short_name }}
+      </span>
+      {% endif %}
     </div>
   </span>
   <span class="text">

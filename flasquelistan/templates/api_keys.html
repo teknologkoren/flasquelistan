@@ -1,0 +1,82 @@
+{# This is not a part of the admin interface, but it uses similar UI elements. #}
+{% extends "strequeadmin/layout.html" %}
+
+{% block body %}
+<div class="api-info">
+  <h2>{{ _("API-nycklar för") }} {{ user.full_name }}</h2>
+  <p>
+    {{ _("Streque API kan användas för att skriva egna program som kan
+    interagera med Strequelistan å dina vägnar. Försiktighet ombedes&mdash;ett
+    program eller en person som har din API-nyckel kan ställa till med en
+    hel del besvär för QM. För mer info om hur man använder API:et, se") }}
+    <a href="https://github.com/teknologkoren/flasquelistan/blob/master/flasquelistan/views/api.py">
+      {{ _("koden i vårt GitHub-repo") }}</a>.
+  </p>
+  <p>
+    {{ _("Du rekommenderas att skapa en separat API-nyckel för varje projekt.") }}
+  </p>
+  <p>
+    <a href="{{ url_for('strequelistan.edit_api_key', user_id=user.id) }}">{{ _("Ny API-nyckel") }}</a>
+    |
+    <a href="{{ url_for('strequelistan.edit_profile', user_id=user.id) }}">{{ _("Tillbaka") }}</a>
+  </p>
+</div>
+<div>
+  {% if user.api_keys %}
+  <div class="table-wrap">
+    <table class="api-keys">
+      <tr>
+        <th>{{ _("Namn") }}</th>
+        <th>{{ _("Kort namn") }}</th>
+        {% if user.is_admin %}
+        <th>{{ _("Admin") }}</th>
+        {% endif %}
+        <th>{{ _("Aktiv") }}</th>
+        <th>{{ _("Skapad") }}</th>
+        <th>{{ _("Senast använd") }}</th>
+      </tr>
+      {% for api_key in user.api_keys %}
+      <tr>
+        <td>
+          <a href="{{ url_for('strequelistan.edit_api_key', user_id=user.id, api_key_id=api_key.id) }}">
+            {{ api_key.name }}
+          </a>
+        </td>
+        <td>
+          {{ api_key.short_name }}
+        </td>
+        {% if user.is_admin %}
+        <td>
+          {% if api_key.is_admin %}
+          {{ _("Admin") }}
+          {% else %}
+          {{ _("Ej admin") }}
+          {% endif %}
+        </td>
+        {% endif %}
+        <td>
+          {% if api_key.is_enabled %}
+          {{ _("Aktiv") }}
+          {% else %}
+          {{ _("Inaktiv") }}
+          {% endif %}
+        </td>
+        <td>
+          {{ format_datetime(api_key.created_timestamp, "yyyy-MM-dd HH:mm") }}
+        </td>
+        <td>
+          {% if api_key.last_used_timestamp %}
+          {{ format_datetime(api_key.last_used_timestamp, "yyyy-MM-dd HH:mm") }}
+          {% else %}
+          {{ _("Aldrig använd") }}
+          {% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+    </table>
+  </div>
+  {% else %}
+  <p>{{ _("Inga API-nycklar funna.") }}</p>
+  {% endif %}
+</div>
+{% endblock %}

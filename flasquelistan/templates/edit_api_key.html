@@ -1,0 +1,49 @@
+{# This is not a part of the admin interface, but it uses similar UI elements. #}
+{% extends "strequeadmin/layout.html" %}
+
+{% from "macros.html" import form_entry %}
+
+{% block scripts %}
+<script defer src="{{ url_for("static", filename="js/confirmDialog.js") }}"></script>
+{% endblock %}
+
+{% block body %}
+<div>
+  <h2>{% if api_key %}{{ _("Redigera") }}{% else %}{{ _("Skapa") }}{% endif %} {{ _("API-nyckel") }}</h2>
+  <form method="POST">
+    {{ form.csrf_token }}
+
+    {{ form_entry(form.name) }}
+    {{ form_entry(form.short_name) }}
+    {{ form_entry(form.is_enabled) }}
+    {% if user.is_admin %}
+    {{ form_entry(form.has_admin_privileges) }}
+    {% endif %}
+
+    {% if api_key %}
+    {{ form_entry(form.reset_key) }}
+
+    <div class="form-entry">
+      <button
+        class="confirm"
+        {% if not can_be_deleted %}
+        disabled="true"
+        {% endif %}
+        formaction="{{ url_for('strequelistan.delete_api_key', user_id=user.id, api_key_id=api_key.id) }}">
+        {{ _("Ta bort API-nyckel") }}
+      </button>
+      {% if not can_be_deleted %}
+      <div class="field-description">
+        {{ _("Denna nyckel är redan kopplad till transaktioner och kan därför ej raderas.")}}
+      </div>
+      {% endif %}
+    </div>
+    {% endif %}
+
+    <div class="form-entry">
+      <button>{{ _("Spara") }}</button> | <a href="{{ url_for('strequelistan.api_keys', user_id=user.id) }}">{{ _("Avbryt") }}</a>
+    </div>
+  </form>
+</div>
+</div>
+{% endblock %}

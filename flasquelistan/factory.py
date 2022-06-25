@@ -288,6 +288,8 @@ def setup_flask_admin(app, db):
     admin.add_view(LoginModelView(models.Streque, db.session, name='Streque'))
     admin.add_view(LoginModelView(models.AdminTransaction, db.session,
                                   name='AdminTransaction'))
+    admin.add_view(LoginModelView(models.ApiKey, db.session,
+                                  name='ApiKey'))
     admin.add_view(LoginModelView(models.UserTransaction, db.session,
                                   name='UserTransaction'))
     admin.add_view(LoginModelView(models.CreditTransfer, db.session,

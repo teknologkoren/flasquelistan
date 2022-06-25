@@ -42,6 +42,24 @@ class Unique:
             raise validators.ValidationError(self.message)
 
 
+class UniqueEdit:
+    """Validate that field is unique in model, but only if the field changed.
+    This variant of the validator also works when editing."""
+    def __init__(self, model, field,
+                 message=_l('Detta element existerar redan.')):
+        self.model = model
+        self.field = field
+        self.message = message
+
+    def __call__(self, form, field):
+        # If the field was not edited, don't check uniqueness.
+        if field.object_data == field.data:
+            return
+        if (models.db.session.query(self.model)
+                .filter(self.field == field.data).scalar()):
+            raise validators.ValidationError(self.message)
+
+
 class Exists:
     """Validate that field is unique in model."""
     def __init__(self, model, field,
@@ -527,3 +545,32 @@ class EditQuoteForm(flask_wtf.FlaskForm):
         ],
         format='%Y-%m-%dT%H:%M'
     )
+
+
+class EditApiKeyForm(flask_wtf.FlaskForm):
+    name = fields.StringField(
+        _l('Namn'),
+        description=_l("Max 50 tecken"),
+        validators=[
+            validators.InputRequired(),
+            validators.Length(max=50),
+            UniqueEdit(models.ApiKey,
+                models.ApiKey.name,
+                message=_('Detta namn används redan.'))
+        ])
+    short_name = fields.StringField(
+        _l('Kort namn'),
+        description=_l("Max 10 tecken. Kommer att visas intill transaktioner"
+        " gjorda med nyckeln. Om fältet lämnas tomt ser transaktionerna ut som"
+        " vanligt. Ska helst vara en emoji. 🤩"),
+        validators=[
+            validators.Length(max=50)
+        ])
+    is_enabled = fields.BooleanField(_l("Aktiverad?"),
+        default=True,
+        description=_l("Om du inaktiverar nyckeln så går den inte att använda."))
+    has_admin_privileges = fields.BooleanField(_l("Adminprivilegier?"),
+        description=_l("OBS: gäller endast så länge du själv är admin."))
+    reset_key = fields.BooleanField(_l("Återställ nyckel"),
+        description=_l("Kryssa i om du vill generera en ny nyckel. VARNING: din"
+                       " gamla nyckel kommer att sluta fungera."))
