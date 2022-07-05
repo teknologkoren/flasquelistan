@@ -138,7 +138,7 @@ def verify_email(user, email_address):
     site_title = flask.current_app.config['SITE_TITLE']
     subject = "Verifiera din e-postaddress på " + site_title
 
-    fromaddr = flask.current_app.config['ADMIN_EMAILADDR']
+    fromaddr = flask.current_app.config['SYSTEM_EMAILADDR']
     util.send_email(fromaddr, email_address, subject, email_body)
 
 
@@ -214,7 +214,7 @@ def reset():
         site_title = flask.current_app.config['SITE_TITLE']
         subject = "Återställ ditt lösenord på " + site_title
 
-        fromaddr = flask.current_app.config['ADMIN_EMAILADDR']
+        fromaddr = flask.current_app.config['SYSTEM_EMAILADDR']
         util.send_email(fromaddr, user.email, subject, email_body)
 
         flask.flash(reset_flash.format(form.email.data), 'info')
