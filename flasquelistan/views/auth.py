@@ -99,7 +99,10 @@ def register():
         models.db.session.add(request)
         models.db.session.commit()
 
-        util.send_email('qm@teknologkoren.se',
+        fromaddr = flask.current_app.config['SYSTEM_EMAILADDR']
+        admin_email = flask.current_app.config['ADMIN_EMAILADDR']
+        util.send_email(fromaddr,
+                        admin_email,
                         "Förfrågan om nytt konto på Strequelistan",
                         flask.render_template('auth/register_email.jinja2',
                                               request=request)
@@ -112,8 +115,8 @@ def register():
     return flask.render_template('auth/register.html', form=form)
 
 
-def verify_email(user, email):
-    """Create an email verification email.
+def verify_email(user, email_address):
+    """Send an email address verification email.
 
     The user id and the requested email address is hashed and included as a
     token in a link referring to the verification page. The link is sent to the
@@ -123,17 +126,20 @@ def verify_email(user, email):
     """
     ts = URLSafeTimedSerializer(flask.current_app.config["SECRET_KEY"])
 
-    token = ts.dumps([user.id, email], 'verify-email')
+    token = ts.dumps([user.id, email_address], 'verify-email')
 
-    verify_link = flask.url_for('auth.verify_token', token=token,
+    verify_link = flask.url_for('auth.verify_token',
+                                token=token,
                                 _external=True)
 
     email_body = flask.render_template('auth/email_verification.jinja2',
                                        link=verify_link)
 
-    subject = "Verifiera din e-postaddress på Strequelistan"
+    site_title = flask.current_app.config['SITE_TITLE']
+    subject = "Verifiera din e-postaddress på " + site_title
 
-    util.send_email(email, subject, email_body)
+    fromaddr = flask.current_app.config['ADMIN_EMAILADDR']
+    util.send_email(fromaddr, email_address, subject, email_body)
 
 
 @mod.route('/verify/<token>')
@@ -197,16 +203,19 @@ def reset():
         user = models.User.query.filter_by(email=form.email.data).first()
         token = ts.dumps(user.id, salt='recover-key')
 
-        recover_url = flask.url_for('.reset_token', token=token,
+        recover_url = flask.url_for('.reset_token',
+                                    token=token,
                                     _external=True)
 
         email_body = flask.render_template('auth/password_reset_email.jinja2',
                                            name=user.first_name,
                                            link=recover_url)
 
-        subject = "Återställ ditt lösenord hos Strequelistan"
+        site_title = flask.current_app.config['SITE_TITLE']
+        subject = "Återställ ditt lösenord på " + site_title
 
-        util.send_email(user.email, subject, email_body)
+        fromaddr = flask.current_app.config['ADMIN_EMAILADDR']
+        util.send_email(fromaddr, user.email, subject, email_body)
 
         flask.flash(reset_flash.format(form.email.data), 'info')
         return flask.redirect(flask.url_for('.login'))

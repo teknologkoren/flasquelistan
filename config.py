@@ -30,7 +30,9 @@ WTF_CSRF_TIME_LIMIT = 21600  # 6 hours
 # Email settings
 SMTP_MAILSERVER = 'smtp.example.com'
 SMTP_PORT = 25
-SMTP_SENDADDR = 'webmaster@example.com'
 #SMTP_USE_STARTTLS = True
 #SMTP_USERNAME = 'webmaster@example.com'
 #SMTP_PASSWORD = 'smtpsecretpassword'
+SYSTEM_EMAILADDR = 'system-noreply@example.com'
+# address to send from and to send admin notifications to
+ADMIN_EMAILADDR = 'webmaster@example.com'

@@ -50,7 +50,7 @@ def url_for_image(filename, imagetype, width=None):
     return full_href(md5=md5, expires=expires)
 
 
-def send_email(toaddr, subject, body):
+def send_email(fromaddr, toaddr, subject, body):
     """Send an email with SMTP & STARTTLS.
 
     Uses the best security defaults according to the python documentation at
@@ -67,7 +67,7 @@ def send_email(toaddr, subject, body):
     msg.set_content(body)
 
     msg['Subject'] = subject
-    msg['From'] = config['SMTP_SENDADDR']
+    msg['From'] = fromaddr
     msg['To'] = toaddr
     msg['Date'] = email.utils.formatdate(localtime=True)
 

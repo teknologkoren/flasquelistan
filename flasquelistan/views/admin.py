@@ -4,6 +4,7 @@ import flask
 import flask_babel
 import flask_login
 import sqlalchemy as sqla
+from flask import current_app
 from flask_babel import gettext as _
 from flask_babel import lazy_gettext as _l
 from flask_login import current_user
@@ -331,9 +332,12 @@ def spam():
     if flask.request.method == 'POST':
         subject = "Hälsning från QM"
         for user in users:
-            mail = flask.render_template('strequeadmin/negative_balance_mail.jinja2',
-                                         user=user)
-            util.send_email(user.email, subject, mail)
+            mail = flask.render_template(
+                'strequeadmin/negative_balance_mail.jinja2',
+                user=user
+            )
+            fromaddr = current_app.config['ADMIN_EMAILADDR']
+            util.send_email(fromaddr, user.email, subject, mail)
 
         flask.flash(_("Skickade %(nr)i saldopåminnelser!", nr=users.count()),
                     'success')
