@@ -31,6 +31,7 @@ flask==2.0.1
     #   -r requirements.in
     #   flask-admin
     #   flask-babel
+    #   flask-httpauth
     #   flask-login
     #   flask-reuploaded
     #   flask-sqlalchemy
@@ -38,6 +39,8 @@ flask==2.0.1
 flask-admin==1.5.8
     # via -r requirements.in
 flask-babel==2.0.0
+    # via -r requirements.in
+flask-httpauth==4.7.0
     # via -r requirements.in
 flask-login==0.5.0
     # via -r requirements.in
