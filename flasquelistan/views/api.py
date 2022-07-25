@@ -69,8 +69,8 @@ def filter_user_data(user_dict):
 
 @mod.route('/users/me', methods=['GET'])
 @auth.login_required
-def get_current_user():
-    return filter_user_data(current_user().api_dict)
+def get_user_me():
+    return get_user(current_user().id)
 
 
 @mod.route('/users/<int:user_id>', methods=['GET'])
@@ -85,6 +85,12 @@ def get_user_by_phone(phone_number):
     user = models.User.query.filter_by(
         phone=util.format_phone_number(phone_number, e164=True)).first_or_404()
     return filter_user_data(user.api_dict)
+
+
+@mod.route('/users/me/streque/<int:article_id>', methods=['POST'])
+@auth.login_required
+def add_streque_me(article_id):
+    return add_streque(current_user().id, article_id)
 
 
 @mod.route('/users/<int:user_id>/streque/<int:article_id>', methods=['POST'])
