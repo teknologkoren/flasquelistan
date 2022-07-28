@@ -503,6 +503,12 @@ class Streque(Transaction):
         too_old = datetime.datetime.utcnow() - datetime.timedelta(minutes=old)
         return self.timestamp < too_old
 
+    @property
+    def api_dict(self):
+        data = Transaction.api_dict.fget(self)
+        data['standardglas'] = self.standardglas
+        return data
+
 
 class AdminTransaction(Transaction):
     __mapper_args__ = {

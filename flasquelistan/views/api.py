@@ -15,11 +15,12 @@
 #
 
 import flask
-from flask import jsonify
+from flask import jsonify, request
 from flask_babel import lazy_gettext as _l
 from flask_httpauth import HTTPTokenAuth
 
 from flasquelistan import forms, models, util
+from flasquelistan.models import ApiKey, Article, Transaction, User
 
 mod = flask.Blueprint('api', __name__, url_prefix='/api/v1')
 auth = HTTPTokenAuth(scheme='Bearer')
@@ -33,7 +34,7 @@ current_user = lambda: current_api_key().user
 
 @auth.verify_token
 def verify_token(token):
-    return models.ApiKey.authenticate(token)
+    return ApiKey.authenticate(token)
 
 
 @auth.get_user_roles
@@ -44,10 +45,10 @@ def get_api_key_roles(api_key):
 @mod.route('/articles', methods=['GET'])
 @auth.login_required
 def get_active_articles():
-    articles = (models.Article
+    articles = (Article
                 .query
                 .filter_by(is_active=True)
-                .order_by(models.Article.weight.desc())
+                .order_by(Article.weight.desc())
                 .all())
     response = []
     for article in articles:
@@ -76,13 +77,13 @@ def get_user_me():
 @mod.route('/users/<int:user_id>', methods=['GET'])
 @auth.login_required
 def get_user(user_id):
-    return filter_user_data(models.User.query.get_or_404(user_id).api_dict)
+    return filter_user_data(User.query.get_or_404(user_id).api_dict)
 
 
 @mod.route('/users/by-phone/<string:phone_number>', methods=['GET'])
 @auth.login_required
 def get_user_by_phone(phone_number):
-    user = models.User.query.filter_by(
+    user = User.query.filter_by(
         phone=util.format_phone_number(phone_number, e164=True)).first_or_404()
     return filter_user_data(user.api_dict)
 
@@ -96,6 +97,29 @@ def add_streque_me(article_id):
 @mod.route('/users/<int:user_id>/streque/<int:article_id>', methods=['POST'])
 @auth.login_required
 def add_streque(user_id, article_id):
-    user = models.User.query.get_or_404(user_id)
-    article = models.Article.query.get_or_404(article_id)
+    user = User.query.get_or_404(user_id)
+    article = Article.query.get_or_404(article_id)
     return user.strequa(article, current_user(), current_api_key()).api_dict
+
+
+@mod.route('/users/me/transactions', methods=['GET'])
+@auth.login_required
+def get_transactions_me():
+    return get_transactions(current_user().id)
+
+
+@mod.route('/users/<int:user_id>/transactions', methods=['GET'])
+@auth.login_required
+def get_transactions(user_id):
+    if not current_api_key().is_admin and current_user().id != user_id:
+        flask.abort(403) # HTTP 403 Forbidden
+
+    user = User.query.get_or_404(user_id)
+    min_id = request.args.get('min_id', 0)
+    transactions = (
+        Transaction
+        .query
+        .filter(Transaction.user_id == user_id, Transaction.id >= min_id)
+        .order_by(Transaction.id)
+        .all())
+    return jsonify([t.api_dict for t in transactions])
