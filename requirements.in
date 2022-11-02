@@ -15,5 +15,6 @@ phonenumbers
 pillow
 pytest
 pytest-xdist
+sh
 vobject
 wtforms[email]
