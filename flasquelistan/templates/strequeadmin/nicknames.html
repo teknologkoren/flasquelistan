@@ -1,0 +1,137 @@
+{% extends "strequeadmin/layout.html" %}
+
+{% block scripts %}
+<script defer src="{{ url_for('static', filename='js/common.js') }}"></script>
+<script defer src="{{ url_for('static', filename='js/admin.js') }}"></script>
+<script defer src="{{ url_for("static", filename="js/confirmDialog.js") }}"></script>
+{% endblock %}
+
+{% block body %}
+<div>
+  <h2>{{ _("Ej granskade smeknamn") }}</h2>
+  {% if pending_changes %}
+  <p style="max-width: 50em;">
+    {{ _("Om det finns flera smeknamnsförslag för samma person så är det smeknamnet du
+    godkänner sist som blir det aktiva smeknamnet (övriga kommer finnas kvar i
+    historiken).") }}
+  </p>
+  <div class="table-wrap">
+    <table class="quotes">
+      <tr>
+        <th>{{ _("Person") }}</th>
+        <th>{{ _("Smeknamn") }}</th>
+        <th>{{ _("Inlagt") }}</th>
+        <th>{{ _("Inlagt av") }}</th>
+        <th></th>
+        <th></th>
+      </tr>
+      {% for change in pending_changes %}
+      <tr>
+        <td class="user">
+          <span>
+            <a href="{{ url_for('strequelistan.user_nicknames', user_id=change.user.id) }}">
+                {{ change.user.first_name }} {{ change.user.last_name }}
+            </a>
+          </span>
+        </td>
+        <td class="nickname">
+          <span>
+            {{ change.nickname }}
+          </span>
+        </td>
+        <td class="created_timestamp">
+          <span>
+            {{ format_datetime(change.created_timestamp, "yyyy-MM-dd, HH:mm") }}
+          </span>
+        </td>
+        <td class="suggester">
+          <span>
+            {{ change.suggester.first_name }} {{ change.suggester.last_name }}
+          </span>
+        </td>
+        <td class="approve">
+          <form method="POST">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+            <button formaction="{{ url_for('strequeadmin.approve_pending_nickname', change_id=change.id) }}">{{ _("Godkänn") }}</button>
+          </form>
+        </td>
+        <td class="reject">
+          <form method="POST">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+            <button class="confirm" formaction="{{ url_for('strequeadmin.reject_pending_nickname', change_id=change.id) }}">{{ _("Neka") }}</button>
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+    </table>
+  </div>
+  {% else %}
+  {{ _("Det finns inga icke-granskade smeknamnsförslag.") }}
+  {% endif %}
+
+  <h2>{{ _("Godkända smeknamn") }}</h2>
+  <p style="max-width: 50em">
+    {{ _('Om "Godkänt av" saknas innebär det att ändringen ej krävde godkännande. Detta är
+    fallet t.ex. när någon ändrat sitt eget smeknamn, och för gamla smeknamnsändringar.
+    Där det finns två tider för "Skapat" betyder det att vi ej vet exakt när smeknamnet
+    lades in, utan bara att det var mellan de två tiderna.') }}
+  </p>
+  <div class="table-wrap">
+    <table class="quotes">
+      <tr>
+        <th>{{ _("Person") }}</th>
+        <th>{{ _("Smeknamn") }}</th>
+        <th>{{ _("Skapat") }}</th>
+        <th>{{ _("Skapare") }}</th>
+        <th>{{ _("Godkänt") }}</th>
+        <th>{{ _("Godkänt av") }}</th>
+      </tr>
+      {% for change in approved_changes %}
+      <tr>
+        <td class="user">
+          <span>
+            <a href="{{ url_for('strequelistan.user_nicknames', user_id=change.user.id) }}">
+                {{ change.user.first_name }} {{ change.user.last_name }}
+            </a>
+          </span>
+        </td>
+        <td class="nickname">
+          <span>
+            {{ change.nickname }}
+          </span>
+        </td>
+        <td class="created_timestamp">
+          <span>
+            {#
+              If we don't know the exact time a nickname was added, show an interval.
+              If we do, just show the timestamp.
+            #}
+            {% if change.lower_bound_timestamp %}
+            {{ format_datetime(change.lower_bound_timestamp, "yyyy-MM-dd, HH:mm") }} /
+            {% endif %}
+            {{ format_datetime(change.created_timestamp, "yyyy-MM-dd, HH:mm") }}
+          </span>
+        </td>
+        <td class="suggester">
+          <span>
+            {{ change.suggester.first_name }} {{ change.suggester.last_name }}
+          </span>
+        </td>
+        <td class="reviewed_timestamp">
+          <span>
+            {% if change.reviewed_timestamp %}
+              {{ format_datetime(change.reviewed_timestamp, "yyyy-MM-dd, HH:mm") }}
+            {% endif %}
+          </span>
+        </td>
+        <td class="reviewer">
+          <span>
+            {{ change.reviewer.first_name }} {{ change.reviewer.last_name }}
+          </span>
+        </td>
+      </tr>
+      {% endfor %}
+    </table>
+  </div>
+</div>
+{% endblock %}

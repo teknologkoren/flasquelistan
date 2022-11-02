@@ -140,6 +140,13 @@
     </a>
   </p>
   {% endif %}
+  {% if has_pending_nicknames %}
+  <p>
+    <a href="{{ url_for('strequeadmin.show_nicknames') }}">
+      {{ _("Det finns nya smeknamnsförslag!") }}
+    </a>
+  </p>
+  {% endif %}
   {{ usercard(current_user, articles) }}
 
   <h2 class="jump-to-group">{{ _("Hoppa till") }}</h2>

@@ -28,7 +28,14 @@
       {{ form_entry_row(form.is_admin) }}
       {% endif %}
 
-      {{ form_entry(form.nickname) }}
+      <div class="form-entry">
+      <div><label class="" for="nickname">Smeknamn</label> </div>
+      <div class="field-description">
+      Smeknamnsändring har flyttat till
+      <a href="{{ url_for('strequelistan.show_profile', user_id=user.id) }}">profilsidan</a>.
+      </div>
+      </div>
+
       {{ form_entry(form.birthday) }}
       {{ form_entry(form.phone) }}
       {% if current_user.id == user.id %}

@@ -1,5 +1,6 @@
 import base64
 import datetime
+import enum
 import hashlib
 import random
 import secrets
@@ -59,6 +60,12 @@ class User(flask_login.UserMixin, db.Model):
         'ApiKey',
         back_populates='user',
         foreign_keys='ApiKey.user_id'
+    )
+    nickname_changes = db.relationship(
+        'NicknameChange',
+        back_populates='user',
+        lazy='dynamic',
+        foreign_keys='NicknameChange.user_id'
     )
 
     # Do not change the following directly, use User.password
@@ -381,6 +388,48 @@ class Group(db.Model):
 
     def __repr__(self):
         return f"Group {self.name}"
+
+
+class NicknameChangeStatus(enum.Enum):
+    PENDING = 1
+    APPROVED = 2
+    REJECTED = 3
+
+
+class NicknameChange(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+
+    # The user who this nickname belongs to.
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+
+    nickname = db.Column(db.String(50), nullable=False)
+    status = db.Column(db.Enum(NicknameChangeStatus),
+                       nullable=False, default=NicknameChangeStatus.PENDING)
+
+    # The user who suggested the change. Should be null for imported legacy nickname
+    # changes.
+    suggester_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True)
+
+    # The user who reviewed the change. If explicit approval was not required, this should
+    # be null. For imported legacy nickname changes, this should also be null.
+    reviewer_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True)
+    
+    # Whenever the nickname change was created.
+    created_timestamp = db.Column(db.DateTime)
+
+    # Whenever the nickname change was reviewed. If explicit approval was not required,
+    # this should be the same as `created_timestamp`.
+    reviewed_timestamp = db.Column(db.DateTime)
+
+    # This is the latest timestamp before `created_timestamp` when we know that the user
+    # had a different nickname. This should only be set for legacy nickname changes,
+    # where we only have snapshots from (sometimes sparse) backups. 
+    lower_bound_timestamp = db.Column(db.DateTime, nullable=True)
+
+    user = db.relationship('User', foreign_keys=user_id,
+                           back_populates='nickname_changes')
+    suggester = db.relationship('User', foreign_keys=suggester_id)
+    reviewer = db.relationship('User', foreign_keys=reviewer_id)
 
 
 class Article(db.Model):

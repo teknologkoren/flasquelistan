@@ -238,14 +238,6 @@ class VoidTransactionForm(flask_wtf.FlaskForm):
 
 
 class EditUserForm(flask_wtf.FlaskForm):
-    nickname = fields.StringField(
-        _l('Smeknamn'),
-        description=_l("Något roligt."),
-        validators=[
-            validators.Length(max=50)
-        ]
-    )
-
     birthday = html5_fields.DateField(
         _l('Datum'),
         description=_l("Din födelsedags datum."),
@@ -311,6 +303,16 @@ class FullEditUserForm(EditUserForm):
         _l('Admin'),
         description=_l("Medlemmen är administratör för Strequelistan.")
     )
+
+
+class ChangeNicknameForm(flask_wtf.FlaskForm):
+    nickname = fields.StringField(
+        _l('Nytt smeknamn'),
+        description=_l("Något roligt."),
+        validators=[
+            validators.InputRequired(),
+            validators.Length(max=50)
+        ])
 
 
 class AddUserForm(UniqueEmailForm, FullEditUserForm):

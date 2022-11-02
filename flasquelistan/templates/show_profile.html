@@ -75,6 +75,25 @@
     </dl>
     {% endif %}
 
+    <form method="POST"
+          action="{{ url_for('strequelistan.change_nickname', user_id=user.id) }}"
+          enctype="multipart/form-data">
+      {{ change_nickname_form.csrf_token }}
+      <fieldset>
+        <legend>{{ _("Byt smeknamn") }}</legend>
+        <p>
+        <div class="field-description">
+          {{ change_nickname_form.nickname.description }}
+        </div>
+        {{ change_nickname_form.nickname }}
+        <button>{{ _("Spara") }}</button>
+        </p>
+        <a href="{{ url_for('strequelistan.user_nicknames', user_id=user.id) }}">
+          {{ _("Visa smeknamnshistorik") }}
+        </a>
+      </fieldset>
+    </form>
+
     <form class="upload-and-set-profile-picture"
           method="POST"
           action="{{ url_for('strequelistan.upload_profile_picture', user_id=user.id) }}"
