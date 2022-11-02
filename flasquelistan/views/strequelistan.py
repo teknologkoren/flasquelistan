@@ -2,6 +2,7 @@ import datetime
 import hashlib
 import os
 import secrets
+from attr import has
 
 import flask
 import flask_babel
@@ -107,12 +108,19 @@ def index():
         .count()
     )
 
+    if current_user.is_admin:
+        has_pending_nicknames = (models.NicknameChange.query
+            .filter_by(status=models.NicknameChangeStatus.PENDING).count() > 0)
+    else:
+        has_pending_nicknames = False
+
     return flask.render_template(
         'strequelistan.html',
         groups=groups,
         quote=random_quote,
         articles=articles,
         notification_count=notification_count,
+        has_pending_nicknames=has_pending_nicknames,
         users_with_streques=users_with_streques,
         birthdays=birthdays,
         birthday_emoji=birthday_emoji,
@@ -502,6 +510,7 @@ def show_profile(user_id):
                     .order_by(models.Transaction.timestamp.desc())
                     .limit(5))
 
+    change_nickname_form = forms.ChangeNicknameForm()
     upload_profile_picture_form = forms.UploadProfilePictureForm()
     change_profile_picture_form = forms.ChangeProfilePictureFormFactory(user)
     credit_transfer_form = forms.CreditTransferForm()
@@ -517,6 +526,7 @@ def show_profile(user_id):
         'show_profile.html',
         user=user,
         transactions=transactions,
+        change_nickname_form=change_nickname_form,
         profile_picture_form=upload_profile_picture_form,
         change_profile_picture_form=change_profile_picture_form,
         credit_transfer_form=credit_transfer_form,
@@ -541,6 +551,48 @@ def admin_transaction(user_id):
         )
         transaction.create_notification()
         flask.flash(_l("Transaktion utförd!"), 'success')
+
+    elif form.is_submitted():
+        forms.flash_errors(form)
+
+    return flask.redirect(
+        flask.url_for('strequelistan.show_profile', user_id=user_id)
+    )
+
+
+@mod.route('/profile/<int:user_id>/change_nickname', methods=['POST'])
+def change_nickname(user_id):
+    user = models.User.query.get_or_404(user_id)
+    form = forms.ChangeNicknameForm()
+
+    if form.validate_on_submit():
+        nickname_change = models.NicknameChange(
+            user_id=user.id,
+            nickname=form.nickname.data,
+            status=models.NicknameChangeStatus.PENDING,
+            created_timestamp=datetime.datetime.now(),
+            suggester=current_user
+        )
+
+        # A user should be able to change their own nickname without approval.
+        needs_approval = (current_user != user)
+
+        if not needs_approval:
+            nickname_change.status = models.NicknameChangeStatus.APPROVED
+            nickname_change.reviewed_timestamp = datetime.datetime.now()
+
+        user.nickname_changes.append(nickname_change)
+        models.db.session.commit()
+
+        if needs_approval:
+            flask.flash(
+                _l("Din smeknamnsändring är sparad och väntar på att bli godkänd."), 'success')
+        else:
+            flask.flash(_l("Din smeknamnsändring är sparad."), 'success')
+
+        return flask.redirect(
+            flask.url_for('strequelistan.user_nicknames', user_id=user_id)
+        )
 
     elif form.is_submitted():
         forms.flash_errors(form)
@@ -670,6 +722,31 @@ def user_history(user_id):
 
     return flask.render_template('user_history.html', user=user,
                                  transactions=transactions)
+
+
+@mod.route('/profile/<int:user_id>/nicknames')
+def user_nicknames(user_id):
+    user = models.User.query.get_or_404(user_id)
+
+    pending_changes = (user.nickname_changes
+                       .filter(models.NicknameChange.status.is_(models.NicknameChangeStatus.PENDING))
+                       .order_by(models.NicknameChange.created_timestamp.desc())
+                       .all())
+
+    changes = (user.nickname_changes
+               .filter(models.NicknameChange.status.is_(models.NicknameChangeStatus.APPROVED))
+               .order_by(models.NicknameChange.reviewed_timestamp.desc())
+               .all())
+
+    if not current_user.is_admin:
+        pending_changes = list(filter(
+            # For non-admins, only show suggestions that the user made themselves.
+            lambda change: change.suggester == current_user,
+            pending_changes
+        ))
+
+    return flask.render_template('user_nicknames.html', user=user,
+                                 pending_changes=pending_changes, changes=changes)
 
 
 @mod.route('/profile/<int:user_id>/vcard')

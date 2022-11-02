@@ -4,7 +4,7 @@ import flask
 import flask_babel
 import flask_login
 import sqlalchemy as sqla
-from flask import current_app
+from flask import abort, current_app
 from flask_babel import gettext as _
 from flask_babel import lazy_gettext as _l
 from flask_login import current_user
@@ -360,7 +360,6 @@ def add_user(request_id=None):
         user = models.User(
             first_name=form.first_name.data,
             last_name=form.last_name.data,
-            nickname=form.nickname.data,
             email=form.email.data,
             phone=form.phone.data,
             active=form.active.data,
@@ -473,6 +472,55 @@ def remove_group(group_id):
 def show_quotes():
     quotes = models.Quote.query.order_by(models.Quote.timestamp.desc()).all()
     return flask.render_template('strequeadmin/quotes.html', quotes=quotes)
+
+
+@mod.route('/admin/nicknames/')
+def show_nicknames():
+    pending_changes = (models.NicknameChange.query
+                       .filter(models.NicknameChange.status.is_(models.NicknameChangeStatus.PENDING))
+                       .order_by(models.NicknameChange.created_timestamp.desc())
+                       .all())
+    approved_changes = (models.NicknameChange.query
+                        .filter(models.NicknameChange.status.is_(models.NicknameChangeStatus.APPROVED))
+                        .order_by(models.NicknameChange.reviewed_timestamp.desc())
+                        .all())
+    return flask.render_template(
+        'strequeadmin/nicknames.html',
+        pending_changes=pending_changes,
+        approved_changes=approved_changes)
+
+
+@mod.route('/admin/nicknames/<int:change_id>/approve', methods=['POST'])
+def approve_pending_nickname(change_id):
+    change = models.NicknameChange.query.get_or_404(change_id)
+
+    if change.status != models.NicknameChangeStatus.PENDING:
+        abort(404)
+    
+    change.user.nickname = change.nickname
+    change.status = models.NicknameChangeStatus.APPROVED
+    change.reviewer = current_user
+    change.reviewed_timestamp = datetime.datetime.now()
+    models.db.session.commit()
+
+    flask.flash(_l("Smeknamnsbytet har godkänts."), 'success')
+    return flask.redirect(flask.url_for('strequeadmin.show_nicknames'))
+
+
+@mod.route('/admin/nicknames/<int:change_id>/reject', methods=['POST'])
+def reject_pending_nickname(change_id):
+    change = models.NicknameChange.query.get_or_404(change_id)
+
+    if change.status != models.NicknameChangeStatus.PENDING:
+        abort(404)
+    
+    change.status = models.NicknameChangeStatus.REJECTED
+    change.reviewer = current_user
+    change.reviewed_timestamp = datetime.datetime.now()
+    models.db.session.commit()
+
+    flask.flash(_l("Smeknamnsbytet har nekats."), 'success')
+    return flask.redirect(flask.url_for('strequeadmin.show_nicknames'))
 
 
 @mod.route('/admin/quotes/edit/<int:quote_id>', methods=['GET', 'POST'])

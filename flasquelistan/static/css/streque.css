@@ -334,12 +334,14 @@ ol.notification-history {
   max-width: 40rem;
 }
 
-ol.transaction-history {
+ol.transaction-history,
+ol.nickname-history {
   padding: 0;
   max-width: 30rem;
 }
 
 ol.transaction-history li,
+ol.nickname-history li,
 ol.notification-history li {
   display: block;
   border: 1px solid #ddd;
@@ -348,16 +350,22 @@ ol.notification-history li {
   padding: .5rem;
 }
 
+ol.nickname-history li.emphasized-dashed-border {
+  border: 2px dashed #aaa;
+}
+
 ol.notification-history li .notification-text {
   white-space: pre-line;
 }
 
-ol.transaction-history li .upper {
+ol.transaction-history li .upper,
+ol.nickname-history li .upper {
   display: flex;
   justify-content: space-between;
 }
 
-ol.transaction-history li .lower {
+ol.transaction-history li .lower,
+ol.nickname-history li .lower {
   display: flex;
 }
 

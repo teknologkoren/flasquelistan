@@ -1,0 +1,103 @@
+{% extends "layout.html" %}
+
+{% set active_page = "streque" %}
+
+{% block scripts %}
+<script defer src="{{ url_for('static', filename='js/toggleVisibility.js') }}"></script>
+{% endblock %}
+
+{% block body %}
+<div class="profile">
+  <div>
+    <h2>
+      {{ user.first_name }} {{ user.last_name }}
+    </h2>
+    {% if current_user.is_admin %}
+    <a href="{{ url_for('strequeadmin.show_nicknames') }}">{{ _("Adminsida för smeknamn") }}</a><br />
+    {% endif %}
+    <a href="{{ url_for('strequelistan.show_profile', user_id=user.id) }}">{{ _("Tillbaka till profil") }}</a>
+
+    <h3>
+      {{ _("Smeknamnshistorik") }}
+    </h3>
+    <dl>
+      {% if not changes %}
+      <p>{{ _("Den här koristen har ännu inte fått något smeknamn. Lägg gärna till ett på profilsidan.") }}</p>
+      {% else %}
+        <dd>
+        <ol class="nickname-history">
+
+        {% for change in pending_changes %}
+          <li class="emphasized-dashed-border">
+            <div class="upper">
+              <span class="text">
+                {{ change.nickname }}
+              </span>
+            </div>
+            <div class="lower">
+              <span class="timestamp">
+                {{ format_datetime(change.created_timestamp, "yyyy-MM-dd, HH:mm")}}
+              </span>
+              <span class="separator">|</span>
+              {% if change.suggester == current_user %}
+              <span class="timestamp">{{ _("Din ändring väntar på godkännande") }}</span>
+              {% else %}
+              <span class="timestamp">{{ _("Väntar på godkännande") }}</span>
+              {% endif %}
+            </div>
+          </li>
+        {% endfor %}
+
+        {% for change in changes %}
+          <li>
+            <div class="upper">
+              <span class="text">
+                {{ change.nickname }}
+              </span>
+            </div>
+            <div class="lower">
+              <span class="timestamp">
+                {% if change.lower_bound_timestamp %}
+                  {% if (change.created_timestamp - change.lower_bound_timestamp).days <= 1 %}
+                    {{ format_date(change.created_timestamp, "yyyy-MM-dd") }}
+                  {% elif (change.created_timestamp - change.lower_bound_timestamp).days <= 7 %}
+                    ~{{ format_date(change.created_timestamp, "yyyy-MM-dd") }}
+                  {% else %}
+                  {{ _("Tillagt mellan") }} 
+                  {{ format_date(change.lower_bound_timestamp, "yyyy-MM-dd") }}
+                  {{ _("och") }}
+                  {{ format_date(change.created_timestamp, "yyyy-MM-dd") }}
+                  {% endif %}
+                {% else %}
+                  {{ format_datetime(change.created_timestamp, "yyyy-MM-dd, HH:mm")}}
+                {% endif %}
+              </span>
+            </div>
+          </li>
+        {% endfor %}
+
+        <p>
+          <a href="#interesting-info" onclick="toggleVisibility('interesting-info');">
+            {{ _("Info för den intresserade") }}
+          </a>
+        </p>
+        <div id="interesting-info" style="display: none">
+          <p>
+          {{ _('Smeknamnsändringar började sparas den 2 november 2022. Äldre smeknamn kommer från
+          databasbackups, som inte alltid har gjorts regelbundet (längsta mellanrummet är
+          drygt 2 år). Därför är datumen för tidigare ändringar osäkra, och vissa smeknamn
+          har helt gått förlorade.') }}
+          </p>
+          <p>
+          {{ _('Datum med tid är den exakta tidpunkten ett nytt smeknamn föreslogs. Datum utan tid
+          betyder att ändringen skedde inom en dag innan datumet. "~" före ett datum
+          betyder att ändringen skedde inom en vecka innan datumet.') }}
+          </p>
+        </div>
+        </ol>
+        </dd>
+      {% endif %}
+    </dl>
+  </div>
+</div>
+{% endblock %}
