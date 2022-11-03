@@ -16,9 +16,6 @@ def run(path):
     strequelistan = list(p.glob('*.sqlite3'))
     flasquelistan = list(p.glob('*.sqlite'))
 
-    print(strequelistan)
-    print(flasquelistan)
-
     db_queries = []
     for db in sorted(strequelistan):
         db_queries.append((db, "SELECT id, first_name, last_name, nickname FROM EmailUser_myuser WHERE nickname != '';"))
