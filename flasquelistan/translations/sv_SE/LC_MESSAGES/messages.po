@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2022-11-03 00:15+0100\n"
+"POT-Creation-Date: 2022-11-03 01:56+0100\n"
 "PO-Revision-Date: 2019-06-24 08:18+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: sv\n"
@@ -674,7 +674,7 @@ msgstr ""
 msgid "Info för den intresserade"
 msgstr ""
 
-#: templates/user_nicknames.html:95
+#: templates/user_nicknames.html:86
 msgid ""
 "Smeknamnsändringar började sparas den 2 november 2022. Äldre smeknamn "
 "kommer från\n"
@@ -685,7 +685,7 @@ msgid ""
 "          har helt gått förlorade."
 msgstr ""
 
-#: templates/user_nicknames.html:101
+#: templates/user_nicknames.html:92
 msgid ""
 "Datum med tid är den exakta tidpunkten ett nytt smeknamn föreslogs. Datum"
 " utan tid\n"
@@ -1218,67 +1218,67 @@ msgstr ""
 msgid "Transaktion utförd!"
 msgstr ""
 
-#: views/strequelistan.py:589
+#: views/strequelistan.py:590
 msgid "Din smeknamnsändring är sparad och väntar på att bli godkänd."
 msgstr ""
 
-#: views/strequelistan.py:591
+#: views/strequelistan.py:592
 msgid "Din smeknamnsändring är sparad."
 msgstr ""
 
-#: views/strequelistan.py:616
+#: views/strequelistan.py:617
 msgid "Kunde inte ladda upp bilden, försök med ett annat filnamn eller filformat."
 msgstr ""
 
-#: views/strequelistan.py:637
+#: views/strequelistan.py:638
 msgid "Profilbilden har ändrats!"
 msgstr ""
 
-#: views/strequelistan.py:652 views/strequelistan.py:677
-#: views/strequelistan.py:769 views/strequelistan.py:923
+#: views/strequelistan.py:653 views/strequelistan.py:678
+#: views/strequelistan.py:770 views/strequelistan.py:924
 msgid "Du får bara redigera din egen profil! ಠ_ಠ"
 msgstr ""
 
-#: views/strequelistan.py:662
+#: views/strequelistan.py:663
 msgid "Din profilbild har ändrats!"
 msgstr ""
 
-#: views/strequelistan.py:684
+#: views/strequelistan.py:685
 msgid ""
 "Du kan inte ta bort <a href=\"https://phys.org/news/2014-08-what-is-"
 "nothing.html\">ingenting</a>!"
 msgstr ""
 
-#: views/strequelistan.py:701
+#: views/strequelistan.py:702
 msgid "Profilbilden har tagits bort!"
 msgstr ""
 
-#: views/strequelistan.py:805
+#: views/strequelistan.py:806
 msgid "Ändringarna har sparats!"
 msgstr ""
 
-#: views/strequelistan.py:826 views/strequelistan.py:839
+#: views/strequelistan.py:827 views/strequelistan.py:840
 msgid "Du får bara hantera din egna API-nycklar! ಠ_ಠ"
 msgstr ""
 
-#: views/strequelistan.py:880
+#: views/strequelistan.py:881
 #, python-format
 msgid ""
 "Din API-nyckel med namnet \"%(name)s\" är: \"%(secret)s\". Du kommer inte"
 " kunna se den igen, så se till att spara den nu."
 msgstr ""
 
-#: views/strequelistan.py:909
+#: views/strequelistan.py:910
 #, python-format
 msgid "Api-nyckeln \"%(name)s\" är borttagen."
 msgstr ""
 
-#: views/strequelistan.py:934
+#: views/strequelistan.py:935
 #, python-format
 msgid "En länk för att verifiera e-postadressen har skickats till %(email)s."
 msgstr ""
 
-#: views/strequelistan.py:941
+#: views/strequelistan.py:942
 msgid "Lösenordet har ändrats!"
 msgstr ""
 
