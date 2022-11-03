@@ -296,6 +296,10 @@ input[type=number] {
   width: 100%;
 }
 
+.hidden {
+  display: none;
+}
+
 @media print {
   .bottom-nav {
     display: none;

@@ -3,7 +3,7 @@
 {% set active_page = "streque" %}
 
 {% block scripts %}
-<script defer src="{{ url_for('static', filename='js/toggleVisibility.js') }}"></script>
+<script defer src="{{ url_for('static', filename='js/visibilityToggle.js') }}"></script>
 {% endblock %}
 
 {% block body %}
@@ -77,11 +77,11 @@
         {% endfor %}
 
         <p>
-          <a href="#interesting-info" onclick="toggleVisibility('interesting-info');">
+          <a href="#" id="visibility-toggle">
             {{ _("Info för den intresserade") }}
           </a>
         </p>
-        <div id="interesting-info" style="display: none">
+        <div id="toggleable-element" class="hidden">
           <p>
           {{ _('Smeknamnsändringar började sparas den 2 november 2022. Äldre smeknamn kommer från
           databasbackups, som inte alltid har gjorts regelbundet (längsta mellanrummet är
