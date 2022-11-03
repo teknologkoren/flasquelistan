@@ -570,7 +570,7 @@ def change_nickname(user_id):
             user_id=user.id,
             nickname=form.nickname.data,
             status=models.NicknameChangeStatus.PENDING,
-            created_timestamp=datetime.datetime.now(),
+            created_timestamp=datetime.datetime.utcnow(),
             suggester=current_user
         )
 
@@ -580,7 +580,7 @@ def change_nickname(user_id):
         if not needs_approval:
             user.nickname = nickname_change.nickname
             nickname_change.status = models.NicknameChangeStatus.APPROVED
-            nickname_change.reviewed_timestamp = datetime.datetime.now()
+            nickname_change.reviewed_timestamp = datetime.datetime.utcnow()
 
         user.nickname_changes.append(nickname_change)
         models.db.session.commit()

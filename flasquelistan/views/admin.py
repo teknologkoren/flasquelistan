@@ -500,7 +500,7 @@ def approve_pending_nickname(change_id):
     change.user.nickname = change.nickname
     change.status = models.NicknameChangeStatus.APPROVED
     change.reviewer = current_user
-    change.reviewed_timestamp = datetime.datetime.now()
+    change.reviewed_timestamp = datetime.datetime.utcnow()
     models.db.session.commit()
 
     flask.flash(_l("Smeknamnsbytet har godkänts."), 'success')
@@ -516,7 +516,7 @@ def reject_pending_nickname(change_id):
     
     change.status = models.NicknameChangeStatus.REJECTED
     change.reviewer = current_user
-    change.reviewed_timestamp = datetime.datetime.now()
+    change.reviewed_timestamp = datetime.datetime.utcnow()
     models.db.session.commit()
 
     flask.flash(_l("Smeknamnsbytet har nekats."), 'success')
