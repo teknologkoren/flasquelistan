@@ -578,6 +578,7 @@ def change_nickname(user_id):
         needs_approval = (current_user != user)
 
         if not needs_approval:
+            user.nickname = nickname_change.nickname
             nickname_change.status = models.NicknameChangeStatus.APPROVED
             nickname_change.reviewed_timestamp = datetime.datetime.now()
 
