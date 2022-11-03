@@ -10,7 +10,7 @@
 <div>
   <h2>{{ _("Ej granskade smeknamn") }}</h2>
   {% if pending_changes %}
-  <p style="max-width: 50em;">
+  <p class="nickname-info">
     {{ _("Om det finns flera smeknamnsförslag för samma person så är det smeknamnet du
     godkänner sist som blir det aktiva smeknamnet (övriga kommer finnas kvar i
     historiken).") }}
@@ -70,7 +70,7 @@
   {% endif %}
 
   <h2>{{ _("Godkända smeknamn") }}</h2>
-  <p style="max-width: 50em">
+  <p class="nickname-info">
     {{ _('Om "Godkänt av" saknas innebär det att ändringen ej krävde godkännande. Detta är
     fallet t.ex. när någon ändrat sitt eget smeknamn, och för gamla smeknamnsändringar.
     Där det finns två tider för "Skapat" betyder det att vi ej vet exakt när smeknamnet

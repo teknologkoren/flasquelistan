@@ -87,3 +87,7 @@
   max-width: 15rem;
   min-width: 10rem;
 }
+
+.nickname-info {
+  max-width: 50rem;
+}
