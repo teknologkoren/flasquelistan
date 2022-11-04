@@ -574,8 +574,9 @@ def change_nickname(user_id):
             suggester=current_user
         )
 
-        # A user should be able to change their own nickname without approval.
-        needs_approval = (current_user != user)
+        # A user should be able to change their own nickname without approval,
+        # and admins should also not need approval to change nicknames.
+        needs_approval = (current_user != user) and (not current_user.is_admin)
 
         if not needs_approval:
             user.nickname = nickname_change.nickname
@@ -787,6 +788,17 @@ def edit_profile(user_id):
                 user.group_id = form.group_id.data
             else:
                 user.group_id = None
+
+        if user.nickname != form.nickname.data:
+            nickname_change = models.NicknameChange(
+                user_id=user.id,
+                nickname=form.nickname.data,
+                status=models.NicknameChangeStatus.APPROVED,
+                created_timestamp=datetime.datetime.utcnow(),
+                reviewed_timestamp=datetime.datetime.utcnow(),
+                suggester=current_user
+            )
+            user.nickname_changes.append(nickname_change)
 
         user.nickname = form.nickname.data
         user.birthday = form.birthday.data
