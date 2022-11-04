@@ -7,16 +7,17 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2022-11-03 01:56+0100\n"
-"PO-Revision-Date: 2022-11-03 01:56+0100\n"
+"POT-Creation-Date: 2022-11-04 17:34+0100\n"
+"PO-Revision-Date: 2022-11-04 17:35+0100\n"
 "Last-Translator: \n"
-"Language: en\n"
 "Language-Team: en <LL@li.org>\n"
-"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"Language: en\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "Generated-By: Babel 2.9.1\n"
+"X-Generator: Poedit 3.1.1\n"
 
 #: forms.py:24
 #, python-format
@@ -76,148 +77,152 @@ msgstr "Keep me logged in"
 msgid "Fel lösenord."
 msgstr "Wrong password."
 
-#: forms.py:242 templates/strequeadmin/transactions.html:29
+#: forms.py:242 templates/strequeadmin/index.html:35
+#: templates/strequeadmin/nicknames.html:22
+#: templates/strequeadmin/nicknames.html:83
+msgid "Smeknamn"
+msgstr "Nicknames"
+
+#: forms.py:243 forms.py:319
+msgid "Något roligt."
+msgstr "Something funny."
+
+#: forms.py:250 templates/strequeadmin/transactions.html:29
 msgid "Datum"
 msgstr "Date"
 
-#: forms.py:243
+#: forms.py:251
 msgid "Din födelsedags datum."
 msgstr "Date of your birthday."
 
-#: forms.py:250 forms.py:338
+#: forms.py:258 forms.py:346
 msgid "Telefon"
 msgstr "Telephone"
 
-#: forms.py:251 forms.py:339
+#: forms.py:259 forms.py:347
 msgid ""
-"Ett telefonnummer. Landskod kan utelämnas för svenska nummer, men behövs "
-"för utländska nummer."
+"Ett telefonnummer. Landskod kan utelämnas för svenska nummer, men behövs för "
+"utländska nummer."
 msgstr ""
 "A phone number. Country code can be left out for Swedish numbers, but is "
 "necessary for foreign numbers."
 
-#: forms.py:256
+#: forms.py:264
 msgid "Kroppsvikt"
 msgstr "Body weight"
 
-#: forms.py:257
+#: forms.py:265
 msgid ""
-"Din vikt i kg. Används för att mer precist räkna ut "
-"alkoholkoncentrationen i blodet. Fältet kan lämnas tomt"
+"Din vikt i kg. Används för att mer precist räkna ut alkoholkoncentrationen i "
+"blodet. Fältet kan lämnas tomt"
 msgstr ""
-"Your weight in kg. Used to more precisely calculatethe alcohol "
-"concentration in your blood. The field can be left empty"
+"Your weight in kg. Used to more precisely calculatethe alcohol concentration in "
+"your blood. The field can be left empty"
 
-#: forms.py:268
+#: forms.py:276
 msgid "Har du en Y-kromosom?"
 msgstr "Do you have an Y-chromosome?"
 
-#: forms.py:269
+#: forms.py:277
 msgid "Används för att mer precist räkna ut alkoholkoncentrationen i blodet."
 msgstr "Used to more precesely calculate your blood alcohol concentration."
 
-#: forms.py:272
+#: forms.py:280
 msgid "Vill ej uppge"
 msgstr "Would not disclose"
 
-#: forms.py:273
+#: forms.py:281
 msgid "Ja"
 msgstr "Yes"
 
-#: forms.py:274
+#: forms.py:282
 msgid "Nej"
 msgstr "No"
 
-#: forms.py:284 forms.py:324
+#: forms.py:292 forms.py:332
 msgid "Förnamn"
 msgstr "First name"
 
-#: forms.py:291 forms.py:331
+#: forms.py:299 forms.py:339
 msgid "Efternamn"
 msgstr "Last name"
 
-#: forms.py:298 forms.py:490 templates/api_keys.html:34
-#: templates/api_keys.html:59 templates/strequeadmin/articles.html:15
-#: templates/strequeadmin/articles.html:38 templates/strequeadmin/users.html:20
-#: templates/strequeadmin/users.html:50
+#: forms.py:306 forms.py:498 templates/api_keys.html:34 templates/api_keys.html:59
+#: templates/strequeadmin/articles.html:15 templates/strequeadmin/articles.html:38
+#: templates/strequeadmin/users.html:20 templates/strequeadmin/users.html:50
 msgid "Aktiv"
 msgstr "Active"
 
-#: forms.py:299
+#: forms.py:307
 msgid "Om medlemmen är aktiv i föreningen."
 msgstr "If the member is active in the organisation."
 
-#: forms.py:301
+#: forms.py:309
 msgid "Grupp"
 msgstr "Group"
 
-#: forms.py:303 templates/api_keys.html:32 templates/api_keys.html:51
-#: templates/strequeadmin/index.html:5
-#: templates/strequeadmin/transactions.html:69
+#: forms.py:311 templates/api_keys.html:32 templates/api_keys.html:51
+#: templates/strequeadmin/index.html:5 templates/strequeadmin/transactions.html:69
 #: templates/strequeadmin/users.html:21 templates/strequeadmin/users.html:59
 msgid "Admin"
 msgstr "Admin"
 
-#: forms.py:304
+#: forms.py:312
 msgid "Medlemmen är administratör för Strequelistan."
 msgstr "The member is an administrator of Strequelistan."
 
-#: forms.py:310
+#: forms.py:318
 msgid "Nytt smeknamn"
 msgstr "New nickname"
 
-#: forms.py:311
-msgid "Något roligt."
-msgstr "Something funny."
-
-#: forms.py:342
+#: forms.py:350
 msgid "Meddelande till QM"
 msgstr "Message to QM"
 
-#: forms.py:349 forms.py:529 templates/layout.html:33 templates/quote.html:9
+#: forms.py:357 forms.py:537 templates/layout.html:33 templates/quote.html:9
 #: templates/quotes.html:44 templates/strequeadmin/index.html:34
 #: templates/strequeadmin/quotes.html:10 templates/strequeadmin/quotes.html:14
 msgid "Citat"
 msgstr "Quotes"
 
-#: forms.py:350 forms.py:530
+#: forms.py:358 forms.py:538
 msgid "Max 150 tecken."
 msgstr "Max 150 characters."
 
-#: forms.py:356 forms.py:537 templates/strequeadmin/quotes.html:15
+#: forms.py:364 forms.py:545 templates/strequeadmin/quotes.html:15
 msgid "Upphovsman"
 msgstr "Originator"
 
-#: forms.py:357
+#: forms.py:365
 msgid "'–' läggs till automatiskt"
 msgstr "'-' is added automatically"
 
-#: forms.py:366 views/admin.py:357
+#: forms.py:374 views/admin.py:357
 msgid "Ingen"
 msgstr "None"
 
-#: forms.py:390
+#: forms.py:398
 msgid "Ladda upp ny profilbild"
 msgstr "Upload a new profile picture"
 
-#: forms.py:391
+#: forms.py:399
 msgid "Endast bilder!"
 msgstr "Only images!"
 
-#: forms.py:396
+#: forms.py:404
 msgid "Från"
 msgstr "From"
 
-#: forms.py:399
+#: forms.py:407
 msgid "Till"
 msgstr "To"
 
-#: forms.py:406 forms.py:435 templates/strequeadmin/bulk_transactions.html:28
+#: forms.py:414 forms.py:443 templates/strequeadmin/bulk_transactions.html:28
 #: templates/strequeadmin/confirm_bulk_transactions.html:21
 msgid "Transaktionsvärde"
 msgstr "Transaction amount"
 
-#: forms.py:412 forms.py:442 forms.py:514
+#: forms.py:420 forms.py:450 forms.py:522
 #: templates/strequeadmin/bulk_transactions.html:29
 #: templates/strequeadmin/confirm_bulk_transactions.html:22
 #: templates/strequeadmin/requests.html:19
@@ -225,105 +230,104 @@ msgstr "Transaction amount"
 msgid "Meddelande"
 msgstr "Message"
 
-#: forms.py:430 forms.py:456 forms.py:497 forms.py:554
-#: templates/api_keys.html:29 templates/paperlist.html:31
-#: templates/strequeadmin/articles.html:10
-#: templates/strequeadmin/groups.html:10
-#: templates/strequeadmin/requests.html:13 templates/strequeadmin/stats.html:34
-#: templates/strequeadmin/stats.html:46 templates/strequeadmin/users.html:16
+#: forms.py:438 forms.py:464 forms.py:505 forms.py:562 templates/api_keys.html:29
+#: templates/paperlist.html:31 templates/strequeadmin/articles.html:10
+#: templates/strequeadmin/groups.html:10 templates/strequeadmin/requests.html:13
+#: templates/strequeadmin/stats.html:34 templates/strequeadmin/stats.html:46
+#: templates/strequeadmin/users.html:16
 msgid "Namn"
 msgstr "Name"
 
-#: forms.py:461 templates/strequeadmin/articles.html:11
+#: forms.py:469 templates/strequeadmin/articles.html:11
 msgid "Pris"
 msgstr "Price"
 
-#: forms.py:470
+#: forms.py:478
 msgid "Standardglas"
 msgstr "Standard units"
 
-#: forms.py:478 templates/strequeadmin/articles.html:13
+#: forms.py:486 templates/strequeadmin/articles.html:13
 msgid "Beskrivning"
 msgstr "Description"
 
-#: forms.py:479
+#: forms.py:487
 msgid "Vilka produkter som ingår och/eller beskrivning. Markdown."
 msgstr "Which products that's included and/or a description. Markdown."
 
-#: forms.py:483 forms.py:502 templates/strequeadmin/articles.html:14
+#: forms.py:491 forms.py:510 templates/strequeadmin/articles.html:14
 #: templates/strequeadmin/groups.html:11
 msgid "Sorteringsvikt"
 msgstr "Sorting weight"
 
-#: forms.py:484 forms.py:503
+#: forms.py:492 forms.py:511
 msgid "Heltal. En högre vikt stiger."
 msgstr "Integer. Higher values floats."
 
-#: forms.py:491
+#: forms.py:499
 msgid "Produkten är synlig och går att strequa på."
 msgstr "The product is visible and it is possible to buy it."
 
-#: forms.py:519 templates/strequeadmin/stats.html:58
+#: forms.py:527 templates/strequeadmin/stats.html:58
 msgid "Summa"
 msgstr "Amount"
 
-#: forms.py:543 templates/strequeadmin/quotes.html:16
+#: forms.py:551 templates/strequeadmin/quotes.html:16
 msgid "Tid"
 msgstr "Time"
 
-#: forms.py:544
+#: forms.py:552
 msgid "Tidszon UTC."
 msgstr "Time zone UTC."
 
-#: forms.py:555
+#: forms.py:563
 msgid "Max 50 tecken"
 msgstr "Max 50 characters"
 
-#: forms.py:561
+#: forms.py:569
 msgid "Detta namn används redan."
 msgstr "This name is already used."
 
-#: forms.py:564 templates/api_keys.html:30
+#: forms.py:572 templates/api_keys.html:30
 msgid "Kort namn"
 msgstr "Short name"
 
-#: forms.py:565
+#: forms.py:573
 msgid ""
-"Max 10 tecken. Kommer att visas intill transaktioner gjorda med nyckeln. "
-"Om fältet lämnas tomt ser transaktionerna ut som vanligt. Ska helst vara "
-"en emoji. 🤩"
+"Max 10 tecken. Kommer att visas intill transaktioner gjorda med nyckeln. Om "
+"fältet lämnas tomt ser transaktionerna ut som vanligt. Ska helst vara en emoji. "
+"🤩"
 msgstr ""
-"Max 10 characters. Will be shown next to transactions made with this key."
-" If the field is left empty, the transactions will look as usual. Should "
-"preferably be an emoji. 🤩"
+"Max 10 characters. Will be shown next to transactions made with this key. If "
+"the field is left empty, the transactions will look as usual. Should preferably "
+"be an emoji. 🤩"
 
-#: forms.py:571
+#: forms.py:579
 msgid "Aktiverad?"
 msgstr "Enabled?"
 
-#: forms.py:573
+#: forms.py:581
 msgid "Om du inaktiverar nyckeln så går den inte att använda."
 msgstr "If you disable the key, it will not be possible to use it."
 
-#: forms.py:574
+#: forms.py:582
 msgid "Adminprivilegier?"
 msgstr "Admin privileges?"
 
-#: forms.py:575
+#: forms.py:583
 msgid "OBS: gäller endast så länge du själv är admin."
 msgstr "NOTE: only applies as long as you're still an admin."
 
-#: forms.py:576
+#: forms.py:584
 msgid "Återställ nyckel"
 msgstr "Reset key"
 
-#: forms.py:577
+#: forms.py:585
 msgid ""
-"Kryssa i om du vill generera en ny nyckel. VARNING: din gamla nyckel "
-"kommer att sluta fungera."
+"Kryssa i om du vill generera en ny nyckel. VARNING: din gamla nyckel kommer att "
+"sluta fungera."
 msgstr ""
-"Check this if you want to generate a new key. WARNING: your old key will "
-"stop working."
+"Check this if you want to generate a new key. WARNING: your old key will stop "
+"working."
 
 #: templates/add_quote.html:9 templates/quotes.html:45
 msgid "Lägg till citat"
@@ -334,7 +338,7 @@ msgid "Lägg till"
 msgstr "Add"
 
 #: templates/add_quote.html:15 templates/edit_api_key.html:44
-#: templates/edit_profile.html:50 templates/strequeadmin/add_user.html:19
+#: templates/edit_profile.html:43 templates/strequeadmin/add_user.html:20
 #: templates/strequeadmin/confirm_bulk_transactions.html:59
 #: templates/strequeadmin/edit_article.html:30
 #: templates/strequeadmin/edit_group.html:25
@@ -349,16 +353,14 @@ msgstr "API keys for"
 #: templates/api_keys.html:8
 msgid ""
 "Streque API kan användas för att skriva egna program som kan\n"
-"    interagera med Strequelistan å dina vägnar. Försiktighet "
-"ombedes&mdash;ett\n"
-"    program eller en person som har din API-nyckel kan ställa till med en"
-"\n"
+"    interagera med Strequelistan å dina vägnar. Försiktighet ombedes&mdash;ett\n"
+"    program eller en person som har din API-nyckel kan ställa till med en\n"
 "    hel del besvär för QM. För mer info om hur man använder API:et, se"
 msgstr ""
 "Streque API can be used to write your own programs to interact with "
-"Strequelistan on your behalf. Please be careful&mdash;a program or person"
-" in possession of your API key can cause quite a bit of trouble for QM. "
-"For more information on how to use the API, see"
+"Strequelistan on your behalf. Please be careful&mdash;a program or person in "
+"possession of your API key can cause quite a bit of trouble for QM. For more "
+"information on how to use the API, see"
 
 #: templates/api_keys.html:13
 msgid "koden i vårt GitHub-repo"
@@ -407,8 +409,7 @@ msgid "Produkter"
 msgstr "Products"
 
 #: templates/edit_api_key.html:12 templates/strequeadmin/edit_article.html:12
-#: templates/strequeadmin/edit_group.html:11
-#: templates/strequeadmin/quotes.html:37
+#: templates/strequeadmin/edit_group.html:11 templates/strequeadmin/quotes.html:37
 msgid "Redigera"
 msgstr "Edit"
 
@@ -427,26 +428,24 @@ msgstr "Delete API key"
 
 #: templates/edit_api_key.html:37
 msgid ""
-"Denna nyckel är redan kopplad till transaktioner och kan därför ej "
-"raderas."
+"Denna nyckel är redan kopplad till transaktioner och kan därför ej raderas."
 msgstr ""
-"This key cannot be deleted, as it has already been used to make "
-"transactions."
+"This key cannot be deleted, as it has already been used to make transactions."
 
-#: templates/edit_api_key.html:44 templates/edit_profile.html:50
+#: templates/edit_api_key.html:44 templates/edit_profile.html:43
 #: templates/show_profile.html:89 templates/show_profile.html:107
-#: templates/show_profile.html:164 templates/strequeadmin/add_user.html:18
+#: templates/show_profile.html:164 templates/strequeadmin/add_user.html:19
 #: templates/strequeadmin/edit_article.html:30
 #: templates/strequeadmin/edit_group.html:25
 #: templates/strequeadmin/edit_quote.html:24
 msgid "Spara"
 msgstr "Save"
 
-#: templates/edit_profile.html:46
+#: templates/edit_profile.html:39
 msgid "Byt e-postadress eller lösenord"
 msgstr "Change email address or password"
 
-#: templates/edit_profile.html:47
+#: templates/edit_profile.html:40
 msgid "Hantera API-nycklar"
 msgstr "Manage API keys"
 
@@ -551,11 +550,11 @@ msgstr "Balance"
 #, python-format
 msgid ""
 "Fyll på ditt saldo genom att göra en betalning till PG 20 74-3, märk "
-"betalningen med \"Streque %(namn)s\". Prata med QM om du inte har "
-"möjlighet att göra detta."
+"betalningen med \"Streque %(namn)s\". Prata med QM om du inte har möjlighet att "
+"göra detta."
 msgstr ""
-"Top up your balance by making a payment to PG 20 74-3 with message "
-"\"Streque %(namn)s\". Talk to QM if you are unable to do this."
+"Top up your balance by making a payment to PG 20 74-3 with message \"Streque "
+"%(namn)s\". Talk to QM if you are unable to do this."
 
 #: templates/show_profile.html:83
 msgid "Byt smeknamn"
@@ -670,11 +669,11 @@ msgstr "Nickname history"
 
 #: templates/user_nicknames.html:25
 msgid ""
-"Den här koristen har ännu inte fått något smeknamn. Lägg gärna till ett "
-"på profilsidan."
+"Den här koristen har ännu inte fått något smeknamn. Lägg gärna till ett på "
+"profilsidan."
 msgstr ""
-"This choir member doesn't have a nickname yet. Feel free to add one on "
-"the profile page."
+"This choir member doesn't have a nickname yet. Feel free to add one on the "
+"profile page."
 
 #: templates/user_nicknames.html:43
 msgid "Din ändring väntar på godkännande"
@@ -694,36 +693,35 @@ msgstr "Information for the interested ones"
 
 #: templates/user_nicknames.html:86
 msgid ""
-"Smeknamnsändringar började sparas den 2 november 2022. Äldre smeknamn "
-"kommer från\n"
-"          databasbackups, som inte alltid har gjorts regelbundet (längsta"
-" mellanrummet är\n"
-"          drygt 2 år). Därför är datumen för tidigare ändringar osäkra, "
-"och vissa smeknamn\n"
+"Smeknamnsändringar började sparas den 2 november 2022. Äldre smeknamn kommer "
+"från\n"
+"          databasbackups, som inte alltid har gjorts regelbundet (längsta "
+"mellanrummet är\n"
+"          drygt 2 år). Därför är datumen för tidigare ändringar osäkra, och "
+"vissa smeknamn\n"
 "          har helt gått förlorade."
 msgstr ""
 "Nickname changes have been kept since the 3rd of November 2022. Older "
 "nicknames\n"
-"          come from database backups, which have not always been made "
-"regularly (the\n"
-"          longest gap is over 2 years). Therefore, the dates of older "
-"changes are\n"
+"          come from database backups, which have not always been made regularly "
+"(the\n"
+"          longest gap is over 2 years). Therefore, the dates of older changes "
+"are\n"
 "          uncertain, and some nicknames have been lost completely."
 
 #: templates/user_nicknames.html:92
 msgid ""
-"Datum med tid är den exakta tidpunkten ett nytt smeknamn föreslogs. Datum"
-" utan tid\n"
-"          betyder att ändringen skedde inom en dag innan datumet. \"~\" "
-"före ett datum\n"
+"Datum med tid är den exakta tidpunkten ett nytt smeknamn föreslogs. Datum utan "
+"tid\n"
+"          betyder att ändringen skedde inom en dag innan datumet. \"~\" före "
+"ett datum\n"
 "          betyder att ändringen skedde inom en vecka innan datumet."
 msgstr ""
-"If a nickname change has both date and time, they are precise. If the "
-"time is\n"
-"          missing, the change was made within a day before the written "
-"date. If there is\n"
-"          a \"~\" before the date, the change was made within a week "
-"before the date."
+"If a nickname change has both date and time, they are precise. If the time is\n"
+"          missing, the change was made within a day before the written date. If "
+"there is\n"
+"          a \"~\" before the date, the change was made within a week before the "
+"date."
 
 #: templates/auth/login.html:5
 msgid "Logga in title"
@@ -816,11 +814,11 @@ msgstr "These transactions will be executed, do you want to continue?"
 
 #: templates/strequeadmin/confirm_bulk_transactions.html:13
 msgid ""
-"Använd bakåt-knappen i webbläsaren istället för \"Avbryt\" ifall du vill "
-"ha kvar värdena!"
+"Använd bakåt-knappen i webbläsaren istället för \"Avbryt\" ifall du vill ha "
+"kvar värdena!"
 msgstr ""
-"Use the \"back\" button in your browser instead of \"Abort\" if you want "
-"to keep the values!"
+"Use the \"back\" button in your browser instead of \"Abort\" if you want to "
+"keep the values!"
 
 #: templates/strequeadmin/confirm_bulk_transactions.html:20
 msgid "Typ"
@@ -911,12 +909,6 @@ msgstr "Generate"
 msgid "Annat"
 msgstr "Other"
 
-#: templates/strequeadmin/index.html:35
-#: templates/strequeadmin/nicknames.html:22
-#: templates/strequeadmin/nicknames.html:83
-msgid "Smeknamn"
-msgstr "Nicknames"
-
 #: templates/strequeadmin/index.html:36
 msgid "Statistik"
 msgstr "Streque stats"
@@ -931,15 +923,13 @@ msgstr "Non-reviewed nicknames"
 
 #: templates/strequeadmin/nicknames.html:14
 msgid ""
-"Om det finns flera smeknamnsförslag för samma person så är det smeknamnet"
-" du\n"
-"    godkänner sist som blir det aktiva smeknamnet (övriga kommer finnas "
-"kvar i\n"
+"Om det finns flera smeknamnsförslag för samma person så är det smeknamnet du\n"
+"    godkänner sist som blir det aktiva smeknamnet (övriga kommer finnas kvar i\n"
 "    historiken)."
 msgstr ""
 "If there are multiple nickname suggestions for the same person, the last "
-"approved nickname will become active (the other ones will still be "
-"present in the history)."
+"approved nickname will become active (the other ones will still be present in "
+"the history)."
 
 #: templates/strequeadmin/nicknames.html:21
 #: templates/strequeadmin/nicknames.html:82
@@ -972,19 +962,20 @@ msgstr "Approved nicknames"
 
 #: templates/strequeadmin/nicknames.html:74
 msgid ""
-"Om \"Godkänt av\" saknas innebär det att ändringen ej krävde godkännande."
-" Detta är\n"
-"    fallet t.ex. när någon ändrat sitt eget smeknamn, och för gamla "
-"smeknamnsändringar.\n"
-"    Där det finns två tider för \"Skapat\" betyder det att vi ej vet "
-"exakt när smeknamnet\n"
-"    lades in, utan bara att det var mellan de två tiderna."
+"Om \"Godkänt av\" saknas innebär det att ändringen ej krävde godkännande. Detta "
+"är\n"
+"    fallet t.ex. när någon ändrat sitt eget smeknamn, ändringar gjorda av "
+"admins, och för\n"
+"    gamla smeknamnsändringar. Där det finns två tider för \"Skapat\" betyder "
+"det att vi ej\n"
+"    vet exakt när smeknamnet lades in, utan bara att det var mellan de två "
+"tiderna."
 msgstr ""
-"If \"Approver\" is missing, it means that the change did not require "
-"approval. This is the case e.g. when someone changed their own nickname, "
-"and for old nickname changes. Where there are two times for \"Created\", "
-"it means that we don't know exactly when the nickname was added, only "
-"that it was in between those times."
+"If \"Approver\" is missing, it means that the change did not require approval. "
+"This is the case e.g. when someone changed their own nickname, an admin changed "
+"a nickname, and for old nickname changes. Where there are two times for "
+"\"Created\", it means that we don't know exactly when the nickname was added, "
+"only that it was in between those times."
 
 #: templates/strequeadmin/nicknames.html:84
 msgid "Skapat"
@@ -1007,8 +998,8 @@ msgid ""
 "Att lägga till en användare från länkarna nedan tar bort förfrågan\n"
 "    automatiskt när användaren skapats."
 msgstr ""
-"Adding a user using the link below automatically removes the request when"
-" the user has been created."
+"Adding a user using the link below automatically removes the request when the "
+"user has been created."
 
 #: templates/strequeadmin/requests.html:15
 msgid "E-postaddress"
@@ -1206,8 +1197,7 @@ msgstr "%(e)s is now verified!"
 
 #: views/auth.py:195
 msgid ""
-"Om {} är en registrerad adress så har vi skickat en återställningslänk "
-"till den."
+"Om {} är en registrerad adress så har vi skickat en återställningslänk till den."
 msgstr "We have sent a password reset link to {} if it is a registered address."
 
 #: views/auth.py:228
@@ -1216,8 +1206,7 @@ msgstr "Please enter your email address"
 
 #: views/auth.py:246
 msgid ""
-"Länken verkar vara trasig eller felaktig,               var vänlig försök"
-" igen."
+"Länken verkar vara trasig eller felaktig,               var vänlig försök igen."
 msgstr "The link seems to be broken, please try again."
 
 #: views/auth.py:274
@@ -1263,73 +1252,72 @@ msgstr "You need to be admin to do this!"
 msgid "Transaktion utförd!"
 msgstr "Transaction created!"
 
-#: views/strequelistan.py:590
+#: views/strequelistan.py:591
 msgid "Din smeknamnsändring är sparad och väntar på att bli godkänd."
 msgstr "Your nickname change has been submitted and is pending approval."
 
-#: views/strequelistan.py:592
+#: views/strequelistan.py:593
 msgid "Din smeknamnsändring är sparad."
 msgstr "Your nickname change has been submitted."
 
-#: views/strequelistan.py:617
+#: views/strequelistan.py:618
 msgid "Kunde inte ladda upp bilden, försök med ett annat filnamn eller filformat."
 msgstr ""
-"Could not save the picture, try again with another file name or file "
-"format."
+"Could not save the picture, try again with another file name or file format."
 
-#: views/strequelistan.py:638
+#: views/strequelistan.py:639
 msgid "Profilbilden har ändrats!"
 msgstr "The profile picture has been changed!"
 
-#: views/strequelistan.py:653 views/strequelistan.py:678
-#: views/strequelistan.py:770 views/strequelistan.py:924
+#: views/strequelistan.py:654 views/strequelistan.py:679
+#: views/strequelistan.py:771 views/strequelistan.py:936
 msgid "Du får bara redigera din egen profil! ಠ_ಠ"
 msgstr "You are only allowed to edit your own profile ಠ_ಠ"
 
-#: views/strequelistan.py:663
+#: views/strequelistan.py:664
 msgid "Din profilbild har ändrats!"
 msgstr "Your profile picture has been changed!"
 
-#: views/strequelistan.py:685
+#: views/strequelistan.py:686
 msgid ""
-"Du kan inte ta bort <a href=\"https://phys.org/news/2014-08-what-is-"
-"nothing.html\">ingenting</a>!"
+"Du kan inte ta bort <a href=\"https://phys.org/news/2014-08-what-is-nothing."
+"html\">ingenting</a>!"
 msgstr ""
-"You can not delete <a href=\"https://phys.org/news/2014-08-what-is-"
-"nothing.html\">nothing</a>!"
+"You can not delete <a href=\"https://phys.org/news/2014-08-what-is-nothing."
+"html\">nothing</a>!"
 
-#: views/strequelistan.py:702
+#: views/strequelistan.py:703
 msgid "Profilbilden har tagits bort!"
 msgstr "Profile picture deleted!"
 
-#: views/strequelistan.py:806
+#: views/strequelistan.py:818
 msgid "Ändringarna har sparats!"
 msgstr "Changes saved!"
 
-#: views/strequelistan.py:827 views/strequelistan.py:840
+#: views/strequelistan.py:839 views/strequelistan.py:852
 msgid "Du får bara hantera din egna API-nycklar! ಠ_ಠ"
 msgstr "You are only allowed to manage your own API keys! ಠ_ಠ"
 
-#: views/strequelistan.py:881
+#: views/strequelistan.py:893
 #, python-format
 msgid ""
-"Din API-nyckel med namnet \"%(name)s\" är: \"%(secret)s\". Du kommer inte"
-" kunna se den igen, så se till att spara den nu."
+"Din API-nyckel med namnet \"%(name)s\" är: \"%(secret)s\". Du kommer inte kunna "
+"se den igen, så se till att spara den nu."
 msgstr ""
-"Your API key called \"%(name)s\" is: \"%(secret)s\". You won't be able to"
-" see it again, so make sure to save it now."
+"Your API key called \"%(name)s\" is: \"%(secret)s\". You won't be able to see "
+"it again, so make sure to save it now."
 
-#: views/strequelistan.py:910
+#: views/strequelistan.py:922
 #, python-format
 msgid "Api-nyckeln \"%(name)s\" är borttagen."
 msgstr "The API key \"%(name)s\" is deleted."
 
-#: views/strequelistan.py:935
+#: views/strequelistan.py:947
 #, python-format
 msgid "En länk för att verifiera e-postadressen har skickats till %(email)s."
 msgstr "A link to verify your email address has been sent to %(email)s."
 
-#: views/strequelistan.py:942
+#: views/strequelistan.py:954
 msgid "Lösenordet har ändrats!"
 msgstr "Password changed!"
 
@@ -1371,14 +1359,10 @@ msgstr "Password changed!"
 
 #~ msgid "Beskrivning hur man sätter in pengar"
 #~ msgstr ""
-#~ "To add money to your balance you"
-#~ " make a bank transaction to PlusGiro"
-#~ " (PG) 20 74-3 with your name "
-#~ "and the word \"streque\" as the "
-#~ "comment. If you for some reason "
-#~ "can't do this (if for example you"
-#~ " don't have a Swedish bank account)"
-#~ " you can give QM cash."
+#~ "To add money to your balance you make a bank transaction to PlusGiro (PG) 20 "
+#~ "74-3 with your name and the word \"streque\" as the comment. If you for some "
+#~ "reason can't do this (if for example you don't have a Swedish bank account) "
+#~ "you can give QM cash."
 
 #~ msgid "Ett telefonnummer, med eller utan landskod."
 #~ msgstr "A phonenumber, with or without country code."
@@ -1394,4 +1378,3 @@ msgstr "Password changed!"
 
 #~ msgid "Citatreaktioner"
 #~ msgstr "Quote reactions"
-
