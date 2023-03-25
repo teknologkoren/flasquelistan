@@ -513,6 +513,14 @@ class EditGroupForm(flask_wtf.FlaskForm):
             validators.InputRequired()
         ]
     )
+    active = fields.BooleanField(
+        _l('Aktiva medlemmar?'),
+        description=_l("Medlemmar i denna grupp hanteras som aktiva körmedlemmar."))
+    discord_sync = fields.BooleanField(
+        _l('Synka med Discord?'),
+        description=_l("Medlemmar i denna grupp får automatiskt en roll"
+                       " med samma namn i Discord.")
+    )
 
 
 class CreditTransferForm(flask_wtf.FlaskForm):

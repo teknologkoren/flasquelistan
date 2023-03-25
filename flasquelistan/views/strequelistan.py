@@ -6,7 +6,7 @@ from attr import has
 
 import flask
 import flask_babel
-from flask import current_app, abort
+from flask import current_app, abort, request
 from flask_babel import gettext as _
 from flask_babel import lazy_gettext as _l
 from flask_login import current_user, login_required
@@ -15,6 +15,7 @@ from sqlalchemy.sql.expression import extract, func, not_
 
 from flasquelistan import forms, models, util
 from flasquelistan.views import auth
+from flasquelistan.discord import DiscordClient
 
 mod = flask.Blueprint('strequelistan', __name__)
 mod.before_request(login_required(lambda: None))
@@ -815,6 +816,9 @@ def edit_profile(user_id):
 
         models.db.session.commit()
 
+        if user.discord_user_id is not None:
+            DiscordClient.sync_roles(user)
+
         flask.flash(_l("Ändringarna har sparats!"), 'success')
         return flask.redirect(flask.url_for('strequelistan.show_profile',
                                             user_id=user.id))
@@ -961,3 +965,29 @@ def change_email_or_password(user_id):
     return flask.render_template('change_email_or_password.html',
                                  form=form,
                                  user=user)
+
+
+@mod.route('/discord/connect')
+def discord_redirect():
+    return flask.redirect(DiscordClient.get_authorization_url())
+
+
+@mod.route('/discord/callback')
+def discord_callback():
+    client = DiscordClient()
+    client.authenticate(request.url, request.args.get("state"))
+
+    discord_user = client.get_user()
+    client.add_to_server(
+        discord_user['id'],
+        current_user.displayname,
+        DiscordClient.get_expected_roles(current_user))
+
+    current_user.discord_user_id = discord_user["id"]
+    current_user.discord_username = f'{discord_user["username"]}#{discord_user["discriminator"]}'
+    models.db.session.commit()
+
+    guild_id = current_app.config.get("DISCORD_GUILD_ID")
+    flask.flash(_l("Du är nu tillagd i vår Discord-server! %sKlicka här för att besöka den.%s") %
+                (f'<a href="https://discord.com/channels/{guild_id}" target="_blank">', '</a>'), 'success')
+    return flask.redirect(flask.url_for('strequelistan.show_profile', user_id=current_user.id))

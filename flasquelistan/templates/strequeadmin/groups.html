@@ -9,6 +9,8 @@
       <tr>
         <th>{{ _("Namn") }}</th>
         <th>{{ _("Sorteringsvikt") }}</th>
+        <th>{{ _("Aktiva medlemmar") }}</th>
+        <th>{{ _("Synkas med Discord") }}</th>
       </tr>
       {% for group in groups %}
       <tr>
@@ -19,6 +21,12 @@
         </td>
         <td>
           {{ group.weight }}
+        </td>
+        <td>
+          {{ _("Ja") if group.active else _("Nej") }}
+        </td>
+        <td>
+          {{ _("Nej") if group.discord_role_id is none else _("Ja") }}
         </td>
       </tr>
       {% endfor %}

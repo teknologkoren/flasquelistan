@@ -10,6 +10,7 @@ from flask_babel import lazy_gettext as _l
 from flask_login import current_user
 
 from flasquelistan import forms, models, util
+from flasquelistan.discord import DiscordClient
 from flasquelistan.views import auth
 
 mod = flask.Blueprint('strequeadmin', __name__)
@@ -425,7 +426,8 @@ def show_groups():
 def edit_group(group_id=None):
     if group_id:
         group = models.Group.query.get_or_404(group_id)
-        form = forms.EditGroupForm(obj=group)
+        form = forms.EditGroupForm(
+            obj=group, discord_sync=group.discord_role_id is not None)
     else:
         group = None
         form = forms.EditGroupForm()
@@ -436,6 +438,13 @@ def edit_group(group_id=None):
 
         group.name = form.name.data
         group.weight = form.weight.data
+        group.active = form.active.data
+
+        # Turn on or off Discord integration
+        if form.discord_sync.data and group.discord_role_id is None:
+            group.discord_role_id = DiscordClient.add_or_fetch_role(group.name)
+        elif not form.discord_sync.data and group.discord_role_id is not None:
+            group.discord_role_id = None
 
         if not group_id:
             models.db.session.add(group)
