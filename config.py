@@ -36,3 +36,13 @@ SMTP_PORT = 25
 SYSTEM_EMAILADDR = 'system-noreply@example.com'
 # address to send from and to send admin notifications to
 ADMIN_EMAILADDR = 'webmaster@example.com'
+
+# Discord integration settings
+DISCORD_REDIRECT_URI = "https://localhost/discord/callback"
+DISCORD_APPLICATION_ID = "0000000000000000000"
+DISCORD_GUILD_ID = "0000000000000000000"
+DISCORD_CLIENT_ID = "0000000000000000000"
+DISCORD_CLIENT_SECRET = "another super secret secret"
+DISCORD_BOT_SECRET = "yet another super secret secret"
+DISCORD_ACTIVE_ROLE_ID = "0000000000000000000"
+DISCORD_UNKNOWN_ROLE_ID = "0000000000000000000"

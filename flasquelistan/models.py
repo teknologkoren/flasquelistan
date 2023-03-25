@@ -36,6 +36,8 @@ class User(flask_login.UserMixin, db.Model):
     body_mass = db.Column(db.Integer, nullable=True)
     y_chromosome = db.Column(db.Boolean, nullable=True)
     lang = db.Column(db.String(20), nullable=True, default="sv_SE")
+    discord_user_id = db.Column(db.String(20))
+    discord_username = db.Column(db.String(32))
 
     # use_alter=True adds fk after ProfilePicture has been created to avoid
     # circular dependency
@@ -380,6 +382,12 @@ class Group(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50), nullable=False)
     weight = db.Column(db.Integer)
+
+    # Whether users in the group are considered active choir members.
+    active = db.Column(db.Boolean, nullable=False, default=False)
+
+    # A Discord role to add to group members who have connected their Discord accounts.
+    discord_role_id = db.Column(db.String(20), nullable=True)
 
     users = db.relationship('User', back_populates='group')
 

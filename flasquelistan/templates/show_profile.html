@@ -57,6 +57,10 @@
       {% endif %}
       </dd>
       {% endif %}
+      {% if user.discord_user_id and user.discord_username %}
+      <dt>{{ _("Discord-profil") }}</dt>
+      <dd><a href="https://discord.com/users/{{ user.discord_user_id }}">{{ user.discord_username }}</a></dd>
+      {% endif %}
       {% if user.birthday %}
       <dt>{{ _("Födelsedag") }}</dt>
       <dd>{{ format_date(user.birthday) }}</dd>
