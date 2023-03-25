@@ -84,7 +84,7 @@ packaging==20.9
     # via pytest
 phonenumbers==8.12.24
     # via -r requirements.in
-pillow==9.0.1
+pillow==9.3.0
     # via -r requirements.in
 pluggy==0.13.1
     # via pytest
