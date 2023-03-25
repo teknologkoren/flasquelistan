@@ -74,9 +74,10 @@ jinja2==3.0.1
     #   flask-babel
 markdown==3.3.4
     # via -r requirements.in
-markupsafe==2.0.1
+markupsafe==2.1.2
     # via
     #   jinja2
+    #   werkzeug
     #   wtforms
 oauthlib==3.2.2
     # via requests-oauthlib
@@ -131,7 +132,7 @@ urllib3==1.26.15
     # via requests
 vobject==0.9.6.1
     # via -r requirements.in
-werkzeug==2.0.1
+werkzeug==2.2.3
     # via flask
 wtforms[email]==2.3.3
     # via
