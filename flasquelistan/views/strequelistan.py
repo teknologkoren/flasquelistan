@@ -987,6 +987,8 @@ def discord_callback():
     current_user.discord_username = f'{discord_user["username"]}#{discord_user["discriminator"]}'
     models.db.session.commit()
 
+    DiscordClient.sync_roles(current_user)
+
     guild_id = current_app.config.get("DISCORD_GUILD_ID")
     flask.flash(_l("Du är nu tillagd i vår Discord-server! %sKlicka här för att besöka den.%s") %
                 (f'<a href="https://discord.com/channels/{guild_id}" target="_blank">', '</a>'), 'success')
