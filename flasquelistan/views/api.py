@@ -89,6 +89,14 @@ def get_user_by_phone(phone_number):
     return filter_user_data(user.api_dict)
 
 
+@mod.route('/users/by-discord/<string:discord_user_id>', methods=['GET'])
+@auth.login_required
+def get_user_by_discord(discord_user_id):
+    user = User.query.filter_by(
+        discord_user_id=discord_user_id).first_or_404()
+    return filter_user_data(user.api_dict)
+
+
 @mod.route('/users/me/streque/<int:article_id>', methods=['POST'])
 @auth.login_required
 def add_streque_me(article_id):
