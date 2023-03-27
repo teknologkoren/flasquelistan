@@ -18,6 +18,7 @@ import flask
 from flask import jsonify, request
 from flask_babel import lazy_gettext as _l
 from flask_httpauth import HTTPTokenAuth
+from sqlalchemy import desc
 
 from flasquelistan import forms, models, util
 from flasquelistan.models import ApiKey, Article, Transaction, User
@@ -105,21 +106,48 @@ def add_streque(user_id, article_id):
 @mod.route('/users/me/transactions', methods=['GET'])
 @auth.login_required
 def get_transactions_me():
-    return get_transactions(current_user().id)
+    return get_transactions_user(current_user().id)
 
 
 @mod.route('/users/<int:user_id>/transactions', methods=['GET'])
 @auth.login_required
-def get_transactions(user_id):
+def get_transactions_user(user_id):
     if not current_api_key().is_admin and current_user().id != user_id:
         flask.abort(403) # HTTP 403 Forbidden
 
     user = User.query.get_or_404(user_id)
     min_id = request.args.get('min_id', 0)
-    transactions = (
-        Transaction
-        .query
-        .filter(Transaction.user_id == user_id, Transaction.id >= min_id)
-        .order_by(Transaction.id)
-        .all())
+    limit = request.args.get('limit', None)
+    order = request.args.get('order', "asc")
+
+    return query_transactions(user=user, min_id=min_id, limit=limit, order=order)
+
+
+@mod.route('/transactions', methods=['GET'])
+@auth.login_required
+def get_transactions():
+    min_id = request.args.get('min_id', 0)
+    limit = request.args.get('limit', None)
+    order = request.args.get('order', "asc")
+
+    return query_transactions(min_id=min_id, limit=limit, order=order)
+
+
+def query_transactions(user=None, min_id=0, limit=None, order="asc"):
+    if not current_api_key().is_admin:
+        flask.abort(403) # HTTP 403 Forbidden
+
+    q = Transaction.query
+    if user is not None:
+        q = q.filter(Transaction.user_id == user.id)
+    if min_id > 0:
+        q = q.filter(Transaction.id >= min_id)
+    if order == "desc":
+        q = q.order_by(desc(Transaction.id))
+    else:
+        q = q.order_by(Transaction.id)
+    if limit is not None:
+        q = q.limit(limit)
+    transactions = q.all()
+
     return jsonify([t.api_dict for t in transactions])
