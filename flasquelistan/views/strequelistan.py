@@ -980,7 +980,7 @@ def discord_callback():
     discord_user = client.get_user()
     client.add_to_server(
         discord_user['id'],
-        current_user.displayname,
+        current_user.full_name,
         DiscordClient.get_expected_roles(current_user))
 
     current_user.discord_user_id = discord_user["id"]

@@ -37,7 +37,7 @@ class User(flask_login.UserMixin, db.Model):
     y_chromosome = db.Column(db.Boolean, nullable=True)
     lang = db.Column(db.String(20), nullable=True, default="sv_SE")
     discord_user_id = db.Column(db.String(20))
-    discord_username = db.Column(db.String(32))
+    discord_username = db.Column(db.String(40))
 
     # use_alter=True adds fk after ProfilePicture has been created to avoid
     # circular dependency
