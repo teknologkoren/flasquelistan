@@ -65,7 +65,7 @@ def filter_user_data(user_dict):
     else:
         allowed = ('id', 'email', 'first_name', 'last_name', 'full_name',
                   'nickname', 'birthday', 'active', 'lang', 'group', 'phone',
-                  'profile_picture')
+                  'profile_picture', 'discord_user_id', 'discord_username')
         return {k: v for (k, v) in user_dict.items() if k in allowed}
 
 

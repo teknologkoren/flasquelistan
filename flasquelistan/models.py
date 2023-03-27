@@ -91,6 +91,8 @@ class User(flask_login.UserMixin, db.Model):
         data['group'] = {'id': self.group_id,
                          'name': self.group.name} if self.group else None
         data['lang'] = self.lang
+        data['discord_user_id'] = self.discord_user_id
+        data['discord_username'] = self.discord_username
         if self.profile_picture:
             data['profile_picture'] = {
                 'id': self.profile_picture_id,
