@@ -18,10 +18,10 @@ import flask
 from flask import jsonify, request
 from flask_babel import lazy_gettext as _l
 from flask_httpauth import HTTPTokenAuth
-from sqlalchemy import desc
+from sqlalchemy import desc, func
 
 from flasquelistan import forms, models, util
-from flasquelistan.models import ApiKey, Article, Transaction, User
+from flasquelistan.models import ApiKey, Article, Transaction, User, Quote
 
 mod = flask.Blueprint('api', __name__, url_prefix='/api/v1')
 auth = HTTPTokenAuth(scheme='Bearer')
@@ -159,3 +159,17 @@ def query_transactions(user=None, min_id=0, limit=None, order="asc"):
     transactions = q.all()
 
     return jsonify([t.api_dict for t in transactions])
+
+
+@mod.route('/quotes/random', methods=['GET'])
+@auth.login_required
+def get_random_quote():
+    quote = models.Quote.query.order_by(func.random()).first()
+    return jsonify(quote.api_dict)
+
+
+@mod.route('/quotes/<int:quote_id>', methods=['GET'])
+@auth.login_required
+def get_quote(quote_id):
+    quote = Quote.query.get_or_404(quote_id)
+    return jsonify(quote.api_dict)

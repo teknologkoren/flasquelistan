@@ -701,6 +701,18 @@ class Quote(db.Model):
         lines = [line for line in self.text.splitlines() if line]
         return "\n".join(lines)
 
+    @property
+    def api_dict(self):
+        data = dict()
+        data['id'] = self.id
+        data['text'] = self.cleaned()
+        data['who'] = self.who
+        data['has_date'] = self.has_date()
+        data['has_time'] = self.has_time()
+        data['time'] = self.timestamp
+        data['timestamp'] = self.timestamp.timestamp()
+        return data
+
     def __str__(self):
         return "\"{}...\" — {}".format(self.text[:20], self.who[:10] or "<None>")
 
