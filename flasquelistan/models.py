@@ -264,6 +264,8 @@ class User(flask_login.UserMixin, db.Model):
         db.session.add(streque)
         db.session.commit()
 
+        util.emit_balance_change_event(self, self.balance + value)
+
         return streque
 
     def admin_transaction(self, value, message, by_user):
@@ -276,6 +278,8 @@ class User(flask_login.UserMixin, db.Model):
 
         db.session.add(transaction)
         db.session.commit()
+
+        util.emit_balance_change_event(self, self.balance - value)
 
         return transaction
 
@@ -552,6 +556,8 @@ class Transaction(db.Model):
         self.voided = True
         db.session.commit()
 
+        util.emit_balance_change_event(self.user, self.user.balance + self.value)
+
         return True
 
     @property
@@ -627,6 +633,7 @@ class AdminTransaction(Transaction):
         )
         db.session.add(notification)
         db.session.commit()
+        util.emit_notification_event(notification)
 
 
 class UserTransaction(Transaction):
@@ -685,6 +692,9 @@ class CreditTransfer(db.Model):
 
         payer.balance -= value
         payee.balance += value
+
+        util.emit_balance_change_event(payer, payer.balance + value)
+        util.emit_balance_change_event(payee, payee.balance - value)
 
         db.session.add(payer_tx)
         db.session.add(payee_tx)

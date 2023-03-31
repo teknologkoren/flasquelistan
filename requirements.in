@@ -1,5 +1,6 @@
 bcrypt
 coverage
+eventlet
 ffmpy
 flask
 flask-admin
@@ -7,6 +8,7 @@ flask-babel
 flask-HTTPAuth
 flask-login
 flask-reuploaded
+flask-socketio
 flask-sqlalchemy
 flask-wtf
 gunicorn

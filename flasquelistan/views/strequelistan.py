@@ -166,6 +166,7 @@ def add_streque():
         )
         models.db.session.add(notification)
         models.db.session.commit()
+        util.emit_notification_event(notification)
 
     if flask.request.is_json:
         response = {
@@ -236,6 +237,9 @@ def void_streque():
             reference=str(streque.id)
         )
         models.db.session.add(void_notification)
+        models.db.session.commit()
+        util.emit_notification_event(void_notification)
+
     models.db.session.commit()
 
     if flask.request.is_json:
@@ -363,6 +367,7 @@ def credit_transfer():
         )
         models.db.session.add(payee_notification)
         models.db.session.commit()
+        util.emit_notification_event(payee_notification)
 
     elif form.is_submitted():
         forms.flash_errors(form)

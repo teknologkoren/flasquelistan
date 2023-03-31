@@ -13,18 +13,24 @@
 # To perform a simple test of the API, make a GET request to:
 #     <URL to flasquelistan>/api/v1/users/me
 #
+# The API also allows listening to new Notifications and balance changes
+# through a websocket, using SocketIO. Connect to "wss://<url to flasquelistan>/",
+# and make sure to provide {'token': 'your_api_key'} as auth.
 
 import flask
 from flask import jsonify, request
 from flask_babel import lazy_gettext as _l
 from flask_httpauth import HTTPTokenAuth
+from flask_socketio import ConnectionRefusedError
 from sqlalchemy import desc, func
 
 from flasquelistan import forms, models, util
+from flasquelistan.factory import socketio
 from flasquelistan.models import ApiKey, Article, Transaction, User, Quote
 
 mod = flask.Blueprint('api', __name__, url_prefix='/api/v1')
 auth = HTTPTokenAuth(scheme='Bearer')
+
 
 # We are using the ApiKey as "user" for the authentication library, because
 # we need information about which key was used to authenticate, not just which
@@ -33,6 +39,18 @@ current_api_key = lambda: auth.current_user()
 current_user = lambda: current_api_key().user
 
 
+# SocketIO authentication.
+@socketio.on('connect')
+def connect(auth):
+    if 'token' not in auth:
+        raise ConnectionRefusedError("invalid auth string")
+
+    api_key = ApiKey.authenticate(auth['token'])
+    if api_key is None:
+        raise ConnectionRefusedError("unauthorized")
+
+
+# REST authentication.
 @auth.verify_token
 def verify_token(token):
     return ApiKey.authenticate(token)

@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 from pathlib import Path
+from flask_socketio import SocketIO
 
-from flasquelistan import factory
+from flasquelistan.factory import create_app, socketio
 
 path = Path(__file__).parent.resolve()
 
@@ -29,7 +30,7 @@ if not instance_config.is_file():
     instance_config.touch()
     instance_config.write_text(default_config)
 
-app = factory.create_app(instance_config='config.py')
+app = create_app(instance_config='config.py')
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    socketio.run(app)

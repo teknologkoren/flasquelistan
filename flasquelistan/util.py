@@ -6,6 +6,7 @@ import smtplib
 import ssl
 import threading
 from urllib.parse import urljoin, urlparse
+from flasquelistan.factory import socketio
 
 import flask
 import flask_uploads
@@ -157,3 +158,23 @@ def format_phone_number(phone, e164=False):
     )
 
     return formatted
+
+
+def emit_balance_change_event(user, old_balance):
+    socketio.emit('balance_change', {
+        'user_id': user.id,
+        'discord_user_id': user.discord_user_id,
+        'old_balance': old_balance,
+        'new_balance': user.balance,
+        'new_emoji': user.bac_emoji,
+    })
+
+
+def emit_notification_event(notification):
+    user = notification.user
+    socketio.emit('notification', {
+        'notification_id': notification.id,
+        'user_id': user.id,
+        'discord_user_id': user.discord_user_id,
+        'text': notification.text
+    })
