@@ -5,6 +5,7 @@ import hashlib
 import random
 import secrets
 import string
+from calendar import THURSDAY
 
 import bcrypt
 import flask
@@ -14,6 +15,7 @@ import flask_sqlalchemy
 import markdown
 import vobject
 from sqlalchemy.ext.hybrid import hybrid_method, hybrid_property
+from sqlalchemy import func
 
 from flasquelistan import util
 
@@ -360,6 +362,61 @@ class User(flask_login.UserMixin, db.Model):
         i = int.from_bytes(md5.digest(), 'little') % 0x45
         # add number to start of the 'Emoticons' unicode block
         return chr(0x1f600 + i)
+
+    @property
+    def badges(self):
+        total_count = (Streque.query
+                       .filter(Streque.user_id == self.id)
+                       .count())
+        alcfree_count = (Streque.query
+                         .filter(Streque.user_id == self.id,
+                                 Streque.standardglas == 0.0)
+                         .count())
+        
+        today = datetime.date.today()
+        offset = (today.weekday() - THURSDAY) % 7
+        last_thu = today - datetime.timedelta(days=offset)
+        last_thursdays = [last_thu - datetime.timedelta(days=i*7) for i in range(4)]
+        thursday_drinks = (Streque.query
+                           .with_entities(func.DATE(Streque.timestamp), func.count())
+                           .filter(Streque.user_id == self.id,
+                                   func.DATE(Streque.timestamp).in_(last_thursdays))
+                           .group_by(func.DATE(Streque.timestamp))
+                           .all())
+        
+        nicknames_called_count = (NicknameChange.query
+                                .filter(NicknameChange.user_id == self.id,
+                                        NicknameChange.status == 'APPROVED')
+                                .count())
+        nicknames_suggested_count = (NicknameChange.query
+                                    .filter(NicknameChange.suggester_id == self.id,
+                                            NicknameChange.status == 'APPROVED')
+                                    .count())
+        
+        badges = []
+        # More alcfree than non-alc streques
+        if alcfree_count > total_count/2:
+            badges.append(chr(0x1F697) + ' Designated Driver')
+        
+        # Return customer
+        if len(thursday_drinks) == 4:
+            badges.append(chr(0x1F911) + ' Return Customer')
+        
+        # Calling and getting called names
+        if nicknames_called_count >= 5:
+            badges.append(chr(0x1F3F7) + ' Kärt Barn Har Många Namn')
+        if nicknames_suggested_count >= 5:
+            badges.append(chr(0x1F5E3) + ' Calling People Names')
+    
+        # Total streques
+        if 10 <= total_count < 25:
+            badges.append(chr(0x1F476) + ' Beginner')
+        elif 25 <= total_count < 50:
+            badges.append(chr(0x1F9D2) + ' Intermediate')
+        elif 50 <= total_count < 100:
+            badges.append(chr(0x1F52C) + ' Expert')
+        
+        return badges
 
     def __str__(self):
         return f"{self.first_name} {self.last_name} <{self.email}>"

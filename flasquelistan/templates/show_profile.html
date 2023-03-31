@@ -79,6 +79,13 @@
     </dl>
     {% endif %}
 
+    <dl>
+      <dt>{{ _("Badges") }}</dt>
+      {% for badge in user.badges %}
+      <dd>{{ badge }}</dd>  
+      {% endfor %}    
+    </dl>
+
     <form method="POST"
           action="{{ url_for('strequelistan.change_nickname', user_id=user.id) }}"
           enctype="multipart/form-data">
