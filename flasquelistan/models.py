@@ -93,6 +93,7 @@ class User(flask_login.UserMixin, db.Model):
         data['lang'] = self.lang
         data['discord_user_id'] = self.discord_user_id
         data['discord_username'] = self.discord_username
+        data['bac_emoji'] = self.bac_emoji
         if self.profile_picture:
             data['profile_picture'] = {
                 'id': self.profile_picture_id,
@@ -351,6 +352,32 @@ class User(flask_login.UserMixin, db.Model):
         blood_alcohol_concentration = round(final_bac, 2)
 
         return blood_alcohol_concentration
+
+    @property
+    def bac_emoji(self):
+        bac = self.bac
+        if bac < 0.1:
+            return None
+        elif bac < 0.3:
+            return '🍺'
+        elif bac < 0.5:
+            return '🍻'
+        elif bac < 1:
+            return '👌'
+        elif bac < 1.5:
+            return '🕺'
+        elif bac < 2:
+            return '😟'
+        elif bac < 2.5:
+            return '🤢'
+        elif bac < 3:
+            return '😵'
+        elif bac < 3.5:
+            return '💀'
+        elif bac < 4:
+            return '🇷🇺'
+        else:
+            return '🇫🇮'
 
     @property
     def emoji(self):

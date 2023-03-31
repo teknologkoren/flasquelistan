@@ -25,27 +25,7 @@
     {% set bac = user.bac %}
     {% if bac >= 0.1 %}
     <div class="alcometer">
-      {% if bac < 0.3 %}
-      🍺
-      {% elif bac < 0.5 %}
-      🍻
-      {% elif bac < 1 %}
-      👌
-      {% elif bac < 1.5 %}
-      🕺
-      {% elif bac < 2 %}
-      😟
-      {% elif bac < 2.5 %}
-      🤢
-      {% elif bac < 3 %}
-      😵
-      {% elif bac < 3.5 %}
-      💀
-      {% elif bac < 4 %}
-      🇷🇺
-      {% else %}
-      🇫🇮
-      {% endif %}
+      {{ user.bac_emoji }}
       <span class="bac">
         {{ '{:.2f}'.format(bac) }}
       </span>
