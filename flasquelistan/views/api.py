@@ -26,7 +26,7 @@ from sqlalchemy import desc, func
 
 from flasquelistan import forms, models, util
 from flasquelistan.factory import socketio
-from flasquelistan.models import ApiKey, Article, Transaction, User, Quote
+from flasquelistan.models import db, ApiKey, Article, Notification, Transaction, User, Quote
 
 mod = flask.Blueprint('api', __name__, url_prefix='/api/v1')
 auth = HTTPTokenAuth(scheme='Bearer')
@@ -191,3 +191,27 @@ def get_random_quote():
 def get_quote(quote_id):
     quote = Quote.query.get_or_404(quote_id)
     return jsonify(quote.api_dict)
+
+
+@mod.route('/notifications/<int:notification_id>/mark_sent', methods=['POST'])
+@auth.login_required
+def mark_notification_sent(notification_id):
+    if not current_api_key().is_admin:
+        flask.abort(403) # HTTP 403 Forbidden
+
+    notification = Notification.query.get_or_404(notification_id)
+    notification.is_sent = True
+    db.session.commit()
+    return '', 204 # HTTP 204 No Content
+
+
+@mod.route('/notifications/<int:notification_id>/mark_acknowledged', methods=['POST'])
+@auth.login_required
+def mark_notification_acknowledged(notification_id):
+    if not current_api_key().is_admin:
+        flask.abort(403) # HTTP 403 Forbidden
+
+    notification = Notification.query.get_or_404(notification_id)
+    notification.is_acknowledged = True
+    db.session.commit()
+    return '', 204 # HTTP 204 No Content
