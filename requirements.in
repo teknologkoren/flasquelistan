@@ -1,6 +1,5 @@
 bcrypt
 coverage
-eventlet
 ffmpy
 flask
 flask-admin
@@ -11,6 +10,8 @@ flask-reuploaded
 flask-socketio
 flask-sqlalchemy
 flask-wtf
+gevent
+gevent-websocket
 gunicorn
 markdown
 phonenumbers
