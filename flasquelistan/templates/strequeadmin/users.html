@@ -10,6 +10,11 @@
 {% block body %}
 <div>
   <h2>{{ _("Användare") }}</h2>
+  {% if only_active %}
+    <p><a href="{{ url_for('strequeadmin.show_users') }}">{{ _("Visa alla") }}</a></p>
+  {% else %}
+    <p><a href="{{ url_for('strequeadmin.show_users', only_active='true') }}">{{ _("Visa endast aktiva") }}</a></p>
+  {% endif %}
   <div class="table-wrap">
     <table class="users">
       <tr>
@@ -18,6 +23,7 @@
         <th>{{ _("Telefonnummer") }}</th>
         <th>{{ _("Saldo") }}</th>
         <th>{{ _("Aktiv") }}</th>
+        <th>{{ _("Har Discord") }}</th>
         <th>{{ _("Admin") }}</th>
       </tr>
       {% for user in users %}
@@ -50,6 +56,15 @@
             {{ _("Aktiv") }}
             {% else %}
             {{ _("Inaktiv") }}
+            {% endif %}
+          </span>
+        </td>
+        <td class="discord">
+          <span>
+            {% if user.discord_user_id %}
+            {{ _("Ja") }}
+            {% else %}
+            {{ _("Nej") }}
             {% endif %}
           </span>
         </td>

@@ -388,8 +388,15 @@ def add_user(request_id=None):
 
 @mod.route('/admin/users')
 def show_users():
-    users = models.User.query.order_by(models.User.first_name.asc()).all()
-    return flask.render_template('strequeadmin/users.html', users=users)
+    only_active = flask.request.args.get('only_active', False)
+
+    q = models.User.query
+    if only_active:
+        q = q.filter(models.User.active.is_(True))
+    users = q.order_by(models.User.first_name.asc()).all()
+
+    return flask.render_template('strequeadmin/users.html', users=users,
+                                 only_active=only_active)
 
 
 @mod.route('/admin/requests/')
