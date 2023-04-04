@@ -1,7 +1,8 @@
 import datetime
 import hashlib
 import os
-import secrets
+import sys
+import traceback
 from attr import has
 
 import flask
@@ -1029,8 +1030,17 @@ def discord_callback():
     if not (current_user.group and current_user.group.discord_role_id):
         abort(403)
 
-    client = DiscordClient()
-    client.authenticate(request.url, request.args.get("state"))
+    try:
+        client = DiscordClient()
+        client.authenticate(request.url, request.args.get("state"))
+    except Exception:
+        print(f"User {current_user.full_name} tried to connect with Discord but an "
+            "exception was thrown:", file=sys.stderr)
+        print(traceback.format_exc(), file=sys.stderr)
+        flask.flash(_l('Något gick snett. Försök gärna en gång till, det löser vissa '
+            'kända problem. Prata med webmaster om det inte hjälper.'),
+            'error')
+        return flask.redirect(flask.url_for('strequelistan.discord'))
 
     discord_user = client.get_user()
     client.add_to_server(
@@ -1050,7 +1060,7 @@ def discord_callback():
             existing_user.discord_user_id = None
             existing_user.discord_username = None
 
-            flask.flash(_l('Varning: Discord-kontot du loggade in med var redan kopplat till '
+            flask.flash(_l('Discord-kontot du loggade in med var redan kopplat till '
                 '%s. Det är nu kopplat till dig (%s) istället.' %
                 (existing_user.full_name, current_user.full_name)),
                 'warning')
