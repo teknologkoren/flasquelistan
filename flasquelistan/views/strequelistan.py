@@ -1041,6 +1041,9 @@ def discord_callback():
     existing_users = models.User.query.filter_by(discord_user_id=discord_user['id']).all()
     if existing_users:
         for existing_user in existing_users:
+            if existing_user == current_user:
+                continue
+
             # This Discord account was already connected to another Streque user.
             # Remove the previous connection.
             DiscordClient.sync_roles_on_disconnect(existing_user)
@@ -1048,7 +1051,7 @@ def discord_callback():
             existing_user.discord_username = None
 
             flask.flash(_l('Varning: Discord-kontot du loggade in med var redan kopplat till '
-                '%s. Det är nu kopplat till dig (%s) istället.' % 
+                '%s. Det är nu kopplat till dig (%s) istället.' %
                 (existing_user.full_name, current_user.full_name)),
                 'warning')
 
