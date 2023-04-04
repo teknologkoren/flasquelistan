@@ -443,3 +443,7 @@ ol.transaction-history li .value {
   max-width: 40rem;
   width: 100%;
 }
+
+.discord-logo {
+    max-height: 1em;
+}
