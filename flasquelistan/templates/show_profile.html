@@ -58,8 +58,16 @@
       </dd>
       {% endif %}
       {% if user.discord_user_id and user.discord_username %}
-      <dt>{{ _("Discord-profil") }}</dt>
-      <dd><a href="https://discord.com/users/{{ user.discord_user_id }}">{{ user.discord_username }}</a></dd>
+        <dt>{{ _("Discord-profil") }}</dt>
+        <dd>
+          <a href="https://discord.com/users/{{ user.discord_user_id }}">{{ user.discord_username }}</a>
+          {% if user.group.discord_role_id and user == current_user %}
+            <a href="{{ url_for('strequelistan.discord') }}">({{ _("hantera") }})</a>
+          {% endif %}
+        </dd>
+      {% elif user.group.discord_role_id and user == current_user and is_discord_launched_yet %}
+        <dt>{{ _("Discord-profil") }}</dt>
+        <dd><a href="{{ url_for('strequelistan.discord') }}">{{ _("Gå med i körens Discord-server här") }}</a></dd>
       {% endif %}
       {% if user.birthday %}
       <dt>{{ _("Födelsedag") }}</dt>

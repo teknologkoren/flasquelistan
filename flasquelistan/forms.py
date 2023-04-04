@@ -592,3 +592,6 @@ class EditApiKeyForm(flask_wtf.FlaskForm):
     reset_key = fields.BooleanField(_l("Återställ nyckel"),
         description=_l("Kryssa i om du vill generera en ny nyckel. VARNING: din"
                        " gamla nyckel kommer att sluta fungera."))
+
+class DisconnectDiscordForm(flask_wtf.FlaskForm):
+    pass

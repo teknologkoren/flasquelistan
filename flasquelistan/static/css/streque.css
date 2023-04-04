@@ -438,3 +438,8 @@ ol.transaction-history li .value {
 .stupid-button {
   margin: 0 .5rem;
 }
+
+.discord-info {
+  max-width: 40rem;
+  width: 100%;
+}

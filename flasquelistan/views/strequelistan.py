@@ -11,7 +11,9 @@ from flask_babel import gettext as _
 from flask_babel import lazy_gettext as _l
 from flask_login import current_user, login_required
 from flask_uploads import UploadNotAllowed
+from flask_wtf import csrf
 from sqlalchemy.sql.expression import extract, func, not_
+from config import ADMIN_EMAILADDR
 
 from flasquelistan import forms, models, util
 from flasquelistan.views import auth
@@ -86,6 +88,20 @@ def index():
         .order_by(models.Article.weight.desc())
         .all()
     )
+
+    if util.is_discord_launched_yet():
+        # If the user has not yet connected their Discord account, and they are in a group
+        # connected to Discord, show a flash message.
+        if (not current_user.discord_user_id and
+            current_user.group and
+            current_user.group.discord_role_id):
+            flask.flash(
+                _l('Kören har flyttat från Messenger till Discord!') +
+                f' <a href="{ flask.url_for("strequelistan.discord")}">' +
+                _l('Gå med i vår Discord-server här.') +
+                '</a>',
+                'info'
+            )
 
     if current_app.config.get('DISPLAY_BALANCE_WARNINGS', True):
         if current_user.balance <= 0:
@@ -537,6 +553,7 @@ def show_profile(user_id):
         change_profile_picture_form=change_profile_picture_form,
         credit_transfer_form=credit_transfer_form,
         admin_transaction_form=admin_transaction_form,
+        is_discord_launched_yet=util.is_discord_launched_yet()
     )
 
 
@@ -972,13 +989,46 @@ def change_email_or_password(user_id):
                                  user=user)
 
 
+@mod.route('/discord')
+def discord():
+    return flask.render_template('discord.html',
+        user=current_user,
+        admin_email=ADMIN_EMAILADDR,
+        form=forms.DisconnectDiscordForm())
+
+
 @mod.route('/discord/connect')
 def discord_redirect():
-    return flask.redirect(DiscordClient.get_authorization_url())
+    # Redirect if the current user is in a group connected to Discord.
+    if current_user.group and current_user.group.discord_role_id:
+        return flask.redirect(DiscordClient.get_authorization_url())
+    # Otherwise, the user is not allowed to join.
+    else:
+        abort(403)
+
+
+@mod.route('/discord/disconnect', methods=['POST'])
+def discord_disconnect():
+    # Replace all managed roles by just the "Unknown" role.
+    DiscordClient.sync_roles_on_disconnect(current_user)
+
+    # Delete discord account information from the database.
+    current_user.discord_user_id = None
+    current_user.discord_username = None
+    models.db.session.commit()
+
+    flask.flash(
+        _l("Ditt Discord-konto är inte längre kopplat till din Streque-profil."),
+        'success')
+    return flask.redirect(flask.url_for('strequelistan.show_profile', user_id=current_user.id))
 
 
 @mod.route('/discord/callback')
 def discord_callback():
+    # Only users in a group connected to Discord are allowed to join.
+    if not (current_user.group and current_user.group.discord_role_id):
+        abort(403)
+
     client = DiscordClient()
     client.authenticate(request.url, request.args.get("state"))
 
@@ -987,6 +1037,20 @@ def discord_callback():
         discord_user['id'],
         current_user.full_name,
         DiscordClient.get_expected_roles(current_user))
+
+    existing_users = models.User.query.filter_by(discord_user_id=discord_user['id']).all()
+    if existing_users:
+        for existing_user in existing_users:
+            # This Discord account was already connected to another Streque user.
+            # Remove the previous connection.
+            DiscordClient.sync_roles_on_disconnect(existing_user)
+            existing_user.discord_user_id = None
+            existing_user.discord_username = None
+
+            flask.flash(_l('Varning: Discord-kontot du loggade in med var redan kopplat till '
+                '%s. Det är nu kopplat till dig (%s) istället.' % 
+                (existing_user.full_name, current_user.full_name)),
+                'warning')
 
     current_user.discord_user_id = discord_user["id"]
     current_user.discord_username = f'{discord_user["username"]}#{discord_user["discriminator"]}'

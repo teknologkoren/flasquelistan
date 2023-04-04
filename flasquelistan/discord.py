@@ -103,14 +103,22 @@ class DiscordClient:
             headers={"Authorization": f"Bot {bot_secret}"}).json()
         return user['roles']
 
-    def sync_roles(user):
+    # Set and remove Discord roles based on the user's group on Strequelistan.
+    # If disconnect is True, replace all managed roles with the Unknown role.
+    def sync_roles(user, disconnect=False):
         if user.discord_user_id is None:
             return
 
         bot_secret = current_app.config.get("DISCORD_BOT_SECRET")
         guild_id = current_app.config.get("DISCORD_GUILD_ID")
+        active_role_id = current_app.config.get("DISCORD_ACTIVE_ROLE_ID")
+        unknown_role_id = current_app.config.get("DISCORD_UNKNOWN_ROLE_ID")
 
-        expected = set(DiscordClient.get_expected_roles(user))
+        if disconnect:
+            expected = set((unknown_role_id,))
+        else:
+            expected = set(DiscordClient.get_expected_roles(user))
+
         current = set(DiscordClient.get_current_roles(user.discord_user_id))
         managed = set(group.discord_role_id for group in models.Group
                       .query
@@ -118,8 +126,8 @@ class DiscordClient:
                       .filter(models.Group.discord_role_id.is_not(None))
                       .order_by(models.Group.weight.desc())
                       .all())
-        managed.add(current_app.config.get("DISCORD_ACTIVE_ROLE_ID"))
-        managed.add(current_app.config.get("DISCORD_UNKNOWN_ROLE_ID"))
+        managed.add(active_role_id)
+        managed.add(unknown_role_id)
 
         # Roles that should be kept, because they are not managed by flasquelistan.
         current_non_managed = current.difference(managed)
@@ -132,3 +140,6 @@ class DiscordClient:
                 f"https://discord.com/api/guilds/{guild_id}/members/{user.discord_user_id}",
                 json={"roles": list(new_roles)},
                 headers={"Authorization": f"Bot {bot_secret}"})
+
+    def sync_roles_on_disconnect(user):
+        DiscordClient.sync_roles(user, True)

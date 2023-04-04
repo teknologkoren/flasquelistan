@@ -1,0 +1,72 @@
+{% extends 'layout.html' %}
+
+{% block scripts %}
+<script defer src="{{ url_for("static", filename="js/confirmDialog.js") }}"></script>
+{% endblock %}
+
+{% block body %}
+<div class="discord-info">
+  <h1>{{ _("Streque + Discord = ❤️") }}</h1>
+  {% if not user.group.discord_role_id %}
+    {{ _('Endast aktiva och före detta korister kan gå med i körens Discord-server. Uppfyller du
+          kravet, men ser ändå detta meddelande? Kontakta i så fall <a href="mailto:%(email)s">
+          webmaster</a>.', email=admin_email) }}
+  {% else %}
+  <p>
+    {{
+      _("Kören har en Discord-server som är integrerad med Strequelistan. För att gå med i servern
+         behöver du koppla ditt Discord-konto till ditt Streque-konto, vilket du gör med hjälp av
+         länken nedan. Har du inget konto ännu så kan du skapa ett nytt genom samma länk.")
+    }}
+  </p>
+  {% if user.discord_user_id %}
+  <p>
+    {{ _("Du har redan ett Discord-konto kopplat till Streque:") }}
+    <a href="https://discord.com/users/{{ user.discord_user_id }}">{{ user.discord_username }}</a>.
+    {{ _("Du kan välja att ta bort ditt Discord-konto från Streque eller att logga in med ett annat
+    konto för att byta till det. Notera att du kommer tappa tillgången till körens Discord-server
+    om du tar bort kopplingen till ditt Streque-konto.") }}
+  </p>
+  {% endif %}
+  <p>
+    <a href="{{ url_for('strequelistan.discord_redirect') }}">
+      <img 
+        src="https://assets-global.website-files.com/6257adef93867e50d84d30e2/636e0a6a49cf127bf92de1e2_icon_clyde_blurple_RGB.png"
+        style="max-height: 1em;">
+      {{ _("Logga in med Discord") }}
+    </a>
+  </p>
+  {% if user.discord_user_id %}
+  <form method="POST">
+  {{ form.csrf_token }}
+  <div class="form-entry">
+    <button
+        class="confirm"
+        formaction="{{ url_for('strequelistan.discord_disconnect') }}">
+        {{ _("Ta bort mitt Discord-konto från Streque") }}
+    </button>
+  </div>
+  </form>
+  {% endif %}
+
+  <h2>{{ _("Frågor och svar") }}</h2>
+  <h3>{{ _("Det fungerar inte, vad ska jag ta mig till?") }}</h3>
+  <p>
+     {{ _('Kontakta <a href="mailto:%(email)s">webmaster</a> via valfritt kommunikationsmedel,
+     så får du hjälp!', email=admin_email) }}
+  </p>
+  {% if user.discord_user_id %}
+  <h3>{{ _("Min Streque-profil har fel Discord-användarnamn, vad ska jag göra?") }}</h3>
+  <p>
+    {{ _('Om du har bytt användarnamn på Discord sedan du kopplade ditt konto till Streque så
+    uppdateras det inte automatiskt här. Om du vill lösa detta, klicka på "Logga in med Discord"
+    ovan och gör om kopplingsprocessen på nytt.') }}
+  </p>
+  <p>
+    {{ _("OBS: notera att det användarnamn som visas här är det du valde när du skapade ditt
+    konto, dvs inte samma som ditt smeknamn på servern.") }}
+  </p>
+  {% endif %}
+  {% endif %}
+</div>
+{% endblock %}

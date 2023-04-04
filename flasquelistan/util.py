@@ -6,13 +6,13 @@ import smtplib
 import ssl
 import threading
 from urllib.parse import urljoin, urlparse
-from flasquelistan.factory import socketio
 
 import flask
 import flask_uploads
 import phonenumbers
 import werkzeug
 from PIL import Image, ImageOps
+from flasquelistan.factory import socketio
 
 image_uploads = flask_uploads.UploadSet('images',
                                         flask_uploads.IMAGES)
@@ -178,3 +178,9 @@ def emit_notification_event(notification):
         'discord_user_id': user.discord_user_id,
         'text': notification.text
     })
+
+
+# Helper method to determine whether the Discord integration is launched yet.
+# TODO: remove after launch.
+def is_discord_launched_yet():
+    return datetime.datetime.now() > datetime.datetime(2023, 4, 6, 21)
