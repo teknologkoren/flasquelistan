@@ -115,6 +115,17 @@ def get_user_by_discord(discord_user_id):
     return filter_user_data(user.api_dict)
 
 
+@mod.route('/users/by-birthday/<int:month>/<int:day>', methods=['GET'])
+@auth.login_required
+def get_users_by_birthday(month: int, day: int):
+    users = User.query.filter(User.birthday.is_not(None)).all()
+    results = []
+    for user in users:
+        if user.birthday.month == month and user.birthday.day == day:
+            results.append(filter_user_data(user.api_dict))
+    return jsonify(results)
+
+
 @mod.route('/users/me/streque/<int:article_id>', methods=['POST'])
 @auth.login_required
 def add_streque_me(article_id):
