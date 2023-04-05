@@ -35,8 +35,8 @@ auth = HTTPTokenAuth(scheme='Bearer')
 # We are using the ApiKey as "user" for the authentication library, because
 # we need information about which key was used to authenticate, not just which
 # user owns it. Let's define some functions to make this less confusing.
-current_api_key = lambda: auth.current_user()
-current_user = lambda: current_api_key().user
+def current_api_key(): return auth.current_user()
+def current_user(): return current_api_key().user
 
 
 # SocketIO authentication.
@@ -82,8 +82,8 @@ def filter_user_data(user_dict):
         return user_dict
     else:
         allowed = ('id', 'email', 'first_name', 'last_name', 'full_name',
-                  'nickname', 'birthday', 'active', 'lang', 'group', 'phone',
-                  'profile_picture', 'discord_user_id', 'discord_username')
+                   'nickname', 'birthday', 'active', 'lang', 'group', 'phone',
+                   'profile_picture', 'discord_user_id', 'discord_username')
         return {k: v for (k, v) in user_dict.items() if k in allowed}
 
 
@@ -150,7 +150,7 @@ def get_transactions_me():
 @auth.login_required
 def get_transactions_user(user_id):
     if not current_api_key().is_admin and current_user().id != user_id:
-        flask.abort(403) # HTTP 403 Forbidden
+        flask.abort(403)  # HTTP 403 Forbidden
 
     user = User.query.get_or_404(user_id)
     min_id = request.args.get('min_id', 0)
@@ -172,7 +172,7 @@ def get_transactions():
 
 def query_transactions(user=None, min_id=0, limit=None, order="asc"):
     if not current_api_key().is_admin:
-        flask.abort(403) # HTTP 403 Forbidden
+        flask.abort(403)  # HTTP 403 Forbidden
 
     q = Transaction.query
     if user is not None:
@@ -188,6 +188,27 @@ def query_transactions(user=None, min_id=0, limit=None, order="asc"):
     transactions = q.all()
 
     return jsonify([t.api_dict for t in transactions])
+
+
+@mod.route('/quotes', methods=['GET'])
+@auth.login_required
+def get_quotes():
+    min_id = request.args.get('min_id', 0)
+    limit = request.args.get('limit', None)
+    order = request.args.get('order', "asc")
+
+    q = models.Quote.query
+    if min_id > 0:
+        q = q.filter(Quote.id >= min_id)
+    if order == "desc":
+        q = q.order_by(desc(Quote.id))
+    else:
+        q = q.order_by(Quote.id)
+    if limit is not None:
+        q = q.limit(limit)
+    quotes = q.all()
+
+    return jsonify([quote.api_dict for quote in quotes])
 
 
 @mod.route('/quotes/random', methods=['GET'])
@@ -208,21 +229,21 @@ def get_quote(quote_id):
 @auth.login_required
 def mark_notification_sent(notification_id):
     if not current_api_key().is_admin:
-        flask.abort(403) # HTTP 403 Forbidden
+        flask.abort(403)  # HTTP 403 Forbidden
 
     notification = Notification.query.get_or_404(notification_id)
     notification.is_sent = True
     db.session.commit()
-    return '', 204 # HTTP 204 No Content
+    return '', 204  # HTTP 204 No Content
 
 
 @mod.route('/notifications/<int:notification_id>/mark_acknowledged', methods=['POST'])
 @auth.login_required
 def mark_notification_acknowledged(notification_id):
     if not current_api_key().is_admin:
-        flask.abort(403) # HTTP 403 Forbidden
+        flask.abort(403)  # HTTP 403 Forbidden
 
     notification = Notification.query.get_or_404(notification_id)
     notification.is_acknowledged = True
     db.session.commit()
-    return '', 204 # HTTP 204 No Content
+    return '', 204  # HTTP 204 No Content
