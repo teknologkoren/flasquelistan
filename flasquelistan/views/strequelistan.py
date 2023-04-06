@@ -1043,10 +1043,6 @@ def discord_callback():
         return flask.redirect(flask.url_for('strequelistan.discord'))
 
     discord_user = client.get_user()
-    client.add_to_server(
-        discord_user['id'],
-        current_user.full_name,
-        DiscordClient.get_expected_roles(current_user))
 
     existing_users = models.User.query.filter_by(discord_user_id=discord_user['id']).all()
     if existing_users:
@@ -1065,9 +1061,31 @@ def discord_callback():
                 (existing_user.full_name, current_user.full_name)),
                 'warning')
 
+    if (current_user.discord_user_id is not None
+        and current_user.discord_user_id != discord_user["id"]):
+
+        # This Streque account was already connected to a different Discord account.
+        # Remove any managed roles before adding the new account.
+        DiscordClient.sync_roles_on_disconnect(current_user)
+
+        flask.flash(
+            _l('Du hade redan ett annat Discord-konto (%s) kopplat till ditt Streque-konto. '
+               'Kontot du loggade in med nu (%s) har ersätt det gamla.') %
+                (
+                    current_user.discord_username,
+                    f'{discord_user["username"]}#{discord_user["discriminator"]}'
+                ),
+            'warning')
+
+
     current_user.discord_user_id = discord_user["id"]
     current_user.discord_username = f'{discord_user["username"]}#{discord_user["discriminator"]}'
     models.db.session.commit()
+
+    client.add_to_server(
+        discord_user['id'],
+        current_user.full_name,
+        DiscordClient.get_expected_roles(current_user))
 
     DiscordClient.sync_roles(current_user)
 

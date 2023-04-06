@@ -1,12 +1,8 @@
-import sys
 import requests
 from requests_oauthlib import OAuth2Session
 from flask import current_app
 from flask_wtf import csrf
 from flasquelistan import models
-import pprint
-
-pp = pprint.PrettyPrinter(indent=2)
 
 
 class DiscordClient:
@@ -42,7 +38,6 @@ class DiscordClient:
             data["nick"] = nickname
         if roles is not None:
             data["roles"] = roles
-        pp.pprint(data)
         bot_secret = current_app.config.get("DISCORD_BOT_SECRET")
         guild_id = current_app.config.get("DISCORD_GUILD_ID")
 
@@ -51,8 +46,6 @@ class DiscordClient:
             json=data,
             headers={"Authorization": f"Bot {bot_secret}"})
 
-        print(f"Add to server response code: {r.status_code}", file=sys.stderr)
-        print(r.text, file=sys.stderr)
         return r.status_code == requests.codes.ok
 
     def add_or_fetch_role(name):
@@ -116,10 +109,14 @@ class DiscordClient:
 
         if disconnect:
             expected = set((unknown_role_id,))
+            try:
+                current = set(DiscordClient.get_current_roles(user.discord_user_id))
+            except:
+                current = set()
         else:
             expected = set(DiscordClient.get_expected_roles(user))
+            current = set(DiscordClient.get_current_roles(user.discord_user_id))
 
-        current = set(DiscordClient.get_current_roles(user.discord_user_id))
         managed = set(group.discord_role_id for group in models.Group
                       .query
                       # Only groups a Discord role id
@@ -133,13 +130,15 @@ class DiscordClient:
         current_non_managed = current.difference(managed)
 
         new_roles = expected.union(current_non_managed)
-        print(f"New roles: {new_roles}", file=sys.stderr)
 
         if new_roles != current:
             requests.patch(
                 f"https://discord.com/api/guilds/{guild_id}/members/{user.discord_user_id}",
                 json={"roles": list(new_roles)},
-                headers={"Authorization": f"Bot {bot_secret}"})
+                headers={
+                    "Authorization": f"Bot {bot_secret}",
+                    "X-Audit-Log-Reason": f"Syncing roles with Streque user #{user.id}: {user.full_name}",
+                })
 
     def sync_roles_on_disconnect(user):
         DiscordClient.sync_roles(user, True)
