@@ -39,10 +39,22 @@
 </div>
 {% endmacro %}
 
+{% block head %}
+<script defer src="{{ url_for('static', filename='js/common.js') }}"></script>
+<script defer src="{{ url_for('static', filename='js/streque.js') }}"></script>
+<script defer src="{{ url_for('static', filename='js/quoteFilter.js') }}"></script>
+<script defer src="{{ url_for('static', filename='js/lib/confetti.browser.min.js') }}"></script>
+{% endblock %}
+
+
 {% block body %}
 <div class="cards">
   <h2>{{ _("Citat") }}</h2>
   <p><a href="{{ url_for('quotes.add_quote') }}">{{ _("Lägg till citat") }}</a></p>
+  <div class="user-filter">
+    <input type="text" id="quote-filter" placeholder="Sök citat" autocomplete="off">
+    <button id="clear-filter" type="button">{{ _("Rensa") }}</button>
+  </div>
   {% if not quotes %}
   <p>{{ _("No quotes yet!") }}</p>
   {% endif %}
