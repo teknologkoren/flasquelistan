@@ -1079,7 +1079,13 @@ def discord_callback():
 
 
     current_user.discord_user_id = discord_user["id"]
-    current_user.discord_username = f'{discord_user["username"]}#{discord_user["discriminator"]}'
+    if discord_user["discriminator"] == "0":
+        # If the user is migrated to the new tag-less Discord username system, don't include the
+        # 0 tag in the stored username. For more info see https://support-dev.discord.com/hc/en-us/articles/13667755828631.
+        current_user.discord_username = f'{discord_user["username"]}'
+    else:
+        # If the user still has a legacy username with a tag, include it in the stored username.
+        current_user.discord_username = f'{discord_user["username"]}#{discord_user["discriminator"]}'
     models.db.session.commit()
 
     client.add_to_server(
