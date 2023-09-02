@@ -14,7 +14,7 @@ bcrypt==3.2.0
     # via -r requirements.in
 bidict==0.22.1
     # via python-socketio
-certifi==2022.12.7
+certifi==2023.7.22
     # via requests
 cffi==1.14.5
     # via bcrypt
