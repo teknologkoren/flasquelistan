@@ -146,6 +146,10 @@ def get_transactions_me():
     return get_transactions_user(current_user().id)
 
 
+def cast_integer_param(param):
+    return int(param) if param.isdigit() else None
+
+
 @mod.route('/users/<int:user_id>/transactions', methods=['GET'])
 @auth.login_required
 def get_transactions_user(user_id):
@@ -153,9 +157,12 @@ def get_transactions_user(user_id):
         flask.abort(403)  # HTTP 403 Forbidden
 
     user = User.query.get_or_404(user_id)
-    min_id = request.args.get('min_id', 0)
     limit = request.args.get('limit', None)
     order = request.args.get('order', "asc")
+    min_id = cast_integer_param(request.args.get('min_id', '0'))
+
+    if min_id is None:
+        return "400 Bad Request: invalid min_id.", 400 # HTTP 400 Bad Request
 
     return query_transactions(user=user, min_id=min_id, limit=limit, order=order)
 
@@ -163,17 +170,20 @@ def get_transactions_user(user_id):
 @mod.route('/transactions', methods=['GET'])
 @auth.login_required
 def get_transactions():
-    min_id = request.args.get('min_id', 0)
+    if not current_api_key().is_admin:
+        flask.abort(403)  # HTTP 403 Forbidden
+
     limit = request.args.get('limit', None)
     order = request.args.get('order', "asc")
+    min_id = cast_integer_param(request.args.get('min_id', '0'))
+
+    if min_id is None:
+        return "400 Bad Request: invalid min_id.", 400 # HTTP 400 Bad Request
 
     return query_transactions(min_id=min_id, limit=limit, order=order)
 
 
 def query_transactions(user=None, min_id=0, limit=None, order="asc"):
-    if not current_api_key().is_admin:
-        flask.abort(403)  # HTTP 403 Forbidden
-
     q = Transaction.query
     if user is not None:
         q = q.filter(Transaction.user_id == user.id)
