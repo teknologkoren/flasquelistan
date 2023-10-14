@@ -10,7 +10,6 @@ from urllib.parse import urljoin, urlparse
 import flask
 import flask_uploads
 import phonenumbers
-import werkzeug
 from PIL import Image, ImageOps
 from flasquelistan.factory import socketio
 
@@ -30,25 +29,23 @@ def generate_secure_path_hash(expires, url, secret):
 
 def url_for_image(filename, imagetype, width=None):
     if imagetype == 'profilepicture':
-        base = profile_pictures.config.base_url
+        url = profile_pictures.config.base_url
     elif imagetype == 'image':
-        base = image_uploads.config.base_url
+        url = image_uploads.config.base_url
     else:
         flask.abort(500)
 
-    href = werkzeug.urls.Href(base)
     if width and not flask.current_app.debug:
-        url = href('img{}'.format(width), filename)
-    else:
-        url = href(filename)
+        url = urljoin(url, 'img{}'.format(width))
+
+    url = urljoin(url, filename)
 
     secret = flask.current_app.config['IMAGE_SECRET']
     expiry = flask.current_app.config['IMAGE_EXPIRY']
     expires = int(datetime.datetime.now().timestamp() + expiry)
     md5 = generate_secure_path_hash(expires, url, secret)
 
-    full_href = werkzeug.urls.Href(url)
-    return full_href(md5=md5, expires=expires)
+    return f"{url}?md5={md5}&expires={expires}"
 
 
 def send_email(fromaddr, toaddr, subject, body):
