@@ -39,7 +39,7 @@
 {% macro profile_picture(user, with_link=False, lazy=False) %}
 {% if user.profile_picture %}
 {% if with_link %}
-<a class="profile-picture" href="{{ url_for('strequelistan.user_gallery', user_id=user.id, page=gallery_page_for_image(user.profile_picture, user), _anchor=user.profile_picture.id) }}">
+<a class="profile-picture" href="{{ url_for('strequelistan.user_gallery', user_id=user.id, page=gallery_page_for_image(user.profile_picture, user), _anchor=user.profile_picture.id|string) }}">
   <img src="{{ url_for_image(user.profile_picture.filename, 'profilepicture', 600) }}">
 </a>
 {% else %}
