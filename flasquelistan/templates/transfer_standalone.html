@@ -1,0 +1,33 @@
+{% extends "layout.html" %}
+
+{% set active_page = "streque" %}
+{% set main_class = "non-padded" %}
+
+{% from "macros.html" import form_entry %}
+
+{% block body %}
+<div class="profile">
+  <div class="profile-content">
+    <form id="transfer" method="POST" action="{{ url_for('strequelistan.credit_transfer') }}">
+      {{ credit_transfer_form.csrf_token }}
+      {{ credit_transfer_form.payer_id }}
+      {{ credit_transfer_form.payee_id }}
+      <fieldset>
+        <legend>{{ _("Streque Pay") }}</legend>
+        <div class="form-entry">
+          {{ _("Från") }}: {{ current_user.full_name }}<br/>
+          {{ _("Till") }}: {{ user.full_name }}
+        </div>
+        {{ form_entry(credit_transfer_form.value) }}
+        {{ form_entry(credit_transfer_form.message) }}
+        {% if user.id == current_user.id %}
+            <button disabled>{{ _("(du kan inte Streque Pay:a dig själv)") }}</button>
+        {% else %}
+            <button>{{ _("Skicka") }}</button>
+        {% endif %}
+      </fieldset>
+    </form>
+  </div>
+</div>
+<a href="{{ url_for('strequelistan.show_profile', user_id=user.id) }}">{{ _("Gå till profil") }}</a>
+{% endblock %}

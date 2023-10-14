@@ -392,6 +392,43 @@ def credit_transfer():
     return redir
 
 
+@mod.route('/transfer-generate-link', methods=['POST'])
+def credit_transfer_generate_link():
+    form = forms.CreditTransferForm()
+
+    payee = (models.User
+             .query
+             .filter_by(id=form.payee_id.data)
+             .first()
+             )
+
+    if not (payee):
+        flask.abort(400)
+
+    redir = flask.redirect(
+        flask.url_for('strequelistan.show_profile', user_id=payee.id)
+    )
+
+    if form.validate_on_submit():
+        args = {'value': form.value.data}
+        if form.value.data:
+            args['value'] = form.value.data
+        message = form.message.data.strip()
+        if message:
+            args['message'] = message
+        generated_url = flask.url_for('strequelistan.transfer_standalone', user_id=payee.id, _external=True, **args)
+
+        flask.flash(
+            _('Streque Pay-länk skapad: <a href="%(href)s">%(href)s',
+              href=generated_url),
+            'success'
+        )
+    elif form.is_submitted():
+        forms.flash_errors(form)
+
+    return redir
+
+
 @mod.route('/articles')
 def article_description():
     articles = (models.Article
@@ -555,6 +592,29 @@ def show_profile(user_id):
         credit_transfer_form=credit_transfer_form,
         admin_transaction_form=admin_transaction_form,
         is_discord_launched_yet=util.is_discord_launched_yet()
+    )
+
+
+@mod.route('/profile/<int:user_id>/pay')
+def transfer_standalone(user_id):
+    user = models.User.query.get_or_404(user_id)
+
+    credit_transfer_form = forms.CreditTransferForm()
+    credit_transfer_form.payer_id.data = current_user.id
+    credit_transfer_form.payee_id.data = user.id
+
+    # Pre-fill credit transfer form if query parameters are set
+    try:
+        credit_transfer_form.value.data = request.args.get("value", None, float)
+    except ValueError:
+        # If the value param was not a valid float, ignore it.
+        pass
+    credit_transfer_form.message.data = request.args.get("message", None)
+
+    return flask.render_template(
+        'transfer_standalone.html',
+        user=user,
+        credit_transfer_form=credit_transfer_form,
     )
 
 

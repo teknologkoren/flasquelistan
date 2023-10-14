@@ -132,6 +132,19 @@
         <button>{{ _("Skicka") }}</button>
       </fieldset>
     </form>
+    {% else %}
+    <form method="POST" action="{{ url_for('strequelistan.credit_transfer_generate_link') }}">
+      {{ credit_transfer_form.csrf_token }}
+      {{ credit_transfer_form.payer_id }}
+      {{ credit_transfer_form.payee_id }}
+      <fieldset>
+        <legend>{{ _("Generera Streque Pay-länk") }}</legend>
+        {{ _("Vill du att någon ska skicka dig en Streque Pay? Fyll i summa och klicka på knappen för att skapa en smidig länk att skicka!") }}
+        {{ form_entry(credit_transfer_form.value) }}
+        {{ form_entry(credit_transfer_form.message) }}
+        <button>{{ _("Skapa länk") }}</button>
+      </fieldset>
+    </form>
     {% endif %}
 
     {% if current_user.is_admin %}
