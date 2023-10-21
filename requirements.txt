@@ -145,7 +145,7 @@ sqlalchemy==1.4.18
     # via flask-sqlalchemy
 toml==0.10.2
     # via pytest
-urllib3==1.26.17
+urllib3==1.26.18
     # via requests
 vobject==0.9.6.1
     # via -r requirements.in
