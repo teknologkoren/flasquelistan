@@ -87,6 +87,16 @@ def filter_user_data(user_dict):
         return {k: v for (k, v) in user_dict.items() if k in allowed}
 
 
+@mod.route('/users', methods=['GET'])
+@auth.login_required
+def get_active_users():
+    results = []
+    users = User.query.filter_by(active=True).all()
+    for user in users:
+        results.append(filter_user_data(user.api_dict))
+    return jsonify(results)
+
+
 @mod.route('/users/me', methods=['GET'])
 @auth.login_required
 def get_user_me():
