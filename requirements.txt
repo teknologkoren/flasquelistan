@@ -149,7 +149,7 @@ urllib3==1.26.18
     # via requests
 vobject==0.9.6.1
     # via -r requirements.in
-werkzeug==2.3.7
+werkzeug==3.0.1
     # via
     #   flask
     #   flask-login
