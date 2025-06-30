@@ -17,4 +17,6 @@ flasquelistan/static/.webassets-cache*
 
 *.swp
 .coverage
+
 flasquelistan/songbook_dist/
+ssh/
