@@ -3,7 +3,6 @@ import hashlib
 import os
 import sys
 import traceback
-from attr import has
 
 import flask
 import flask_babel
