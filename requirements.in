@@ -1,4 +1,5 @@
 bcrypt
+click<8.2.0
 coverage
 ffmpy
 flask<2.3.0
