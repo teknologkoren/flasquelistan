@@ -25,7 +25,7 @@ class TestAuth:
         rv = client.get('/')
 
         assert rv.status_code == 302
-        assert rv.headers['Location'] == 'http://localhost/login?next=%2F'
+        assert rv.headers['Location'] == '/login?next=%2F'
 
     def test_login_logout(self, app):
         # Create 2 users
@@ -67,7 +67,7 @@ class TestAuth:
             assert current_user.id == user.id
 
             # Check if redirect worked as expected
-            assert rv.headers['Location'] == 'http://localhost/'
+            assert rv.headers['Location'] == '/'
             assert rv.status_code == 302
 
             # Log out
@@ -418,7 +418,7 @@ class TestPaperListPage:
         with client:
             response = client.get('http://localhost/paperlist')
             assert response.status_code == 302
-            assert response.headers['Location'] == 'http://localhost/login?next=%2Fpaperlist'
+            assert response.headers['Location'] == '/login?next=%2Fpaperlist'
 
 
 class TestCreateUserPage:
