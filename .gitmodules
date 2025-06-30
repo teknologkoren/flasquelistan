@@ -1,0 +1,3 @@
+[submodule "songbook-viewer"]
+	path = songbook-viewer
+	url = git@github.com:teknologkoren/songbook-viewer.git
