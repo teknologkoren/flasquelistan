@@ -46,3 +46,15 @@ DISCORD_CLIENT_SECRET = "another super secret secret"
 DISCORD_BOT_SECRET = "yet another super secret secret"
 DISCORD_ACTIVE_ROLE_ID = "0000000000000000000"
 DISCORD_UNKNOWN_ROLE_ID = "0000000000000000000"
+
+# Goof configuration - set enabled=False or remove entry to disable
+GOOFS_CONFIG = {
+    # Example configuration (override in instance/config.py):
+    # 'random_picture_1': {
+    #     'enabled': True,
+    #     'type': 'random_picture',
+    #     'route': '/example',
+    #     'user_id': None,           # Set actual user ID in instance/config.py
+    #     'title': 'Random Pictures'
+    # }
+}

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>{{ title }}</title>
+    <style>
+        body {
+            text-align: center;
+            padding: 10px;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 90vh;
+            /* overflow: hidden; */
+        }
+
+        img {
+            width: 95vw;
+            max-height: 65vh;
+            height: auto;
+            object-fit: contain;
+            border: 3px solid #d4d4aa;
+            border-radius: 15px;
+            padding: 1.2em;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+            background: linear-gradient(145deg, #fafafa, #f0f0f0);
+        }
+
+        a {
+            color: #007bff;
+            text-decoration: none;
+            font-size: 4vw;
+            margin-top: 20px;
+            display: inline-block;
+        }
+
+        @media (pointer: fine) {
+            a {
+                font-size: 1.2em;
+            }
+        }
+
+        h1 {
+            font-family: 'Times New Roman', serif;
+            font-style: italic;
+            font-weight: 300;
+            color: #666;
+            font-size: 5vw;
+            margin: 0 0 20px 0;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+            letter-spacing: 0.1em;
+        }
+
+        @media (pointer: fine) {
+            h1 {
+                font-size: 2.5em;
+            }
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>{{ title }}</h1>
+    <img src="{{ image_url }}" alt="Random picture">
+    <p>
+        <a href="{{ request.url }}">Another one!</a>
+        <br>
+        <a href="{{ url_for('strequelistan.index') }}">Back to Streque</a>
+    </p>
+</body>
+
+</html>
