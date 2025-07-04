@@ -2,6 +2,7 @@ from flask import Blueprint, render_template, abort
 import random
 from flasquelistan.models import User, ProfilePicture, db
 from flasquelistan import util
+from flasquelistan.views.strequelistan import gallery_page_for_image
 
 mod = Blueprint("goofs", __name__)
 
@@ -45,7 +46,6 @@ def create_random_picture_route(app, route, config, goof_id):
         image_url = util.url_for_image(random_picture.filename, "profilepicture")
 
         # Find which page this image is on in the user gallery
-        from flasquelistan.views.strequelistan import gallery_page_for_image
         gallery_page = gallery_page_for_image(random_picture, user)
         
         # Generate URL to user gallery at the specific page with anchor
