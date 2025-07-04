@@ -44,11 +44,23 @@ def create_random_picture_route(app, route, config, goof_id):
         # Generate secure URL for the image
         image_url = util.url_for_image(random_picture.filename, "profilepicture")
 
+        # Find which page this image is on in the user gallery
+        from flasquelistan.views.strequelistan import gallery_page_for_image
+        gallery_page = gallery_page_for_image(random_picture, user)
+        
+        # Generate URL to user gallery at the specific page with anchor
+        from flask import url_for
+        if gallery_page:
+            gallery_url = url_for("strequelistan.user_gallery", user_id=user_id, page=gallery_page, _anchor=str(random_picture.id))
+        else:
+            gallery_url = url_for("strequelistan.user_gallery", user_id=user_id, _anchor=str(random_picture.id))
+
         title = config.get("title", "Random Pictures")
 
         return render_template(
             "goofs/random_picture.html",
             image_url=image_url,
+            gallery_url=gallery_url,
             title=title,
             route_id=goof_id,
         )

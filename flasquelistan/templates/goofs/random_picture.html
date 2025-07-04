@@ -68,7 +68,9 @@
 
 <body>
     <h1>{{ title }}</h1>
-    <img src="{{ image_url }}" alt="Random picture">
+    <a href="{{ gallery_url }}">
+        <img src="{{ image_url }}" alt="Random picture" style="cursor: pointer;">
+    </a>
     <p>
         <a href="{{ request.url }}">Another one!</a>
         <br>
