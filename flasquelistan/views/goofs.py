@@ -1,10 +1,13 @@
 from flask import Blueprint, render_template, abort
 import random
+
+from flask_login import login_required
 from flasquelistan.models import User, ProfilePicture, db
 from flasquelistan import util
 from flasquelistan.views.strequelistan import gallery_page_for_image
 
 mod = Blueprint("goofs", __name__)
+mod.before_request(login_required(lambda: None))
 
 
 def init_goof_routes(app):
