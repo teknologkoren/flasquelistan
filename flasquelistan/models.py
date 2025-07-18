@@ -333,6 +333,7 @@ class User(flask_login.UserMixin, db.Model):
             # Algorithm will burn away more alcohol that there is in the body
             # which is not possible.
             if alcohol_in_body < 0:
+
                 alcohol_in_body = 0
 
             alcohol_in_body += (streque.standardglas
@@ -391,6 +392,30 @@ class User(flask_login.UserMixin, db.Model):
         i = int.from_bytes(md5.digest(), 'little') % 0x45
         # add number to start of the 'Emoticons' unicode block
         return chr(0x1f600 + i)
+
+    def poke(self, poker):
+        last_poke = (
+            Poke.query
+            .filter(
+                (
+                    ((Poke.poker_id == poker.id) & (Poke.pokee_id == self.id)) |
+                    ((Poke.poker_id == self.id) & (Poke.pokee_id == poker.id))
+                )
+            )
+            .order_by(Poke.timestamp.desc())
+            .first()
+        )
+        # If the last poke was not made by the user that is trying to poke or
+        # if the there hasn't been any pokes between these users, we allow the poke.
+        if last_poke and last_poke.poker == poker:
+            return False
+
+        poke = Poke(poker_id=poker.id, pokee_id=self.id)
+        db.session.add(poke)
+        db.session.commit()
+
+        return poke
+
 
     def __str__(self):
         return f"{self.first_name} {self.last_name} <{self.email}>"
@@ -454,7 +479,7 @@ class NicknameChange(db.Model):
     # The user who reviewed the change. If explicit approval was not required, this should
     # be null. For imported legacy nickname changes, this should also be null.
     reviewer_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True)
-    
+ 
     # Whenever the nickname change was created.
     created_timestamp = db.Column(db.DateTime)
 
@@ -772,6 +797,35 @@ class ProfilePicture(db.Model):
 
     def __repr__(self):
         return f"ProfilePicture {self.filename} {self.user_id}"
+
+
+class Poke(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    poker_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    pokee_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    timestamp = db.Column(db.DateTime, nullable=False,
+                          default=datetime.datetime.utcnow)
+
+    poker = db.relationship('User', foreign_keys=poker_id)
+    pokee = db.relationship('User', foreign_keys=pokee_id)
+
+    def create_notification(self):
+        notification = Notification(
+            text=f"{self.poker.displayname} puffade dig!",
+            user_id=self.pokee_id,
+            type="poke",
+            reference=str(self.id)
+        )
+        db.session.add(notification)
+        db.session.commit()
+        util.emit_notification_event(notification)
+        return notification
+
+    def __str__(self):
+        return f"{self.poker.displayname} poked {self.pokee.displayname}"
+
+    def __repr__(self):
+        return f"Poke {self.id} from {self.poker_id} to {self.pokee_id}"
 
 
 class Notification(db.Model):
