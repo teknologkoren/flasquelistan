@@ -11,7 +11,6 @@ from flask_babel import gettext as _
 from flask_babel import lazy_gettext as _l
 from flask_login import current_user, login_required
 from flask_uploads import UploadNotAllowed
-from flask_wtf import csrf
 from sqlalchemy.sql.expression import extract, func, not_
 from config import ADMIN_EMAILADDR
 
@@ -844,6 +843,27 @@ def user_vcard(user_id):
         .format(user.first_name, user.last_name)
     )
     return response
+
+
+@mod.route('/profile/<int:user_id>/poke', methods=['POST'])
+def poke_user(user_id):
+    if current_user.id == user_id:
+        flask.flash(_l("Du kan inte puffa dig själv, det är oanständigt."), 'error')
+        return flask.redirect(flask.url_for('.show_profile', user_id=user_id))
+
+    user = models.User.query.get_or_404(user_id)
+
+    poke = user.poke(current_user)
+    if not poke:
+        flask.flash(
+            _l("Du har redan puffat denna användare, du måste få en puff tillbaka först."),
+            'error'
+        )
+        return flask.redirect(flask.url_for('.show_profile', user_id=user_id))
+
+    poke.create_notification()
+    flask.flash(_l("Puffad!"), 'success')
+    return flask.redirect(flask.url_for('.show_profile', user_id=user_id))
 
 
 @mod.route('/profile/<int:user_id>/edit/', methods=['GET', 'POST'])

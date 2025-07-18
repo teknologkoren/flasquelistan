@@ -40,6 +40,15 @@
       <a href="{{ url_for('strequelistan.user_vcard', user_id=user.id) }}" download>{{ _("Ladda ner kontaktfil") }}</a>
     </p>
 
+    {% if user != current_user %}
+    <p>
+      <form action="{{ url_for('strequelistan.poke_user', user_id=user.id) }}" method="post">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+        <button>{{ _("👉 Puffa") }}</button>
+      </form>
+    </p>
+    {% endif %}
+
     <dl>
       <dt>{{ _("E-postadress") }}</dt>
       <dd><a href="mailto:{{ user.email }}">{{ user.email }}</a></dd>
