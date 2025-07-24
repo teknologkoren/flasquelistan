@@ -13,7 +13,11 @@
         <ol class="notification-history">
           {% for notification in notifications %}
             <li>
-              <div class="notification-text">{{ notification.text }}</div>
+              {% if notification.type == 'poke' %}
+                <div class="notification-text">{{ notification.text|safe }}</div>
+              {% else %}
+                <div class="notification-text">{{ notification.text }}</div>
+              {% endif %}
               <div class="timestamp">
                 {{ format_datetime(notification.timestamp, "dd MMMM yyyy, HH:mm") }}
               </div>
