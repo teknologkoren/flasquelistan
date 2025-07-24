@@ -810,8 +810,9 @@ class Poke(db.Model):
     pokee = db.relationship('User', foreign_keys=pokee_id)
 
     def create_notification(self):
+        profile_link = flask.url_for('strequelistan.show_profile', user_id=self.poker_id)
         notification = Notification(
-            text=f"{self.poker.displayname} puffade dig!",
+            text=f'<a href="{profile_link}">{self.poker.displayname}</a> puffade dig!',
             user_id=self.pokee_id,
             type="poke",
             reference=str(self.id)
