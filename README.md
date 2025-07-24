@@ -3,12 +3,12 @@
 ## Setting up a development environment
 ### uv
 
-We use `uv` for package management, you can find and introduction and
+We use `uv` for package management, you can find an introduction and
 installation instructions over [at their website](https://docs.astral.sh/uv/).
 
 Quick set up guide:
 
-    $ uv init
+    $ uv sync
 
 Done!
 
