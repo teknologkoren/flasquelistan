@@ -70,3 +70,4 @@ function addStupidButtons() {
 
 initStrequeButtons();
 addStupidButtons();
+downloadEmma();

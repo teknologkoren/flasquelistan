@@ -1,30 +1,38 @@
+function downloadEmma() {
+  var video = document.createElement('video');
+  video.id = 'emma';
+  video.classList.add('hide-emma');
+  video.setAttribute('preload', 'auto');
+  video.setAttribute('muted', '');
+  video.setAttribute('playsinline', '');
+  video.setAttribute('disableRemotePlayback', '');
+
+  var webm = document.createElement('source');
+  webm.src = '/static/images/emma.webm';
+  webm.type = 'video/webm; codecs=vp9';
+  video.appendChild(webm);
+
+  var mp4 = document.createElement('source');
+  mp4.src = '/static/images/emma.compat.mp4';
+  mp4.type = 'video/mp4';
+  video.appendChild(mp4);
+
+  document.body.appendChild(video);
+}
+
 var timeout;
-
 function displayEmma() {
-  if (timeout !== undefined) {
+  if (typeof timeout !== 'undefined') {
     clearTimeout(timeout);
-    document.getElementById('emma-img').remove();
   }
-
-  var emma = document.createElement('img');
-  emma.id = 'emma-img';
-  emma.classList.add('hidden');
-
-  emma.onload = function () {
-    timeout = setTimeout(function () {
-      emma.classList.remove('hidden');
-
-      timeout = setTimeout(function () {
-        emma.classList.add('hidden');
-        setTimeout(function () {
-          emma.remove();
-          timeout = undefined;
-        }, 100);
-      }, 1100);
-    }, 50);
-  };
-  emma.src = '/static/images/emma.gif';
-  document.body.appendChild(emma);
+  var emma = document.getElementById('emma');
+  emma.currentTime = 0;
+  emma.classList.remove('hide-emma');
+  setTimeout(function () { emma.play(); }, 50);
+  timeout = setTimeout(function () {
+    emma.classList.add('hide-emma');
+    emma.pause();
+  }, 1200);
 }
 
 function postData(uri, data, onsuccess, onfailure, csrftoken) {
