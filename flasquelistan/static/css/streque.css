@@ -375,7 +375,7 @@ ol.transaction-history li .value {
   margin-left: 1rem;
 }
 
-#emma-img {
+#emma {
   position: fixed;
   border-radius: 50%;
   top: 50%;
@@ -391,8 +391,7 @@ ol.transaction-history li .value {
   transition: transform .1s;
   transition-timing-function: linear;
 }
-
-#emma-img.hidden {
+#emma.hide-emma {
   transform: translate(-50%, -50%) scale(0.0001);
 }
 
