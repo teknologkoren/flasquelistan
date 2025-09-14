@@ -589,8 +589,8 @@ msgid "Det är tomt här, strequa mer!"
 msgstr ""
 
 #: templates/strequelistan.html:86
-msgid "Ring Sqrubben"
-msgstr ""
+msgid "Flerstämt"
+msgstr "Flerstämt"
 
 #: templates/strequelistan.html:88
 msgid "Prislista"

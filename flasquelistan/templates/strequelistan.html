@@ -62,9 +62,7 @@
 <div class="streque-top">
   <nav class="streque-nav">
     <ul>
-      {% if "PHONENUMBER" in config %}
-      <li><a href="tel:{{ config["PHONENUMBER"] }}">☎️ {{ _("Ring Sqrubben") }}</a></li>
-      {% endif %}
+      <li><a href="{{ url_for("songbook.index") }}">📘 {{ _("Flerstämt") }}</a></li>
       <li><a href="{{ url_for("strequelistan.article_description") }}">💰 {{ _("Prislista") }}</a></li>
       {% if current_user.is_admin %}
       <li><a href="{{ url_for("strequeadmin.index") }}">😎 Admin</a></li>

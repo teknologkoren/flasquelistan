@@ -599,8 +599,8 @@ msgid "Det är tomt här, strequa mer!"
 msgstr "It's empty here, strequa more!"
 
 #: templates/strequelistan.html:86
-msgid "Ring Sqrubben"
-msgstr "Call Sqrubben"
+msgid "Flerstämt"
+msgstr "Songbook"
 
 #: templates/strequelistan.html:88
 msgid "Prislista"
