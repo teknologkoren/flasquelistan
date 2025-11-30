@@ -580,6 +580,10 @@ def show_profile(user_id):
     else:
         admin_transaction_form = None
 
+    last_poke = None
+    if current_user != user:
+        last_poke = current_user.get_last_poke(user)
+
     return flask.render_template(
         'show_profile.html',
         user=user,
@@ -589,7 +593,8 @@ def show_profile(user_id):
         change_profile_picture_form=change_profile_picture_form,
         credit_transfer_form=credit_transfer_form,
         admin_transaction_form=admin_transaction_form,
-        is_discord_launched_yet=util.is_discord_launched_yet()
+        is_discord_launched_yet=util.is_discord_launched_yet(),
+        last_poke=last_poke
     )
 
 
