@@ -9,8 +9,8 @@
   <h1>{{ _("Streque + Discord = ❤️") }}</h1>
   {% if not user.group.discord_role_id %}
     {{ _('Endast aktiva och före detta korister kan gå med i körens Discord-server. Uppfyller du
-          kravet, men ser ändå detta meddelande? Kontakta i så fall <a href="mailto:%(email)s">
-          webmaster</a>.', email=admin_email) }}
+          kravet, men ser ändå detta meddelande? Kontakta i så fall') }} <a href="mailto:{{ admin_email }}">
+          webmaster</a>.
   {% else %}
   <p>
     {{
@@ -50,8 +50,8 @@
   <h2>{{ _("Frågor och svar") }}</h2>
   <h3>{{ _("Det fungerar inte, vad ska jag ta mig till?") }}</h3>
   <p>
-     {{ _('Kontakta <a href="mailto:%(email)s">webmaster</a> via valfritt kommunikationsmedel,
-     så får du hjälp!', email=admin_email) }}
+     {{ _('Kontakta') }} <a href="mailto:{{ admin_email }}">webmaster</a> {{ _('via valfritt kommunikationsmedel,
+     så får du hjälp!') }}
   </p>
   {% if user.discord_user_id %}
   <h3>{{ _("Min Streque-profil har fel Discord-användarnamn, vad ska jag göra?") }}</h3>
