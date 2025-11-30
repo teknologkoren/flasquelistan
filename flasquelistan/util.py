@@ -173,7 +173,7 @@ def emit_notification_event(notification):
         'notification_id': notification.id,
         'user_id': user.id,
         'discord_user_id': user.discord_user_id,
-        'text': notification.text
+        'text': notification.formatted_markdown
     })
 
 
