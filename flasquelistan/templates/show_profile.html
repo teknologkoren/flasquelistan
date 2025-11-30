@@ -32,7 +32,7 @@
     </h2>
     {% if user == current_user or current_user.is_admin %}
     <p>
-    <a href="{{ url_for('strequelistan.edit_profile', user_id=user.id) }}">{{ _("Redigera profil") }}</a>
+      <a href="{{ url_for('strequelistan.edit_profile', user_id=user.id) }}">{{ _("Redigera profil") }}</a>
     </p>
     {% endif %}
 
@@ -42,10 +42,25 @@
 
     {% if user != current_user %}
     <p>
-      <form action="{{ url_for('strequelistan.poke_user', user_id=user.id) }}" method="post">
-        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-        <button>{{ _("👉 Puffa") }}</button>
-      </form>
+      {% if last_poke and last_poke.poker == current_user %}
+      {{ _("Du puffade %(name)s %(time)s.", name=user.displayname, time=format_datetime(last_poke.timestamp, "dd MMMM
+      yyyy, HH:mm")) }}
+      {% else %}
+      {% if last_poke %}
+      {{ _("%(name)s puffade dig %(time)s.", name=user.displayname, time=format_datetime(last_poke.timestamp, "dd MMMM
+      yyyy, HH:mm")) }}
+      {% endif %}
+    <form action="{{ url_for('strequelistan.poke_user', user_id=user.id) }}" method="post">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+      <button>
+        {% if last_poke %}
+        {{ _("👉 Puffa tillbaka") }}
+        {% else %}
+        {{ _("👉 Puffa") }}
+        {% endif %}
+      </button>
+    </form>
+    {% endif %}
     </p>
     {% endif %}
 

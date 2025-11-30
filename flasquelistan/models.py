@@ -393,18 +393,22 @@ class User(flask_login.UserMixin, db.Model):
         # add number to start of the 'Emoticons' unicode block
         return chr(0x1f600 + i)
 
-    def poke(self, poker):
-        last_poke = (
+    def get_last_poke(self, other_user):
+        return (
             Poke.query
             .filter(
                 (
-                    ((Poke.poker_id == poker.id) & (Poke.pokee_id == self.id)) |
-                    ((Poke.poker_id == self.id) & (Poke.pokee_id == poker.id))
+                    ((Poke.poker_id == other_user.id) & (Poke.pokee_id == self.id)) |
+                    ((Poke.poker_id == self.id) & (Poke.pokee_id == other_user.id))
                 )
             )
             .order_by(Poke.timestamp.desc())
             .first()
         )
+
+    def poke(self, poker):
+        last_poke = self.get_last_poke(poker)
+        
         # If the last poke was not made by the user that is trying to poke or
         # if the there hasn't been any pokes between these users, we allow the poke.
         if last_poke and last_poke.poker == poker:
