@@ -6,11 +6,18 @@
 We use `uv` for package management, you can find an introduction and
 installation instructions over [at their website](https://docs.astral.sh/uv/).
 
-Quick set up guide:
+You can use `uv sync` to manually initialize or update the virtual environment,
+and then activate it in your shell.
 
     $ uv sync
+    $ source .venv/bin/activate
 
-Done!
+Once the environment is activated, you can run commands normally, such as the ones
+listed in the sections below.
+
+Alternatively, you can use `uv run <command>` to run individual commands in the
+virtual environment. This will automatically make sure the environment is up to
+date.
 
 ### Initializing the application
 
