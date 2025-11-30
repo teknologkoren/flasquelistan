@@ -62,7 +62,7 @@
 <div class="streque-top">
   <nav class="streque-nav">
     <ul>
-      <li><a href="{{ url_for("songbook.index") }}">📘 {{ _("Flerstämt") }}</a></li>
+      <li><a href="{{ url_for("songbook.index") }}" target="_blank" rel="noopener noreferrer">📘 {{ _("Flerstämt") }}</a></li>
       <li><a href="{{ url_for("strequelistan.article_description") }}">💰 {{ _("Prislista") }}</a></li>
       {% if current_user.is_admin %}
       <li><a href="{{ url_for("strequeadmin.index") }}">😎 Admin</a></li>
