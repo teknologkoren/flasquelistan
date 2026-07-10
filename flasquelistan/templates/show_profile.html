@@ -86,12 +86,12 @@
         <dd>
           <a href="https://discord.com/users/{{ user.discord_user_id }}">{{ user.discord_username }}</a>
           {% if user.group.discord_role_id and user == current_user %}
-            <a href="{{ url_for('strequelistan.discord') }}">({{ _("hantera") }})</a>
+            <a href="{{ url_for('discord_oauth.discord') }}">({{ _("hantera") }})</a>
           {% endif %}
         </dd>
       {% elif user.group.discord_role_id and user == current_user %}
         <dt>{{ _("Discord-profil") }}</dt>
-        <dd><a href="{{ url_for('strequelistan.discord') }}">{{ _("Gå med i körens Discord-server här") }}</a></dd>
+        <dd><a href="{{ url_for('discord_oauth.discord') }}">{{ _("Gå med i körens Discord-server här") }}</a></dd>
       {% endif %}
       {% if user.birthday %}
       <dt>{{ _("Födelsedag") }}</dt>

@@ -4,6 +4,7 @@ import pytest
 import requests
 
 from flasquelistan import models
+from tests.helpers import logged_in
 from flasquelistan.discord import DiscordClient
 
 DISCORD_CONFIG = {
@@ -164,3 +165,23 @@ class TestSyncRoles:
 
             with pytest.raises(RuntimeError):
                 DiscordClient.sync_roles(discord_user, disconnect=True)
+
+
+class TestDiscordViews:
+    def test_discord_page_logged_in(self, client):
+        """The Discord info page renders for a logged in user."""
+        with logged_in(client):
+            response = client.get('/discord')
+            assert response.status_code == 200
+
+    def test_discord_page_requires_login(self, client):
+        """Anonymous users are redirected to the login page."""
+        response = client.get('/discord')
+        assert response.status_code == 302
+        assert '/login' in response.headers['Location']
+
+    def test_discord_connect_forbidden_without_group(self, client):
+        """Users not in a Discord-connected group may not connect."""
+        with logged_in(client):
+            response = client.get('/discord/connect')
+            assert response.status_code == 403

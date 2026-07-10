@@ -29,7 +29,7 @@
   </p>
   {% endif %}
   <p>
-    <a href="{{ url_for('strequelistan.discord_redirect') }}">
+    <a href="{{ url_for('discord_oauth.discord_redirect') }}">
       <img class="discord-logo" src="/static/images/discord.png" />
       {{ _("Logga in med Discord") }}
     </a>
@@ -40,7 +40,7 @@
   <div class="form-entry">
     <button
         class="confirm"
-        formaction="{{ url_for('strequelistan.discord_disconnect') }}">
+        formaction="{{ url_for('discord_oauth.discord_disconnect') }}">
         {{ _("Ta bort mitt Discord-konto från Streque") }}
     </button>
   </div>
