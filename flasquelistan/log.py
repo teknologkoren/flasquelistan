@@ -12,7 +12,7 @@ class RequestFormatter(logging.Formatter):
                     user = current_user
                 else:
                     user = "not logged in"
-            except:  # noqa: E722 (ignore 'bare except' warning)
+            except Exception:
                 # we don't want to crash while formatting the error
                 # if the database is unreachable, for example.
                 user = "error while getting user"

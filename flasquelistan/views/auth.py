@@ -6,7 +6,7 @@ import flask_login
 from flask_babel import gettext as _
 from flask_babel import lazy_gettext as _l
 from flask_login import current_user
-from itsdangerous import SignatureExpired, URLSafeTimedSerializer
+from itsdangerous import BadData, SignatureExpired, URLSafeTimedSerializer
 
 from flasquelistan import forms, models, util
 
@@ -156,7 +156,7 @@ def verify_token(token):
     except SignatureExpired:
         flask.flash(_l("Länken har gått ut, var vänlig försök igen."), 'error')
         return flask.redirect(flask.url_for('auth.login'))
-    except:  # noqa: E722 (ignore 'bare except' warning)
+    except BadData:
         flask.abort(404)
 
     user = models.User.query.get_or_404(user_id)
@@ -255,7 +255,12 @@ def reset_token(token):
     except SignatureExpired:
         flask.flash(expired, 'error')
         return flask.redirect(flask.url_for('.login'))
-    except:  # noqa: E722 (ignore 'bare except' warning)
+    except BadData:
+        flask.flash(invalid, 'error')
+        return flask.redirect(flask.url_for('.login'))
+
+    if user is None:
+        # Valid token but the user has since been deleted.
         flask.flash(invalid, 'error')
         return flask.redirect(flask.url_for('.login'))
 

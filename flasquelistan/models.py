@@ -14,6 +14,7 @@ import flask_sqlalchemy
 import markdown
 import vobject
 from sqlalchemy.ext.hybrid import hybrid_method, hybrid_property
+from sqlalchemy.orm.exc import NoResultFound
 
 from flasquelistan import util
 
@@ -984,7 +985,7 @@ class ApiKey(db.Model):
         try:
             api_key = ApiKey.query.filter_by(
                 _api_key_hash=ApiKey.hash_key(key)).one()
-        except:
+        except NoResultFound:
             return None
 
         if not api_key.is_enabled:
