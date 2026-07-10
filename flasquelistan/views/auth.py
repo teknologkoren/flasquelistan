@@ -29,7 +29,7 @@ def admin_required(func):
         if current_user.is_admin:
             return func(*args, **kwargs)
 
-        if flask.request.get_json():
+        if flask.request.get_json(silent=True):
             # Request is AJAX
             return flask.abort(403)
 
