@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, abort
 import random
+import re
 
 from flask_login import login_required
 from flasquelistan.models import User, ProfilePicture
@@ -68,6 +69,8 @@ def create_random_picture_route(app, route, config, goof_id):
             route_id=goof_id,
         )
 
-    # Create unique endpoint name
-    endpoint_name = f"goofs.random_picture_{hash(goof_id) % 10000}"
+    # Derive a stable endpoint name from the goof id. The "goofs." prefix
+    # makes the blueprint's before_request login check apply to the route.
+    sanitized_id = re.sub(r"\W", "_", goof_id)
+    endpoint_name = f"goofs.{sanitized_id}"
     app.add_url_rule(route, endpoint_name, random_picture_view)
