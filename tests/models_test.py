@@ -87,38 +87,6 @@ def test_article_model(app):
     assert article.id > 0
 
 
-def test_article_model(app):
-    article = models.Article(
-        weight=1,
-        name='Holy Grail',
-        value=10000,
-        description="Difficult to find. Watch out for the rabbit.",
-        standardglas=2,
-        is_active=True
-    )
-
-    models.db.session.add(article)
-    models.db.session.commit()
-
-    assert article.id > 0
-
-
-def test_article_model(app):
-    article = models.Article(
-        weight=1,
-        name='Holy Grail',
-        value=10000,
-        description="Difficult to find. Watch out for the rabbit.",
-        standardglas=2,
-        is_active=True
-    )
-
-    models.db.session.add(article)
-    models.db.session.commit()
-
-    assert article.id > 0
-
-
 def test_profilepicture_model(app):
     brian = models.User(
         email='brian@pfoj.tld',

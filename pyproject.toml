@@ -34,3 +34,7 @@ dependencies = [
     "werkzeug<3.0.0",
     "wtforms[email]<3.0.0",
 ]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = "*_test.py"
