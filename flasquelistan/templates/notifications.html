@@ -9,7 +9,7 @@
     {% if not notifications %}
     <p>{{ _("Här var det tomt.") }}</p>
     {% else %}
-    <a href="{{ url_for('strequelistan.mark_notifications_read') }}">{{ _("Markera alla som lästa") }}</a>
+    <a href="{{ url_for('notifications.mark_notifications_read') }}">{{ _("Markera alla som lästa") }}</a>
     <ol class="notification-history">
       {% for notification in notifications %}
       <li>

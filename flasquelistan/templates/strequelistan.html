@@ -113,7 +113,7 @@
   <h2>{{ _("Inloggad användare") }}</h2>
   {% if notification_count %}
   <p>
-    <a href="{{ url_for('strequelistan.notifications') }}">
+    <a href="{{ url_for('notifications.notifications') }}">
       {{ _("Du har %(num)d notifikation(er)!", num=notification_count) }}
     </a>
   </p>
