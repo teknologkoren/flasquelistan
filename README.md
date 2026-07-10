@@ -1,5 +1,10 @@
 # flasquelistan
 
+## Documentation
+
+- [Deploying to production](docs/DEPLOYMENT.md) — including how to deploy the songbook
+- [Maintainability roadmap](docs/ROADMAP.md) — planned cleanup and Docker migration
+
 ## Setting up a development environment
 ### uv
 
