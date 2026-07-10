@@ -1,10 +1,8 @@
 #!/usr/bin/env python3
 
 import flask
-import pytest
 from flasquelistan import models
 
-from tests.helpers import app
 
 
 def test_poke_notification_formatting(app):

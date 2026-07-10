@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
 
-import pytest
 from flasquelistan import models
-from tests.helpers import app, client, login
+from tests.helpers import login
 
 def test_poke_ux_states(app, client):
     with app.test_request_context():

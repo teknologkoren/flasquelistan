@@ -1,9 +1,7 @@
 #!/usr/bin/env python3
 
-import pytest
-from flasquelistan import factory, models
+from flasquelistan import models
 
-from tests.helpers import app
 
 
 def test_admintransaction_model(app):

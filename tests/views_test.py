@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 
-import pytest
 
 from flask import url_for
 from flask_login import current_user
@@ -9,12 +8,9 @@ import datetime
 
 from flasquelistan import models
 
-from tests.helpers import app
-from tests.helpers import client
 from tests.helpers import logged_in
 from tests.helpers import logged_in_admin
 from tests.helpers import login
-from tests.helpers import logout
 
 
 class TestAuth:
