@@ -88,19 +88,18 @@ def index():
         .all()
     )
 
-    if util.is_discord_launched_yet():
-        # If the user has not yet connected their Discord account, and they are in a group
-        # connected to Discord, show a flash message.
-        if (not current_user.discord_user_id and
-            current_user.group and
-            current_user.group.discord_role_id):
-            flask.flash(
-                _l('Kören har flyttat från Messenger till Discord!') +
-                f' <a href="{ flask.url_for("strequelistan.discord")}">' +
-                _l('Gå med i vår Discord-server här.') +
-                '</a>',
-                'info'
-            )
+    # If the user has not yet connected their Discord account, and they are in a group
+    # connected to Discord, show a flash message.
+    if (not current_user.discord_user_id and
+        current_user.group and
+        current_user.group.discord_role_id):
+        flask.flash(
+            _l('Kören har flyttat från Messenger till Discord!') +
+            f' <a href="{ flask.url_for("strequelistan.discord")}">' +
+            _l('Gå med i vår Discord-server här.') +
+            '</a>',
+            'info'
+        )
 
     if current_app.config.get('DISPLAY_BALANCE_WARNINGS', True):
         if current_user.balance <= 0:
@@ -593,7 +592,6 @@ def show_profile(user_id):
         change_profile_picture_form=change_profile_picture_form,
         credit_transfer_form=credit_transfer_form,
         admin_transaction_form=admin_transaction_form,
-        is_discord_launched_yet=util.is_discord_launched_yet(),
         last_poke=last_poke
     )
 

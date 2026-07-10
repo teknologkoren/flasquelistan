@@ -175,9 +175,3 @@ def emit_notification_event(notification):
         'discord_user_id': user.discord_user_id,
         'text': notification.formatted_markdown
     })
-
-
-# Helper method to determine whether the Discord integration is launched yet.
-# TODO: remove after launch.
-def is_discord_launched_yet():
-    return datetime.datetime.now() > datetime.datetime(2023, 4, 6, 21)

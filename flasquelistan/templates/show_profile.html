@@ -89,7 +89,7 @@
             <a href="{{ url_for('strequelistan.discord') }}">({{ _("hantera") }})</a>
           {% endif %}
         </dd>
-      {% elif user.group.discord_role_id and user == current_user and is_discord_launched_yet %}
+      {% elif user.group.discord_role_id and user == current_user %}
         <dt>{{ _("Discord-profil") }}</dt>
         <dd><a href="{{ url_for('strequelistan.discord') }}">{{ _("Gå med i körens Discord-server här") }}</a></dd>
       {% endif %}
