@@ -559,7 +559,7 @@ class TestRemoveAccountRequestPage:
             response = client.post(
                     url_for('strequeadmin.remove_request', request_id=1),
             )
-            assert response.headers['Location'] == 'http://localhost/'
+            assert response.headers['Location'] == '/'
             assert response.status_code == 302
 
     def test_not_logged_in(self, client):
@@ -629,7 +629,7 @@ class TestRemoveGroupPage:
             response = client.post(
                     url_for('strequeadmin.remove_group', group_id=1),
             )
-            assert response.headers['Location'] == 'http://localhost/'
+            assert response.headers['Location'] == '/'
             assert response.status_code == 302
 
     def test_not_logged_in(self, client):
@@ -837,7 +837,7 @@ class TestRemoveQuotePage:
                     url_for('strequeadmin.remove_quote', quote_id=1),
                     #follow_redirects=True
             )
-            assert response.headers['Location'] == 'http://localhost/'
+            assert response.headers['Location'] == '/'
             assert response.status_code == 302
 
     def test_not_logged_in(self, client):
