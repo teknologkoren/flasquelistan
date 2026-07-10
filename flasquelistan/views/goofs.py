@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, abort
 import random
 
 from flask_login import login_required
-from flasquelistan.models import User, ProfilePicture, db
+from flasquelistan.models import User, ProfilePicture
 from flasquelistan import util
 from flasquelistan.views.strequelistan import gallery_page_for_image
 

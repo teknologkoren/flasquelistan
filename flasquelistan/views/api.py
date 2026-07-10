@@ -19,12 +19,11 @@
 
 import flask
 from flask import jsonify, request
-from flask_babel import lazy_gettext as _l
 from flask_httpauth import HTTPTokenAuth
 from flask_socketio import ConnectionRefusedError
 from sqlalchemy import desc, func
 
-from flasquelistan import forms, models, util
+from flasquelistan import models, util
 from flasquelistan.factory import socketio
 from flasquelistan.models import db, ApiKey, Article, Notification, Transaction, User, Quote
 

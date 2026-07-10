@@ -7,7 +7,6 @@ requires-python = ">=3.9, <3.11"
 dependencies = [
     "bcrypt",
     "click<8.2.0",
-    "coverage",
     "ffmpy",
     "flask<2.3.0",
     "flask-admin",
@@ -24,8 +23,6 @@ dependencies = [
     "markdown",
     "phonenumbers",
     "pillow",
-    "pytest",
-    "pytest-xdist",
     "requests",
     "requests-oauthlib",
     "sh",
@@ -34,6 +31,24 @@ dependencies = [
     "werkzeug<3.0.0",
     "wtforms[email]<3.0.0",
 ]
+
+[dependency-groups]
+dev = [
+    "coverage",
+    "pytest",
+    "pytest-xdist",
+    "ruff",
+]
+
+[tool.ruff]
+# Matches the dominant style of the existing code; do not reformat wholesale.
+line-length = 100
+
+[tool.ruff.lint]
+# Deliberately minimal: syntax errors, undefined names, unused imports/
+# variables (F), basic pycodestyle errors (E4/E7/E9), and bare excepts
+# (E722). Widen once the codebase is cleaner.
+select = ["E4", "E7", "E9", "F", "E722"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

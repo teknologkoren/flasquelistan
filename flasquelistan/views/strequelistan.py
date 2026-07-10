@@ -57,7 +57,7 @@ def index():
     )
 
     current_app.jinja_env.filters['is_active'] = \
-        lambda l: [i for i in l if i.active]
+        lambda items: [i for i in items if i.active]
 
     today = datetime.date.today()
     birthdays = (

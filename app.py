@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 from pathlib import Path
-from flask_socketio import SocketIO
 
 from flasquelistan.factory import create_app, socketio
 

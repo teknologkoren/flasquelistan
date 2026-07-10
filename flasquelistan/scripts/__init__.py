@@ -13,5 +13,5 @@ def normalize_phone_numbers_command():
 
 @mod.cli.command('import_nickname_changes')
 @click.argument('path')
-def normalize_phone_numbers_command(path):
+def import_nickname_changes_command(path):
     import_nickname_changes.run(path)

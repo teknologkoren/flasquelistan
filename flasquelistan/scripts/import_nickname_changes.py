@@ -1,5 +1,4 @@
 import click
-import sys
 import sh
 from pathlib import Path
 from datetime import datetime
