@@ -269,13 +269,13 @@ class TestProfilePage:
     """Tests for the profile page"""
     def test_status(self, client):
         with logged_in(client):
-            response = client.get(url_for('strequelistan.show_profile', user_id=1))
+            response = client.get(url_for('profile.show_profile', user_id=1))
             assert response.status_code == 200
 
     def test_edit_profile_link_correct_user(self, client):
 
         with logged_in(client):
-            response = client.get(url_for('strequelistan.show_profile', user_id=1))
+            response = client.get(url_for('profile.show_profile', user_id=1))
             text = response.get_data(as_text=True)
 
             assert "Redigera profil" in text
@@ -294,7 +294,7 @@ class TestProfilePage:
 
         with logged_in_admin(client):
 
-            response = client.get(url_for('strequelistan.show_profile', user_id=user.id))
+            response = client.get(url_for('profile.show_profile', user_id=user.id))
             text = response.get_data(as_text=True)
 
             assert "Redigera profil" in text
@@ -311,7 +311,7 @@ class TestProfilePage:
         models.db.session.commit()
 
         with logged_in(client):
-            response = client.get(url_for('strequelistan.show_profile', user_id=user.id))
+            response = client.get(url_for('profile.show_profile', user_id=user.id))
             text = response.get_data(as_text=True)
 
             assert "Redigera profil" not in text
@@ -940,3 +940,29 @@ class TestRemoveArticlePage:
         with client:
             response = client.post('http://localhost/admin/articles/remove/1')
             assert response.status_code == 302
+
+
+class TestProfilePages:
+    def test_profile_pages_render(self, client):
+        """Smoke test that the profile-owned pages render for the user."""
+        with logged_in(client) as user:
+            for url in (
+                f'/profile/{user.id}/edit/',
+                f'/profile/{user.id}/nicknames',
+                f'/profile/{user.id}/history',
+                f'/profile/{user.id}/api-keys',
+                f'/profile/{user.id}/api-keys/new',
+                f'/profile/{user.id}/edit/password',
+            ):
+                response = client.get(url)
+                assert response.status_code == 200, url
+
+            response = client.get(f'/profile/{user.id}/vcard')
+            assert response.status_code == 200
+            assert response.mimetype == 'text/vcard'
+
+    def test_profile_requires_login(self, client):
+        """Anonymous users are redirected to the login page."""
+        response = client.get('/profile/1/')
+        assert response.status_code == 302
+        assert '/login' in response.headers['Location']

@@ -31,7 +31,7 @@ def credit_transfer():
         flask.abort(400)
 
     redir = flask.redirect(
-        flask.url_for('strequelistan.show_profile', user_id=payee.id)
+        flask.url_for('profile.show_profile', user_id=payee.id)
     )
 
     if form.validate_on_submit():
@@ -97,7 +97,7 @@ def credit_transfer_generate_link():
         flask.abort(400)
 
     redir = flask.redirect(
-        flask.url_for('strequelistan.show_profile', user_id=payee.id)
+        flask.url_for('profile.show_profile', user_id=payee.id)
     )
 
     if form.validate_on_submit():
@@ -147,7 +147,7 @@ def transfer_standalone(user_id):
 def admin_transaction(user_id):
     if not current_user.is_admin:
         flask.flash(_l("Du måste vara admin för att göra det!"), 'error')
-        return flask.redirect(flask.url_for('strequelistan.show_profile', user_id=user_id))
+        return flask.redirect(flask.url_for('profile.show_profile', user_id=user_id))
 
     user = models.User.query.get_or_404(user_id)
     form = forms.UserTransactionForm()
@@ -165,5 +165,5 @@ def admin_transaction(user_id):
         forms.flash_errors(form)
 
     return flask.redirect(
-        flask.url_for('strequelistan.show_profile', user_id=user_id)
+        flask.url_for('profile.show_profile', user_id=user_id)
     )

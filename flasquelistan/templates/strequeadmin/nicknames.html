@@ -29,7 +29,7 @@
       <tr>
         <td class="user">
           <span>
-            <a href="{{ url_for('strequelistan.user_nicknames', user_id=change.user.id) }}">
+            <a href="{{ url_for('profile.user_nicknames', user_id=change.user.id) }}">
                 {{ change.user.first_name }} {{ change.user.last_name }}
             </a>
           </span>
@@ -90,7 +90,7 @@
       <tr>
         <td class="user">
           <span>
-            <a href="{{ url_for('strequelistan.user_nicknames', user_id=change.user.id) }}">
+            <a href="{{ url_for('profile.user_nicknames', user_id=change.user.id) }}">
                 {{ change.user.first_name }} {{ change.user.last_name }}
             </a>
           </span>

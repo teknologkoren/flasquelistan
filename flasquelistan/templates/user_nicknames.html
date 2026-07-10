@@ -15,7 +15,7 @@
     {% if current_user.is_admin %}
     <a href="{{ url_for('strequeadmin.show_nicknames') }}">{{ _("Adminsida för smeknamn") }}</a><br />
     {% endif %}
-    <a href="{{ url_for('strequelistan.show_profile', user_id=user.id) }}">{{ _("Tillbaka till profil") }}</a>
+    <a href="{{ url_for('profile.show_profile', user_id=user.id) }}">{{ _("Tillbaka till profil") }}</a>
 
     <h3>
       {{ _("Smeknamnshistorik") }}

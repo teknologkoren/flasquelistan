@@ -32,12 +32,12 @@
     </h2>
     {% if user == current_user or current_user.is_admin %}
     <p>
-      <a href="{{ url_for('strequelistan.edit_profile', user_id=user.id) }}">{{ _("Redigera profil") }}</a>
+      <a href="{{ url_for('profile.edit_profile', user_id=user.id) }}">{{ _("Redigera profil") }}</a>
     </p>
     {% endif %}
 
     <p>
-      <a href="{{ url_for('strequelistan.user_vcard', user_id=user.id) }}" download>{{ _("Ladda ner kontaktfil") }}</a>
+      <a href="{{ url_for('profile.user_vcard', user_id=user.id) }}" download>{{ _("Ladda ner kontaktfil") }}</a>
     </p>
 
     {% if user != current_user %}
@@ -50,7 +50,7 @@
       {{ _("%(name)s puffade dig %(time)s.", name=user.displayname, time=format_datetime(last_poke.timestamp, "dd MMMM
       yyyy, HH:mm")) }}
       {% endif %}
-    <form action="{{ url_for('strequelistan.poke_user', user_id=user.id) }}" method="post">
+    <form action="{{ url_for('profile.poke_user', user_id=user.id) }}" method="post">
       <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
       <button>
         {% if last_poke %}
@@ -112,7 +112,7 @@
     {% endif %}
 
     <form method="POST"
-          action="{{ url_for('strequelistan.change_nickname', user_id=user.id) }}"
+          action="{{ url_for('profile.change_nickname', user_id=user.id) }}"
           enctype="multipart/form-data">
       {{ change_nickname_form.csrf_token }}
       <fieldset>
@@ -124,7 +124,7 @@
         {{ change_nickname_form.nickname }}
         <button>{{ _("Spara") }}</button>
         </p>
-        <a href="{{ url_for('strequelistan.user_nicknames', user_id=user.id) }}">
+        <a href="{{ url_for('profile.user_nicknames', user_id=user.id) }}">
           {{ _("Visa smeknamnshistorik") }}
         </a>
       </fieldset>
@@ -132,7 +132,7 @@
 
     <form class="upload-and-set-profile-picture"
           method="POST"
-          action="{{ url_for('strequelistan.upload_profile_picture', user_id=user.id) }}"
+          action="{{ url_for('profile.upload_profile_picture', user_id=user.id) }}"
           enctype="multipart/form-data">
       <fieldset>
         <legend>{{ profile_picture_form.upload.label }}</legend>
@@ -185,7 +185,7 @@
 
     {% if user == current_user or current_user.is_admin %}
     <form method="POST"
-          action="{{ url_for('strequelistan.change_profile_picture', user_id=user.id) }}"
+          action="{{ url_for('profile.change_profile_picture', user_id=user.id) }}"
           enctype="multipart/form-data">
 
       {{ change_profile_picture_form.csrf_token }}
@@ -211,14 +211,14 @@
           </div>
           <div class="submit">
               <button>{{ _("Spara") }}</button>
-              <button class="confirm" formaction="{{ url_for('strequelistan.delete_profile_picture', user_id=user.id) }}">{{ _("Ta bort") }}</button>
+              <button class="confirm" formaction="{{ url_for('profile.delete_profile_picture', user_id=user.id) }}">{{ _("Ta bort") }}</button>
         </fieldset>
       </div>
     </form>
     <dl>
       <dt>{{ _("Historik") }}</dt>
       <dd>
-      <p><a href="{{ url_for('strequelistan.user_history', user_id=user.id) }}">{{ _("All historik") }}</a></p>
+      <p><a href="{{ url_for('profile.user_history', user_id=user.id) }}">{{ _("All historik") }}</a></p>
       {% if transactions.all() %}
       <ol class="transaction-history">
       {% for transaction in transactions %}

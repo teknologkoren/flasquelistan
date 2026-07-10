@@ -45,7 +45,7 @@ def discord_disconnect():
     flask.flash(
         _l("Ditt Discord-konto är inte längre kopplat till din Streque-profil."),
         'success')
-    return flask.redirect(flask.url_for('strequelistan.show_profile', user_id=current_user.id))
+    return flask.redirect(flask.url_for('profile.show_profile', user_id=current_user.id))
 
 
 @mod.route('/discord/callback')
@@ -122,4 +122,4 @@ def discord_callback():
     guild_id = current_app.config.get("DISCORD_GUILD_ID")
     flask.flash(_l("Du är nu tillagd i vår Discord-server! %sKlicka här för att besöka den.%s") %
                 (f'<a href="https://discord.com/channels/{guild_id}" target="_blank">', '</a>'), 'success')
-    return flask.redirect(flask.url_for('strequelistan.show_profile', user_id=current_user.id))
+    return flask.redirect(flask.url_for('profile.show_profile', user_id=current_user.id))

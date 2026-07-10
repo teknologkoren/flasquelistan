@@ -29,7 +29,7 @@
         {% if not can_be_deleted %}
         disabled="true"
         {% endif %}
-        formaction="{{ url_for('strequelistan.delete_api_key', user_id=user.id, api_key_id=api_key.id) }}">
+        formaction="{{ url_for('profile.delete_api_key', user_id=user.id, api_key_id=api_key.id) }}">
         {{ _("Ta bort API-nyckel") }}
       </button>
       {% if not can_be_deleted %}
@@ -41,7 +41,7 @@
     {% endif %}
 
     <div class="form-entry">
-      <button>{{ _("Spara") }}</button> | <a href="{{ url_for('strequelistan.api_keys', user_id=user.id) }}">{{ _("Avbryt") }}</a>
+      <button>{{ _("Spara") }}</button> | <a href="{{ url_for('profile.api_keys', user_id=user.id) }}">{{ _("Avbryt") }}</a>
     </div>
   </form>
 </div>

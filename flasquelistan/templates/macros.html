@@ -98,7 +98,7 @@
       <img class="gallery-image" src="{{ url_for_image(image.filename, 'profilepicture', 800) }}">
     </a>
     <div class="gallery-image-description">
-      <a href="{{ url_for('strequelistan.show_profile', user_id=image.user.id) }}">{{ image.user.full_name }}</a>,
+      <a href="{{ url_for('profile.show_profile', user_id=image.user.id) }}">{{ image.user.full_name }}</a>,
       {{_('Uppladdad')}}: {{ image.timestamp.strftime('%d %b %Y ') }}
     </div>
   </div>

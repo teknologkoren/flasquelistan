@@ -70,7 +70,7 @@ class Poke(db.Model):
         if not poke:
             return None
         
-        profile_link = flask.url_for('strequelistan.show_profile', user_id=poke.poker_id)
+        profile_link = flask.url_for('profile.show_profile', user_id=poke.poker_id)
         safe_name = flask.escape(poke.poker.displayname)
         return f'<a href="{profile_link}">{safe_name}</a> puffade dig!'
 
@@ -80,7 +80,7 @@ class Poke(db.Model):
         if not poke:
             return None
 
-        profile_link = flask.url_for('strequelistan.show_profile', user_id=poke.poker_id, _external=True)
+        profile_link = flask.url_for('profile.show_profile', user_id=poke.poker_id, _external=True)
         return f"[{poke.poker.displayname}]({profile_link}) puffade dig!"
 
     def __str__(self):
