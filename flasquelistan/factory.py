@@ -96,7 +96,8 @@ def setup_error_emails(app):
 def register_blueprints(app):
     from flasquelistan.views import (auth, admin, api, quotes, serviceworker,
                                      strequelistan, songbook, goofs,
-                                     discord_oauth, notifications, transfers)
+                                     discord_oauth, notifications, transfers,
+                                     gallery)
     from flasquelistan import scripts
     app.register_blueprint(auth.mod)
     app.register_blueprint(admin.mod)
@@ -106,6 +107,7 @@ def register_blueprints(app):
     app.register_blueprint(discord_oauth.mod)
     app.register_blueprint(notifications.mod)
     app.register_blueprint(transfers.mod)
+    app.register_blueprint(gallery.mod)
     app.register_blueprint(quotes.mod)
     app.register_blueprint(songbook.songbook)
     app.register_blueprint(scripts.mod)
@@ -259,14 +261,14 @@ def setup_flask_babel(app):
 def setup_flask_uploads(app):
     import flask_uploads
     from flasquelistan import util
-    from flasquelistan.views import strequelistan
+    from flasquelistan.views import gallery
 
     flask_uploads.configure_uploads(app, util.image_uploads)
     flask_uploads.configure_uploads(app, util.profile_pictures)
 
     app.jinja_env.globals['url_for_image'] = util.url_for_image
     app.jinja_env.globals['gallery_page_for_image'] = (
-        strequelistan.gallery_page_for_image
+        gallery.gallery_page_for_image
     )
 
 

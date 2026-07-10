@@ -5,7 +5,7 @@ import re
 from flask_login import login_required
 from flasquelistan.models import User, ProfilePicture
 from flasquelistan import util
-from flasquelistan.views.strequelistan import gallery_page_for_image
+from flasquelistan.views.gallery import gallery_page_for_image
 
 mod = Blueprint("goofs", __name__)
 mod.before_request(login_required(lambda: None))
@@ -55,9 +55,9 @@ def create_random_picture_route(app, route, config, goof_id):
         # Generate URL to user gallery at the specific page with anchor
         from flask import url_for
         if gallery_page:
-            gallery_url = url_for("strequelistan.user_gallery", user_id=user_id, page=gallery_page, _anchor=str(random_picture.id))
+            gallery_url = url_for("gallery.user_gallery", user_id=user_id, page=gallery_page, _anchor=str(random_picture.id))
         else:
-            gallery_url = url_for("strequelistan.user_gallery", user_id=user_id, _anchor=str(random_picture.id))
+            gallery_url = url_for("gallery.user_gallery", user_id=user_id, _anchor=str(random_picture.id))
 
         title = config.get("title", "Random Pictures")
 

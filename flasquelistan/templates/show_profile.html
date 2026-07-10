@@ -14,7 +14,7 @@
   <div class="profile-content">
     {{ profile_picture(user, with_link=True) }}
     <div class="user-gallery-link">
-      <a href="{{ url_for('strequelistan.user_gallery', user_id=user.id) }}">{{ _("Fler bilder") }}</a>
+      <a href="{{ url_for('gallery.user_gallery', user_id=user.id) }}">{{ _("Fler bilder") }}</a>
     </div>
   </div>
 
