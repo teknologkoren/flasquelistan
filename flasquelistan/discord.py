@@ -4,6 +4,10 @@ from flask import current_app
 from flask_wtf import csrf
 from flasquelistan import models
 
+# Timeout for calls to the Discord API. The site runs on a single gunicorn
+# worker, so a hanging request here would freeze the whole site.
+REQUEST_TIMEOUT = 10
+
 
 class DiscordClient:
 
@@ -27,10 +31,12 @@ class DiscordClient:
         self.client = DiscordClient._create_client()
         self.token = self.client.fetch_token("https://discord.com/api/oauth2/token",
                                              authorization_response=authorization_response,
-                                             client_secret=current_app.config.get("DISCORD_CLIENT_SECRET"))
+                                             client_secret=current_app.config.get("DISCORD_CLIENT_SECRET"),
+                                             timeout=REQUEST_TIMEOUT)
 
     def get_user(self):
-        return self.client.get("https://discord.com/api/users/@me").json()
+        return self.client.get("https://discord.com/api/users/@me",
+                               timeout=REQUEST_TIMEOUT).json()
 
     def add_to_server(self, user_id, nickname=None, roles=None):
         data = {"access_token": self.token["access_token"]}
@@ -44,7 +50,8 @@ class DiscordClient:
         r = requests.put(
             f"https://discord.com/api/guilds/{guild_id}/members/{user_id}",
             json=data,
-            headers={"Authorization": f"Bot {bot_secret}"})
+            headers={"Authorization": f"Bot {bot_secret}"},
+            timeout=REQUEST_TIMEOUT)
 
         return r.status_code == requests.codes.ok
 
@@ -54,7 +61,8 @@ class DiscordClient:
 
         roles = requests.get(
             f"https://discord.com/api/guilds/{guild_id}/roles",
-            headers={"Authorization": f"Bot {bot_secret}"}).json()
+            headers={"Authorization": f"Bot {bot_secret}"},
+            timeout=REQUEST_TIMEOUT).json()
 
         for role in roles:
             if role['name'] == name:
@@ -67,7 +75,8 @@ class DiscordClient:
                 "hoist": True,
                 "mentionable": True,
             },
-            headers={"Authorization": f"Bot {bot_secret}"}).json()
+            headers={"Authorization": f"Bot {bot_secret}"},
+            timeout=REQUEST_TIMEOUT).json()
 
         return role['id']
 
@@ -93,7 +102,8 @@ class DiscordClient:
 
         user = requests.get(
             f"https://discord.com/api/guilds/{guild_id}/members/{user_id}",
-            headers={"Authorization": f"Bot {bot_secret}"}).json()
+            headers={"Authorization": f"Bot {bot_secret}"},
+            timeout=REQUEST_TIMEOUT).json()
         return user['roles']
 
     # Set and remove Discord roles based on the user's group on Strequelistan.
@@ -111,7 +121,10 @@ class DiscordClient:
             expected = set((unknown_role_id,))
             try:
                 current = set(DiscordClient.get_current_roles(user.discord_user_id))
-            except:
+            except (requests.RequestException, KeyError):
+                # The API call failed or the user is no longer in the guild
+                # (error responses have no 'roles' key). Still strip the
+                # managed roles so the disconnect completes.
                 current = set()
         else:
             expected = set(DiscordClient.get_expected_roles(user))
@@ -138,7 +151,8 @@ class DiscordClient:
                 headers={
                     "Authorization": f"Bot {bot_secret}",
                     "X-Audit-Log-Reason": f"Syncing roles with Streque user #{user.id}: {user.full_name}",
-                })
+                },
+                timeout=REQUEST_TIMEOUT)
 
     def sync_roles_on_disconnect(user):
         DiscordClient.sync_roles(user, True)
