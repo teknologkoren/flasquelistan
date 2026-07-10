@@ -1,5 +1,5 @@
 version = 1
-revision = 2
+revision = 3
 requires-python = ">=3.9, <3.11"
 resolution-markers = [
     "python_full_version >= '3.10'",
@@ -335,16 +335,16 @@ wheels = [
 
 [[package]]
 name = "flask-wtf"
-version = "0.15.1"
+version = "1.0.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "flask" },
     { name = "itsdangerous" },
     { name = "wtforms" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/9c/b5/4b48cece7b31aac2beab115330c2978ef4deee3aeb0dd1037c9b7a71b8c3/Flask-WTF-0.15.1.tar.gz", hash = "sha256:ff177185f891302dc253437fe63081e7a46a4e99aca61dfe086fb23e54fff2dc", size = 45540, upload-time = "2021-05-25T18:02:05.094Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/d9/38/d4798dd05be711d666e1befb08b1d3db57bd146d1a14d15657f60c88b446/Flask-WTF-1.0.1.tar.gz", hash = "sha256:34fe5c6fee0f69b50e30f81a3b7ea16aa1492a771fe9ad0974d164610c09a6c9", size = 45721, upload-time = "2022-03-31T18:09:32.169Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/16/df/ba01a1d9a8b9d933c0e746c7ca015bfeee2b1e4e32f0527de3bbe6ac65a7/Flask_WTF-0.15.1-py2.py3-none-any.whl", hash = "sha256:6ff7af73458f182180906a37a783e290bdc8a3817fe4ad17227563137ca285bf", size = 13496, upload-time = "2021-05-25T18:02:03.122Z" },
+    { url = "https://files.pythonhosted.org/packages/3a/26/3803ee692eb9a8d21bf7ba1cecd649ce3a55899c65467bdfc1bad13ec50f/Flask_WTF-1.0.1-py3-none-any.whl", hash = "sha256:9d733658c80be551ce7d5bc13c7a7ac0d80df509be1e23827c847d9520f4359a", size = 12121, upload-time = "2022-03-31T18:09:30.313Z" },
 ]
 
 [[package]]
@@ -396,7 +396,7 @@ requires-dist = [
     { name = "flask-reuploaded" },
     { name = "flask-socketio" },
     { name = "flask-sqlalchemy", specifier = "<3.0.0" },
-    { name = "flask-wtf", specifier = "<1.0.0" },
+    { name = "flask-wtf", specifier = ">=1.0.0,<1.1.0" },
     { name = "gevent" },
     { name = "gevent-websocket" },
     { name = "gunicorn" },
@@ -515,7 +515,7 @@ name = "importlib-metadata"
 version = "8.7.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "zipp" },
+    { name = "zipp", marker = "python_full_version < '3.10'" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/76/66/650a33bd90f786193e4de4b3ad86ea60b53c89b669a5c7be931fac31cdb0/importlib_metadata-8.7.0.tar.gz", hash = "sha256:d13b81ad223b890aa16c5471f2ac3056cf76c5f10f82d6f9292f0b415f389000", size = 56641, upload-time = "2025-04-27T15:29:01.736Z" }
 wheels = [
