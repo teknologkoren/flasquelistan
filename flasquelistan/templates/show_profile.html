@@ -145,7 +145,7 @@
     </form>
 
     {% if current_user != user %}
-    <form method="POST" action="{{ url_for('strequelistan.credit_transfer') }}">
+    <form method="POST" action="{{ url_for('transfers.credit_transfer') }}">
       {{ credit_transfer_form.csrf_token }}
       {{ credit_transfer_form.payer_id }}
       {{ credit_transfer_form.payee_id }}
@@ -157,7 +157,7 @@
       </fieldset>
     </form>
     {% else %}
-    <form method="POST" action="{{ url_for('strequelistan.credit_transfer_generate_link') }}">
+    <form method="POST" action="{{ url_for('transfers.credit_transfer_generate_link') }}">
       {{ credit_transfer_form.csrf_token }}
       {{ credit_transfer_form.payer_id }}
       {{ credit_transfer_form.payee_id }}
@@ -172,7 +172,7 @@
     {% endif %}
 
     {% if current_user.is_admin %}
-    <form method="POST" action="{{ url_for('strequelistan.admin_transaction', user_id=user.id) }}">
+    <form method="POST" action="{{ url_for('transfers.admin_transaction', user_id=user.id) }}">
       <fieldset>
           <legend>{{ _("Admintransaktion") }}</legend>
         {{ admin_transaction_form.csrf_token }}

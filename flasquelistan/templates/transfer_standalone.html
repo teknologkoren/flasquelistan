@@ -8,7 +8,7 @@
 {% block body %}
 <div class="profile">
   <div class="profile-content">
-    <form id="transfer" method="POST" action="{{ url_for('strequelistan.credit_transfer') }}">
+    <form id="transfer" method="POST" action="{{ url_for('transfers.credit_transfer') }}">
       {{ credit_transfer_form.csrf_token }}
       {{ credit_transfer_form.payer_id }}
       {{ credit_transfer_form.payee_id }}
