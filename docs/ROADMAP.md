@@ -23,7 +23,7 @@ Done or in progress (each item is its own commit on master):
 4. **Split the giant files** (behavior and URLs unchanged, tests added first):
    - `views/strequelistan.py` (1185 lines mixing drink tally, profiles,
      gallery, pokes, API keys, Discord login) → one view module per topic.
-   - `models.py` (998 lines, 17 models) → a `models/` package; all existing
+   - `models.py` (998 lines, 15 models) → a `models/` package; all existing
      imports keep working.
    - Move the vendored cache-busting helper and the hardcoded test-data
      fixtures out of `factory.py`.
