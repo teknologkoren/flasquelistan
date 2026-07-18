@@ -1,0 +1,44 @@
+# .dockerignore is independent of .gitignore. Notably, the gitignored
+# out-of-band songbook files (songbook-viewer/songs.json and
+# songbook-viewer/public/Flerstämt.pdf) must NOT be ignored here — they enter
+# the build context so the songbook stage can build them in.
+
+# VCS and tooling state
+.git
+.jj
+.github
+.claude
+.gitignore
+.gitmodules
+.venv
+__pycache__
+**/__pycache__
+**/*.pyc
+.pytest_cache
+.ruff_cache
+.coverage
+.coveragerc
+
+# Runtime state — provided via bind mounts, never baked into the image
+instance
+flasquelistan/static/uploads
+db.sqlite
+
+# Songbook: stage 1 is the only source of songbook_dist, so a stale local
+# build is never baked in. node_modules/dist are rebuilt inside stage 1.
+flasquelistan/songbook_dist
+songbook-viewer/node_modules
+songbook-viewer/dist
+
+# Locally compiled translations — recompiled in the image
+**/*.mo
+
+# Not needed at runtime
+tests
+docs
+misc
+
+# Docker files themselves
+Dockerfile
+docker-compose*.yml
+.dockerignore
