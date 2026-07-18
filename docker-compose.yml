@@ -1,0 +1,24 @@
+services:
+  app:
+    build: .
+    ports:
+      # Localhost only — nginx on the host terminates TLS and proxies here.
+      - "127.0.0.1:8000:8000"
+    volumes:
+      # Bind mounts rather than named volumes: nginx on the host serves
+      # uploads and static files straight from these paths (secure_link and
+      # the image resizing server), and backups stay a plain rsync.
+      - ./instance:/app/instance
+      - ./flasquelistan/static/uploads:/app/flasquelistan/static/uploads
+    restart: unless-stopped
+    # The image runs as UID 1000; if the mounted directories are owned by
+    # another user on the host, uncomment and adjust:
+    # user: "1000:1000"
+    healthcheck:
+      # / redirects to the login page; urlopen follows it and raises on non-2xx.
+      test: ["CMD", "python", "-c",
+             "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/')"]
+      interval: 30s
+      timeout: 5s
+      start_period: 20s
+      retries: 3
