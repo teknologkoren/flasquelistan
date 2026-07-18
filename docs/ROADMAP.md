@@ -47,27 +47,31 @@ Future (not started, roughly in order of value):
 Goal: `git pull && docker compose up --build -d` is the entire deploy, and
 the VPS's system packages (Node in particular) stop mattering.
 
+Done:
+
 1. **`Dockerfile`** (multi-stage): stage 1 = a pinned Node 22 image that runs
    `npm ci && npm run build` in `songbook-viewer/`; stage 2 = a pinned Python
    3.10 image with the app, dependencies installed with uv, the built
    songbook copied in from stage 1, translations compiled, gunicorn on
-   port 8000.
+   port 8000. If the songbook submodule or its out-of-band `songs.json` is
+   missing, the build succeeds without the songbook (`/bok/` returns 404) —
+   which also settles the old "known wrinkle": `git submodule update` stays a
+   pre-build step on the server, with the out-of-band files in place in the
+   checkout, and Docker builds from the local directory.
 2. **`docker-compose.yml`**: one service, port 8000 bound to localhost only,
-   volumes so data survives container rebuilds:
+   bind mounts so data survives container rebuilds (and nginx keeps serving
+   these paths straight from disk):
    - `instance/` (SQLite database + local config)
    - `flasquelistan/static/uploads/` (profile pictures etc.)
-3. **One-time server migration** (document each step in DEPLOYMENT.md as it
-   happens): install Docker; change nginx `proxy_pass` from the unix socket
-   to `http://127.0.0.1:8000` (both the `/` and `/socket.io` locations);
-   replace the gunicorn systemd unit with one that runs
-   `docker compose up`.
-4. **Commit the server configs.** The live nginx conf and systemd unit are
-   currently only on the server (a snapshot is parked in version-control
-   history). Once updated for Docker, commit them under `deploy/` so
-   production config has history. Note: the nginx conf contains the
-   secure-link salt — decide whether to move it out before committing.
-5. **Known wrinkle:** building the songbook needs the private submodule (SSH
-   deploy key) and the two out-of-band files (`Flerstämt.pdf`, `songs.json`).
-   Simplest: keep `git submodule update` as a pre-build step on the server,
-   with the files in place in the checkout, and let Docker build from the
-   local directory. Revisit if it annoys.
+   Plus `docker-compose.dev.yml`, an optional override for local development
+   (source bind-mounted, gunicorn `--reload`).
+
+Remaining:
+
+3. **One-time server migration**: install Docker; change nginx `proxy_pass`
+   from the unix socket to `http://127.0.0.1:8000` (both the `/` and
+   `/socket.io` locations); retire the gunicorn systemd unit. The runbook
+   lives in the private `teknologkoren/docs` repo (`streque.md`).
+4. **Server configs stay out of this public repo** (the nginx conf contains
+   the secure-link salt). They are documented, together with the migration
+   runbook, in the private `teknologkoren/docs` repo instead.

@@ -7,6 +7,39 @@ SQLite in `instance/`. The songbook at `/bok/` is a separate React app, built
 from the `songbook-viewer` git submodule into `flasquelistan/songbook_dist/`
 (gitignored — it must be built on the server, it is never in git).
 
+## 0. Running with Docker
+
+The repo has a multi-stage `Dockerfile` and a `docker-compose.yml` that will
+replace steps 1–2 below once the server has been migrated (the migration
+runbook lives in the private `teknologkoren/docs` repo). Until then, this is
+how you run the containerized app anywhere:
+
+```
+docker compose up --build -d
+```
+
+This builds the songbook (Node 22) and the app image (Python 3.10, uv,
+gunicorn on port 8000, bound to localhost only) and starts it with `instance/`
+and `flasquelistan/static/uploads/` bind-mounted, so the database, local
+config and uploads live as plain files in the checkout and survive rebuilds.
+
+- **Songbook is optional at build time.** If the `songbook-viewer` submodule
+  is not checked out, or `songbook-viewer/songs.json` is missing, the build
+  prints a warning and succeeds without the songbook — `/bok/` returns 404,
+  everything else works. With the submodule and both out-of-band files
+  (`songs.json`, `public/Flerstämt.pdf`) in place, the songbook is built and
+  served automatically.
+- **First run:** an `instance/config.py` is auto-generated with `DEBUG = True`
+  and placeholder secrets — fine locally, but it **must be edited** for
+  anything reachable from the internet. Create an admin with
+  `docker compose exec app flask createadmin`.
+- **The container runs as UID 1000.** If the mounted `instance/` and uploads
+  directories are owned by another user, set `user:` in a compose override.
+- **Development:** `docker compose -f docker-compose.yml -f
+  docker-compose.dev.yml up --build` bind-mounts the source tree and reloads
+  gunicorn on changes, for prod-parity testing. Plain `flask run` per
+  README.md remains the quickest dev loop.
+
 ## 1. Deploying the app
 
 ```
@@ -75,8 +108,9 @@ Verify: log in at https://www.streque.se and open 📘 Flerstämt (`/bok/`).
 
 - systemd unit: `/etc/systemd/system/flasquelistan.service` (gunicorn,
   `GeventWebSocketWorker`, unix socket `/run/flasquelistan/flasquelistan.sock`).
-- nginx site: `/etc/nginx/sites-available/flasquelistan.conf`. Snapshots of
-  both live in jj/git history ("WIP: snapshot of live server configs").
+- nginx site: `/etc/nginx/sites-available/flasquelistan.conf`. Copies of both
+  are documented in the private `teknologkoren/docs` repo (`streque.md`) —
+  server configs are **never** committed to this public repo.
 - The nginx `Content-Security-Policy` on the `www` server block was widened
   for the songbook (Google Fonts + `worker-src blob:` for the PDF renderer).
   If the songbook loads but renders broken/unstyled, compare the live CSP
@@ -85,9 +119,12 @@ Verify: log in at https://www.streque.se and open 📘 Flerstämt (`/bok/`).
   Discord OAuth. The profile-picture `secure_link` salt is embedded in the
   nginx config. The songbook SSH deploy key is in `~streque/.ssh/`.
 
-## 4. Where this is heading (Docker)
+## 4. Migrating the server to Docker
 
-The plan (see [ROADMAP.md](ROADMAP.md)) is to replace steps 1–2 with a Docker
-image that bakes in pinned Python and Node versions, builds the songbook
-automatically during `docker compose up --build`, and makes the VPS's system
-packages irrelevant. Until that lands, this document is the process.
+The Docker image and compose files (section 0) are ready; the VPS still runs
+the bare-gunicorn setup from sections 1–2. The one-time migration —
+installing Docker, pointing the two nginx `proxy_pass` lines at
+`http://127.0.0.1:8000`, retiring the old systemd unit — is documented step
+by step in the private `teknologkoren/docs` repo (`streque.md`). After the
+migration, deploying is `git pull && docker compose up --build -d` and
+sections 1–2 become history.
