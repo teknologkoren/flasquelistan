@@ -1,0 +1,206 @@
+import datetime
+
+from flasquelistan import models
+
+
+def make_user(email='monty@python.tld', first_name='Monty', last_name='Python',
+              balance=0):
+    user = models.User(
+        email=email,
+        first_name=first_name,
+        last_name=last_name,
+        balance=balance,
+    )
+    models.db.session.add(user)
+    models.db.session.commit()
+    return user
+
+
+class TestVoidAndRefund:
+    def test_refunds_balance_once(self, app):
+        user = make_user()
+
+        transaction = models.Transaction(
+            text='1 alcohol',
+            value=-1000,
+            user_id=user.id,
+            created_by_id=user.id,
+        )
+        models.db.session.add(transaction)
+        models.db.session.commit()
+
+        assert transaction.void_and_refund() is True
+        assert transaction.voided
+        assert user.balance == 1000
+
+        # Voiding again is a no-op and must not refund twice.
+        assert transaction.void_and_refund() is False
+        assert user.balance == 1000
+
+
+class TestCreditTransfer:
+    def test_create_rejects_non_positive_value(self, app):
+        payer = make_user(balance=1000)
+        payee = make_user(email='brian@pfoj.tld', first_name='Brian',
+                          last_name='Smith')
+
+        for value in (0, -100):
+            transfer = models.CreditTransfer.create(
+                payer=payer,
+                payee=payee,
+                created_by=payer,
+                value=value,
+                message=None,
+            )
+            assert transfer is False
+
+        assert payer.balance == 1000
+        assert payee.balance == 0
+        assert models.UserTransaction.query.count() == 0
+        assert models.CreditTransfer.query.count() == 0
+
+    def test_create_moves_money_and_sets_texts(self, app):
+        payer = make_user(balance=10000)
+        payee = make_user(email='brian@pfoj.tld', first_name='Brian',
+                          last_name='Smith')
+
+        transfer = models.CreditTransfer.create(
+            payer=payer,
+            payee=payee,
+            created_by=payer,
+            value=1000,
+            message='tack för senast',
+        )
+
+        assert payer.balance == 9000
+        assert payee.balance == 1000
+        # The money only moves, the total is conserved.
+        assert payer.balance + payee.balance == 10000
+
+        assert transfer.payer_transaction.value == -1000
+        assert transfer.payee_transaction.value == 1000
+        assert transfer.payer_transaction.text == \
+            'Till Brian Smith: tack för senast'
+        assert transfer.payee_transaction.text == \
+            'Från Monty Python: tack för senast'
+
+    def test_create_without_message_omits_suffix(self, app):
+        payer = make_user(balance=10000)
+        payee = make_user(email='brian@pfoj.tld', first_name='Brian',
+                          last_name='Smith')
+
+        transfer = models.CreditTransfer.create(
+            payer=payer,
+            payee=payee,
+            created_by=payer,
+            value=500,
+            message=None,
+        )
+
+        assert transfer.payer_transaction.text == 'Till Brian Smith'
+        assert transfer.payee_transaction.text == 'Från Monty Python'
+
+    def test_void_refunds_both_sides_once(self, app):
+        payer = make_user(balance=10000)
+        payee = make_user(email='brian@pfoj.tld', first_name='Brian',
+                          last_name='Smith')
+
+        transfer = models.CreditTransfer.create(
+            payer=payer,
+            payee=payee,
+            created_by=payer,
+            value=1000,
+            message=None,
+        )
+
+        transfer.void()
+        assert payer.balance == 10000
+        assert payee.balance == 0
+        assert transfer.payer_transaction.voided
+        assert transfer.payee_transaction.voided
+
+        # A second void must not move any more money.
+        transfer.void()
+        assert payer.balance == 10000
+        assert payee.balance == 0
+
+
+class TestAdminTransactionNotification:
+    def test_deposit_notification(self, app):
+        user = make_user()
+        transaction = user.admin_transaction(10000, 'påfyllning', by_user=user)
+        transaction.create_notification()
+
+        notification = models.Notification.query.filter_by(
+            type='admintransaction').one()
+        assert notification.user_id == user.id
+        assert notification.reference == str(transaction.id)
+        assert notification.text.startswith('Insättning!')
+        assert 'påfyllning' in notification.text
+
+    def test_withdrawal_notification(self, app):
+        user = make_user()
+        transaction = user.admin_transaction(-2500, 'straffavgift',
+                                             by_user=user)
+        transaction.create_notification()
+
+        notification = models.Notification.query.filter_by(
+            type='admintransaction').one()
+        assert notification.text.startswith('Uttag!')
+        assert 'straffavgift' in notification.text
+
+    def test_admin_transaction_updates_balance(self, app):
+        user = make_user(balance=1000)
+        user.admin_transaction(-300, 'uttag', by_user=user)
+        assert user.balance == 700
+        user.admin_transaction(500, 'insättning', by_user=user)
+        assert user.balance == 1200
+
+
+class TestStreque:
+    def test_too_old_boundary(self, app):
+        user = make_user()
+        streque = models.Streque(value=-400, user_id=user.id)
+        models.db.session.add(streque)
+        models.db.session.commit()
+
+        now = datetime.datetime.utcnow()
+        streque.timestamp = now - datetime.timedelta(minutes=14)
+        assert not streque.too_old()
+
+        streque.timestamp = now - datetime.timedelta(minutes=16)
+        assert streque.too_old()
+
+    def test_strequa_updates_balance_and_records_metadata(self, app):
+        user = make_user()
+        article = models.Article(
+            weight=1,
+            name='Öl',
+            value=400,
+            standardglas=1,
+            is_active=True,
+        )
+        models.db.session.add(article)
+        models.db.session.commit()
+
+        streque = user.strequa(article, by_user=user)
+
+        assert user.balance == -400
+        assert streque.value == -400
+        assert streque.text == 'Öl'
+        assert streque.standardglas == 1
+        assert streque.created_by_id == user.id
+        assert streque.api_key_id is None
+
+    def test_api_dict_includes_standardglas(self, app):
+        user = make_user()
+        streque = models.Streque(value=-400, user_id=user.id, standardglas=1.5)
+        models.db.session.add(streque)
+        models.db.session.commit()
+
+        # formatted_value needs a request context for locale selection
+        with app.test_request_context():
+            data = streque.api_dict
+        assert data['standardglas'] == 1.5
+        assert data['value'] == -400
+        assert data['type'] == 'streque'
