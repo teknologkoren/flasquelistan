@@ -212,9 +212,12 @@ def query_transactions(user=None, min_id=0, limit=None, order="asc"):
 @mod.route('/quotes', methods=['GET'])
 @auth.login_required
 def get_quotes():
-    min_id = request.args.get('min_id', 0)
+    min_id = cast_integer_param(request.args.get('min_id', '0'))
     limit = request.args.get('limit', None)
     order = request.args.get('order', "asc")
+
+    if min_id is None:
+        return "400 Bad Request: invalid min_id.", 400 # HTTP 400 Bad Request
 
     q = models.Quote.query
     if min_id > 0:
