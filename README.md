@@ -1,10 +1,5 @@
 # flasquelistan
 
-## Documentation
-
-- [Deploying to production](docs/DEPLOYMENT.md) — including how to deploy the songbook
-- [Maintainability roadmap](docs/ROADMAP.md) — planned cleanup and Docker migration
-
 ## Setting up a development environment
 ### uv
 
@@ -50,6 +45,18 @@ with some sane defaults. The config in `/instance` overrides the default config
 and is not checked in to git. The generated config sets the database file to be
 created in `/instance`.
 
+### Docker (optional)
+
+To run the app the same way production does (gunicorn, websockets, pinned
+Python), with the source tree mounted and auto-reload on changes:
+
+    $ docker compose -f docker-compose.yml -f docker-compose.dev.yml up --build
+
+The app is then live on [http://localhost:8000](http://localhost:8000). The
+`flask` commands above work inside the container via
+`docker compose exec app flask <command>`. See
+[docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) for details.
+
 ## Testing
 [Pytest](https://docs.pytest.org/en/latest/) is used for testing, tests are
 located in `tests/`. Run the tests from the root directory with
@@ -73,3 +80,7 @@ And then show the result with:
 
     $ coverage report
 
+## Documentation
+
+- [Deploying to production](docs/DEPLOYMENT.md) — Docker-based deployment, including the songbook
+- [Maintainability roadmap](docs/ROADMAP.md) — completed and planned cleanup work

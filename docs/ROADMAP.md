@@ -42,10 +42,11 @@ Future (not started, roughly in order of value):
    been green for a while. Biggest known blockers: `db.create_all(app=app)`
    and `@babel.localeselector` use APIs removed in newer versions.
 
-## Track 2 — Deployment (Docker)
+## Track 2 — Deployment (Docker) — complete
 
-Goal: `git pull && docker compose up --build -d` is the entire deploy, and
-the VPS's system packages (Node in particular) stop mattering.
+Goal, achieved 2026-07-18: `git pull && docker compose up --build -d` is the
+entire deploy, and the VPS's system packages (Node in particular) stop
+mattering.
 
 Done:
 
@@ -66,12 +67,15 @@ Done:
    Plus `docker-compose.dev.yml`, an optional override for local development
    (source bind-mounted, gunicorn `--reload`).
 
-Remaining:
+3. **One-time server migration** (done 2026-07-18): Docker installed on the
+   VPS, nginx `proxy_pass` switched from the unix socket to
+   `http://127.0.0.1:8000` (both the `/` and `/socket.io` locations), the
+   gunicorn systemd unit retired. Production now deploys with
+   `git pull && git submodule update --init && docker compose up --build -d`
+   — see DEPLOYMENT.md.
 
-3. **One-time server migration**: install Docker; change nginx `proxy_pass`
-   from the unix socket to `http://127.0.0.1:8000` (both the `/` and
-   `/socket.io` locations); retire the gunicorn systemd unit. The runbook
-   lives in the private `teknologkoren/docs` repo (`streque.md`).
+Standing policy:
+
 4. **Server configs stay out of this public repo** (the nginx conf contains
-   the secure-link salt). They are documented, together with the migration
-   runbook, in the private `teknologkoren/docs` repo instead.
+   the secure-link salt). They are documented in the private
+   `teknologkoren/docs` repo (`streque.md`) instead.
