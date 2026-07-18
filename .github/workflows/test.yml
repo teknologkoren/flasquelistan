@@ -20,7 +20,11 @@ jobs:
         run: uv sync
 
       - name: Run tests
-        run: uv run pytest -q
+        run: uv run coverage run -m pytest -q
+
+      # Fails if coverage drops below the fail_under threshold in .coveragerc.
+      - name: Coverage report
+        run: uv run coverage report
 
       - name: Lint
         run: uv run ruff check .
