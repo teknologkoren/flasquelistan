@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
 
 
+import pytest
 from flask import url_for
 from flask_login import current_user
+from jinja2.exceptions import TemplateNotFound
 
 import datetime
 
@@ -1080,3 +1082,556 @@ class TestProfilePages:
         response = client.get('/profile/1/')
         assert response.status_code == 302
         assert '/login' in response.headers['Location']
+
+
+class TestAdminBulkTransactions:
+    """Test the two-step admin bulk transaction flow"""
+
+    def test_bulk_transactions_form_shows_confirmation(self, client):
+        user = models.User(
+            email='brian@pfoj.tld',
+            first_name='Brian',
+            last_name='Cohen',
+        )
+        models.db.session.add(user)
+        models.db.session.commit()
+
+        with logged_in_admin(client):
+            response = client.post(
+                url_for('strequeadmin.bulk_transactions'),
+                data={
+                    f'user-{user.id}-value': '12.50',
+                    f'user-{user.id}-text': 'Sångarstriden',
+                }
+            )
+            text = response.get_data(as_text=True)
+
+            # The confirmation page lists the pending transaction...
+            assert response.status_code == 200
+            assert 'vill du fortsätta?' in text
+            assert user.full_name in text
+            assert f'name="user-{user.id}-value" value="1250"' in text
+
+            # ...but nothing has happened yet.
+            assert user.balance == 0
+
+    def test_confirm_bulk_transactions_updates_balance(self, client):
+        user = models.User(
+            email='brian@pfoj.tld',
+            first_name='Brian',
+            last_name='Cohen',
+        )
+        models.db.session.add(user)
+        models.db.session.commit()
+
+        with logged_in_admin(client):
+            response = client.post(
+                url_for('strequeadmin.confirm_bulk_transactions'),
+                data={
+                    f'user-{user.id}-value': '1250',
+                    f'user-{user.id}-text': 'Sångarstriden',
+                },
+                follow_redirects=True
+            )
+            text = response.get_data(as_text=True)
+
+            assert response.status_code == 200
+            assert 'Transaktionerna utfördes!' in text
+            assert user.balance == 1250
+
+            transaction = models.AdminTransaction.query.one()
+            assert transaction.user_id == user.id
+            assert transaction.value == 1250
+            assert transaction.text == 'Sångarstriden'
+
+            notification = models.Notification.query.filter_by(
+                user_id=user.id, type='admintransaction').one()
+            assert 'Insättning' in notification.text
+
+    def test_bulk_transactions_without_values_does_nothing(self, client):
+        with logged_in_admin(client):
+            response = client.post(
+                url_for('strequeadmin.bulk_transactions'),
+                data={},
+                follow_redirects=True
+            )
+            text = response.get_data(as_text=True)
+
+            assert 'Inga transaktioner utförda' in text
+            assert models.AdminTransaction.query.count() == 0
+
+
+class TestVoidTransaction:
+    """Test the admin void transaction view"""
+
+    def test_admin_void_transaction_refunds(self, client):
+        with logged_in_admin(client) as admin:
+            user = models.User(
+                email='brian@pfoj.tld',
+                first_name='Brian',
+                last_name='Cohen',
+            )
+            models.db.session.add(user)
+            models.db.session.commit()
+
+            transaction = user.admin_transaction(-1000, 'Uttag', admin)
+            assert user.balance == -1000
+
+            response = client.post(
+                url_for('strequeadmin.void_transaction'),
+                json={'transaction_id': transaction.id}
+            )
+
+            assert response.status_code == 200
+            assert response.json.get('transaction_id') == transaction.id
+            assert response.json.get('balance') == 0
+            assert transaction.voided
+            assert user.balance == 0
+
+    def test_void_already_voided_transaction_rejected(self, client):
+        with logged_in_admin(client) as admin:
+            transaction = admin.admin_transaction(-1000, 'Uttag', admin)
+            transaction.void_and_refund()
+
+            response = client.post(
+                url_for('strequeadmin.void_transaction'),
+                json={'transaction_id': transaction.id}
+            )
+
+            assert response.status_code == 400
+            assert admin.balance == 0  # no double refund
+
+    def test_void_nonexistent_transaction_rejected(self, client):
+        with logged_in_admin(client):
+            response = client.post(
+                url_for('strequeadmin.void_transaction'),
+                json={'transaction_id': 4711}
+            )
+            assert response.status_code == 400
+
+    def test_non_admin_cannot_void_transaction(self, client):
+        with logged_in(client) as user:
+            transaction = user.admin_transaction(-1000, 'Uttag', user)
+
+            response = client.post(
+                url_for('strequeadmin.void_transaction'),
+                json={'transaction_id': transaction.id}
+            )
+
+            # admin_required returns 403 for JSON (AJAX) requests.
+            assert response.status_code == 403
+            assert not transaction.voided
+            assert user.balance == -1000
+
+
+class TestArticleCrud:
+    """Test creating and editing articles"""
+
+    def test_add_article(self, client):
+        with logged_in_admin(client):
+            response = client.post(
+                url_for('strequeadmin.edit_article'),
+                data={
+                    'name': 'Holy Grail',
+                    'value': '8.50',
+                    'standardglas': '2',
+                    'weight': '1',
+                    'is_active': 'y',
+                },
+                follow_redirects=True
+            )
+            text = response.get_data(as_text=True)
+
+            assert response.status_code == 200
+            assert 'Produkt "Holy Grail" skapad.' in text
+
+            article = models.Article.query.one()
+            assert article.name == 'Holy Grail'
+            assert article.value == 850  # stored in ören
+            assert article.is_active
+
+    def test_edit_article(self, client):
+        article = models.Article(
+            weight=1,
+            name='Holy Grail',
+            value=10000,
+            standardglas=2,
+            is_active=True
+        )
+        models.db.session.add(article)
+        models.db.session.commit()
+
+        with logged_in_admin(client):
+            response = client.post(
+                url_for('strequeadmin.edit_article', article_id=article.id),
+                data={
+                    'name': 'Unholy Grail',
+                    'value': '50',
+                    'standardglas': '1',
+                    'weight': '2',
+                },
+                follow_redirects=True
+            )
+            text = response.get_data(as_text=True)
+
+            assert response.status_code == 200
+            assert 'Produkt "Unholy Grail" ändrad.' in text
+            assert article.name == 'Unholy Grail'
+            assert article.value == 5000
+            assert article.weight == 2
+            assert article.is_active is False
+
+    def test_add_article_invalid_value_rejected(self, client):
+        with logged_in_admin(client):
+            response = client.post(
+                url_for('strequeadmin.edit_article'),
+                data={
+                    'name': 'Huge Grail',
+                    'value': '9001',  # over the max of 1000
+                    'standardglas': '1',
+                    'weight': '1',
+                }
+            )
+
+            assert response.status_code == 200
+            assert models.Article.query.count() == 0
+
+
+class TestGroupCrud:
+    """Test creating and editing groups"""
+
+    def test_add_group(self, client):
+        with logged_in_admin(client):
+            response = client.post(
+                url_for('strequeadmin.edit_group'),
+                data={'name': 'Knights who say Ni', 'weight': '10'},
+                follow_redirects=True
+            )
+            text = response.get_data(as_text=True)
+
+            assert response.status_code == 200
+            assert 'Grupp "Knights who say Ni" skapad.' in text
+
+            group = models.Group.query.one()
+            assert group.name == 'Knights who say Ni'
+            assert group.weight == 10
+            assert group.active is False
+
+    def test_edit_group(self, client):
+        group = models.Group(name='Knights who say Ni', weight=10)
+        models.db.session.add(group)
+        models.db.session.commit()
+
+        with logged_in_admin(client):
+            response = client.post(
+                url_for('strequeadmin.edit_group', group_id=group.id),
+                data={
+                    'name': 'Knights who say Ekke Ekke',
+                    'weight': '20',
+                    'active': 'y',
+                },
+                follow_redirects=True
+            )
+
+            assert response.status_code == 200
+            assert group.name == 'Knights who say Ekke Ekke'
+            assert group.weight == 20
+            assert group.active is True
+
+    def test_add_group_requires_name(self, client):
+        with logged_in_admin(client):
+            response = client.post(
+                url_for('strequeadmin.edit_group'),
+                data={'name': '', 'weight': '10'}
+            )
+
+            assert response.status_code == 200
+            assert models.Group.query.count() == 0
+
+
+class TestCreateUserFromRequestPost:
+    """Test creating a user from a registration request"""
+
+    def test_create_user_removes_request(self, client):
+        r = models.RegistrationRequest(
+            email="monty@python.example.org",
+            first_name="Monty",
+            last_name="Python",
+            phone="+46761234567",
+            message="Hejsan!"
+        )
+        models.db.session.add(r)
+        models.db.session.commit()
+
+        with logged_in_admin(client):
+            response = client.post(
+                url_for('strequeadmin.add_user', request_id=r.id),
+                data={
+                    'first_name': 'Monty',
+                    'last_name': 'Python',
+                    'email': 'monty@python.example.org',
+                    'phone': '+46761234567',
+                    'group_id': '-1',
+                    'active': 'y',
+                },
+                follow_redirects=True
+            )
+            text = response.get_data(as_text=True)
+
+            assert response.status_code == 200
+            assert 'skapad och förfrågan borttagen!' in text
+
+            user = models.User.query.filter_by(
+                email='monty@python.example.org').one()
+            assert user.first_name == 'Monty'
+            assert user.active is True
+            assert models.RegistrationRequest.query.count() == 0
+
+
+class TestBalanceReminderEmails:
+    """Test sending balance reminder emails"""
+
+    def test_emails_sent_only_to_negative_balance_users(self, client,
+                                                        monkeypatch):
+        sent = []
+        monkeypatch.setattr(
+            'flasquelistan.util.send_email',
+            lambda fromaddr, toaddr, subject, body:
+                sent.append(toaddr)
+        )
+
+        negative = models.User(
+            email='negative@python.tld',
+            first_name='Malvina',
+            last_name='Teknolog',
+            balance=-1000,
+        )
+        positive = models.User(
+            email='positive@python.tld',
+            first_name='Osquar',
+            last_name='Teknolog',
+            balance=1000,
+        )
+        models.db.session.add_all([negative, positive])
+        models.db.session.commit()
+
+        with logged_in_admin(client):
+            response = client.post(url_for('strequeadmin.spam'))
+            text = response.get_data(as_text=True)
+
+            assert response.status_code == 200
+            assert 'Skickade 1 saldopåminnelser!' in text
+            assert sent == ['negative@python.tld']
+
+
+class TestStatsPages:
+    """Test the admin statistics pages"""
+
+    def test_streque_stats_with_date_range(self, client):
+        article = models.Article(
+            weight=1,
+            name='Holy Grail',
+            value=10000,
+            standardglas=2,
+            is_active=True
+        )
+        models.db.session.add(article)
+        models.db.session.commit()
+
+        with logged_in_admin(client):
+            current_user.strequa(article, current_user)
+
+            today = datetime.date.today()
+            yesterday = today - datetime.timedelta(days=1)
+            response = client.get(
+                url_for('strequeadmin.streque_stats',
+                        from_date=yesterday.isoformat(),
+                        to_date=today.isoformat())
+            )
+            text = response.get_data(as_text=True)
+
+            assert response.status_code == 200
+            assert current_user.full_name in text
+
+    def test_streque_stats_invalid_dates(self, client):
+        with logged_in_admin(client):
+            response = client.get(
+                url_for('strequeadmin.streque_stats',
+                        from_date='banana',
+                        to_date='2020-01-01')
+            )
+            text = response.get_data(as_text=True)
+
+            assert response.status_code == 200
+            assert 'Ogiltigt datumintervall!' in text
+
+    def test_streque_stats_form_redirects_with_dates(self, client):
+        with logged_in_admin(client):
+            response = client.post(
+                url_for('strequeadmin.streque_stats'),
+                data={'start': '2020-01-01', 'end': '2020-01-31'}
+            )
+
+            assert response.status_code == 302
+            assert 'from_date=2020-01-01' in response.headers['Location']
+            assert 'to_date=2020-01-31' in response.headers['Location']
+
+    def test_transactions_invalid_dates(self, client):
+        with logged_in_admin(client):
+            response = client.get(
+                url_for('strequeadmin.transactions',
+                        from_date='not-a-date',
+                        to_date='also-not-a-date')
+            )
+            text = response.get_data(as_text=True)
+
+            assert response.status_code == 200
+            assert 'Ogiltigt datumintervall!' in text
+
+    def test_stats_page(self, client):
+        negative = models.User(
+            email='negative@python.tld',
+            first_name='Malvina',
+            last_name='Teknolog',
+            balance=-1000,
+        )
+        positive = models.User(
+            email='positive@python.tld',
+            first_name='Osquar',
+            last_name='Teknolog',
+            balance=1000,
+        )
+        models.db.session.add_all([negative, positive])
+        models.db.session.commit()
+
+        with logged_in_admin(client):
+            response = client.get(url_for('strequeadmin.stats'))
+            text = response.get_data(as_text=True)
+
+            assert response.status_code == 200
+            assert 'Malvina Teknolog' in text
+            assert 'Osquar Teknolog' in text
+
+
+class TestStrequelistanPages:
+    """Test miscellaneous strequelistan pages"""
+
+    def test_payments_page(self, client):
+        # BUG: the strequelistan.payments view renders 'payments.html', but
+        # no such template exists, so the page crashes with a server error
+        # for every user. This test documents the current (broken) behavior.
+        with logged_in(client):
+            with pytest.raises(TemplateNotFound):
+                client.get(url_for('strequelistan.payments'))
+
+    def test_paperlist_active_filter(self, client):
+        # The paper list only shows users that belong to a group.
+        group = models.Group(name='Knights who say Ni', weight=10)
+        models.db.session.add(group)
+        models.db.session.commit()
+
+        inactive = models.User(
+            email='inactive@python.tld',
+            first_name='Inactive',
+            last_name='Member',
+            active=False,
+            group_id=group.id,
+        )
+        models.db.session.add(inactive)
+        models.db.session.commit()
+
+        with logged_in_admin(client) as admin:
+            admin.active = True
+            admin.group_id = group.id
+            models.db.session.commit()
+
+            response = client.get(
+                url_for('strequelistan.paperlist', active='true')
+            )
+            text = response.get_data(as_text=True)
+
+            assert response.status_code == 200
+            assert admin.full_name in text
+            assert inactive.full_name not in text
+
+            # Without the filter, both users are listed.
+            response = client.get(url_for('strequelistan.paperlist'))
+            text = response.get_data(as_text=True)
+            assert admin.full_name in text
+            assert inactive.full_name in text
+
+    def test_paperlist_empty_rows(self, client):
+        with logged_in(client):
+            response = client.get(
+                url_for('strequelistan.paperlist', empty='3')
+            )
+            assert response.status_code == 200
+
+    def test_paperlist_invalid_empty_param(self, client):
+        with logged_in(client):
+            response = client.get(
+                url_for('strequelistan.paperlist', empty='bogus')
+            )
+            assert response.status_code == 200
+
+    def test_history_ignores_date_args(self, client):
+        with logged_in(client):
+            response = client.get(
+                url_for('strequelistan.history',
+                        from_date='2020-01-01',
+                        to_date='banana')
+            )
+            assert response.status_code == 200
+
+
+class TestQuoteViews:
+    """Test adding and viewing quotes"""
+
+    def test_add_quote(self, client):
+        with logged_in(client):
+            response = client.post(
+                url_for('quotes.add_quote'),
+                data={
+                    'text': 'He is not the Messiah!',
+                    'who': 'Brians mother',
+                },
+                follow_redirects=True
+            )
+            text = response.get_data(as_text=True)
+
+            assert response.status_code == 200
+            assert 'Citat tillagt!' in text
+
+            quote = models.Quote.query.one()
+            assert quote.text == 'He is not the Messiah!'
+            assert quote.who == 'Brians mother'
+
+    def test_add_quote_requires_text(self, client):
+        with logged_in(client):
+            response = client.post(
+                url_for('quotes.add_quote'),
+                data={'text': '', 'who': 'Nobody'}
+            )
+
+            assert response.status_code == 200
+            assert models.Quote.query.count() == 0
+
+    def test_single_quote_page(self, client):
+        quote = models.Quote(
+            text="And now for something completely different.",
+            who="Newsreader [John Cleese]"
+        )
+        models.db.session.add(quote)
+        models.db.session.commit()
+
+        with logged_in(client):
+            response = client.get(url_for('quotes.quote', quote_id=quote.id))
+            text = response.get_data(as_text=True)
+
+            assert response.status_code == 200
+            assert quote.text in text
+
+    def test_unknown_quote_404(self, client):
+        with logged_in(client):
+            response = client.get(url_for('quotes.quote', quote_id=4711))
+            assert response.status_code == 404
