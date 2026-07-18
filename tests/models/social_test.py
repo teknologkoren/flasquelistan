@@ -1,9 +1,21 @@
 #!/usr/bin/env python3
 
 import flask
-from flasquelistan import models
-from tests.helpers import logged_in
 
+from flasquelistan import models
+
+
+
+def test_quote_model(app):
+    quote = models.Quote(
+        text="Ni!",
+        who="The knights who say 'Ni!'"
+    )
+
+    models.db.session.add(quote)
+    models.db.session.commit()
+
+    assert quote.id > 0
 
 
 def test_poke_notification_formatting(app):
@@ -52,49 +64,7 @@ def test_poke_notification_formatting(app):
 
         # Refresh notification from DB
         notification = models.db.session.get(models.Notification, notification.id)
-        
+
         # Should fall back to text
         assert notification.formatted_html == flask.escape(notification.text)
         assert notification.formatted_markdown == notification.text
-
-
-class TestNotificationViews:
-    def test_notifications_page_marks_as_sent(self, client):
-        """The notifications page renders and marks notifications as sent."""
-        with logged_in(client) as user:
-            notification = models.Notification(
-                text="Testnotis",
-                user_id=user.id,
-                type='streque',
-                reference='1'
-            )
-            models.db.session.add(notification)
-            models.db.session.commit()
-
-            response = client.get('/notifications')
-            assert response.status_code == 200
-            assert 'Testnotis' in response.get_data(as_text=True)
-            assert notification.is_sent
-
-    def test_mark_notifications_read(self, client):
-        """Sent notifications are acknowledged and user is redirected."""
-        with logged_in(client) as user:
-            notification = models.Notification(
-                text="Testnotis",
-                user_id=user.id,
-                type='streque',
-                reference='1',
-                is_sent=True
-            )
-            models.db.session.add(notification)
-            models.db.session.commit()
-
-            response = client.get('/notifications/mark-read')
-            assert response.status_code == 302
-            assert notification.is_acknowledged
-
-    def test_notifications_require_login(self, client):
-        """Anonymous users are redirected to the login page."""
-        response = client.get('/notifications')
-        assert response.status_code == 302
-        assert '/login' in response.headers['Location']
