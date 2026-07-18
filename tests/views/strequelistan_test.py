@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
 
 
+import pytest
 from flask import url_for
 from flask_login import current_user
+from jinja2.exceptions import TemplateNotFound
 
 import datetime
 
@@ -393,3 +395,74 @@ class TestPaperListPage:
             response = client.get('http://localhost/paperlist')
             assert response.status_code == 302
             assert response.headers['Location'] == '/login?next=%2Fpaperlist'
+
+
+class TestStrequelistanPages:
+    """Test miscellaneous strequelistan pages"""
+
+    def test_payments_page(self, client):
+        # BUG: the strequelistan.payments view renders 'payments.html', but
+        # no such template exists, so the page crashes with a server error
+        # for every user. This test documents the current (broken) behavior.
+        with logged_in(client):
+            with pytest.raises(TemplateNotFound):
+                client.get(url_for('strequelistan.payments'))
+
+    def test_paperlist_active_filter(self, client):
+        # The paper list only shows users that belong to a group.
+        group = models.Group(name='Knights who say Ni', weight=10)
+        models.db.session.add(group)
+        models.db.session.commit()
+
+        inactive = models.User(
+            email='inactive@python.tld',
+            first_name='Inactive',
+            last_name='Member',
+            active=False,
+            group_id=group.id,
+        )
+        models.db.session.add(inactive)
+        models.db.session.commit()
+
+        with logged_in_admin(client) as admin:
+            admin.active = True
+            admin.group_id = group.id
+            models.db.session.commit()
+
+            response = client.get(
+                url_for('strequelistan.paperlist', active='true')
+            )
+            text = response.get_data(as_text=True)
+
+            assert response.status_code == 200
+            assert admin.full_name in text
+            assert inactive.full_name not in text
+
+            # Without the filter, both users are listed.
+            response = client.get(url_for('strequelistan.paperlist'))
+            text = response.get_data(as_text=True)
+            assert admin.full_name in text
+            assert inactive.full_name in text
+
+    def test_paperlist_empty_rows(self, client):
+        with logged_in(client):
+            response = client.get(
+                url_for('strequelistan.paperlist', empty='3')
+            )
+            assert response.status_code == 200
+
+    def test_paperlist_invalid_empty_param(self, client):
+        with logged_in(client):
+            response = client.get(
+                url_for('strequelistan.paperlist', empty='bogus')
+            )
+            assert response.status_code == 200
+
+    def test_history_ignores_date_args(self, client):
+        with logged_in(client):
+            response = client.get(
+                url_for('strequelistan.history',
+                        from_date='2020-01-01',
+                        to_date='banana')
+            )
+            assert response.status_code == 200

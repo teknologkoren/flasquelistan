@@ -1,13 +1,62 @@
 #!/usr/bin/env python3
 
+import io
+import os
+
+import pytest
+from PIL import Image
 
 from flask import url_for
 
-from flasquelistan import models
+from flasquelistan import factory, models
 
 from tests.helpers import logged_in
 from tests.helpers import logged_in_admin
 from tests.helpers import login
+from tests.helpers import logout
+
+
+@pytest.fixture
+def app(tmp_path):
+    """App fixture with upload destinations pointed at a temp directory.
+
+    Overrides the conftest.py `app` fixture for this module only, so that
+    profile picture uploads do not end up in the repository's static folder.
+    """
+    config = {
+        # Use an in-memory database for faster test execution.
+        'SQLALCHEMY_DATABASE_URI': 'sqlite:///:memory:',
+        # Disable CSRF in unit tests.
+        'WTF_CSRF_ENABLED': False,
+        'TESTING': True,
+        # Store uploads in a temp dir instead of flasquelistan/static/uploads.
+        'UPLOADS_DEFAULT_DEST': str(tmp_path / 'uploads'),
+        'UPLOADED_IMAGES_DEST': str(tmp_path / 'uploads' / 'images'),
+        'UPLOADED_PROFILEPICTURES_DEST': str(
+            tmp_path / 'uploads' / 'profilepictures'
+        ),
+        # Needed to render pages with profile pictures (util.url_for_image).
+        'IMAGE_SECRET': 'not-so-secret-test-secret',
+        'IMAGE_EXPIRY': 3600,
+    }
+
+    app = factory.create_app(config)
+    with app.app_context():
+        yield app
+
+
+def make_user(email='brian@pfoj.tld', first_name='Brian', last_name='Cohen',
+              **kwargs):
+    """Create and commit an additional user."""
+    user = models.User(
+        email=email,
+        first_name=first_name,
+        last_name=last_name,
+        **kwargs
+    )
+    models.db.session.add(user)
+    models.db.session.commit()
+    return user
 
 
 class TestProfilePage:
@@ -139,3 +188,513 @@ def test_poke_ux_states(app, client):
         assert response.status_code == 200
         assert "👉 Puffa" not in response.get_data(as_text=True)
         assert "Du puffade" in response.get_data(as_text=True)
+
+
+class TestEditProfile:
+    def test_edit_own_profile_page_renders(self, client):
+        with logged_in(client) as user:
+            response = client.get(
+                url_for('profile.edit_profile', user_id=user.id)
+            )
+            assert response.status_code == 200
+
+    def test_edit_own_profile_normalizes_phone(self, client):
+        with logged_in(client) as user:
+            response = client.post(
+                url_for('profile.edit_profile', user_id=user.id),
+                data={
+                    'nickname': 'Black Knight',
+                    'phone': '0761234567',
+                    'y_chromosome': 'n/a',
+                }
+            )
+
+            assert response.status_code == 302
+            # Swedish numbers are normalized to E.164.
+            assert user.phone == '+46761234567'
+            assert user.nickname == 'Black Knight'
+
+    def test_non_admin_cannot_view_edit_page_of_other_user(self, client):
+        other = make_user()
+
+        with logged_in(client):
+            response = client.get(
+                url_for('profile.edit_profile', user_id=other.id)
+            )
+            assert response.status_code == 302
+            assert response.headers['Location'] == url_for(
+                'profile.show_profile', user_id=other.id)
+
+    def test_non_admin_cannot_edit_other_user(self, client):
+        other = make_user()
+
+        with logged_in(client):
+            response = client.post(
+                url_for('profile.edit_profile', user_id=other.id),
+                data={'nickname': 'Naughty', 'y_chromosome': 'n/a'}
+            )
+
+            assert response.status_code == 302
+            assert other.nickname != 'Naughty'
+
+    def test_admin_can_edit_other_user(self, client):
+        other = make_user()
+
+        with logged_in_admin(client):
+            response = client.post(
+                url_for('profile.edit_profile', user_id=other.id),
+                data={
+                    'first_name': 'Reg',
+                    'last_name': 'Judean',
+                    'nickname': 'Splitter',
+                    'group_id': '-1',
+                    'active': 'y',
+                    'y_chromosome': 'n/a',
+                }
+            )
+
+            assert response.status_code == 302
+            assert other.first_name == 'Reg'
+            assert other.last_name == 'Judean'
+            assert other.nickname == 'Splitter'
+            assert other.active is True
+            assert other.is_admin is False
+
+    def test_admin_only_fields_ignored_for_non_admin(self, client):
+        """A regular user posting admin-only fields must not gain anything."""
+        with logged_in(client) as user:
+            response = client.post(
+                url_for('profile.edit_profile', user_id=user.id),
+                data={
+                    'first_name': 'Hacker',
+                    'is_admin': 'y',
+                    'active': 'y',
+                    'nickname': 'still fine',
+                    'y_chromosome': 'n/a',
+                }
+            )
+
+            assert response.status_code == 302
+            # The regular EditUserForm has no admin fields, they are ignored.
+            assert user.first_name == 'Monty'
+            assert user.is_admin is False
+            assert user.active is False
+            # But the regular fields are saved.
+            assert user.nickname == 'still fine'
+
+
+class TestChangeEmailOrPassword:
+    def test_wrong_password_does_not_change_email(self, client, monkeypatch):
+        sent = []
+        monkeypatch.setattr(
+            'flasquelistan.util.send_email',
+            lambda *args, **kwargs: sent.append(args)
+        )
+
+        with logged_in(client) as user:
+            response = client.post(
+                url_for('profile.change_email_or_password', user_id=user.id),
+                data={
+                    'email': 'new@python.tld',
+                    'password': 'liquidsnake',  # wrong password
+                }
+            )
+
+            # Form is re-rendered with an error, nothing changed.
+            assert response.status_code == 200
+            assert user.email == 'monty@python.tld'
+            assert sent == []
+
+    def test_correct_password_sends_verification_email(self, client,
+                                                       monkeypatch):
+        sent = []
+        monkeypatch.setattr(
+            'flasquelistan.util.send_email',
+            lambda fromaddr, toaddr, subject, body:
+                sent.append((toaddr, subject))
+        )
+
+        with logged_in(client) as user:
+            response = client.post(
+                url_for('profile.change_email_or_password', user_id=user.id),
+                data={
+                    'email': 'new@python.tld',
+                    'password': 'solidsnake',
+                }
+            )
+
+            assert response.status_code == 302
+
+            # A verification email was sent to the *new* address...
+            assert len(sent) == 1
+            assert sent[0][0] == 'new@python.tld'
+
+            # ...but the email is not changed until the address is verified.
+            assert user.email == 'monty@python.tld'
+
+    def test_change_password(self, client):
+        with logged_in(client) as user:
+            response = client.post(
+                url_for('profile.change_email_or_password', user_id=user.id),
+                data={
+                    'email': 'monty@python.tld',
+                    'password': 'solidsnake',
+                    'new_password': 'liquidsnake',
+                }
+            )
+            assert response.status_code == 302
+
+        logout(client)
+
+        # The old password no longer works...
+        response = login(client, 'monty@python.tld', 'solidsnake')
+        assert response.status_code == 200
+
+        # ...but the new one does.
+        response = login(client, 'monty@python.tld', 'liquidsnake')
+        assert response.status_code == 302
+
+    def test_non_admin_cannot_open_other_users_password_page(self, client):
+        other = make_user()
+
+        with logged_in(client):
+            response = client.get(
+                url_for('profile.change_email_or_password', user_id=other.id)
+            )
+            assert response.status_code == 302
+            assert response.headers['Location'] == url_for(
+                'profile.show_profile', user_id=other.id)
+
+
+class TestApiKeys:
+    def test_create_api_key_shows_secret_once(self, client, monkeypatch):
+        monkeypatch.setattr(
+            models.ApiKey, 'generate_key',
+            staticmethod(lambda: 'cafebabe' * 4)
+        )
+
+        with logged_in(client) as user:
+            response = client.post(
+                url_for('profile.edit_api_key', user_id=user.id),
+                data={'name': 'Spanish inquisition', 'is_enabled': 'y'},
+                follow_redirects=True
+            )
+            text = response.get_data(as_text=True)
+
+            # The plaintext key is flashed once...
+            assert response.status_code == 200
+            assert 'cafebabe' * 4 in text
+
+            api_key = models.ApiKey.query.one()
+            assert api_key.name == 'Spanish inquisition'
+            assert api_key.user_id == user.id
+            # Only a hash of the key is stored.
+            assert api_key.api_key != 'cafebabe' * 4
+
+            # ...and is not visible on the api key page afterwards.
+            response = client.get(
+                url_for('profile.api_keys', user_id=user.id)
+            )
+            assert 'cafebabe' * 4 not in response.get_data(as_text=True)
+
+    def test_delete_api_key(self, client):
+        with logged_in(client) as user:
+            api_key = models.ApiKey(
+                name='Dead parrot',
+                api_key=models.ApiKey.generate_key(),
+                user_id=user.id,
+            )
+            models.db.session.add(api_key)
+            models.db.session.commit()
+
+            response = client.post(
+                url_for('profile.delete_api_key', user_id=user.id,
+                        api_key_id=api_key.id),
+                follow_redirects=True
+            )
+            text = response.get_data(as_text=True)
+
+            assert response.status_code == 200
+            assert 'borttagen' in text
+            assert models.ApiKey.query.count() == 0
+
+    def test_delete_api_key_with_transactions_blocked(self, client):
+        with logged_in(client) as user:
+            api_key = models.ApiKey(
+                name='Norwegian blue',
+                api_key=models.ApiKey.generate_key(),
+                user_id=user.id,
+            )
+            models.db.session.add(api_key)
+            models.db.session.commit()
+
+            streque = models.Streque(
+                value=-1000,
+                text='Holy Grail',
+                user_id=user.id,
+                created_by_id=user.id,
+                api_key_id=api_key.id,
+            )
+            models.db.session.add(streque)
+            models.db.session.commit()
+
+            assert api_key.can_be_deleted is False
+
+            response = client.post(
+                url_for('profile.delete_api_key', user_id=user.id,
+                        api_key_id=api_key.id)
+            )
+
+            assert response.status_code == 400
+            assert models.ApiKey.query.count() == 1
+
+    def test_non_admin_cannot_view_other_users_api_keys(self, client):
+        other = make_user()
+
+        with logged_in(client):
+            response = client.get(
+                url_for('profile.api_keys', user_id=other.id)
+            )
+            assert response.status_code == 302
+            assert response.headers['Location'] == url_for(
+                'profile.show_profile', user_id=other.id)
+
+
+class TestPoke:
+    def test_poke_creates_poke_and_notification(self, client):
+        other = make_user()
+
+        with logged_in(client) as user:
+            response = client.post(
+                url_for('profile.poke_user', user_id=other.id),
+                follow_redirects=True
+            )
+            text = response.get_data(as_text=True)
+
+            assert response.status_code == 200
+            assert 'Puffad!' in text
+
+            poke = models.Poke.query.one()
+            assert poke.poker_id == user.id
+            assert poke.pokee_id == other.id
+
+            notification = models.Notification.query.filter_by(
+                user_id=other.id, type='poke').one()
+            assert 'puffade dig' in notification.text
+
+    def test_cannot_poke_again_before_poke_back(self, client):
+        other = make_user()
+
+        with logged_in(client):
+            client.post(url_for('profile.poke_user', user_id=other.id))
+            response = client.post(
+                url_for('profile.poke_user', user_id=other.id),
+                follow_redirects=True
+            )
+            text = response.get_data(as_text=True)
+
+            assert 'redan puffat' in text
+            assert models.Poke.query.count() == 1
+
+    def test_cannot_poke_self(self, client):
+        with logged_in(client) as user:
+            response = client.post(
+                url_for('profile.poke_user', user_id=user.id),
+                follow_redirects=True
+            )
+            text = response.get_data(as_text=True)
+
+            assert 'inte puffa dig själv' in text
+            assert models.Poke.query.count() == 0
+
+    def test_profile_page_shows_poke_state(self, client):
+        other = make_user()
+
+        with logged_in(client):
+            response = client.get(
+                url_for('profile.show_profile', user_id=other.id)
+            )
+            assert '👉 Puffa' in response.get_data(as_text=True)
+
+            client.post(url_for('profile.poke_user', user_id=other.id))
+
+            response = client.get(
+                url_for('profile.show_profile', user_id=other.id)
+            )
+            assert 'Du puffade' in response.get_data(as_text=True)
+
+
+class TestUserPages:
+    def test_vcard(self, client):
+        with logged_in(client) as user:
+            user.phone = '0761234567'
+            models.db.session.commit()
+
+            response = client.get(
+                url_for('profile.user_vcard', user_id=user.id)
+            )
+            text = response.get_data(as_text=True)
+
+            assert response.status_code == 200
+            assert response.mimetype == 'text/vcard'
+            assert 'Monty Python' in text
+            assert 'monty@python.tld' in text
+
+    def test_user_history_page(self, client):
+        with logged_in(client) as user:
+            response = client.get(
+                url_for('profile.user_history', user_id=user.id)
+            )
+            assert response.status_code == 200
+
+    def test_user_nicknames_page(self, client):
+        with logged_in(client) as user:
+            response = client.get(
+                url_for('profile.user_nicknames', user_id=user.id)
+            )
+            assert response.status_code == 200
+
+
+def make_jpeg():
+    """Create a small JPEG image in memory."""
+    stream = io.BytesIO()
+    image = Image.new('RGB', (8, 8), color=(255, 0, 0))
+    image.save(stream, format='JPEG')
+    stream.seek(0)
+    return stream
+
+
+def make_profile_picture(user, filename='shrubbery.jpg'):
+    """Create a ProfilePicture row (no file on disk needed)."""
+    picture = models.ProfilePicture(filename=filename, user_id=user.id)
+    models.db.session.add(picture)
+    models.db.session.commit()
+    return picture
+
+
+class TestProfilePictures:
+    def test_upload_profile_picture(self, app, client):
+        with logged_in(client) as user:
+            response = client.post(
+                url_for('profile.upload_profile_picture', user_id=user.id),
+                data={'upload': (make_jpeg(), 'avatar.jpg')},
+                content_type='multipart/form-data',
+                follow_redirects=True
+            )
+            text = response.get_data(as_text=True)
+
+            assert response.status_code == 200
+            assert 'Profilbilden har ändrats!' in text
+
+            assert user.profile_picture is not None
+            path = os.path.join(
+                app.config['UPLOADED_PROFILEPICTURES_DEST'],
+                user.profile_picture.filename
+            )
+            assert os.path.isfile(path)
+
+    def test_upload_disallowed_file_rejected(self, client):
+        with logged_in(client) as user:
+            response = client.post(
+                url_for('profile.upload_profile_picture', user_id=user.id),
+                data={'upload': (io.BytesIO(b'#!/bin/sh'), 'evil.sh')},
+                content_type='multipart/form-data',
+                follow_redirects=True
+            )
+
+            assert response.status_code == 200
+            assert user.profile_picture is None
+            assert models.ProfilePicture.query.count() == 0
+
+    def test_change_profile_picture(self, client):
+        with logged_in(client) as user:
+            first = make_profile_picture(user, 'first.jpg')
+            second = make_profile_picture(user, 'second.jpg')
+
+            user.profile_picture_id = first.id
+            models.db.session.commit()
+
+            response = client.post(
+                url_for('profile.change_profile_picture', user_id=user.id),
+                data={'profile_picture': str(second.id)},
+                follow_redirects=True
+            )
+            text = response.get_data(as_text=True)
+
+            assert response.status_code == 200
+            assert 'Din profilbild har ändrats!' in text
+            assert user.profile_picture_id == second.id
+
+    def test_delete_profile_picture(self, client):
+        with logged_in(client) as user:
+            picture = make_profile_picture(user)
+            user.profile_picture_id = picture.id
+            models.db.session.commit()
+
+            response = client.post(
+                url_for('profile.delete_profile_picture', user_id=user.id),
+                data={'profile_picture': str(picture.id)},
+                follow_redirects=True
+            )
+            text = response.get_data(as_text=True)
+
+            assert response.status_code == 200
+            assert 'Profilbilden har tagits bort!' in text
+            assert models.ProfilePicture.query.count() == 0
+
+    def test_delete_none_profile_picture_rejected(self, client):
+        with logged_in(client) as user:
+            picture = make_profile_picture(user)
+
+            response = client.post(
+                url_for('profile.delete_profile_picture', user_id=user.id),
+                data={'profile_picture': 'none'},
+                follow_redirects=True
+            )
+            text = response.get_data(as_text=True)
+
+            assert 'ingenting' in text
+            assert models.ProfilePicture.query.count() == 1
+            assert picture in models.db.session
+
+    def test_other_user_cannot_change_profile_picture(self, client):
+        other = make_user()
+        picture = make_profile_picture(other)
+
+        with logged_in(client):
+            response = client.post(
+                url_for('profile.change_profile_picture', user_id=other.id),
+                data={'profile_picture': str(picture.id)}
+            )
+
+            assert response.status_code == 302
+            assert response.headers['Location'] == url_for(
+                'profile.show_profile', user_id=other.id)
+            assert other.profile_picture_id is None
+
+    def test_other_user_cannot_delete_profile_picture(self, client):
+        other = make_user()
+        picture = make_profile_picture(other)
+
+        with logged_in(client):
+            response = client.post(
+                url_for('profile.delete_profile_picture', user_id=other.id),
+                data={'profile_picture': str(picture.id)}
+            )
+
+            assert response.status_code == 302
+            assert models.ProfilePicture.query.count() == 1
+
+    def test_admin_can_change_other_users_profile_picture(self, client):
+        other = make_user()
+        picture = make_profile_picture(other)
+
+        with logged_in_admin(client):
+            response = client.post(
+                url_for('profile.change_profile_picture', user_id=other.id),
+                data={'profile_picture': str(picture.id)},
+                follow_redirects=True
+            )
+
+            assert response.status_code == 200
+            assert other.profile_picture_id == picture.id
