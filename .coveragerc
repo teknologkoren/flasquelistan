@@ -2,6 +2,17 @@
 branch=True
 source =
     flasquelistan
+omit =
+    flasquelistan/scripts/*
+    flasquelistan/log.py
+    flasquelistan/views/songbook.py
 
 [report]
 show_missing=True
+# Ratchet: bump towards the current measured coverage (minus a small margin)
+# whenever new tests land. Never lower it.
+fail_under=57
+exclude_lines =
+    pragma: no cover
+    def __repr__
+    def __str__
