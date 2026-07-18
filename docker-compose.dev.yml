@@ -1,0 +1,19 @@
+# Development override: run the production image but with the source tree
+# bind-mounted and gunicorn reloading on changes. Prod-parity testing
+# (websockets, gunicorn, pinned Python) — the fastest day-to-day loop is
+# still `flask run` outside Docker, see README.md.
+#
+# Usage: docker compose -f docker-compose.yml -f docker-compose.dev.yml up --build
+#
+# Note: with the whole repo mounted over /app, the songbook (/bok/) and the
+# compiled translations come from your working tree (flasquelistan/songbook_dist/
+# and local .mo files), not from the image.
+services:
+  app:
+    volumes:
+      - .:/app  # safe: the virtualenv lives in /opt/venv
+    environment:
+      FLASK_DEBUG: "1"
+    command: >
+      gunicorn -k geventwebsocket.gunicorn.workers.GeventWebSocketWorker
+      -w 1 -b 0.0.0.0:8000 --reload app:app
