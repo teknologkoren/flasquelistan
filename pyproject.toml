@@ -3,13 +3,13 @@ name = "flasquelistan"
 version = "1.0.0"
 description = "Implementation of Strequelistan with Flask and progressive enhancement 🍻"
 readme = "README.md"
-requires-python = ">=3.9, <3.11"
+requires-python = ">=3.10, <3.14"
 dependencies = [
     "bcrypt",
     "click<8.2.0",
     "ffmpy",
     "flask<2.3.0",
-    "flask-admin",
+    "flask-admin[sqlalchemy]>=2.0",
     "flask-babel<3.0.0",
     "flask-HTTPAuth",
     "flask-login",
