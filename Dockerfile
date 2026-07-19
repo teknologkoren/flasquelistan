@@ -1,5 +1,5 @@
 # --- Stage 1: songbook (optional; skipped gracefully if unavailable) --------
-FROM node:22.23.1-bookworm-slim AS songbook
+FROM node:24.18.0-bookworm-slim AS songbook
 WORKDIR /build
 # The submodule directory always exists in a checkout (empty if uninitialized),
 # so this COPY never fails. songs.json and public/Flerstämt.pdf are gitignored
@@ -15,7 +15,7 @@ RUN mkdir -p /out/songbook_dist && \
     fi
 
 # --- Stage 2: app -----------------------------------------------------------
-FROM python:3.10.20-slim-bookworm
+FROM python:3.13.14-slim-bookworm
 COPY --from=ghcr.io/astral-sh/uv:0.11.29 /uv /uvx /bin/
 
 # Venv outside /app so a dev bind mount of the repo does not shadow it.
