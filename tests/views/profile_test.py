@@ -410,10 +410,10 @@ class TestApiKeys:
             )
             assert 'cafebabe' * 4 not in response.get_data(as_text=True)
 
-    def test_admin_can_grant_admin_privileges_on_other_users_key(self, client):
-        # The admin-bit check must look at the requester (current_user), not
-        # the target user. A real admin editing a non-admin user's key must
-        # be allowed to set has_admin_privileges.
+    def test_no_admin_privileged_keys_on_non_admin_accounts(self, client):
+        # Keys with the admin bit set may only belong to admin users, so
+        # even an admin requester must be rejected when trying to attach an
+        # admin-privileged key to a non-admin user's account.
         target = make_user(email='target@python.tld', is_admin=False)
 
         with logged_in_admin(client):
@@ -426,10 +426,25 @@ class TestApiKeys:
                 },
             )
 
+            assert response.status_code == 400
+            assert models.ApiKey.query.count() == 0
+
+    def test_admin_can_create_admin_privileged_key_on_admin_account(
+            self, client):
+        with logged_in_admin(client) as admin:
+            response = client.post(
+                url_for('profile.edit_api_key', user_id=admin.id),
+                data={
+                    'name': 'Admin key',
+                    'has_admin_privileges': 'y',
+                    'is_enabled': 'y',
+                },
+            )
+
             assert response.status_code == 302
 
             api_key = models.ApiKey.query.one()
-            assert api_key.user_id == target.id
+            assert api_key.user_id == admin.id
             assert api_key.has_admin_privileges is True
 
     def test_non_admin_cannot_grant_admin_privileges_on_own_key(self, client):
