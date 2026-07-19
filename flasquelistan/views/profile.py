@@ -427,6 +427,10 @@ def edit_api_key(user_id, api_key_id=None):
 @mod.route('/profile/<int:user_id>/edit/api-keys/delete/<int:api_key_id>', methods=['POST'])
 def delete_api_key(user_id, api_key_id):
     api_key = models.ApiKey.query.get_or_404(api_key_id)
+
+    if current_user.id != user_id and not current_user.is_admin:
+        abort(403)
+
     if api_key.user.id != user_id:
         abort(404)
 
