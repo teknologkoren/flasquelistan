@@ -384,7 +384,7 @@ def edit_api_key(user_id, api_key_id=None):
 
         # Only admins are allowed to create keys with the admin bit set.
         if form.has_admin_privileges.data:
-            if not user.is_admin:
+            if not current_user.is_admin:
                 abort(400)
         api_key.has_admin_privileges = form.has_admin_privileges.data
 
@@ -448,7 +448,7 @@ def delete_api_key(user_id, api_key_id):
 def change_email_or_password(user_id):
     user = models.User.query.get_or_404(user_id)
 
-    if current_user.id != user.id and not user.is_admin:
+    if current_user.id != user.id and not current_user.is_admin:
         if current_user.is_admin:
             form = forms.ChangeEmailOrPasswordForm(obj=user, user=user,
                                                    nopasswordvalidation=True)
