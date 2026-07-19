@@ -654,6 +654,24 @@ class TestProfilePictures:
             assert models.ProfilePicture.query.count() == 1
             assert picture in models.db.session
 
+    def test_other_user_can_upload_profile_picture(self, client):
+        # Intentional: anyone may upload a new profile picture onto any
+        # profile — a long-standing gag in the choir. Changing or deleting
+        # someone else's existing picture is still restricted (below).
+        other = make_user()
+
+        with logged_in(client):
+            response = client.post(
+                url_for('profile.upload_profile_picture', user_id=other.id),
+                data={'upload': (make_jpeg(), 'goofy.jpg')},
+                content_type='multipart/form-data',
+                follow_redirects=True
+            )
+
+            assert response.status_code == 200
+            assert other.profile_picture is not None
+            assert other.profile_picture.user_id == other.id
+
     def test_other_user_cannot_change_profile_picture(self, client):
         other = make_user()
         picture = make_profile_picture(other)
