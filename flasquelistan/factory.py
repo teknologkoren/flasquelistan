@@ -156,7 +156,8 @@ def register_cli(app):
 
 def init_db(app):
     from flasquelistan import models
-    models.db.create_all(app=app)
+    with app.app_context():
+        models.db.create_all()
 
 
 def setup_jinja(app):
