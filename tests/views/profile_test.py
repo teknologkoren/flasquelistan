@@ -362,6 +362,22 @@ class TestChangeEmailOrPassword:
             assert response.headers['Location'] == url_for(
                 'profile.show_profile', user_id=other.id)
 
+    def test_non_admin_cannot_open_admin_password_page(self, client):
+        # The access check must look at the requester's admin bit, not the
+        # target's. When the target is an admin, a non-admin requester must
+        # still be redirected away and must not see the target's email.
+        admin_target = make_user(email='admin@python.tld', is_admin=True)
+
+        with logged_in(client):
+            response = client.get(
+                url_for('profile.change_email_or_password',
+                        user_id=admin_target.id)
+            )
+            assert response.status_code == 302
+            assert response.headers['Location'] == url_for(
+                'profile.show_profile', user_id=admin_target.id)
+            assert 'admin@python.tld' not in response.get_data(as_text=True)
+
 
 class TestApiKeys:
     def test_create_api_key_shows_secret_once(self, client, monkeypatch):
@@ -393,6 +409,44 @@ class TestApiKeys:
                 url_for('profile.api_keys', user_id=user.id)
             )
             assert 'cafebabe' * 4 not in response.get_data(as_text=True)
+
+    def test_admin_can_grant_admin_privileges_on_other_users_key(self, client):
+        # The admin-bit check must look at the requester (current_user), not
+        # the target user. A real admin editing a non-admin user's key must
+        # be allowed to set has_admin_privileges.
+        target = make_user(email='target@python.tld', is_admin=False)
+
+        with logged_in_admin(client):
+            response = client.post(
+                url_for('profile.edit_api_key', user_id=target.id),
+                data={
+                    'name': 'Escalated key',
+                    'has_admin_privileges': 'y',
+                    'is_enabled': 'y',
+                },
+            )
+
+            assert response.status_code == 302
+
+            api_key = models.ApiKey.query.one()
+            assert api_key.user_id == target.id
+            assert api_key.has_admin_privileges is True
+
+    def test_non_admin_cannot_grant_admin_privileges_on_own_key(self, client):
+        # A non-admin requester must still be rejected when trying to set the
+        # admin bit on their own key.
+        with logged_in(client) as user:
+            response = client.post(
+                url_for('profile.edit_api_key', user_id=user.id),
+                data={
+                    'name': 'Sneaky key',
+                    'has_admin_privileges': 'y',
+                    'is_enabled': 'y',
+                },
+            )
+
+            assert response.status_code == 400
+            assert models.ApiKey.query.count() == 0
 
     def test_delete_api_key(self, client):
         with logged_in(client) as user:
