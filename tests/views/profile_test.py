@@ -545,7 +545,7 @@ class TestApiKeys:
 
             # The attacker must be forbidden and the key must survive.
             assert response.status_code == 403
-            assert models.ApiKey.query.get(key_id) is not None
+            assert models.db.session.get(models.ApiKey, key_id) is not None
 
     def test_owner_can_delete_own_api_key(self, client):
         with logged_in(client) as user:
@@ -566,7 +566,7 @@ class TestApiKeys:
 
             assert response.status_code == 200
             assert 'borttagen' in response.get_data(as_text=True)
-            assert models.ApiKey.query.get(key_id) is None
+            assert models.db.session.get(models.ApiKey, key_id) is None
 
     def test_admin_can_delete_other_users_api_key(self, client):
         victim = make_user()
@@ -589,7 +589,7 @@ class TestApiKeys:
 
             assert response.status_code == 200
             assert 'borttagen' in response.get_data(as_text=True)
-            assert models.ApiKey.query.get(key_id) is None
+            assert models.db.session.get(models.ApiKey, key_id) is None
 
 
 class TestPoke:
