@@ -122,7 +122,7 @@ def credit_transfer_generate_link():
 
 @mod.route('/profile/<int:user_id>/pay')
 def transfer_standalone(user_id):
-    user = models.User.query.get_or_404(user_id)
+    user = models.db.get_or_404(models.User, user_id)
 
     credit_transfer_form = forms.CreditTransferForm()
     credit_transfer_form.payer_id.data = current_user.id
@@ -149,7 +149,7 @@ def admin_transaction(user_id):
         flask.flash(_l("Du måste vara admin för att göra det!"), 'error')
         return flask.redirect(flask.url_for('profile.show_profile', user_id=user_id))
 
-    user = models.User.query.get_or_404(user_id)
+    user = models.db.get_or_404(models.User, user_id)
     form = forms.UserTransactionForm()
 
     if form.validate_on_submit():

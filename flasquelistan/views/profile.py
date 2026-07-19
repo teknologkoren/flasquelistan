@@ -17,7 +17,7 @@ mod.before_request(login_required(lambda: None))
 
 @mod.route('/profile/<int:user_id>/')
 def show_profile(user_id):
-    user = models.User.query.get_or_404(user_id)
+    user = models.db.get_or_404(models.User, user_id)
 
     transactions = (user.transactions
                     .filter(models.Streque.voided.is_(False))
@@ -55,7 +55,7 @@ def show_profile(user_id):
 
 @mod.route('/profile/<int:user_id>/change_nickname', methods=['POST'])
 def change_nickname(user_id):
-    user = models.User.query.get_or_404(user_id)
+    user = models.db.get_or_404(models.User, user_id)
     form = forms.ChangeNicknameForm()
 
     if form.validate_on_submit():
@@ -102,7 +102,7 @@ def upload_profile_picture(user_id):
     form = forms.UploadProfilePictureForm()
 
     if form.validate_on_submit() and form.upload.data:
-        user = models.User.query.get_or_404(user_id)
+        user = models.db.get_or_404(models.User, user_id)
 
         try:
             filename = util.profile_pictures.save(form.upload.data)
@@ -141,7 +141,7 @@ def upload_profile_picture(user_id):
 
 @mod.route('/profile/<int:user_id>/change-profile-picture', methods=['POST'])
 def change_profile_picture(user_id):
-    user = models.User.query.get_or_404(user_id)
+    user = models.db.get_or_404(models.User, user_id)
 
     if current_user.id != user.id and not current_user.is_admin:
         flask.flash(_l("Du får bara redigera din egen profil! ಠ_ಠ"), 'error')
@@ -166,7 +166,7 @@ def change_profile_picture(user_id):
 
 @mod.route('/profile/<int:user_id>/delete-profile-picture', methods=['POST'])
 def delete_profile_picture(user_id):
-    user = models.User.query.get_or_404(user_id)
+    user = models.db.get_or_404(models.User, user_id)
 
     if current_user.id != user.id and not current_user.is_admin:
         flask.flash(_l("Du får bara redigera din egen profil! ಠ_ಠ"), 'error')
@@ -185,10 +185,8 @@ def delete_profile_picture(user_id):
             )
 
         elif form.profile_picture.data:
-            profile_picture = (models.ProfilePicture
-                               .query
-                               .get_or_404(form.profile_picture.data)
-                               )
+            profile_picture = models.db.get_or_404(
+                models.ProfilePicture, form.profile_picture.data)
 
             models.db.session.delete(profile_picture)
             models.db.session.commit()
@@ -205,7 +203,7 @@ def delete_profile_picture(user_id):
 
 @mod.route('/profile/<int:user_id>/history')
 def user_history(user_id):
-    user = models.User.query.get_or_404(user_id)
+    user = models.db.get_or_404(models.User, user_id)
 
     if current_user.id != user.id and not current_user.is_admin:
         return flask.redirect(flask.url_for('.show_profile', user_id=user_id))
@@ -221,7 +219,7 @@ def user_history(user_id):
 
 @mod.route('/profile/<int:user_id>/nicknames')
 def user_nicknames(user_id):
-    user = models.User.query.get_or_404(user_id)
+    user = models.db.get_or_404(models.User, user_id)
 
     pending_changes = (user.nickname_changes
                        .filter(models.NicknameChange.status.is_(models.NicknameChangeStatus.PENDING))
@@ -246,7 +244,7 @@ def user_nicknames(user_id):
 
 @mod.route('/profile/<int:user_id>/vcard')
 def user_vcard(user_id):
-    user = models.User.query.get_or_404(user_id)
+    user = models.db.get_or_404(models.User, user_id)
     response = flask.make_response(user.vcard)
     response.mimetype = 'text/vcard'
     response.headers['Content-Disposition'] = (
@@ -262,7 +260,7 @@ def poke_user(user_id):
         flask.flash(_l("Du kan inte puffa dig själv, det är oanständigt."), 'error')
         return flask.redirect(flask.url_for('.show_profile', user_id=user_id))
 
-    user = models.User.query.get_or_404(user_id)
+    user = models.db.get_or_404(models.User, user_id)
 
     poke = user.poke(current_user)
     if not poke:
@@ -279,7 +277,7 @@ def poke_user(user_id):
 
 @mod.route('/profile/<int:user_id>/edit/', methods=['GET', 'POST'])
 def edit_profile(user_id):
-    user = models.User.query.get_or_404(user_id)
+    user = models.db.get_or_404(models.User, user_id)
 
     if current_user.id != user.id and not current_user.is_admin:
         flask.flash(_l("Du får bara redigera din egen profil! ಠ_ಠ"), 'error')
@@ -349,7 +347,7 @@ def edit_profile(user_id):
 
 @mod.route('/profile/<int:user_id>/api-keys', methods=['GET'])
 def api_keys(user_id):
-    user = models.User.query.get_or_404(user_id)
+    user = models.db.get_or_404(models.User, user_id)
 
     if current_user.id != user.id and not current_user.is_admin:
         flask.flash(
@@ -362,7 +360,7 @@ def api_keys(user_id):
 @mod.route('/profile/<int:user_id>/api-keys/new', methods=['GET', 'POST'])
 @mod.route('/profile/<int:user_id>/api-keys/edit/<int:api_key_id>', methods=['GET', 'POST'])
 def edit_api_key(user_id, api_key_id=None):
-    user = models.User.query.get_or_404(user_id)
+    user = models.db.get_or_404(models.User, user_id)
 
     if current_user.id != user.id and not current_user.is_admin:
         flask.flash(
@@ -370,7 +368,7 @@ def edit_api_key(user_id, api_key_id=None):
         return flask.redirect(flask.url_for('.show_profile', user_id=user_id))
 
     if api_key_id:
-        api_key = models.ApiKey.query.get_or_404(api_key_id)
+        api_key = models.db.get_or_404(models.ApiKey, api_key_id)
         can_be_deleted = api_key.can_be_deleted
         form = forms.EditApiKeyForm(obj=api_key)
     else:
@@ -426,7 +424,7 @@ def edit_api_key(user_id, api_key_id=None):
 
 @mod.route('/profile/<int:user_id>/edit/api-keys/delete/<int:api_key_id>', methods=['POST'])
 def delete_api_key(user_id, api_key_id):
-    api_key = models.ApiKey.query.get_or_404(api_key_id)
+    api_key = models.db.get_or_404(models.ApiKey, api_key_id)
 
     if current_user.id != user_id and not current_user.is_admin:
         abort(403)
@@ -446,7 +444,7 @@ def delete_api_key(user_id, api_key_id):
 
 @mod.route('/profile/<int:user_id>/edit/password', methods=['GET', 'POST'])
 def change_email_or_password(user_id):
-    user = models.User.query.get_or_404(user_id)
+    user = models.db.get_or_404(models.User, user_id)
 
     if current_user.id != user.id and not current_user.is_admin:
         if current_user.is_admin:

@@ -105,7 +105,7 @@ def get_user_me():
 @mod.route('/users/<int:user_id>', methods=['GET'])
 @auth.login_required
 def get_user(user_id):
-    return filter_user_data(User.query.get_or_404(user_id).api_dict)
+    return filter_user_data(db.get_or_404(User, user_id).api_dict)
 
 
 @mod.route('/users/by-phone/<string:phone_number>', methods=['GET'])
@@ -144,8 +144,8 @@ def add_streque_me(article_id):
 @mod.route('/users/<int:user_id>/streque/<int:article_id>', methods=['POST'])
 @auth.login_required
 def add_streque(user_id, article_id):
-    user = User.query.get_or_404(user_id)
-    article = Article.query.get_or_404(article_id)
+    user = db.get_or_404(User, user_id)
+    article = db.get_or_404(Article, article_id)
     return user.strequa(article, current_user(), current_api_key()).api_dict
 
 
@@ -176,7 +176,7 @@ def get_transactions_user(user_id):
     if not current_api_key().is_admin and current_user().id != user_id:
         flask.abort(403)  # HTTP 403 Forbidden
 
-    user = User.query.get_or_404(user_id)
+    user = db.get_or_404(User, user_id)
     limit = request.args.get('limit', None)
     order = request.args.get('order', "asc")
     min_id = cast_integer_param(request.args.get('min_id', '0'))
@@ -271,7 +271,7 @@ def get_random_quote():
 @mod.route('/quotes/<int:quote_id>', methods=['GET'])
 @auth.login_required
 def get_quote(quote_id):
-    quote = Quote.query.get_or_404(quote_id)
+    quote = db.get_or_404(Quote, quote_id)
     return jsonify(quote.api_dict)
 
 
@@ -281,7 +281,7 @@ def mark_notification_sent(notification_id):
     if not current_api_key().is_admin:
         flask.abort(403)  # HTTP 403 Forbidden
 
-    notification = Notification.query.get_or_404(notification_id)
+    notification = db.get_or_404(Notification, notification_id)
     notification.is_sent = True
     db.session.commit()
     return '', 204  # HTTP 204 No Content
@@ -293,7 +293,7 @@ def mark_notification_acknowledged(notification_id):
     if not current_api_key().is_admin:
         flask.abort(403)  # HTTP 403 Forbidden
 
-    notification = Notification.query.get_or_404(notification_id)
+    notification = db.get_or_404(Notification, notification_id)
     notification.is_acknowledged = True
     db.session.commit()
     return '', 204  # HTTP 204 No Content
