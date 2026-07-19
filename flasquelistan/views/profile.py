@@ -382,9 +382,9 @@ def edit_api_key(user_id, api_key_id=None):
         if not api_key:
             api_key = models.ApiKey()
 
-        # Only admins are allowed to create keys with the admin bit set.
+        # Keys with the admin bit set may only belong to admin users.
         if form.has_admin_privileges.data:
-            if not current_user.is_admin:
+            if not user.is_admin:
                 abort(400)
         api_key.has_admin_privileges = form.has_admin_privileges.data
 
