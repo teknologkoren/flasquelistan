@@ -1,6 +1,7 @@
 import datetime
 
 import flask
+import markupsafe
 
 from flasquelistan import util
 from flasquelistan.models.base import db
@@ -71,7 +72,7 @@ class Poke(db.Model):
             return None
         
         profile_link = flask.url_for('profile.show_profile', user_id=poke.poker_id)
-        safe_name = flask.escape(poke.poker.displayname)
+        safe_name = markupsafe.escape(poke.poker.displayname)
         return f'<a href="{profile_link}">{safe_name}</a> puffade dig!'
 
     @staticmethod
@@ -130,7 +131,7 @@ class Notification(db.Model):
             if html:
                 return html
         
-        return flask.escape(self.text)
+        return markupsafe.escape(self.text)
 
     @property
     def formatted_markdown(self):

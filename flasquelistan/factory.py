@@ -227,14 +227,6 @@ def setup_flask_babel(app):
     from flask_login import current_user
     from flasquelistan import models
 
-    babel = flask_babel.Babel(app)
-
-    app.jinja_env.globals['format_datetime'] = flask_babel.format_datetime
-    app.jinja_env.globals['format_date'] = flask_babel.format_date
-    app.jinja_env.globals['format_currency'] = flask_babel.format_currency
-    app.jinja_env.globals['locale'] = flask_babel.get_locale
-
-    @babel.localeselector
     def get_locale():
         # Check if user is logged in, if so, use the users stored preferences
         if current_user.is_authenticated:
@@ -250,13 +242,27 @@ def setup_flask_babel(app):
                 flask_babel.refresh()
             return session.get('lang', None)
 
-    @babel.timezoneselector
     def get_timezone():
         # Used to change the time zone.
         # user = getattr(g, 'user', None)
         # if user is not None:
         #    return user.timezone
         return None
+
+    babel = flask_babel.Babel(app, locale_selector=get_locale,
+                              timezone_selector=get_timezone)
+
+    # Flask-Babel caches the selected locale on flask.g for the lifetime of
+    # the app context. When an app context outlives a single request (CLI
+    # scripts making internal requests, tests with a long-lived context), a
+    # stale locale would be reused, so re-select it at every request start.
+    app.before_request(flask_babel.refresh)
+
+    app.jinja_env.globals['format_datetime'] = flask_babel.format_datetime
+    app.jinja_env.globals['format_date'] = flask_babel.format_date
+    app.jinja_env.globals['format_currency'] = flask_babel.format_currency
+    app.jinja_env.globals['locale'] = flask_babel.get_locale
+
     return babel
 
 

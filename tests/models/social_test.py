@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-import flask
+import markupsafe
 
 from flasquelistan import models
 
@@ -66,5 +66,5 @@ def test_poke_notification_formatting(app):
         notification = models.db.session.get(models.Notification, notification.id)
 
         # Should fall back to text
-        assert notification.formatted_html == flask.escape(notification.text)
+        assert notification.formatted_html == markupsafe.escape(notification.text)
         assert notification.formatted_markdown == notification.text
