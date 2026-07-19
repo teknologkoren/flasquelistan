@@ -49,7 +49,7 @@ def run(path):
                     print(f"Between {last_timestamp.isoformat()} and {timestamp.isoformat()}, {first_name} {last_name} ({user_id}) got nickname '{nickname}'.")
                     users[user_id] = nickname
 
-                    user = models.User.query.get(int(user_id))
+                    user = models.db.session.get(models.User, int(user_id))
                     change = models.NicknameChange(
                         user_id=int(user_id),
                         nickname=nickname,

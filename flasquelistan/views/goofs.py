@@ -3,7 +3,7 @@ import random
 import re
 
 from flask_login import login_required
-from flasquelistan.models import User, ProfilePicture
+from flasquelistan.models import User, ProfilePicture, db
 from flasquelistan import util
 from flasquelistan.views.gallery import gallery_page_for_image
 
@@ -33,7 +33,7 @@ def create_random_picture_route(app, route, config, goof_id):
         if not user_id:
             abort(404)
 
-        user = User.query.get(user_id)
+        user = db.session.get(User, user_id)
         if not user:
             abort(404)
 

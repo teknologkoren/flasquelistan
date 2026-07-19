@@ -56,7 +56,7 @@ def gallery(page=1):
 @mod.route('/gallery/user/<int:user_id>/')
 @mod.route('/gallery/user/<int:user_id>/<int:page>')
 def user_gallery(user_id, page=1):
-    user = models.User.query.get_or_404(user_id)
+    user = models.db.get_or_404(models.User, user_id)
 
     image_query = (
         models.ProfilePicture

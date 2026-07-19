@@ -31,6 +31,6 @@ def add_quote():
 
 @mod.route('/quotes/<int:quote_id>')
 def quote(quote_id):
-    quote = models.Quote.query.get_or_404(quote_id)
+    quote = models.db.get_or_404(models.Quote, quote_id)
 
     return flask.render_template('quote.html', quote=quote)

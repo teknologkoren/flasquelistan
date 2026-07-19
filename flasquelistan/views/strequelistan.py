@@ -147,12 +147,12 @@ def add_streque():
         }
 
     try:
-        user = models.User.query.get(data['user_id'])
+        user = models.db.session.get(models.User, data['user_id'])
         article_id = int(data['article_id'])
     except (KeyError, ValueError, TypeError):
         flask.abort(400)
 
-    article = models.Article.query.get(article_id)
+    article = models.db.session.get(models.Article, article_id)
 
     if not article:
         flask.abort(400)
@@ -207,7 +207,7 @@ def void_streque():
     except (KeyError, ValueError):
         flask.abort(400)
 
-    streque = models.Streque.query.get(streque_id)
+    streque = models.db.session.get(models.Streque, streque_id)
 
     if not streque or streque.too_old() or streque.voided:
         flask.abort(400)

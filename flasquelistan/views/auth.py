@@ -20,7 +20,7 @@ login_manager.login_message_category = 'info'
 @login_manager.user_loader
 def load_user(user_id):
     """Tell flask-login how to get logged in user."""
-    return models.User.query.get(user_id)
+    return models.db.session.get(models.User, user_id)
 
 
 def admin_required(func):
@@ -159,7 +159,7 @@ def verify_token(token):
     except BadData:
         flask.abort(404)
 
-    user = models.User.query.get_or_404(user_id)
+    user = models.db.get_or_404(models.User, user_id)
     user.email = email
     models.db.session.commit()
 
@@ -251,7 +251,7 @@ def reset_token(token):
     try:
         data, timestamp = ts.loads(token, salt='recover-key', max_age=3600,
                                    return_timestamp=True)
-        user = models.User.query.get(data)
+        user = models.db.session.get(models.User, data)
     except SignatureExpired:
         flask.flash(expired, 'error')
         return flask.redirect(flask.url_for('.login'))

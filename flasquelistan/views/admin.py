@@ -144,7 +144,7 @@ def void_transaction():
     except (KeyError, TypeError):
         flask.abort(400)
 
-    transaction = models.Transaction.query.get(transaction_id)
+    transaction = models.db.session.get(models.Transaction, transaction_id)
 
     if not transaction or transaction.voided:
         flask.abort(400)
@@ -205,7 +205,7 @@ def bulk_transactions():
                 continue
 
             if form_field.value.data:
-                user = models.User.query.get(form_field.user_id.data)
+                user = models.db.session.get(models.User, form_field.user_id.data)
                 if user:
                     transactions.append({
                         'user_id': user.id,
@@ -249,7 +249,7 @@ def confirm_bulk_transactions():
             flask.abort(400)
 
     for user_id, transaction_data in transactions.items():
-        user = models.User.query.get(user_id)
+        user = models.db.session.get(models.User, user_id)
         transaction = user.admin_transaction(
             transaction_data['value'],
             transaction_data['text'],
@@ -278,7 +278,7 @@ def articles():
 @mod.route('/admin/articles/edit/<int:article_id>', methods=['GET', 'POST'])
 def edit_article(article_id=None):
     if article_id:
-        article = models.Article.query.get_or_404(article_id)
+        article = models.db.get_or_404(models.Article, article_id)
         form = forms.EditArticleForm(obj=article)
         if not form.is_submitted():
             form.value.data = form.value.data / 100
@@ -315,7 +315,7 @@ def edit_article(article_id=None):
 
 @mod.route('/admin/articles/remove/<int:article_id>', methods=['POST'])
 def remove_article(article_id):
-    article = models.Article.query.get_or_404(article_id)
+    article = models.db.get_or_404(models.Article, article_id)
 
     models.db.session.delete(article)
     models.db.session.commit()
@@ -349,7 +349,7 @@ def spam():
 @mod.route('/admin/add-user/', methods=['GET', 'POST'])
 @mod.route('/admin/add-user/request/<int:request_id>', methods=['GET', 'POST'])
 def add_user(request_id=None):
-    request = (models.RegistrationRequest.query.get_or_404(request_id)
+    request = (models.db.get_or_404(models.RegistrationRequest, request_id)
                if request_id else None)
 
     form = forms.AddUserForm(obj=request, group_id=-1)
@@ -408,7 +408,7 @@ def requests():
 
 @mod.route('/admin/requests/remove/<int:request_id>', methods=['POST'])
 def remove_request(request_id):
-    request = models.RegistrationRequest.query.get_or_404(request_id)
+    request = models.db.get_or_404(models.RegistrationRequest, request_id)
     models.db.session.delete(request)
     models.db.session.commit()
 
@@ -432,7 +432,7 @@ def show_groups():
 @mod.route('/admin/groups/edit/<int:group_id>', methods=['GET', 'POST'])
 def edit_group(group_id=None):
     if group_id:
-        group = models.Group.query.get_or_404(group_id)
+        group = models.db.get_or_404(models.Group, group_id)
         form = forms.EditGroupForm(
             obj=group, discord_sync=group.discord_role_id is not None)
     else:
@@ -472,7 +472,7 @@ def edit_group(group_id=None):
 
 @mod.route('/admin/groups/remove/<int:group_id>', methods=['POST'])
 def remove_group(group_id):
-    group = models.Group.query.get_or_404(group_id)
+    group = models.db.get_or_404(models.Group, group_id)
 
     models.db.session.delete(group)
     models.db.session.commit()
@@ -508,7 +508,7 @@ def show_nicknames():
 
 @mod.route('/admin/nicknames/<int:change_id>/approve', methods=['POST'])
 def approve_pending_nickname(change_id):
-    change = models.NicknameChange.query.get_or_404(change_id)
+    change = models.db.get_or_404(models.NicknameChange, change_id)
 
     if change.status != models.NicknameChangeStatus.PENDING:
         abort(404)
@@ -525,7 +525,7 @@ def approve_pending_nickname(change_id):
 
 @mod.route('/admin/nicknames/<int:change_id>/reject', methods=['POST'])
 def reject_pending_nickname(change_id):
-    change = models.NicknameChange.query.get_or_404(change_id)
+    change = models.db.get_or_404(models.NicknameChange, change_id)
 
     if change.status != models.NicknameChangeStatus.PENDING:
         abort(404)
@@ -541,7 +541,7 @@ def reject_pending_nickname(change_id):
 
 @mod.route('/admin/quotes/edit/<int:quote_id>', methods=['GET', 'POST'])
 def edit_quote(quote_id):
-    quote = models.Quote.query.get_or_404(quote_id)
+    quote = models.db.get_or_404(models.Quote, quote_id)
     form = forms.EditQuoteForm(obj=quote)
 
     if form.validate_on_submit():
@@ -558,7 +558,7 @@ def edit_quote(quote_id):
 
 @mod.route('/admin/quotes/remove/<int:quote_id>', methods=['POST'])
 def remove_quote(quote_id):
-    quote = models.Quote.query.get_or_404(quote_id)
+    quote = models.db.get_or_404(models.Quote, quote_id)
 
     models.db.session.delete(quote)
     models.db.session.commit()
