@@ -275,11 +275,6 @@ def article_description():
     return flask.render_template('article_description.html', articles=articles)
 
 
-@mod.route('/payments')
-def payments():
-    return flask.render_template('payments.html')
-
-
 @mod.route('/paperlist')
 def paperlist():
 

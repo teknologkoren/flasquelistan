@@ -4,7 +4,7 @@
 import pytest
 from flask import url_for
 from flask_login import current_user
-from jinja2.exceptions import TemplateNotFound
+from werkzeug.routing import BuildError
 
 import datetime
 
@@ -400,17 +400,18 @@ class TestPaperListPage:
 class TestStrequelistanPages:
     """Test miscellaneous strequelistan pages"""
 
-    @pytest.mark.xfail(
-        strict=True,
-        raises=TemplateNotFound,
-        reason="strequelistan.payments renders 'payments.html', which does "
-               "not exist, so the page crashes for every user. This test "
-               "flips green automatically once the template is added.",
-    )
-    def test_payments_page(self, client):
+    def test_payments_route_removed(self, client):
+        # The payment instructions were moved to the profile page (upstream
+        # commit 9729104), which deleted 'payments.html'. The now-dead
+        # /payments route was left behind and crashed with a 500 for every
+        # user (issue #140). The route has been removed, so /payments must
+        # 404 and the endpoint must no longer be reversible via url_for.
         with logged_in(client):
-            response = client.get(url_for('strequelistan.payments'))
-            assert response.status_code == 200
+            response = client.get('/payments')
+            assert response.status_code == 404
+
+            with pytest.raises(BuildError):
+                url_for('strequelistan.payments')
 
     def test_paperlist_active_filter(self, client):
         # The paper list only shows users that belong to a group.
