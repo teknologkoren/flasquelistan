@@ -400,13 +400,17 @@ class TestPaperListPage:
 class TestStrequelistanPages:
     """Test miscellaneous strequelistan pages"""
 
+    @pytest.mark.xfail(
+        strict=True,
+        raises=TemplateNotFound,
+        reason="strequelistan.payments renders 'payments.html', which does "
+               "not exist, so the page crashes for every user. This test "
+               "flips green automatically once the template is added.",
+    )
     def test_payments_page(self, client):
-        # BUG: the strequelistan.payments view renders 'payments.html', but
-        # no such template exists, so the page crashes with a server error
-        # for every user. This test documents the current (broken) behavior.
         with logged_in(client):
-            with pytest.raises(TemplateNotFound):
-                client.get(url_for('strequelistan.payments'))
+            response = client.get(url_for('strequelistan.payments'))
+            assert response.status_code == 200
 
     def test_paperlist_active_filter(self, client):
         # The paper list only shows users that belong to a group.

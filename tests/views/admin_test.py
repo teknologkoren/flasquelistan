@@ -903,7 +903,9 @@ class TestStatsPages:
         with logged_in_admin(client):
             current_user.strequa(article, current_user)
 
-            today = datetime.date.today()
+            # The view filters on the UTC date of the streque timestamps, so
+            # the range must be built from UTC, not the local date.
+            today = datetime.datetime.utcnow().date()
             yesterday = today - datetime.timedelta(days=1)
             response = client.get(
                 url_for('strequeadmin.streque_stats',
