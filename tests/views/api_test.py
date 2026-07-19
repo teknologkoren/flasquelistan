@@ -351,6 +351,38 @@ class TestTransactions:
                               headers=auth_header(key))
         assert response.status_code == 400
 
+    def test_unicode_digit_min_id(self, client):
+        """Superscript digits pass str.isdigit() but crash int()."""
+        _, _, key = make_api_user(admin=True)
+
+        response = client.get('/api/v1/transactions?min_id=²',
+                              headers=auth_header(key))
+        assert response.status_code == 400
+
+    def test_out_of_range_min_id(self, client):
+        """Values beyond SQLite's 64-bit range crash at query execution."""
+        _, _, key = make_api_user(admin=True)
+
+        response = client.get(
+            '/api/v1/transactions?min_id=99999999999999999999999999',
+            headers=auth_header(key))
+        assert response.status_code == 400
+
+    def test_invalid_limit(self, client):
+        _, _, key = make_api_user(admin=True)
+
+        response = client.get('/api/v1/transactions?limit=abc',
+                              headers=auth_header(key))
+        assert response.status_code == 400
+
+    def test_invalid_limit_on_user_transactions(self, client):
+        user, _, key = make_api_user()
+
+        response = client.get(
+            f'/api/v1/users/{user.id}/transactions?limit=abc',
+            headers=auth_header(key))
+        assert response.status_code == 400
+
 
 class TestNotifications:
     def make_notification(self, user):
@@ -475,5 +507,29 @@ class TestQuotesMinId:
         _, _, key = make_api_user()
 
         response = client.get('/api/v1/quotes?min_id=bogus',
+                              headers=auth_header(key))
+        assert response.status_code == 400
+
+    def test_quotes_with_unicode_digit_min_id(self, client):
+        """Superscript digits pass str.isdigit() but crash int()."""
+        _, _, key = make_api_user()
+
+        response = client.get('/api/v1/quotes?min_id=²',
+                              headers=auth_header(key))
+        assert response.status_code == 400
+
+    def test_quotes_with_out_of_range_min_id(self, client):
+        """Values beyond SQLite's 64-bit range crash at query execution."""
+        _, _, key = make_api_user()
+
+        response = client.get(
+            '/api/v1/quotes?min_id=99999999999999999999999999',
+            headers=auth_header(key))
+        assert response.status_code == 400
+
+    def test_quotes_with_invalid_limit(self, client):
+        _, _, key = make_api_user()
+
+        response = client.get('/api/v1/quotes?limit=abc',
                               headers=auth_header(key))
         assert response.status_code == 400

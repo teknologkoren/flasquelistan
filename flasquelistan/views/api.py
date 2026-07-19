@@ -156,7 +156,18 @@ def get_transactions_me():
 
 
 def cast_integer_param(param):
-    return int(param) if param.isdigit() else None
+    """Cast a non-negative integer query parameter, or None if invalid.
+
+    isdecimal() (unlike isdigit()) accepts only characters int() can parse,
+    and the range check keeps values within SQLite's signed 64-bit integers,
+    which otherwise overflow at query execution.
+    """
+    if not param.isdecimal():
+        return None
+    value = int(param)
+    if value > 2**63 - 1:
+        return None
+    return value
 
 
 @mod.route('/users/<int:user_id>/transactions', methods=['GET'])
@@ -173,6 +184,11 @@ def get_transactions_user(user_id):
     if min_id is None:
         return "400 Bad Request: invalid min_id.", 400 # HTTP 400 Bad Request
 
+    if limit is not None:
+        limit = cast_integer_param(limit)
+        if limit is None:
+            return "400 Bad Request: invalid limit.", 400 # HTTP 400 Bad Request
+
     return query_transactions(user=user, min_id=min_id, limit=limit, order=order)
 
 
@@ -188,6 +204,11 @@ def get_transactions():
 
     if min_id is None:
         return "400 Bad Request: invalid min_id.", 400 # HTTP 400 Bad Request
+
+    if limit is not None:
+        limit = cast_integer_param(limit)
+        if limit is None:
+            return "400 Bad Request: invalid limit.", 400 # HTTP 400 Bad Request
 
     return query_transactions(min_id=min_id, limit=limit, order=order)
 
@@ -218,6 +239,11 @@ def get_quotes():
 
     if min_id is None:
         return "400 Bad Request: invalid min_id.", 400 # HTTP 400 Bad Request
+
+    if limit is not None:
+        limit = cast_integer_param(limit)
+        if limit is None:
+            return "400 Bad Request: invalid limit.", 400 # HTTP 400 Bad Request
 
     q = models.Quote.query
     if min_id > 0:
