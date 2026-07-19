@@ -489,6 +489,16 @@ class TestQuotes:
         assert response.status_code == 200
         assert response.json['id'] in [quote.id for quote in quotes]
 
+    def test_get_random_quote_empty_table(self, client):
+        """Regression test: /quotes/random used to crash with a 500 when the
+        quotes table was empty."""
+        _, _, key = make_api_user()
+        assert models.Quote.query.count() == 0
+
+        response = client.get('/api/v1/quotes/random',
+                              headers=auth_header(key))
+        assert response.status_code == 404
+
 
 class TestQuotesMinId:
     def test_quotes_with_min_id(self, client):
