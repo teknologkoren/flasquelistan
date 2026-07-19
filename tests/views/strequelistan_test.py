@@ -1,10 +1,8 @@
 #!/usr/bin/env python3
 
 
-import pytest
 from flask import url_for
 from flask_login import current_user
-from werkzeug.routing import BuildError
 
 import datetime
 
@@ -399,19 +397,6 @@ class TestPaperListPage:
 
 class TestStrequelistanPages:
     """Test miscellaneous strequelistan pages"""
-
-    def test_payments_route_removed(self, client):
-        # The payment instructions were moved to the profile page (upstream
-        # commit 9729104), which deleted 'payments.html'. The now-dead
-        # /payments route was left behind and crashed with a 500 for every
-        # user (issue #140). The route has been removed, so /payments must
-        # 404 and the endpoint must no longer be reversible via url_for.
-        with logged_in(client):
-            response = client.get('/payments')
-            assert response.status_code == 404
-
-            with pytest.raises(BuildError):
-                url_for('strequelistan.payments')
 
     def test_paperlist_active_filter(self, client):
         # The paper list only shows users that belong to a group.
