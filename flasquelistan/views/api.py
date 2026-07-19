@@ -263,6 +263,8 @@ def get_quotes():
 @auth.login_required
 def get_random_quote():
     quote = models.Quote.query.order_by(func.random()).first()
+    if quote is None:
+        flask.abort(404)  # HTTP 404 Not Found
     return jsonify(quote.api_dict)
 
 
