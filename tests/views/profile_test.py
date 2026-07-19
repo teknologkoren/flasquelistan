@@ -456,6 +456,72 @@ class TestApiKeys:
             assert response.headers['Location'] == url_for(
                 'profile.show_profile', user_id=other.id)
 
+    def test_non_admin_cannot_delete_other_users_api_key(self, client):
+        victim = make_user()
+        api_key = models.ApiKey(
+            name='Victim key',
+            api_key=models.ApiKey.generate_key(),
+            user_id=victim.id,
+        )
+        models.db.session.add(api_key)
+        models.db.session.commit()
+        key_id = api_key.id
+
+        with logged_in(client) as attacker:
+            assert attacker.id != victim.id
+            response = client.post(
+                url_for('profile.delete_api_key', user_id=victim.id,
+                        api_key_id=key_id)
+            )
+
+            # The attacker must be forbidden and the key must survive.
+            assert response.status_code == 403
+            assert models.ApiKey.query.get(key_id) is not None
+
+    def test_owner_can_delete_own_api_key(self, client):
+        with logged_in(client) as user:
+            api_key = models.ApiKey(
+                name='Own key',
+                api_key=models.ApiKey.generate_key(),
+                user_id=user.id,
+            )
+            models.db.session.add(api_key)
+            models.db.session.commit()
+            key_id = api_key.id
+
+            response = client.post(
+                url_for('profile.delete_api_key', user_id=user.id,
+                        api_key_id=key_id),
+                follow_redirects=True
+            )
+
+            assert response.status_code == 200
+            assert 'borttagen' in response.get_data(as_text=True)
+            assert models.ApiKey.query.get(key_id) is None
+
+    def test_admin_can_delete_other_users_api_key(self, client):
+        victim = make_user()
+        api_key = models.ApiKey(
+            name='Victim key',
+            api_key=models.ApiKey.generate_key(),
+            user_id=victim.id,
+        )
+        models.db.session.add(api_key)
+        models.db.session.commit()
+        key_id = api_key.id
+
+        with logged_in_admin(client) as admin:
+            assert admin.id != victim.id
+            response = client.post(
+                url_for('profile.delete_api_key', user_id=victim.id,
+                        api_key_id=key_id),
+                follow_redirects=True
+            )
+
+            assert response.status_code == 200
+            assert 'borttagen' in response.get_data(as_text=True)
+            assert models.ApiKey.query.get(key_id) is None
+
 
 class TestPoke:
     def test_poke_creates_poke_and_notification(self, client):
