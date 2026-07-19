@@ -1,15 +1,6 @@
 from flasquelistan import models
 
-
-def make_user():
-    user = models.User(
-        email='monty@python.tld',
-        first_name='Monty',
-        last_name='Python',
-    )
-    models.db.session.add(user)
-    models.db.session.commit()
-    return user
+from tests.helpers import make_user
 
 
 class TestApiKeyAuthenticate:

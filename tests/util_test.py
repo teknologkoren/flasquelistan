@@ -86,9 +86,11 @@ class TestGenerateSecurePathHash:
 
 
 class TestUrlForImage:
-    def test_profilepicture_url(self, app):
-        app.config['IMAGE_SECRET'] = 'not a secret'
-        app.config['IMAGE_EXPIRY'] = 3600
+    # The app is session scoped, so use monkeypatch to restore the config
+    # after each test instead of mutating it permanently.
+    def test_profilepicture_url(self, app, monkeypatch):
+        monkeypatch.setitem(app.config, 'IMAGE_SECRET', 'not a secret')
+        monkeypatch.setitem(app.config, 'IMAGE_EXPIRY', 3600)
 
         with app.test_request_context('/'):
             url = util.url_for_image('monty.jpg', 'profilepicture')
@@ -97,9 +99,9 @@ class TestUrlForImage:
         assert 'md5=' in url
         assert 'expires=' in url
 
-    def test_image_url(self, app):
-        app.config['IMAGE_SECRET'] = 'not a secret'
-        app.config['IMAGE_EXPIRY'] = 3600
+    def test_image_url(self, app, monkeypatch):
+        monkeypatch.setitem(app.config, 'IMAGE_SECRET', 'not a secret')
+        monkeypatch.setitem(app.config, 'IMAGE_EXPIRY', 3600)
 
         with app.test_request_context('/'):
             url = util.url_for_image('gallery.jpg', 'image')

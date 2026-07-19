@@ -5,6 +5,8 @@ from unittest import mock
 
 from flasquelistan import models
 
+from tests.helpers import make_user
+
 
 def test_group_model(app):
     group = models.Group(
@@ -85,16 +87,7 @@ def test_user_model(app):
 
 
 def make_drinker(email='monty@python.tld'):
-    user = models.User(
-        email=email,
-        first_name='Monty',
-        last_name='Python',
-        body_mass=70,
-        y_chromosome=True,
-    )
-    models.db.session.add(user)
-    models.db.session.commit()
-    return user
+    return make_user(email=email, body_mass=70, y_chromosome=True)
 
 
 def add_streque(user, standardglas=2, timestamp=None, voided=False):

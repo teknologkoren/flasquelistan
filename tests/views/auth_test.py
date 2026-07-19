@@ -8,18 +8,7 @@ from itsdangerous import SignatureExpired, URLSafeTimedSerializer
 
 from flasquelistan import models
 
-from tests.helpers import logged_in, login
-
-
-def make_user():
-    user = models.User(
-        email='monty@python.tld',
-        first_name='Monty',
-        last_name='Python',
-    )
-    models.db.session.add(user)
-    models.db.session.commit()
-    return user
+from tests.helpers import captcha_answer, logged_in, login, make_user
 
 
 class TestVerifyEmailToken:
@@ -70,11 +59,6 @@ def make_legacy_hash(password, salt='saltysalt', rounds=1000):
     return 'pbkdf2_sha256${}${}${}'.format(
         rounds, salt, base64.b64encode(dk).decode()
     )
-
-
-def captcha_answer(app, n):
-    s = (app.config['SECRET_KEY'] + str(n)).encode()
-    return hashlib.sha256(s).hexdigest()
 
 
 class TestLegacyPasswordUpgrade:
