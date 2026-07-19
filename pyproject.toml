@@ -16,7 +16,7 @@ dependencies = [
     "flask-reuploaded",
     "flask-socketio",
     "flask-sqlalchemy<3.0.0",
-    "flask-wtf>=1.0.0,<1.1.0",
+    "flask-wtf>=1.2",
     "gevent",
     "gevent-websocket",
     "gunicorn",
@@ -29,7 +29,7 @@ dependencies = [
     "sqlalchemy<2.0.0",
     "vobject",
     "werkzeug<3.0.0",
-    "wtforms[email]<3.0.0",
+    "wtforms[email]>=3.1",
 ]
 
 [dependency-groups]

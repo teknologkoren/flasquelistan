@@ -3,7 +3,6 @@ import random
 
 import flask
 import flask_wtf
-import wtforms.fields.html5 as html5_fields
 from flask_babel import gettext as _
 from flask_babel import lazy_gettext as _l
 from flask_wtf.file import FileAllowed
@@ -96,7 +95,7 @@ def AreYouARobotFormFactory(*args, **kwargs):
         return h
 
     class F(flask_wtf.FlaskForm):
-        def validate(self):
+        def validate(self, extra_validators=None):
             if self.answer.data != make_hash(self.question.data):
                 errors = list(self.question.errors)
                 errors.append(_l("Fel svar."))
@@ -111,7 +110,7 @@ def AreYouARobotFormFactory(*args, **kwargs):
     answer = x + y
     ans_hash = make_hash(answer)
 
-    F.question = html5_fields.IntegerField(
+    F.question = fields.IntegerField(
         _l("Vad är %(x)d + %(y)d?", x=x, y=y),
         validators=[
             validators.InputRequired()
@@ -123,7 +122,7 @@ def AreYouARobotFormFactory(*args, **kwargs):
     return F(*args, **kwargs)
 
 
-class LowercaseEmailField(html5_fields.EmailField):
+class LowercaseEmailField(fields.EmailField):
     """Custom field that lowercases input."""
     def process_formdata(self, valuelist):
         if valuelist:
@@ -180,8 +179,8 @@ class NewPasswordForm(flask_wtf.FlaskForm):
 class LoginForm(RedirectForm, EmailForm, PasswordForm):
     remember = fields.BooleanField(_l("Håll mig inloggad"))
 
-    def validate(self):
-        if not flask_wtf.FlaskForm.validate(self):
+    def validate(self, extra_validators=None):
+        if not flask_wtf.FlaskForm.validate(self, extra_validators):
             return False
 
         user = models.User.authenticate(self.email.data, self.password.data)
@@ -246,7 +245,7 @@ class EditUserForm(flask_wtf.FlaskForm):
         ]
     )
 
-    birthday = html5_fields.DateField(
+    birthday = fields.DateField(
         _l('Datum'),
         description=_l("Din födelsedags datum."),
         validators=[
@@ -254,13 +253,13 @@ class EditUserForm(flask_wtf.FlaskForm):
         ]
     )
 
-    phone = html5_fields.TelField(
+    phone = fields.TelField(
         _l('Telefon'),
         description=_l("Ett telefonnummer. Landskod kan utelämnas för svenska"
                        " nummer, men behövs för utländska nummer.")
     )
 
-    body_mass = html5_fields.IntegerField(
+    body_mass = fields.IntegerField(
         _l('Kroppsvikt'),
         description=_l("Din vikt i kg. Används för att mer precist räkna ut "
                        "alkoholkoncentrationen i blodet. Fältet kan lämnas "
@@ -342,7 +341,7 @@ class RegistrationRequestForm(UniqueEmailForm):
             validators.Length(max=50)
         ],
     )
-    phone = html5_fields.TelField(
+    phone = fields.TelField(
         _l('Telefon'),
         description=_l("Ett telefonnummer. Landskod kan utelämnas för svenska"
                        " nummer, men behövs för utländska nummer.")
@@ -401,16 +400,16 @@ class UploadProfilePictureForm(flask_wtf.FlaskForm):
 
 
 class DateRangeForm(flask_wtf.FlaskForm):
-    start = html5_fields.DateField(_l('Från'), validators=[
+    start = fields.DateField(_l('Från'), validators=[
         validators.InputRequired()
     ])
-    end = html5_fields.DateField(_l('Till'), validators=[
+    end = fields.DateField(_l('Till'), validators=[
         validators.InputRequired()
     ])
 
 
 class UserTransactionForm(flask_wtf.FlaskForm):
-    value = html5_fields.DecimalField(
+    value = fields.DecimalField(
         _l('Transaktionsvärde'),
         render_kw={'step': .01, 'min': -10000, 'max': 10000},
         validators=[
@@ -439,7 +438,7 @@ def BulkTransactionFormFactory(only_active=True):
                                            default=user.full_name)
             user_id = fields.HiddenField('ID', default=user.id)
 
-            value = html5_fields.DecimalField(
+            value = fields.DecimalField(
                 _l('Transaktionsvärde'),
                 render_kw={'step': .01, 'min': -10000, 'max': 10000},
                 validators=[
@@ -465,7 +464,7 @@ class EditArticleForm(flask_wtf.FlaskForm):
         validators.InputRequired(),
         validators.Length(max=15)
     ])
-    value = html5_fields.DecimalField(
+    value = fields.DecimalField(
         _l('Pris'),
         default=0,
         render_kw={'step': .01, 'min': -1000, 'max': 1000},
@@ -474,7 +473,7 @@ class EditArticleForm(flask_wtf.FlaskForm):
             validators.NumberRange(min=-1000, max=1000),
         ]
     )
-    standardglas = html5_fields.DecimalField(
+    standardglas = fields.DecimalField(
         _l('Standardglas'),
         default=1,
         render_kw={'step': .1},
@@ -487,7 +486,7 @@ class EditArticleForm(flask_wtf.FlaskForm):
         description=_l("Vilka produkter som ingår och/eller beskrivning. "
                        "Markdown.")
     )
-    weight = html5_fields.IntegerField(
+    weight = fields.IntegerField(
         _l('Sorteringsvikt'),
         description=_l("Heltal. En högre vikt stiger."),
         validators=[
@@ -506,7 +505,7 @@ class EditGroupForm(flask_wtf.FlaskForm):
         validators.InputRequired(),
         validators.Length(max=50)
     ])
-    weight = html5_fields.IntegerField(
+    weight = fields.IntegerField(
         _l('Sorteringsvikt'),
         description=_l("Heltal. En högre vikt stiger."),
         validators=[
@@ -531,7 +530,7 @@ class CreditTransferForm(flask_wtf.FlaskForm):
         validators.Length(max=50)
     ])
 
-    value = html5_fields.DecimalField(
+    value = fields.DecimalField(
         _l('Summa'),
         render_kw={'step': .01, 'min': 1, 'max': 10000},
         validators=[
@@ -555,7 +554,7 @@ class EditQuoteForm(flask_wtf.FlaskForm):
             validators.Length(max=150)
         ]
     )
-    timestamp = html5_fields.DateTimeLocalField(
+    timestamp = fields.DateTimeLocalField(
         _l('Tid'),
         description=_l("Tidszon UTC."),
         validators=[
