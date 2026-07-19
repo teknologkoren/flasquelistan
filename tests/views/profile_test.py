@@ -10,25 +10,24 @@ from flask import url_for
 
 from flasquelistan import factory, models
 
+from tests import helpers
+from tests.conftest import BASE_TEST_CONFIG, fresh_database
 from tests.helpers import logged_in
 from tests.helpers import logged_in_admin
 from tests.helpers import login
 from tests.helpers import logout
 
 
-@pytest.fixture
-def app(tmp_path):
-    """App fixture with upload destinations pointed at a temp directory.
+@pytest.fixture(scope='module')
+def _app(tmp_path_factory):
+    """App with upload destinations pointed at a temp directory.
 
-    Overrides the conftest.py `app` fixture for this module only, so that
+    Overrides the conftest.py app fixtures for this module only, so that
     profile picture uploads do not end up in the repository's static folder.
     """
+    tmp_path = tmp_path_factory.mktemp('profile_test')
     config = {
-        # Use an in-memory database for faster test execution.
-        'SQLALCHEMY_DATABASE_URI': 'sqlite:///:memory:',
-        # Disable CSRF in unit tests.
-        'WTF_CSRF_ENABLED': False,
-        'TESTING': True,
+        **BASE_TEST_CONFIG,
         # Store uploads in a temp dir instead of flasquelistan/static/uploads.
         'UPLOADS_DEFAULT_DEST': str(tmp_path / 'uploads'),
         'UPLOADED_IMAGES_DEST': str(tmp_path / 'uploads' / 'images'),
@@ -40,23 +39,21 @@ def app(tmp_path):
         'IMAGE_EXPIRY': 3600,
     }
 
-    app = factory.create_app(config)
-    with app.app_context():
+    return factory.create_app(config)
+
+
+@pytest.fixture
+def app(_app):
+    with fresh_database(_app) as app:
         yield app
 
 
-def make_user(email='brian@pfoj.tld', first_name='Brian', last_name='Cohen',
-              **kwargs):
-    """Create and commit an additional user."""
-    user = models.User(
-        email=email,
-        first_name=first_name,
-        last_name=last_name,
-        **kwargs
-    )
-    models.db.session.add(user)
-    models.db.session.commit()
-    return user
+def make_user(**kwargs):
+    """Create an additional user, distinct from the logged in Monty user."""
+    kwargs.setdefault('email', 'brian@pfoj.tld')
+    kwargs.setdefault('first_name', 'Brian')
+    kwargs.setdefault('last_name', 'Cohen')
+    return helpers.make_user(**kwargs)
 
 
 class TestProfilePage:

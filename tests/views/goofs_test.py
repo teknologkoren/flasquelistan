@@ -7,6 +7,7 @@ from flask import url_for
 
 from flasquelistan import factory, models
 
+from tests.conftest import BASE_TEST_CONFIG, fresh_database
 from tests.helpers import logged_in
 
 
@@ -35,21 +36,27 @@ GOOFS_CONFIG = {
 }
 
 
-@pytest.fixture
-def app():
+@pytest.fixture(scope='module')
+def _app():
+    """App with goof routes registered.
+
+    Overrides the conftest.py app fixtures for this module only: goof
+    routes are registered at app creation time, so this module needs an
+    app created with GOOFS_CONFIG set.
+    """
     config = {
-        # Use an in-memory database for faster test execution.
-        'SQLALCHEMY_DATABASE_URI': 'sqlite:///:memory:',
-        # Disable CSRF in unit tests.
-        'WTF_CSRF_ENABLED': False,
-        'TESTING': True,
+        **BASE_TEST_CONFIG,
         'IMAGE_SECRET': 'not a secret',
         'IMAGE_EXPIRY': 3600,
         'GOOFS_CONFIG': GOOFS_CONFIG,
     }
 
-    app = factory.create_app(config)
-    with app.app_context():
+    return factory.create_app(config)
+
+
+@pytest.fixture
+def app(_app):
+    with fresh_database(_app) as app:
         yield app
 
 

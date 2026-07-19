@@ -4,18 +4,7 @@ import datetime
 
 from flasquelistan import models
 
-
-def make_user(email='monty@python.tld', first_name='Monty', last_name='Python',
-              balance=0):
-    user = models.User(
-        email=email,
-        first_name=first_name,
-        last_name=last_name,
-        balance=balance,
-    )
-    models.db.session.add(user)
-    models.db.session.commit()
-    return user
+from tests.helpers import make_user
 
 
 def test_admintransaction_model(app):

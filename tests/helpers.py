@@ -1,3 +1,4 @@
+import hashlib
 from contextlib import contextmanager
 
 from flasquelistan import models
@@ -6,17 +7,31 @@ from flasquelistan import models
 # picks them up automatically without imports.
 
 
+def make_user(email='monty@python.tld', first_name='Monty',
+              last_name='Python', balance=0, **kwargs):
+    """Create a user, commit it to the database and return it."""
+    user = models.User(
+        email=email,
+        first_name=first_name,
+        last_name=last_name,
+        balance=balance,
+        **kwargs
+    )
+    models.db.session.add(user)
+    models.db.session.commit()
+    return user
+
+
+def captcha_answer(app, n):
+    """Compute the expected captcha answer for question `n`."""
+    s = (app.config['SECRET_KEY'] + str(n)).encode()
+    return hashlib.sha256(s).hexdigest()
+
+
 @contextmanager
 def logged_in(client):
     """Fixture for a signed in user"""
-    user = models.User(
-        email='monty@python.tld',
-        first_name='Monty',
-        last_name='Python',
-    )
-
-    models.db.session.add(user)
-    models.db.session.commit()
+    user = make_user()
 
     user.password = 'solidsnake'
     models.db.session.commit()
@@ -30,16 +45,7 @@ def logged_in(client):
 @contextmanager
 def logged_in_admin(client):
     """Fixture for a signed in user"""
-    user = models.User(
-        email='monty@python.tld',
-        first_name='Monty',
-        last_name='Python',
-    )
-
-    user.is_admin = True
-
-    models.db.session.add(user)
-    models.db.session.commit()
+    user = make_user(is_admin=True)
 
     user.password = 'solidsnake'
     models.db.session.commit()

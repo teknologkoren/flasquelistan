@@ -32,8 +32,11 @@ def assert_has_timeout(mocked):
 
 
 @pytest.fixture
-def discord_app(app):
-    app.config.update(DISCORD_CONFIG)
+def discord_app(app, monkeypatch):
+    # The app is session scoped, so use monkeypatch to restore the config
+    # after the test instead of mutating it permanently.
+    for key, value in DISCORD_CONFIG.items():
+        monkeypatch.setitem(app.config, key, value)
     return app
 
 

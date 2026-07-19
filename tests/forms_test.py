@@ -1,24 +1,8 @@
-import hashlib
-
 from werkzeug.datastructures import MultiDict
 
 from flasquelistan import forms, models
 
-
-def make_user(email='monty@python.tld'):
-    user = models.User(
-        email=email,
-        first_name='Monty',
-        last_name='Python',
-    )
-    models.db.session.add(user)
-    models.db.session.commit()
-    return user
-
-
-def captcha_answer(app, n):
-    s = (app.config['SECRET_KEY'] + str(n)).encode()
-    return hashlib.sha256(s).hexdigest()
+from tests.helpers import captcha_answer, make_user
 
 
 class TestUniqueValidator:
