@@ -3,7 +3,7 @@
 {% set active_page = "streque" %}
 {% set main_class = "non-padded" %}
 
-{% from "macros.html" import profile_picture, form_entry, swish_pay_button %}
+{% from "macros.html" import profile_picture, form_entry, swish_pay_button, swish_pay_form %}
 
 {% block head %}
 <script defer src="{{ url_for('static', filename='js/confirmDialog.js') }}"></script>
@@ -158,6 +158,7 @@
         {{ swish_pay_button(user) }}
       </fieldset>
     </form>
+    {{ swish_pay_form(user) }}
     {% else %}
     <form method="POST" action="{{ url_for('transfers.credit_transfer_generate_link') }}">
       {{ credit_transfer_form.csrf_token }}

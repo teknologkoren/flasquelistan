@@ -105,16 +105,37 @@
 {% endmacro %}
 
 
+{# Renders next to the "Skicka" button inside the credit transfer form.
+   The button submits the separate swish_pay_form below (GET to the
+   Swish app), so it works without javascript, with just the number
+   prefilled. With javascript, the click is intercepted and the amount
+   and message from the credit transfer form are added to the link. #}
 {% macro swish_pay_button(payee) %}
   {% set swish_number = payee.formatted_phone(e164=True) %}
   {% if swish_number %}
-  {# The href works without javascript too, just without amount and
-     message prefilled. #}
-  <a class="swish-pay-button"
-     href="https://app.swish.nu/1/p/sw/?sw={{ swish_number|urlencode }}&edit=amt,msg&src=url"
-     data-swish-number="{{ swish_number }}">{{ _("Swisha istället") }}</a>
+  <button form="swish-pay-form"
+          class="swish-pay-button"
+          data-swish-number="{{ swish_number }}">
+    {{ _("Swisha istället") }}
+  </button>
   {% else %}
-  <a class="swish-pay-button"
-     title="{{ _("Inget giltigt telefonnummer") }}">{{ _("Swisha istället") }}</a>
+  <button disabled
+          class="swish-pay-button"
+          title="{{ _("Inget giltigt telefonnummer") }}">
+    {{ _("Swisha istället") }}
+  </button>
+  {% endif %}
+{% endmacro %}
+
+{# The no-javascript fallback target of swish_pay_button. Forms cannot
+   be nested, so place this right after the credit transfer form. #}
+{% macro swish_pay_form(payee) %}
+  {% set swish_number = payee.formatted_phone(e164=True) %}
+  {% if swish_number %}
+  <form id="swish-pay-form" action="https://app.swish.nu/1/p/sw/" method="get">
+    <input type="hidden" name="sw" value="{{ swish_number }}">
+    <input type="hidden" name="edit" value="amt,msg">
+    <input type="hidden" name="src" value="url">
+  </form>
   {% endif %}
 {% endmacro %}
