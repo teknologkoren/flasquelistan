@@ -108,10 +108,13 @@
 {% macro swish_pay_button(payee) %}
   {% set swish_number = payee.formatted_phone(e164=True) %}
   {% if swish_number %}
-  <button type="button"
-          class="swish-pay-button"
-          data-swish-number="{{ swish_number }}">
-    {{ _("Swisha istället") }}
-  </button>
+  {# The href works without javascript too, just without amount and
+     message prefilled. #}
+  <a class="swish-pay-button"
+     href="https://app.swish.nu/1/p/sw/?sw={{ swish_number|urlencode }}&edit=amt,msg&src=url"
+     data-swish-number="{{ swish_number }}">{{ _("Swisha istället") }}</a>
+  {% else %}
+  <a class="swish-pay-button"
+     title="{{ _("Inget giltigt telefonnummer") }}">{{ _("Swisha istället") }}</a>
   {% endif %}
 {% endmacro %}
