@@ -186,7 +186,6 @@
     </form>
     {% endif %}
 
-    {% if user == current_user or current_user.is_admin %}
     <form method="POST"
           action="{{ url_for('profile.change_profile_picture', user_id=user.id) }}"
           enctype="multipart/form-data">
@@ -214,10 +213,13 @@
           </div>
           <div class="submit">
               <button>{{ _("Spara") }}</button>
+              {% if user == current_user or current_user.is_admin %}
               <button class="confirm" formaction="{{ url_for('profile.delete_profile_picture', user_id=user.id) }}">{{ _("Ta bort") }}</button>
+              {% endif %}
         </fieldset>
       </div>
     </form>
+    {% if user == current_user or current_user.is_admin %}
     <dl>
       <dt>{{ _("Historik") }}</dt>
       <dd>

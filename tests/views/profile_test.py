@@ -791,8 +791,8 @@ class TestProfilePictures:
 
     def test_other_user_can_upload_profile_picture(self, client):
         # Intentional: anyone may upload a new profile picture onto any
-        # profile — a long-standing gag in the choir. Changing or deleting
-        # someone else's existing picture is still restricted (below).
+        # profile — a long-standing gag in the choir. Changing to an existing
+        # picture is also allowed, while deletion remains restricted (below).
         other = make_user()
 
         with logged_in(client):
@@ -807,20 +807,57 @@ class TestProfilePictures:
             assert other.profile_picture is not None
             assert other.profile_picture.user_id == other.id
 
-    def test_other_user_cannot_change_profile_picture(self, client):
+    def test_other_user_can_change_profile_picture(self, client):
         other = make_user()
         picture = make_profile_picture(other)
 
         with logged_in(client):
             response = client.post(
                 url_for('profile.change_profile_picture', user_id=other.id),
-                data={'profile_picture': str(picture.id)}
+                data={'profile_picture': str(picture.id)},
+                follow_redirects=True
+            )
+            text = response.get_data(as_text=True)
+
+            assert response.status_code == 200
+            assert 'Din profilbild har ändrats!' in text
+            assert other.profile_picture_id == picture.id
+
+    def test_cannot_change_profile_picture_to_another_users_picture(
+            self, client):
+        target = make_user(email='target@example.com')
+        unrelated = make_user(email='unrelated@example.com')
+        picture = make_profile_picture(unrelated)
+
+        with logged_in(client):
+            response = client.post(
+                url_for(
+                    'profile.change_profile_picture',
+                    user_id=target.id
+                ),
+                data={'profile_picture': str(picture.id)},
+                follow_redirects=True
             )
 
-            assert response.status_code == 302
-            assert response.headers['Location'] == url_for(
-                'profile.show_profile', user_id=other.id)
-            assert other.profile_picture_id is None
+            assert response.status_code == 200
+            assert target.profile_picture_id is None
+
+    def test_other_user_sees_picture_picker_without_delete_control(self, client):
+        other = make_user()
+        picture = make_profile_picture(other)
+
+        with logged_in(client):
+            response = client.get(
+                url_for('profile.show_profile', user_id=other.id)
+            )
+            text = response.get_data(as_text=True)
+
+            assert response.status_code == 200
+            assert 'Uppladdade profilbilder' in text
+            assert f'value="{picture.id}"' in text
+            assert url_for(
+                'profile.delete_profile_picture', user_id=other.id
+            ) not in text
 
     def test_other_user_cannot_delete_profile_picture(self, client):
         other = make_user()
