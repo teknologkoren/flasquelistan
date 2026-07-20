@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-07-20 08:39+0000\n"
+"POT-Creation-Date: 2026-07-20 08:49+0000\n"
 "PO-Revision-Date: 2022-11-04 17:35+0100\n"
 "Last-Translator: \n"
 "Language: en\n"
@@ -559,7 +559,7 @@ msgstr ""
 
 #: templates/edit_api_key.html:44 templates/edit_profile.html:43
 #: templates/show_profile.html:126 templates/show_profile.html:144
-#: templates/show_profile.html:215 templates/strequeadmin/add_user.html:19
+#: templates/show_profile.html:216 templates/strequeadmin/add_user.html:19
 #: templates/strequeadmin/edit_article.html:30
 #: templates/strequeadmin/edit_group.html:27
 #: templates/strequeadmin/edit_quote.html:24
@@ -578,13 +578,13 @@ msgstr "Manage API keys"
 msgid "Profilbilder genom tiderna"
 msgstr "Profile pictures through the ages"
 
-#: templates/history.html:20 templates/show_profile.html:242
+#: templates/history.html:20 templates/show_profile.html:243
 #: templates/user_history.html:39
 msgid "Streckat genom "
 msgstr "Transaction entered by "
 
 #: templates/history.html:44 templates/layout.html:23
-#: templates/show_profile.html:221
+#: templates/show_profile.html:222
 msgid "Historik"
 msgstr "History"
 
@@ -608,11 +608,11 @@ msgstr "Error:"
 msgid "Uppladdad"
 msgstr "Uploaded"
 
-#: templates/macros.html:115 templates/macros.html:118
+#: templates/macros.html:119 templates/macros.html:125
 msgid "Swisha istället"
 msgstr "Pay with Swish instead"
 
-#: templates/macros.html:118
+#: templates/macros.html:124
 msgid "Inget giltigt telefonnummer"
 msgstr "No valid phone number"
 
@@ -735,18 +735,18 @@ msgstr "Streque Pay"
 
 #: templates/auth/register.html:22 templates/auth/reset.html:15
 #: templates/auth/reset_token.html:15 templates/show_profile.html:157
-#: templates/show_profile.html:183
+#: templates/show_profile.html:184
 #: templates/strequeadmin/bulk_transactions.html:54
 #: templates/strequeadmin/confirm_bulk_transactions.html:59
 #: templates/strequeadmin/spam.html:33 templates/transfer_standalone.html:30
 msgid "Skicka"
 msgstr "Send"
 
-#: templates/show_profile.html:167
+#: templates/show_profile.html:168
 msgid "Generera Streque Pay-länk"
 msgstr "Generate Streque Pay link"
 
-#: templates/show_profile.html:168
+#: templates/show_profile.html:169
 msgid ""
 "Vill du att någon ska skicka dig en Streque Pay? Fyll i summa och klicka "
 "på knappen för att skapa en smidig länk att skicka!"
@@ -754,28 +754,28 @@ msgstr ""
 "Do you want someone to send you a Streque Pay? Enter the amount and click"
 " the button to create a convenient link to send!"
 
-#: templates/show_profile.html:171
+#: templates/show_profile.html:172
 msgid "Skapa länk"
 msgstr "Create link"
 
-#: templates/show_profile.html:179
+#: templates/show_profile.html:180
 #: templates/strequeadmin/bulk_transactions.html:47 views/admin.py:214
 msgid "Admintransaktion"
 msgstr "Admin transaction"
 
-#: templates/show_profile.html:197
+#: templates/show_profile.html:198
 msgid "Uppladdade profilbilder"
 msgstr "Uploaded profile pictures"
 
-#: templates/show_profile.html:216 templates/strequeadmin/requests.html:31
+#: templates/show_profile.html:217 templates/strequeadmin/requests.html:31
 msgid "Ta bort"
 msgstr "Delete"
 
-#: templates/show_profile.html:223
+#: templates/show_profile.html:224
 msgid "All historik"
 msgstr "All history"
 
-#: templates/show_profile.html:251
+#: templates/show_profile.html:252
 msgid "Det är tomt här, strequa mer!"
 msgstr "It's empty here, strequa more!"
 
@@ -836,7 +836,7 @@ msgstr "Jump to top"
 msgid "(du kan inte Streque Pay:a dig själv)"
 msgstr "(you cannot Streque Pay yourself)"
 
-#: templates/transfer_standalone.html:37
+#: templates/transfer_standalone.html:40
 #, fuzzy
 msgid "Gå till profil"
 msgstr "Back to profile"

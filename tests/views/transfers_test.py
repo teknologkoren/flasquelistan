@@ -184,9 +184,11 @@ class TestTransferViews:
             page = response.get_data(as_text=True)
             assert 'Swisha istället' in page
             assert 'data-swish-number="+46701234567"' in page
-            # The href works without javascript, with just the number.
-            assert ('href="https://app.swish.nu/1/p/sw/'
-                    '?sw=%2B46701234567&edit=amt,msg&src=url"') in page
+            # The button submits a separate GET form to the Swish app,
+            # which works without javascript, with just the number.
+            assert 'form="swish-pay-form"' in page
+            assert 'action="https://app.swish.nu/1/p/sw/"' in page
+            assert 'name="sw" value="+46701234567"' in page
             assert 'js/swishPay.js' in page
 
     def test_swish_button_disabled_without_phone(self, client):
@@ -203,6 +205,7 @@ class TestTransferViews:
             response = client.get(f'/profile/{payee.id}/pay')
             page = response.get_data(as_text=True)
             assert 'Swisha istället' in page
+            assert 'Inget giltigt telefonnummer' in page
             assert 'data-swish-number' not in page
             assert 'app.swish.nu' not in page
 

@@ -3,7 +3,7 @@
 {% set active_page = "streque" %}
 {% set main_class = "non-padded" %}
 
-{% from "macros.html" import form_entry, swish_pay_button %}
+{% from "macros.html" import form_entry, swish_pay_button, swish_pay_form %}
 
 {% block head %}
 <script defer src="{{ url_for('static', filename='js/swishPay.js') }}"></script>
@@ -32,6 +32,9 @@
         {% endif %}
       </fieldset>
     </form>
+    {% if user.id != current_user.id %}
+    {{ swish_pay_form(user) }}
+    {% endif %}
   </div>
 </div>
 <a href="{{ url_for('profile.show_profile', user_id=user.id) }}">{{ _("Gå till profil") }}</a>
