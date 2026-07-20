@@ -104,3 +104,14 @@
   </div>
 {% endmacro %}
 
+
+{% macro swish_pay_button(payee) %}
+  {% set swish_number = payee.formatted_phone(e164=True) %}
+  {% if swish_number %}
+  <button type="button"
+          class="swish-pay-button"
+          data-swish-number="{{ swish_number }}">
+    {{ _("Swisha istället") }}
+  </button>
+  {% endif %}
+{% endmacro %}

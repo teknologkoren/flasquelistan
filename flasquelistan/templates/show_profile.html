@@ -3,10 +3,11 @@
 {% set active_page = "streque" %}
 {% set main_class = "non-padded" %}
 
-{% from "macros.html" import profile_picture, form_entry %}
+{% from "macros.html" import profile_picture, form_entry, swish_pay_button %}
 
 {% block head %}
 <script defer src="{{ url_for('static', filename='js/confirmDialog.js') }}"></script>
+<script defer src="{{ url_for('static', filename='js/swishPay.js') }}"></script>
 {% endblock %}
 
 {% block body %}
@@ -154,6 +155,7 @@
         {{ form_entry(credit_transfer_form.value) }}
         {{ form_entry(credit_transfer_form.message) }}
         <button>{{ _("Skicka") }}</button>
+        {{ swish_pay_button(user) }}
       </fieldset>
     </form>
     {% else %}
