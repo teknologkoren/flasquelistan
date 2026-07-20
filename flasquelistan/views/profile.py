@@ -143,10 +143,6 @@ def upload_profile_picture(user_id):
 def change_profile_picture(user_id):
     user = models.db.get_or_404(models.User, user_id)
 
-    if current_user.id != user.id and not current_user.is_admin:
-        flask.flash(_l("Du får bara redigera din egen profil! ಠ_ಠ"), 'error')
-        return flask.redirect(flask.url_for('.show_profile', user_id=user_id))
-
     form = forms.ChangeProfilePictureFormFactory(user)
 
     if form.validate_on_submit():
@@ -480,4 +476,3 @@ def change_email_or_password(user_id):
     return flask.render_template('change_email_or_password.html',
                                  form=form,
                                  user=user)
-
