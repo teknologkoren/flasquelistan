@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-07-20 08:03+0000\n"
+"POT-Creation-Date: 2026-07-20 08:05+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -207,11 +207,11 @@ msgstr ""
 msgid "Endast bilder!"
 msgstr ""
 
-#: forms.py:403 templates/transfer_standalone.html:18
+#: forms.py:403 templates/transfer_standalone.html:22
 msgid "Från"
 msgstr ""
 
-#: forms.py:406 templates/transfer_standalone.html:19
+#: forms.py:406 templates/transfer_standalone.html:23
 msgid "Till"
 msgstr ""
 
@@ -522,8 +522,8 @@ msgid ""
 msgstr ""
 
 #: templates/edit_api_key.html:44 templates/edit_profile.html:43
-#: templates/show_profile.html:125 templates/show_profile.html:143
-#: templates/show_profile.html:213 templates/strequeadmin/add_user.html:19
+#: templates/show_profile.html:126 templates/show_profile.html:144
+#: templates/show_profile.html:215 templates/strequeadmin/add_user.html:19
 #: templates/strequeadmin/edit_article.html:30
 #: templates/strequeadmin/edit_group.html:27
 #: templates/strequeadmin/edit_quote.html:24
@@ -542,13 +542,13 @@ msgstr ""
 msgid "Profilbilder genom tiderna"
 msgstr ""
 
-#: templates/history.html:20 templates/show_profile.html:240
+#: templates/history.html:20 templates/show_profile.html:242
 #: templates/user_history.html:39
 msgid "Streckat genom "
 msgstr ""
 
 #: templates/history.html:44 templates/layout.html:23
-#: templates/show_profile.html:219
+#: templates/show_profile.html:221
 msgid "Historik"
 msgstr ""
 
@@ -570,6 +570,10 @@ msgstr ""
 
 #: templates/macros.html:102
 msgid "Uppladdad"
+msgstr ""
+
+#: templates/macros.html:114
+msgid "Swisha istället"
 msgstr ""
 
 #: templates/notifications.html:8
@@ -600,72 +604,72 @@ msgstr ""
 msgid "No quotes yet!"
 msgstr ""
 
-#: templates/show_profile.html:17
+#: templates/show_profile.html:18
 msgid "Fler bilder"
 msgstr ""
 
-#: templates/show_profile.html:35
+#: templates/show_profile.html:36
 msgid "Redigera profil"
 msgstr ""
 
-#: templates/show_profile.html:40
+#: templates/show_profile.html:41
 msgid "Ladda ner kontaktfil"
 msgstr ""
 
-#: templates/show_profile.html:46
+#: templates/show_profile.html:47
 #, python-format
 msgid "Du puffade %(name)s %(time)s."
 msgstr ""
 
-#: templates/show_profile.html:50
+#: templates/show_profile.html:51
 #, python-format
 msgid "%(name)s puffade dig %(time)s."
 msgstr ""
 
-#: templates/show_profile.html:57
+#: templates/show_profile.html:58
 msgid "👉 Puffa tillbaka"
 msgstr ""
 
-#: templates/show_profile.html:59
+#: templates/show_profile.html:60
 msgid "👉 Puffa"
 msgstr ""
 
-#: templates/show_profile.html:68 templates/strequeadmin/users.html:22
+#: templates/show_profile.html:69 templates/strequeadmin/users.html:22
 msgid "E-postadress"
 msgstr ""
 
-#: templates/show_profile.html:72 templates/strequeadmin/requests.html:17
+#: templates/show_profile.html:73 templates/strequeadmin/requests.html:17
 #: templates/strequeadmin/users.html:23
 msgid "Telefonnummer"
 msgstr ""
 
-#: templates/show_profile.html:78
+#: templates/show_profile.html:79
 msgid "(varning: telefonnumret ser ogiltigt ut)"
 msgstr ""
 
-#: templates/show_profile.html:85 templates/show_profile.html:93
+#: templates/show_profile.html:86 templates/show_profile.html:94
 msgid "Discord-profil"
 msgstr ""
 
-#: templates/show_profile.html:89
+#: templates/show_profile.html:90
 msgid "hantera"
 msgstr ""
 
-#: templates/show_profile.html:94
+#: templates/show_profile.html:95
 msgid "Gå med i körens Discord-server här"
 msgstr ""
 
-#: templates/show_profile.html:97
+#: templates/show_profile.html:98
 msgid "Födelsedag"
 msgstr ""
 
-#: templates/show_profile.html:104 templates/strequeadmin/spam.html:11
+#: templates/show_profile.html:105 templates/strequeadmin/spam.html:11
 #: templates/strequeadmin/stats.html:35 templates/strequeadmin/stats.html:47
 #: templates/strequeadmin/users.html:24
 msgid "Saldo"
 msgstr ""
 
-#: templates/show_profile.html:108
+#: templates/show_profile.html:109
 #, python-format
 msgid ""
 "Fyll på ditt saldo genom att göra en betalning till PG 20 74-3, märk "
@@ -673,59 +677,59 @@ msgid ""
 "möjlighet att göra detta."
 msgstr ""
 
-#: templates/show_profile.html:119
+#: templates/show_profile.html:120
 msgid "Byt smeknamn"
 msgstr ""
 
-#: templates/show_profile.html:128
+#: templates/show_profile.html:129
 msgid "Visa smeknamnshistorik"
 msgstr ""
 
-#: templates/show_profile.html:153 templates/transfer_standalone.html:16
+#: templates/show_profile.html:154 templates/transfer_standalone.html:20
 msgid "Streque Pay"
 msgstr ""
 
 #: templates/auth/register.html:22 templates/auth/reset.html:15
-#: templates/auth/reset_token.html:15 templates/show_profile.html:156
-#: templates/show_profile.html:181
+#: templates/auth/reset_token.html:15 templates/show_profile.html:157
+#: templates/show_profile.html:183
 #: templates/strequeadmin/bulk_transactions.html:54
 #: templates/strequeadmin/confirm_bulk_transactions.html:59
-#: templates/strequeadmin/spam.html:33 templates/transfer_standalone.html:26
+#: templates/strequeadmin/spam.html:33 templates/transfer_standalone.html:30
 msgid "Skicka"
 msgstr ""
 
-#: templates/show_profile.html:165
+#: templates/show_profile.html:167
 msgid "Generera Streque Pay-länk"
 msgstr ""
 
-#: templates/show_profile.html:166
+#: templates/show_profile.html:168
 msgid ""
 "Vill du att någon ska skicka dig en Streque Pay? Fyll i summa och klicka "
 "på knappen för att skapa en smidig länk att skicka!"
 msgstr ""
 
-#: templates/show_profile.html:169
+#: templates/show_profile.html:171
 msgid "Skapa länk"
 msgstr ""
 
-#: templates/show_profile.html:177
+#: templates/show_profile.html:179
 #: templates/strequeadmin/bulk_transactions.html:47 views/admin.py:214
 msgid "Admintransaktion"
 msgstr ""
 
-#: templates/show_profile.html:195
+#: templates/show_profile.html:197
 msgid "Uppladdade profilbilder"
 msgstr ""
 
-#: templates/show_profile.html:214 templates/strequeadmin/requests.html:31
+#: templates/show_profile.html:216 templates/strequeadmin/requests.html:31
 msgid "Ta bort"
 msgstr ""
 
-#: templates/show_profile.html:221
+#: templates/show_profile.html:223
 msgid "All historik"
 msgstr ""
 
-#: templates/show_profile.html:249
+#: templates/show_profile.html:251
 msgid "Det är tomt här, strequa mer!"
 msgstr ""
 
@@ -782,11 +786,11 @@ msgstr ""
 msgid "Gå till toppen"
 msgstr ""
 
-#: templates/transfer_standalone.html:24
+#: templates/transfer_standalone.html:28
 msgid "(du kan inte Streque Pay:a dig själv)"
 msgstr ""
 
-#: templates/transfer_standalone.html:32
+#: templates/transfer_standalone.html:37
 msgid "Gå till profil"
 msgstr ""
 

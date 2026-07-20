@@ -168,6 +168,111 @@ class TestTransferViews:
             response = client.get(f'/profile/{payee.id}/pay?value=bogus')
             assert response.status_code == 200
 
+    def test_swish_button_on_standalone_page(self, client):
+        """The pay page has a Swish button when the payee has a phone."""
+        with logged_in(client):
+            payee = models.User(
+                email='payee@python.tld',
+                first_name='John',
+                last_name='Cleese',
+                phone='070-123 45 67',
+            )
+            models.db.session.add(payee)
+            models.db.session.commit()
+
+            response = client.get(f'/profile/{payee.id}/pay')
+            page = response.get_data(as_text=True)
+            assert 'Swisha istället' in page
+            assert 'data-swish-number="+46701234567"' in page
+            assert 'js/swishPay.js' in page
+
+    def test_no_swish_button_without_phone(self, client):
+        """No Swish button when the payee has no phone number."""
+        with logged_in(client):
+            payee = models.User(
+                email='payee@python.tld',
+                first_name='John',
+                last_name='Cleese',
+            )
+            models.db.session.add(payee)
+            models.db.session.commit()
+
+            response = client.get(f'/profile/{payee.id}/pay')
+            page = response.get_data(as_text=True)
+            assert 'Swisha istället' not in page
+            assert 'data-swish-number' not in page
+
+    def test_swish_button_with_foreign_phone(self, client):
+        """Foreign numbers can have Swish too, the button is shown."""
+        with logged_in(client):
+            payee = models.User(
+                email='payee@python.tld',
+                first_name='John',
+                last_name='Cleese',
+                phone='+4531123456',  # Danish
+            )
+            models.db.session.add(payee)
+            models.db.session.commit()
+
+            response = client.get(f'/profile/{payee.id}/pay')
+            page = response.get_data(as_text=True)
+            assert 'Swisha istället' in page
+            assert 'data-swish-number="+4531123456"' in page
+
+    def test_no_swish_button_with_invalid_phone(self, client):
+        """No Swish button when the payee's phone is not a valid number."""
+        with logged_in(client):
+            payee = models.User(
+                email='payee@python.tld',
+                first_name='John',
+                last_name='Cleese',
+                phone='0710001122',  # Invalid Swedish number
+            )
+            models.db.session.add(payee)
+            models.db.session.commit()
+
+            response = client.get(f'/profile/{payee.id}/pay')
+            page = response.get_data(as_text=True)
+            assert 'Swisha istället' not in page
+
+    def test_no_swish_button_on_own_pay_page(self, client):
+        """You cannot Swish yourself, so your own pay page has no button."""
+        with logged_in(client) as user:
+            user.phone = '070-123 45 67'
+            models.db.session.commit()
+
+            response = client.get(f'/profile/{user.id}/pay')
+            page = response.get_data(as_text=True)
+            assert 'Swisha istället' not in page
+
+    def test_swish_button_on_profile_page(self, client):
+        """The profile page's Streque Pay form has a Swish button."""
+        with logged_in(client):
+            payee = models.User(
+                email='payee@python.tld',
+                first_name='John',
+                last_name='Cleese',
+                phone='070-123 45 67',
+            )
+            models.db.session.add(payee)
+            models.db.session.commit()
+
+            response = client.get(f'/profile/{payee.id}/')
+            page = response.get_data(as_text=True)
+            assert 'Swisha istället' in page
+            assert 'data-swish-number="+46701234567"' in page
+            assert 'js/swishPay.js' in page
+
+    def test_no_swish_button_on_own_profile_page(self, client):
+        """Your own profile has the link generator form, no Swish button."""
+        with logged_in(client) as user:
+            user.phone = '070-123 45 67'
+            models.db.session.commit()
+
+            response = client.get(f'/profile/{user.id}/')
+            page = response.get_data(as_text=True)
+            assert 'Swisha istället' not in page
+
     def test_admin_transaction_requires_admin(self, client):
         """Non-admins may not make admin transactions."""
         with logged_in(client) as user:

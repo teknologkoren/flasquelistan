@@ -64,6 +64,12 @@ class TestFormatPhoneNumber:
     def test_empty_string_returns_false(self, app):
         assert util.format_phone_number('') is False
 
+    def test_foreign_number_e164(self, app):
+        # The Swish buttons rely on foreign numbers keeping their
+        # country code in E.164 format.
+        assert util.format_phone_number('+4917612345678', e164=True) \
+            == '+4917612345678'
+
 
 class TestGenerateSecurePathHash:
     def test_deterministic_for_same_input(self, app):
