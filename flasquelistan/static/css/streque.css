@@ -252,6 +252,21 @@ h2.user-filter {
   margin: 1.5rem 0;
 }
 
+a.swish-pay-button {
+  display: inline-block;
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  padding: 0.2rem 0.5rem;
+  color: inherit;
+  text-decoration: none;
+}
+
+/* Grayed out when the payee has no valid phone number (no href). */
+a.swish-pay-button:not([href]) {
+  color: #999;
+  cursor: not-allowed;
+}
+
 .change-profile-picture .grid-wrapper {
   max-height: 30rem;
   overflow-y: scroll;

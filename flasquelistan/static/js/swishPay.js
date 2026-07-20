@@ -1,9 +1,8 @@
-// "Swisha istället"-buttons: open the Swish app with the payee's number
+// "Swisha istället"-links: open the Swish app with the payee's number
 // prefilled, plus amount and message from the Streque Pay form when set.
-// URL format from https://swishurl.taif.se/ — amount and message are kept
-// editable in the Swish app via the edit parameter. Unlike that
-// generator we pass the number in E.164 format ('+46701234567') so
-// foreign numbers work too.
+// Amount and message are kept editable in the Swish app via the edit
+// parameter. The links have a plain number-only href as fallback, so
+// they work without javascript too.
 
 function buildSwishUrl(number, amount, message) {
   var url = "https://app.swish.nu/1/p/sw/?sw=" + encodeURIComponent(number);
@@ -21,9 +20,11 @@ function buildSwishUrl(number, amount, message) {
 }
 
 function addSwishPayListeners() {
-  var buttons = document.querySelectorAll(".swish-pay-button");
+  var buttons = document.querySelectorAll(".swish-pay-button[data-swish-number]");
   for (var i = 0; i < buttons.length; i++) {
-    buttons[i].addEventListener("click", function () {
+    buttons[i].addEventListener("click", function (e) {
+      e.preventDefault();
+
       var form = this.closest("form");
       var valueInput = form ? form.querySelector('[name="value"]') : null;
       var messageInput = form ? form.querySelector('[name="message"]') : null;

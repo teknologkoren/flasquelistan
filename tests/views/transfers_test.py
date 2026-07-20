@@ -184,10 +184,13 @@ class TestTransferViews:
             page = response.get_data(as_text=True)
             assert 'Swisha istället' in page
             assert 'data-swish-number="+46701234567"' in page
+            # The href works without javascript, with just the number.
+            assert ('href="https://app.swish.nu/1/p/sw/'
+                    '?sw=%2B46701234567&edit=amt,msg&src=url"') in page
             assert 'js/swishPay.js' in page
 
-    def test_no_swish_button_without_phone(self, client):
-        """No Swish button when the payee has no phone number."""
+    def test_swish_button_disabled_without_phone(self, client):
+        """A grayed out Swish button when the payee has no phone number."""
         with logged_in(client):
             payee = models.User(
                 email='payee@python.tld',
@@ -199,8 +202,9 @@ class TestTransferViews:
 
             response = client.get(f'/profile/{payee.id}/pay')
             page = response.get_data(as_text=True)
-            assert 'Swisha istället' not in page
+            assert 'Swisha istället' in page
             assert 'data-swish-number' not in page
+            assert 'app.swish.nu' not in page
 
     def test_swish_button_with_foreign_phone(self, client):
         """Foreign numbers can have Swish too, the button is shown."""
@@ -219,8 +223,9 @@ class TestTransferViews:
             assert 'Swisha istället' in page
             assert 'data-swish-number="+4531123456"' in page
 
-    def test_no_swish_button_with_invalid_phone(self, client):
-        """No Swish button when the payee's phone is not a valid number."""
+    def test_swish_button_disabled_with_invalid_phone(self, client):
+        """A grayed out Swish button when the payee's phone is not a
+        valid number."""
         with logged_in(client):
             payee = models.User(
                 email='payee@python.tld',
@@ -233,7 +238,8 @@ class TestTransferViews:
 
             response = client.get(f'/profile/{payee.id}/pay')
             page = response.get_data(as_text=True)
-            assert 'Swisha istället' not in page
+            assert 'Swisha istället' in page
+            assert 'app.swish.nu' not in page
 
     def test_no_swish_button_on_own_pay_page(self, client):
         """You cannot Swish yourself, so your own pay page has no button."""
