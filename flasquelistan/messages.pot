@@ -1,226 +1,226 @@
 # Translations template for PROJECT.
-# Copyright (C) 2025 ORGANIZATION
+# Copyright (C) 2026 ORGANIZATION
 # This file is distributed under the same license as the PROJECT project.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2025.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2026.
 #
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2025-11-30 18:12+0100\n"
+"POT-Creation-Date: 2026-07-20 08:03+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.17.0\n"
+"Generated-By: Babel 2.18.0\n"
 
-#: forms.py:24
+#: forms.py:23
 #, python-format
 msgid "Fel i fältet \"%(label_text)s\": %(error_text)s"
 msgstr ""
 
-#: forms.py:34 forms.py:49
+#: forms.py:33 forms.py:48
 msgid "Detta element existerar redan."
 msgstr ""
 
-#: forms.py:66
+#: forms.py:65
 msgid "Detta element existerar inte."
 msgstr ""
 
-#: forms.py:102
+#: forms.py:101
 msgid "Fel svar."
 msgstr ""
 
-#: forms.py:115
+#: forms.py:114
 #, python-format
 msgid "Vad är %(x)d + %(y)d?"
 msgstr ""
 
-#: forms.py:136 forms.py:144 forms.py:154
+#: forms.py:135 forms.py:143 forms.py:153
 msgid "E-post"
 msgstr ""
 
-#: forms.py:149
+#: forms.py:148
 msgid "Okänd e-postadress."
 msgstr ""
 
-#: forms.py:160 forms.py:212
+#: forms.py:159 forms.py:211
 msgid "Denna e-postadress används redan."
 msgstr ""
 
-#: forms.py:166
+#: forms.py:165
 msgid "Lösenord"
 msgstr ""
 
-#: forms.py:168
+#: forms.py:167
 msgid "Ditt nuvarande lösenord."
 msgstr ""
 
-#: forms.py:174 forms.py:198
+#: forms.py:173 forms.py:197
 msgid "Nytt lösenord"
 msgstr ""
 
-#: forms.py:176 forms.py:200
+#: forms.py:175 forms.py:199
 msgid "Ditt nya lösenord. Åtminstone 8 tecken långt."
 msgstr ""
 
-#: forms.py:181
+#: forms.py:180
 msgid "Håll mig inloggad"
 msgstr ""
 
-#: forms.py:223
+#: forms.py:222
 msgid "Fel lösenord."
 msgstr ""
 
-#: forms.py:242 templates/strequeadmin/index.html:35
+#: forms.py:241 templates/strequeadmin/index.html:35
 #: templates/strequeadmin/nicknames.html:22
 #: templates/strequeadmin/nicknames.html:83
 msgid "Smeknamn"
 msgstr ""
 
-#: forms.py:243 forms.py:319
+#: forms.py:242 forms.py:318
 msgid "Något roligt."
 msgstr ""
 
-#: forms.py:250 templates/strequeadmin/transactions.html:29
+#: forms.py:249 templates/strequeadmin/transactions.html:29
 msgid "Datum"
 msgstr ""
 
-#: forms.py:251
+#: forms.py:250
 msgid "Din födelsedags datum."
 msgstr ""
 
-#: forms.py:258 forms.py:346
+#: forms.py:257 forms.py:345
 msgid "Telefon"
 msgstr ""
 
-#: forms.py:259 forms.py:347
+#: forms.py:258 forms.py:346
 msgid ""
 "Ett telefonnummer. Landskod kan utelämnas för svenska nummer, men behövs "
 "för utländska nummer."
 msgstr ""
 
-#: forms.py:264
+#: forms.py:263
 msgid "Kroppsvikt"
 msgstr ""
 
-#: forms.py:265
+#: forms.py:264
 msgid ""
 "Din vikt i kg. Används för att mer precist räkna ut "
 "alkoholkoncentrationen i blodet. Fältet kan lämnas tomt"
 msgstr ""
 
-#: forms.py:276
+#: forms.py:275
 msgid "Har du en Y-kromosom?"
 msgstr ""
 
-#: forms.py:277
+#: forms.py:276
 msgid "Används för att mer precist räkna ut alkoholkoncentrationen i blodet."
 msgstr ""
 
-#: forms.py:280
+#: forms.py:279
 msgid "Vill ej uppge"
 msgstr ""
 
-#: forms.py:281 templates/strequeadmin/groups.html:26
+#: forms.py:280 templates/strequeadmin/groups.html:26
 #: templates/strequeadmin/groups.html:29 templates/strequeadmin/users.html:65
 msgid "Ja"
 msgstr ""
 
-#: forms.py:282 templates/strequeadmin/groups.html:26
+#: forms.py:281 templates/strequeadmin/groups.html:26
 #: templates/strequeadmin/groups.html:29 templates/strequeadmin/users.html:67
 msgid "Nej"
 msgstr ""
 
-#: forms.py:292 forms.py:332
+#: forms.py:291 forms.py:331
 msgid "Förnamn"
 msgstr ""
 
-#: forms.py:299 forms.py:339
+#: forms.py:298 forms.py:338
 msgid "Efternamn"
 msgstr ""
 
-#: forms.py:306 forms.py:498 templates/api_keys.html:34
+#: forms.py:305 forms.py:497 templates/api_keys.html:34
 #: templates/api_keys.html:59 templates/strequeadmin/articles.html:15
 #: templates/strequeadmin/articles.html:38 templates/strequeadmin/users.html:25
 #: templates/strequeadmin/users.html:56
 msgid "Aktiv"
 msgstr ""
 
-#: forms.py:307
+#: forms.py:306
 msgid "Om medlemmen är aktiv i föreningen."
 msgstr ""
 
-#: forms.py:309
+#: forms.py:308
 msgid "Grupp"
 msgstr ""
 
-#: forms.py:311 templates/api_keys.html:32 templates/api_keys.html:51
+#: forms.py:310 templates/api_keys.html:32 templates/api_keys.html:51
 #: templates/strequeadmin/index.html:5
 #: templates/strequeadmin/transactions.html:69
 #: templates/strequeadmin/users.html:27 templates/strequeadmin/users.html:74
 msgid "Admin"
 msgstr ""
 
-#: forms.py:312
+#: forms.py:311
 msgid "Medlemmen är administratör för Strequelistan."
 msgstr ""
 
-#: forms.py:318
+#: forms.py:317
 msgid "Nytt smeknamn"
 msgstr ""
 
-#: forms.py:350
+#: forms.py:349
 msgid "Meddelande till QM"
 msgstr ""
 
-#: forms.py:357 forms.py:545 templates/layout.html:33 templates/quote.html:9
+#: forms.py:356 forms.py:544 templates/layout.html:33 templates/quote.html:9
 #: templates/quotes.html:44 templates/strequeadmin/index.html:34
 #: templates/strequeadmin/quotes.html:10 templates/strequeadmin/quotes.html:14
 msgid "Citat"
 msgstr ""
 
-#: forms.py:358 forms.py:546
+#: forms.py:357 forms.py:545
 msgid "Max 150 tecken."
 msgstr ""
 
-#: forms.py:364 forms.py:553 templates/strequeadmin/quotes.html:15
+#: forms.py:363 forms.py:552 templates/strequeadmin/quotes.html:15
 msgid "Upphovsman"
 msgstr ""
 
-#: forms.py:365
+#: forms.py:364
 msgid "'–' läggs till automatiskt"
 msgstr ""
 
-#: forms.py:374 views/admin.py:358
+#: forms.py:373 views/admin.py:358
 msgid "Ingen"
 msgstr ""
 
-#: forms.py:398
+#: forms.py:397
 msgid "Ladda upp ny profilbild"
 msgstr ""
 
-#: forms.py:399
+#: forms.py:398
 msgid "Endast bilder!"
 msgstr ""
 
-#: forms.py:404 templates/transfer_standalone.html:18
+#: forms.py:403 templates/transfer_standalone.html:18
 msgid "Från"
 msgstr ""
 
-#: forms.py:407 templates/transfer_standalone.html:19
+#: forms.py:406 templates/transfer_standalone.html:19
 msgid "Till"
 msgstr ""
 
-#: forms.py:414 forms.py:443 templates/strequeadmin/bulk_transactions.html:28
+#: forms.py:413 forms.py:442 templates/strequeadmin/bulk_transactions.html:28
 #: templates/strequeadmin/confirm_bulk_transactions.html:21
 msgid "Transaktionsvärde"
 msgstr ""
 
-#: forms.py:420 forms.py:450 forms.py:530
+#: forms.py:419 forms.py:449 forms.py:529
 #: templates/strequeadmin/bulk_transactions.html:29
 #: templates/strequeadmin/confirm_bulk_transactions.html:22
 #: templates/strequeadmin/requests.html:19
@@ -228,7 +228,7 @@ msgstr ""
 msgid "Meddelande"
 msgstr ""
 
-#: forms.py:438 forms.py:464 forms.py:505 forms.py:570
+#: forms.py:437 forms.py:463 forms.py:504 forms.py:569
 #: templates/api_keys.html:29 templates/paperlist.html:31
 #: templates/strequeadmin/articles.html:10
 #: templates/strequeadmin/groups.html:10
@@ -237,103 +237,103 @@ msgstr ""
 msgid "Namn"
 msgstr ""
 
-#: forms.py:469 templates/strequeadmin/articles.html:11
+#: forms.py:468 templates/strequeadmin/articles.html:11
 msgid "Pris"
 msgstr ""
 
-#: forms.py:478
+#: forms.py:477
 msgid "Standardglas"
 msgstr ""
 
-#: forms.py:486 templates/strequeadmin/articles.html:13
+#: forms.py:485 templates/strequeadmin/articles.html:13
 msgid "Beskrivning"
 msgstr ""
 
-#: forms.py:487
+#: forms.py:486
 msgid "Vilka produkter som ingår och/eller beskrivning. Markdown."
 msgstr ""
 
-#: forms.py:491 forms.py:510 templates/strequeadmin/articles.html:14
+#: forms.py:490 forms.py:509 templates/strequeadmin/articles.html:14
 #: templates/strequeadmin/groups.html:11
 msgid "Sorteringsvikt"
 msgstr ""
 
-#: forms.py:492 forms.py:511
+#: forms.py:491 forms.py:510
 msgid "Heltal. En högre vikt stiger."
 msgstr ""
 
-#: forms.py:499
+#: forms.py:498
 msgid "Produkten är synlig och går att strequa på."
 msgstr ""
 
-#: forms.py:517
+#: forms.py:516
 msgid "Aktiva medlemmar?"
 msgstr ""
 
-#: forms.py:518
+#: forms.py:517
 msgid "Medlemmar i denna grupp hanteras som aktiva körmedlemmar."
 msgstr ""
 
-#: forms.py:520
+#: forms.py:519
 msgid "Synka med Discord?"
 msgstr ""
 
-#: forms.py:521
+#: forms.py:520
 msgid "Medlemmar i denna grupp får automatiskt en roll med samma namn i Discord."
 msgstr ""
 
-#: forms.py:535 templates/strequeadmin/stats.html:58
+#: forms.py:534 templates/strequeadmin/stats.html:58
 msgid "Summa"
 msgstr ""
 
-#: forms.py:559 templates/strequeadmin/quotes.html:16
+#: forms.py:558 templates/strequeadmin/quotes.html:16
 msgid "Tid"
 msgstr ""
 
-#: forms.py:560
+#: forms.py:559
 msgid "Tidszon UTC."
 msgstr ""
 
-#: forms.py:571
+#: forms.py:570
 msgid "Max 50 tecken"
 msgstr ""
 
-#: forms.py:577
+#: forms.py:576
 msgid "Detta namn används redan."
 msgstr ""
 
-#: forms.py:580 templates/api_keys.html:30
+#: forms.py:579 templates/api_keys.html:30
 msgid "Kort namn"
 msgstr ""
 
-#: forms.py:581
+#: forms.py:580
 msgid ""
 "Max 10 tecken. Kommer att visas intill transaktioner gjorda med nyckeln. "
 "Om fältet lämnas tomt ser transaktionerna ut som vanligt. Ska helst vara "
 "en emoji. 🤩"
 msgstr ""
 
-#: forms.py:587
+#: forms.py:586
 msgid "Aktiverad?"
 msgstr ""
 
-#: forms.py:589
+#: forms.py:588
 msgid "Om du inaktiverar nyckeln så går den inte att använda."
 msgstr ""
 
-#: forms.py:590
+#: forms.py:589
 msgid "Adminprivilegier?"
 msgstr ""
 
-#: forms.py:591
+#: forms.py:590
 msgid "OBS: gäller endast så länge du själv är admin."
 msgstr ""
 
-#: forms.py:592
+#: forms.py:591
 msgid "Återställ nyckel"
 msgstr ""
 
-#: forms.py:593
+#: forms.py:592
 msgid ""
 "Kryssa i om du vill generera en ny nyckel. VARNING: din gamla nyckel "
 "kommer att sluta fungera."
@@ -1347,164 +1347,164 @@ msgid ""
 " igen."
 msgstr ""
 
-#: views/auth.py:274
+#: views/auth.py:279
 msgid "Ditt lösenord har återställts!"
 msgstr ""
 
-#: views/quotes.py:26
-msgid "Citat tillagt!"
-msgstr ""
-
-#: views/strequelistan.py:98
-msgid "Kören har flyttat från Messenger till Discord!"
-msgstr ""
-
-#: views/strequelistan.py:100
-msgid "Gå med i vår Discord-server här."
-msgstr ""
-
-#: views/strequelistan.py:108
-msgid "Det finns inga pengar på kontot. Dags att fylla på!"
-msgstr ""
-
-#: views/strequelistan.py:113
-msgid "Det är ont om pengar på kontot. Dags att fylla på?"
-msgstr ""
-
-#: views/strequelistan.py:198
-#, python-format
-msgid "%(text)s-streque på %(name)s tillagt."
-msgstr ""
-
-#: views/strequelistan.py:269
-#, python-format
-msgid "Ångrade %(text)s-streque på %(name)s."
-msgstr ""
-
-#: views/strequelistan.py:347
-msgid "Du kan bara föra över pengar från dig själv! >:("
-msgstr ""
-
-#: views/strequelistan.py:363
-#, python-format
-msgid "Förde över %(a)i pengar till %(name)s"
-msgstr ""
-
-#: views/strequelistan.py:420
-#, python-format
-msgid "Streque Pay-länk skapad: <a href=\"%(href)s\">%(href)s"
-msgstr ""
-
-#: views/strequelistan.py:627
-msgid "Du måste vara admin för att göra det!"
-msgstr ""
-
-#: views/strequelistan.py:640
-msgid "Transaktion utförd!"
-msgstr ""
-
-#: views/strequelistan.py:678
-msgid "Din smeknamnsändring är sparad och väntar på att bli godkänd."
-msgstr ""
-
-#: views/strequelistan.py:680
-msgid "Din smeknamnsändring är sparad."
-msgstr ""
-
-#: views/strequelistan.py:705
-msgid "Kunde inte ladda upp bilden, försök med ett annat filnamn eller filformat."
-msgstr ""
-
-#: views/strequelistan.py:726
-msgid "Profilbilden har ändrats!"
-msgstr ""
-
-#: views/strequelistan.py:741 views/strequelistan.py:766
-#: views/strequelistan.py:879 views/strequelistan.py:1047
-msgid "Du får bara redigera din egen profil! ಠ_ಠ"
-msgstr ""
-
-#: views/strequelistan.py:751
-msgid "Din profilbild har ändrats!"
-msgstr ""
-
-#: views/strequelistan.py:774
-msgid ""
-"Du kan inte ta bort <a href=\"https://phys.org/news/2014-08-what-is-"
-"nothing.html\">ingenting</a>!"
-msgstr ""
-
-#: views/strequelistan.py:790
-msgid "Profilbilden har tagits bort!"
-msgstr ""
-
-#: views/strequelistan.py:856
-msgid "Du kan inte puffa dig själv, det är oanständigt."
-msgstr ""
-
-#: views/strequelistan.py:864
-msgid "Du har redan puffat denna användare, du måste få en puff tillbaka först."
-msgstr ""
-
-#: views/strequelistan.py:870
-msgid "Puffad!"
-msgstr ""
-
-#: views/strequelistan.py:929
-msgid "Ändringarna har sparats!"
-msgstr ""
-
-#: views/strequelistan.py:950 views/strequelistan.py:963
-msgid "Du får bara hantera din egna API-nycklar! ಠ_ಠ"
-msgstr ""
-
-#: views/strequelistan.py:1005
-#, python-format
-msgid ""
-"Din API-nyckel med namnet \"%(name)s\" är: \"%(secret)s\". Du kommer inte"
-" kunna se den igen, så se till att spara den nu."
-msgstr ""
-
-#: views/strequelistan.py:1033
-#, python-format
-msgid "Api-nyckeln \"%(name)s\" är borttagen."
-msgstr ""
-
-#: views/strequelistan.py:1058
-#, python-format
-msgid "En länk för att verifiera e-postadressen har skickats till %(email)s."
-msgstr ""
-
-#: views/strequelistan.py:1065
-msgid "Lösenordet har ändrats!"
-msgstr ""
-
-#: views/strequelistan.py:1106
+#: views/discord_oauth.py:46
 msgid "Ditt Discord-konto är inte längre kopplat till din Streque-profil."
 msgstr ""
 
-#: views/strequelistan.py:1124
+#: views/discord_oauth.py:64
 msgid ""
 "Något gick snett. Försök gärna en gång till, det löser vissa kända "
 "problem. Prata med webmaster om det inte hjälper."
 msgstr ""
 
-#: views/strequelistan.py:1143
+#: views/discord_oauth.py:83
 #, python-format
 msgid ""
 "Discord-kontot du loggade in med var redan kopplat till %s. Det är nu "
 "kopplat till dig (%s) istället."
 msgstr ""
 
-#: views/strequelistan.py:1156
+#: views/discord_oauth.py:96
 #, python-format
 msgid ""
 "Du hade redan ett annat Discord-konto (%s) kopplat till ditt Streque-"
 "konto. Kontot du loggade in med nu (%s) har ersätt det gamla."
 msgstr ""
 
-#: views/strequelistan.py:1183
+#: views/discord_oauth.py:123
 #, python-format
 msgid "Du är nu tillagd i vår Discord-server! %sKlicka här för att besöka den.%s"
+msgstr ""
+
+#: views/profile.py:84
+msgid "Din smeknamnsändring är sparad och väntar på att bli godkänd."
+msgstr ""
+
+#: views/profile.py:86
+msgid "Din smeknamnsändring är sparad."
+msgstr ""
+
+#: views/profile.py:111
+msgid "Kunde inte ladda upp bilden, försök med ett annat filnamn eller filformat."
+msgstr ""
+
+#: views/profile.py:132
+msgid "Profilbilden har ändrats!"
+msgstr ""
+
+#: views/profile.py:147 views/profile.py:172 views/profile.py:283
+#: views/profile.py:455
+msgid "Du får bara redigera din egen profil! ಠ_ಠ"
+msgstr ""
+
+#: views/profile.py:157
+msgid "Din profilbild har ändrats!"
+msgstr ""
+
+#: views/profile.py:180
+msgid ""
+"Du kan inte ta bort <a href=\"https://phys.org/news/2014-08-what-is-"
+"nothing.html\">ingenting</a>!"
+msgstr ""
+
+#: views/profile.py:194
+msgid "Profilbilden har tagits bort!"
+msgstr ""
+
+#: views/profile.py:260
+msgid "Du kan inte puffa dig själv, det är oanständigt."
+msgstr ""
+
+#: views/profile.py:268
+msgid "Du har redan puffat denna användare, du måste få en puff tillbaka först."
+msgstr ""
+
+#: views/profile.py:274
+msgid "Puffad!"
+msgstr ""
+
+#: views/profile.py:333
+msgid "Ändringarna har sparats!"
+msgstr ""
+
+#: views/profile.py:354 views/profile.py:367
+msgid "Du får bara hantera din egna API-nycklar! ಠ_ಠ"
+msgstr ""
+
+#: views/profile.py:409
+#, python-format
+msgid ""
+"Din API-nyckel med namnet \"%(name)s\" är: \"%(secret)s\". Du kommer inte"
+" kunna se den igen, så se till att spara den nu."
+msgstr ""
+
+#: views/profile.py:441
+#, python-format
+msgid "Api-nyckeln \"%(name)s\" är borttagen."
+msgstr ""
+
+#: views/profile.py:466
+#, python-format
+msgid "En länk för att verifiera e-postadressen har skickats till %(email)s."
+msgstr ""
+
+#: views/profile.py:473
+msgid "Lösenordet har ändrats!"
+msgstr ""
+
+#: views/quotes.py:26
+msgid "Citat tillagt!"
+msgstr ""
+
+#: views/strequelistan.py:89
+msgid "Kören har flyttat från Messenger till Discord!"
+msgstr ""
+
+#: views/strequelistan.py:91
+msgid "Gå med i vår Discord-server här."
+msgstr ""
+
+#: views/strequelistan.py:99
+msgid "Det finns inga pengar på kontot. Dags att fylla på!"
+msgstr ""
+
+#: views/strequelistan.py:104
+msgid "Det är ont om pengar på kontot. Dags att fylla på?"
+msgstr ""
+
+#: views/strequelistan.py:189
+#, python-format
+msgid "%(text)s-streque på %(name)s tillagt."
+msgstr ""
+
+#: views/strequelistan.py:260
+#, python-format
+msgid "Ångrade %(text)s-streque på %(name)s."
+msgstr ""
+
+#: views/transfers.py:40
+msgid "Du kan bara föra över pengar från dig själv! >:("
+msgstr ""
+
+#: views/transfers.py:56
+#, python-format
+msgid "Förde över %(a)i pengar till %(name)s"
+msgstr ""
+
+#: views/transfers.py:113
+#, python-format
+msgid "Streque Pay-länk skapad: <a href=\"%(href)s\">%(href)s"
+msgstr ""
+
+#: views/transfers.py:149
+msgid "Du måste vara admin för att göra det!"
+msgstr ""
+
+#: views/transfers.py:162
+msgid "Transaktion utförd!"
 msgstr ""
 
