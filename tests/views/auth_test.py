@@ -7,7 +7,6 @@ from flask_login import current_user
 from itsdangerous import SignatureExpired, URLSafeTimedSerializer
 
 from flasquelistan import models
-
 from tests.helpers import captcha_answer, logged_in, login, make_user
 
 

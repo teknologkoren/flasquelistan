@@ -2,14 +2,11 @@
 
 
 import pytest
-
 from flask import url_for
 
 from flasquelistan import factory, models
-
 from tests.conftest import BASE_TEST_CONFIG, fresh_database
 from tests.helpers import logged_in
-
 
 GOOFS_CONFIG = {
     'monty_pictures': {

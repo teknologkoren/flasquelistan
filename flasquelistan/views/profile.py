@@ -8,8 +8,8 @@ from flask_login import current_user, login_required
 from flask_uploads import UploadNotAllowed
 
 from flasquelistan import forms, models, util
-from flasquelistan.views import auth
 from flasquelistan.discord import DiscordClient
+from flasquelistan.views import auth
 
 mod = flask.Blueprint('profile', __name__)
 mod.before_request(login_required(lambda: None))

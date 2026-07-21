@@ -5,7 +5,6 @@ import markupsafe
 from flasquelistan import models
 
 
-
 def test_quote_model(app):
     quote = models.Quote(
         text="Ni!",

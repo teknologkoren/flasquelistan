@@ -49,6 +49,7 @@ def create_app(config=None, instance_config=None):
 
 def setup_logging():
     from flask.logging import default_handler
+
     from flasquelistan import log
 
     default_handler.setFormatter(log.formatter)
@@ -57,6 +58,7 @@ def setup_logging():
 def setup_error_emails(app):
     import logging
     from logging.handlers import SMTPHandler
+
     from flasquelistan import log
 
     if 'ERROR_EMAIL_TOADDRS' not in app.config:
@@ -94,11 +96,22 @@ def setup_error_emails(app):
 
 
 def register_blueprints(app):
-    from flasquelistan.views import (auth, admin, api, quotes, serviceworker,
-                                     strequelistan, songbook, goofs,
-                                     discord_oauth, notifications, transfers,
-                                     gallery, profile)
     from flasquelistan import scripts
+    from flasquelistan.views import (
+        admin,
+        api,
+        auth,
+        discord_oauth,
+        gallery,
+        goofs,
+        notifications,
+        profile,
+        quotes,
+        serviceworker,
+        songbook,
+        strequelistan,
+        transfers,
+    )
     app.register_blueprint(auth.mod)
     app.register_blueprint(admin.mod)
     app.register_blueprint(api.mod)
@@ -170,6 +183,7 @@ def setup_flask_admin(app, db):
     from flask_admin import AdminIndexView
     from flask_admin.contrib.sqla import ModelView
     from flask_login import current_user
+
     from flasquelistan import models
     from flasquelistan.views import auth
 
@@ -222,9 +236,9 @@ def setup_flask_admin(app, db):
 
 def setup_flask_babel(app):
     import flask_babel
-    from flask import request
-    from flask import session
+    from flask import request, session
     from flask_login import current_user
+
     from flasquelistan import models
 
     def get_locale():
@@ -268,6 +282,7 @@ def setup_flask_babel(app):
 
 def setup_flask_uploads(app):
     import flask_uploads
+
     from flasquelistan import util
     from flasquelistan.views import gallery
 

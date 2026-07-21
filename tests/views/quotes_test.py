@@ -4,7 +4,6 @@
 from flask import url_for
 
 from flasquelistan import models
-
 from tests.helpers import logged_in
 
 

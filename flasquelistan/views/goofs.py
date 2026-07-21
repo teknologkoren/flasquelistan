@@ -1,10 +1,11 @@
-from flask import Blueprint, render_template, abort
 import random
 import re
 
+from flask import Blueprint, abort, render_template
 from flask_login import login_required
-from flasquelistan.models import User, ProfilePicture, db
+
 from flasquelistan import util
+from flasquelistan.models import ProfilePicture, User, db
 from flasquelistan.views.gallery import gallery_page_for_image
 
 mod = Blueprint("goofs", __name__)

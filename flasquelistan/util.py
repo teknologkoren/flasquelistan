@@ -11,6 +11,7 @@ import flask
 import flask_uploads
 import phonenumbers
 from PIL import Image, ImageOps
+
 from flasquelistan.factory import socketio
 
 image_uploads = flask_uploads.UploadSet('images',

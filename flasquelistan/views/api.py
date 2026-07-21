@@ -25,7 +25,7 @@ from sqlalchemy import desc, func
 
 from flasquelistan import models, util
 from flasquelistan.factory import socketio
-from flasquelistan.models import db, ApiKey, Article, Notification, Transaction, User, Quote
+from flasquelistan.models import ApiKey, Article, Notification, Quote, Transaction, User, db
 
 mod = flask.Blueprint('api', __name__, url_prefix='/api/v1')
 auth = HTTPTokenAuth(scheme='Bearer')
