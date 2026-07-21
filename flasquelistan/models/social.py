@@ -70,7 +70,7 @@ class Poke(db.Model):
         poke = db.session.get(Poke, reference)
         if not poke:
             return None
-        
+
         profile_link = flask.url_for('profile.show_profile', user_id=poke.poker_id)
         safe_name = markupsafe.escape(poke.poker.displayname)
         return f'<a href="{profile_link}">{safe_name}</a> puffade dig!'
@@ -130,7 +130,7 @@ class Notification(db.Model):
             html = Poke.format_notification_html(self.reference)
             if html:
                 return html
-        
+
         return markupsafe.escape(self.text)
 
     @property
@@ -139,5 +139,5 @@ class Notification(db.Model):
             md = Poke.format_notification_markdown(self.reference)
             if md:
                 return md
-        
+
         return self.text

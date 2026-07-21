@@ -404,7 +404,7 @@ class User(flask_login.UserMixin, db.Model):
 
     def poke(self, poker):
         last_poke = self.get_last_poke(poker)
-        
+
         # If the last poke was not made by the user that is trying to poke or
         # if the there hasn't been any pokes between these users, we allow the poke.
         if last_poke and last_poke.poker == poker:
@@ -479,7 +479,7 @@ class NicknameChange(db.Model):
     # The user who reviewed the change. If explicit approval was not required, this should
     # be null. For imported legacy nickname changes, this should also be null.
     reviewer_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True)
- 
+
     # Whenever the nickname change was created.
     created_timestamp = db.Column(db.DateTime)
 
@@ -489,7 +489,7 @@ class NicknameChange(db.Model):
 
     # This is the latest timestamp before `created_timestamp` when we know that the user
     # had a different nickname. This should only be set for legacy nickname changes,
-    # where we only have snapshots from (sometimes sparse) backups. 
+    # where we only have snapshots from (sometimes sparse) backups.
     lower_bound_timestamp = db.Column(db.DateTime, nullable=True)
 
     user = db.relationship('User', foreign_keys=user_id,

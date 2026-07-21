@@ -512,7 +512,7 @@ def approve_pending_nickname(change_id):
 
     if change.status != models.NicknameChangeStatus.PENDING:
         abort(404)
-    
+
     change.user.nickname = change.nickname
     change.status = models.NicknameChangeStatus.APPROVED
     change.reviewer = current_user
@@ -529,7 +529,7 @@ def reject_pending_nickname(change_id):
 
     if change.status != models.NicknameChangeStatus.PENDING:
         abort(404)
-    
+
     change.status = models.NicknameChangeStatus.REJECTED
     change.reviewer = current_user
     change.reviewed_timestamp = datetime.datetime.utcnow()

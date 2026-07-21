@@ -107,7 +107,8 @@ def credit_transfer_generate_link():
         message = form.message.data.strip()
         if message:
             args['message'] = message
-        generated_url = flask.url_for('transfers.transfer_standalone', user_id=payee.id, _external=True, **args)
+        generated_url = flask.url_for('transfers.transfer_standalone', user_id=payee.id,
+                                      _external=True, **args)
 
         flask.flash(
             _('Streque Pay-länk skapad: <a href="%(href)s">%(href)s',

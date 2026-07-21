@@ -214,7 +214,8 @@ def setup_flask_admin(app, db):
             '_password_timestamp'
         ]
 
-    admin = flask_admin.Admin(app, name='Flasquelistan', index_view=LoginIndexView(url='/flask-admin'))
+    admin = flask_admin.Admin(app, name='Flasquelistan',
+                              index_view=LoginIndexView(url='/flask-admin'))
     admin.add_view(UserModelView(models.User, db, name='User'))
     admin.add_view(LoginModelView(models.Group, db, name='Group'))
     admin.add_view(LoginModelView(models.Quote, db, name='Quote'))
