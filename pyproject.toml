@@ -45,10 +45,10 @@ dev = [
 line-length = 100
 
 [tool.ruff.lint]
-# Deliberately minimal: syntax errors, undefined names, unused imports/
-# variables (F), basic pycodestyle errors (E4/E7/E9), and bare excepts
-# (E722). Widen once the codebase is cleaner.
-select = ["E4", "E7", "E9", "F", "E722"]
+select = [
+    "E4", "E7", "E9", "E722", "F",  # pyflakes + basic pycodestyle errors
+    "I",    # import sorting (isort)
+]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

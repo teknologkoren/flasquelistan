@@ -1,7 +1,6 @@
 """Transfer objects from an accidentally deleted account to a new one"""
-import sys
-
 import sqlite3
+import sys
 
 OLD_USER_ID, NEW_USER_ID = sys.argv[1], sys.argv[2]
 

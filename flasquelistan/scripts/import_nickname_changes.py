@@ -1,8 +1,9 @@
+import re
+from datetime import datetime
+from pathlib import Path
+
 import click
 import sh
-from pathlib import Path
-from datetime import datetime
-import re
 
 from flasquelistan import models
 

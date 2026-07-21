@@ -2,11 +2,11 @@ import sys
 import traceback
 
 import flask
-from flask import current_app, abort, request
+from flask import abort, current_app, request
 from flask_babel import lazy_gettext as _l
 from flask_login import current_user, login_required
-from config import ADMIN_EMAILADDR
 
+from config import ADMIN_EMAILADDR
 from flasquelistan import forms, models
 from flasquelistan.discord import DiscordClient
 

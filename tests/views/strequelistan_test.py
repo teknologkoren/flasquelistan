@@ -1,15 +1,13 @@
 #!/usr/bin/env python3
 
 
+import datetime
+
 from flask import url_for
 from flask_login import current_user
 
-import datetime
-
 from flasquelistan import models
-
-from tests.helpers import logged_in
-from tests.helpers import logged_in_admin
+from tests.helpers import logged_in, logged_in_admin
 
 
 class TestIndexPage():

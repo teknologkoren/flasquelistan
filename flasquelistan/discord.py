@@ -1,7 +1,8 @@
 import requests
-from requests_oauthlib import OAuth2Session
 from flask import current_app
 from flask_wtf import csrf
+from requests_oauthlib import OAuth2Session
+
 from flasquelistan import models
 
 # Timeout for calls to the Discord API. The site runs on a single gunicorn
