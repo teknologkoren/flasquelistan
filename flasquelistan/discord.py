@@ -151,7 +151,8 @@ class DiscordClient:
                 json={"roles": list(new_roles)},
                 headers={
                     "Authorization": f"Bot {bot_secret}",
-                    "X-Audit-Log-Reason": f"Syncing roles with Streque user #{user.id}: {user.full_name}",
+                    "X-Audit-Log-Reason":
+                        f"Syncing roles with Streque user #{user.id}: {user.full_name}",
                 },
                 timeout=REQUEST_TIMEOUT)
 
