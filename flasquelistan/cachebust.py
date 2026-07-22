@@ -43,7 +43,7 @@ def setup_cache_busting(app):
 
     app.logger.debug('Computing cache-busting values...')
     # compute (un)bust tables.
-    for dirpath, dirnames, filenames in os.walk(static_folder):
+    for dirpath, _dirnames, filenames in os.walk(static_folder):
         for filename in filenames:
             # compute version component
             rooted_filename = os.path.join(dirpath, filename)
