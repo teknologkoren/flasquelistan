@@ -453,7 +453,7 @@ def BulkTransactionFormFactory(only_active=True):
         transaction_form = fields.FormField(F)
 
         setattr(BulkTransactionForm,
-                "user-{}".format(user.id),
+                f"user-{user.id}",
                 transaction_form)
 
     return BulkTransactionForm()

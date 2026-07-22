@@ -393,10 +393,8 @@ class User(flask_login.UserMixin, db.Model):
         return (
             Poke.query
             .filter(
-                (
-                    ((Poke.poker_id == other_user.id) & (Poke.pokee_id == self.id)) |
-                    ((Poke.poker_id == self.id) & (Poke.pokee_id == other_user.id))
-                )
+                ((Poke.poker_id == other_user.id) & (Poke.pokee_id == self.id)) |
+                ((Poke.poker_id == self.id) & (Poke.pokee_id == other_user.id))
             )
             .order_by(Poke.timestamp.desc())
             .first()

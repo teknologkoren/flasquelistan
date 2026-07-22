@@ -66,7 +66,7 @@ def credit_transfer():
                 )
             )
             if message:
-                notification_text += ": {}".format(message)
+                notification_text += f": {message}"
         payee_notification = models.Notification(
             text=notification_text,
             user_id=payee.id,

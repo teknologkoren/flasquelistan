@@ -48,6 +48,7 @@ line-length = 100
 select = [
     "E", "W", "F",  # full pycodestyle + pyflakes
     "I",    # import sorting (isort)
+    "UP",   # pyupgrade: prefer modern syntax available on our minimum Python
 ]
 
 [tool.pytest.ini_options]

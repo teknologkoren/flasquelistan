@@ -119,10 +119,10 @@ class Notification(db.Model):
                           default=datetime.datetime.utcnow)
 
     def __str__(self):
-        return "{} \"{}...\"".format(self.user_id, self.text[:20])
+        return f"{self.user_id} \"{self.text[:20]}...\""
 
     def __repr__(self):
-        return "Notification \"{}...\" to user {}".format(self.text[:20], self.user_id)
+        return f"Notification \"{self.text[:20]}...\" to user {self.user_id}"
 
     @property
     def formatted_html(self):

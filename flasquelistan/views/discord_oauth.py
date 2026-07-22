@@ -81,9 +81,9 @@ def discord_callback():
             existing_user.discord_username = None
 
             flask.flash(_l('Discord-kontot du loggade in med var redan kopplat till '
-                '%s. Det är nu kopplat till dig (%s) istället.' %
-                (existing_user.full_name, current_user.full_name)),
-                'warning')
+                           '%s. Det är nu kopplat till dig (%s) istället.') %
+                        (existing_user.full_name, current_user.full_name),
+                        'warning')
 
     if (current_user.discord_user_id is not None
         and current_user.discord_user_id != discord_user["id"]):
