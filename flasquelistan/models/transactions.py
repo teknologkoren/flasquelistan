@@ -204,9 +204,9 @@ class CreditTransfer(db.Model):
         if value <= 0:
             return False
 
-        suffix = ": {}".format(message) if message else ""
-        payer_message = "Till {}{}".format(payee.full_name, suffix)
-        payee_message = "Från {}{}".format(payer.full_name, suffix)
+        suffix = f": {message}" if message else ""
+        payer_message = f"Till {payee.full_name}{suffix}"
+        payee_message = f"Från {payer.full_name}{suffix}"
 
         payer_tx = (
             UserTransaction(

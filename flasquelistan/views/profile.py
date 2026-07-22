@@ -244,8 +244,7 @@ def user_vcard(user_id):
     response = flask.make_response(user.vcard)
     response.mimetype = 'text/vcard'
     response.headers['Content-Disposition'] = (
-        'attachment; filename="{}_{}.vcf"'
-        .format(user.first_name, user.last_name)
+        f'attachment; filename="{user.first_name}_{user.last_name}.vcf"'
     )
     return response
 

@@ -55,9 +55,7 @@ def make_legacy_hash(password, salt='saltysalt', rounds=1000):
     old teknologkoren/Strequelistan database."""
     dk = hashlib.pbkdf2_hmac('sha256', password.encode(), salt.encode(),
                              rounds)
-    return 'pbkdf2_sha256${}${}${}'.format(
-        rounds, salt, base64.b64encode(dk).decode()
-    )
+    return f'pbkdf2_sha256${rounds}${salt}${base64.b64encode(dk).decode()}'
 
 
 class TestLegacyPasswordUpgrade:

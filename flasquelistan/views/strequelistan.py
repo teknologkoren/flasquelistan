@@ -160,10 +160,7 @@ def add_streque():
     streque = user.strequa(article, current_user)
 
     if user != current_user:
-        text = "{name} strequade en {article} på dig.".format(
-            name=current_user.displayname,
-            article=article.name
-        )
+        text = f"{current_user.displayname} strequade en {article.name} på dig."
         notification = models.Notification(
             text=text,
             user_id=user.id,
@@ -232,10 +229,7 @@ def void_streque():
     elif streque.user_id != current_user.id:
         # The notification has been sent and potentially read, we must
         # send a new notification that the streque was voided.
-        text = "{name} ångrade ett av dina {article}-streque.".format(
-            name=current_user.displayname,
-            article=streque.text
-        )
+        text = f"{current_user.displayname} ångrade ett av dina {streque.text}-streque."
         void_notification = models.Notification(
             text=text,
             user_id=streque.user_id,
