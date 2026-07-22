@@ -4,18 +4,13 @@ import io
 import os
 
 import pytest
+from flask import url_for
 from PIL import Image
 
-from flask import url_for
-
 from flasquelistan import factory, models
-
 from tests import helpers
 from tests.conftest import BASE_TEST_CONFIG, fresh_database
-from tests.helpers import logged_in
-from tests.helpers import logged_in_admin
-from tests.helpers import login
-from tests.helpers import logout
+from tests.helpers import logged_in, logged_in_admin, login, logout
 
 
 @pytest.fixture(scope='module')

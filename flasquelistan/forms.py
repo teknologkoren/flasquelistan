@@ -62,7 +62,7 @@ class UniqueEdit:
 class Exists:
     """Validate that field is unique in model."""
     def __init__(self, model, field,
-                 message=_('Detta element existerar inte.')):
+                 message=_l('Detta element existerar inte.')):
         self.model = model
         self.field = field
         self.message = message
@@ -91,8 +91,7 @@ class RedirectForm(flask_wtf.FlaskForm):
 def AreYouARobotFormFactory(*args, **kwargs):
     def make_hash(n):
         s = (flask.current_app.config['SECRET_KEY'] + str(n)).encode()
-        h = hashlib.sha256(s).hexdigest()
-        return h
+        return hashlib.sha256(s).hexdigest()
 
     class F(flask_wtf.FlaskForm):
         def validate(self, extra_validators=None):
@@ -221,6 +220,8 @@ class ChangeEmailOrPasswordForm(EmailForm, PasswordForm):
 
             self.password.errors.append(_l("Fel lösenord."))
             return False
+
+        return True
 
 
 class AddStrequeForm(flask_wtf.FlaskForm):
@@ -453,7 +454,7 @@ def BulkTransactionFormFactory(only_active=True):
         transaction_form = fields.FormField(F)
 
         setattr(BulkTransactionForm,
-                "user-{}".format(user.id),
+                f"user-{user.id}",
                 transaction_form)
 
     return BulkTransactionForm()

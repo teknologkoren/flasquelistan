@@ -2,11 +2,11 @@ import sys
 import traceback
 
 import flask
-from flask import current_app, abort, request
+from flask import abort, current_app, request
 from flask_babel import lazy_gettext as _l
 from flask_login import current_user, login_required
-from config import ADMIN_EMAILADDR
 
+from config import ADMIN_EMAILADDR
 from flasquelistan import forms, models
 from flasquelistan.discord import DiscordClient
 
@@ -24,12 +24,10 @@ def discord():
 
 @mod.route('/discord/connect')
 def discord_redirect():
-    # Redirect if the current user is in a group connected to Discord.
-    if current_user.group and current_user.group.discord_role_id:
-        return flask.redirect(DiscordClient.get_authorization_url())
-    # Otherwise, the user is not allowed to join.
-    else:
+    # Only users in a group connected to Discord are allowed to join.
+    if not (current_user.group and current_user.group.discord_role_id):
         abort(403)
+    return flask.redirect(DiscordClient.get_authorization_url())
 
 
 @mod.route('/discord/disconnect', methods=['POST'])
@@ -81,9 +79,9 @@ def discord_callback():
             existing_user.discord_username = None
 
             flask.flash(_l('Discord-kontot du loggade in med var redan kopplat till '
-                '%s. Det är nu kopplat till dig (%s) istället.' %
-                (existing_user.full_name, current_user.full_name)),
-                'warning')
+                           '%s. Det är nu kopplat till dig (%s) istället.') %
+                        (existing_user.full_name, current_user.full_name),
+                        'warning')
 
     if (current_user.discord_user_id is not None
         and current_user.discord_user_id != discord_user["id"]):
@@ -109,7 +107,8 @@ def discord_callback():
         current_user.discord_username = f'{discord_user["username"]}'
     else:
         # If the user still has a legacy username with a tag, include it in the stored username.
-        current_user.discord_username = f'{discord_user["username"]}#{discord_user["discriminator"]}'
+        current_user.discord_username = (
+            f'{discord_user["username"]}#{discord_user["discriminator"]}')
     models.db.session.commit()
 
     client.add_to_server(
@@ -121,5 +120,6 @@ def discord_callback():
 
     guild_id = current_app.config.get("DISCORD_GUILD_ID")
     flask.flash(_l("Du är nu tillagd i vår Discord-server! %sKlicka här för att besöka den.%s") %
-                (f'<a href="https://discord.com/channels/{guild_id}" target="_blank">', '</a>'), 'success')
+                (f'<a href="https://discord.com/channels/{guild_id}" target="_blank">', '</a>'),
+                'success')
     return flask.redirect(flask.url_for('profile.show_profile', user_id=current_user.id))

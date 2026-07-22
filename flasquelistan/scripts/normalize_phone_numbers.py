@@ -1,5 +1,6 @@
-import click
 import sys
+
+import click
 
 from flasquelistan import models
 from flasquelistan.util import format_phone_number

@@ -1,15 +1,13 @@
 #!/usr/bin/env python3
 
 
+import datetime
+
 from flask import url_for
 from flask_login import current_user
 
-import datetime
-
 from flasquelistan import models
-
-from tests.helpers import logged_in
-from tests.helpers import logged_in_admin
+from tests.helpers import logged_in, logged_in_admin
 
 
 class TestAdminPage:
@@ -351,7 +349,8 @@ class TestConfirmBulkTransactionPage:
 
     def test_status_admin(self, client):
         with logged_in_admin(client):
-            response = client.post(url_for('strequeadmin.confirm_bulk_transactions'), follow_redirects=True)
+            response = client.post(url_for('strequeadmin.confirm_bulk_transactions'),
+                                   follow_redirects=True)
             text = response.get_data(as_text=True)
             assert "Transaktionerna utfördes!" in text
             assert response.status_code == 200

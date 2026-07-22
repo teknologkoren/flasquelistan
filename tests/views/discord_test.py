@@ -4,8 +4,8 @@ import pytest
 import requests
 
 from flasquelistan import models
-from tests.helpers import logged_in
 from flasquelistan.discord import DiscordClient
+from tests.helpers import logged_in
 
 DISCORD_CONFIG = {
     'DISCORD_BOT_SECRET': 'bot-secret',

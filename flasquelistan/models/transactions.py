@@ -29,7 +29,7 @@ class Article(db.Model):
 
     @property
     def api_dict(self):
-        data = dict()
+        data = {}
         data['id'] = self.id
         data['weight'] = self.weight
         data['name'] = self.name
@@ -76,7 +76,7 @@ class Transaction(db.Model):
 
     __mapper_args__ = {
         'polymorphic_identity': 'transaction',
-        'polymorphic_on': type,
+        'polymorphic_on': 'type',
     }
 
     @property
@@ -98,7 +98,7 @@ class Transaction(db.Model):
 
     @property
     def api_dict(self):
-        data = dict()
+        data = {}
         data['id'] = self.id
         data['text'] = self.text
         data['value'] = self.value
@@ -204,9 +204,9 @@ class CreditTransfer(db.Model):
         if value <= 0:
             return False
 
-        suffix = ": {}".format(message) if message else ""
-        payer_message = "Till {}{}".format(payee.full_name, suffix)
-        payee_message = "Från {}{}".format(payer.full_name, suffix)
+        suffix = f": {message}" if message else ""
+        payer_message = f"Till {payee.full_name}{suffix}"
+        payee_message = f"Från {payer.full_name}{suffix}"
 
         payer_tx = (
             UserTransaction(

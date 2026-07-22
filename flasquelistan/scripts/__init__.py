@@ -1,7 +1,7 @@
 import click
 from flask import Blueprint
 
-from . import normalize_phone_numbers, import_nickname_changes
+from . import import_nickname_changes, normalize_phone_numbers
 
 mod = Blueprint('scripts', __name__)
 

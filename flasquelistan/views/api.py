@@ -20,12 +20,15 @@
 import flask
 from flask import jsonify, request
 from flask_httpauth import HTTPTokenAuth
-from flask_socketio import ConnectionRefusedError
+
+# flask_socketio's exception for rejecting a socket connection intentionally
+# reuses the builtin's name; keep the idiomatic import.
+from flask_socketio import ConnectionRefusedError  # noqa: A004
 from sqlalchemy import desc, func
 
 from flasquelistan import models, util
 from flasquelistan.factory import socketio
-from flasquelistan.models import db, ApiKey, Article, Notification, Transaction, User, Quote
+from flasquelistan.models import ApiKey, Article, Notification, Quote, Transaction, User, db
 
 mod = flask.Blueprint('api', __name__, url_prefix='/api/v1')
 auth = HTTPTokenAuth(scheme='Bearer')
@@ -79,11 +82,10 @@ def filter_user_data(user_dict):
     privileges, otherwise return a subset of keys they are allowed to see."""
     if current_api_key().is_admin:
         return user_dict
-    else:
-        allowed = ('id', 'email', 'first_name', 'last_name', 'full_name',
-                   'nickname', 'birthday', 'active', 'lang', 'group', 'phone',
-                   'profile_picture', 'discord_user_id', 'discord_username')
-        return {k: v for (k, v) in user_dict.items() if k in allowed}
+    allowed = ('id', 'email', 'first_name', 'last_name', 'full_name',
+               'nickname', 'birthday', 'active', 'lang', 'group', 'phone',
+               'profile_picture', 'discord_user_id', 'discord_username')
+    return {k: v for (k, v) in user_dict.items() if k in allowed}
 
 
 @mod.route('/users', methods=['GET'])

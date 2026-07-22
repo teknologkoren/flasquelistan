@@ -11,8 +11,14 @@ Done or in progress (each item is its own commit on master):
 1. **Run the tests automatically.** A GitHub Actions workflow runs the test
    suite on every push and pull request. (Previously ~1400 lines of tests
    existed but nothing ran them; `.travis.yml` was dead.)
-2. **Linting.** `ruff` (a fast standard Python linter) with a minimal rule
-   set, also run in CI. Test/lint tools moved out of the runtime dependencies.
+2. **Linting.** `ruff` (a fast standard Python linter), also run in CI.
+   Test/lint tools moved out of the runtime dependencies. Started with a
+   minimal rule set, later widened to import sorting, full pycodestyle,
+   pyupgrade, bugbear, comprehensions, builtins-shadowing, implicit string
+   concatenation, return consistency, pytest style and the ruff-specific
+   rules. Candidate next steps kept out of scope so far: `S` (bandit,
+   security) and `DTZ` (timezone-aware datetimes; needs a real migration
+   off naive `utcnow()` first).
 3. **Small safety fixes:**
    - Timeouts on the Discord HTTP calls — a hung call froze the whole site
      because gunicorn runs a single worker.

@@ -4,7 +4,6 @@ import datetime
 from unittest import mock
 
 from flasquelistan import models
-
 from tests.helpers import make_user
 
 

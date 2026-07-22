@@ -1,7 +1,8 @@
 import requests
-from requests_oauthlib import OAuth2Session
 from flask import current_app
 from flask_wtf import csrf
+from requests_oauthlib import OAuth2Session
+
 from flasquelistan import models
 
 # Timeout for calls to the Discord API. The site runs on a single gunicorn
@@ -19,7 +20,7 @@ class DiscordClient:
 
     def get_authorization_url():
         client = DiscordClient._create_client()
-        authorization_url, state = client.authorization_url(
+        authorization_url, _state = client.authorization_url(
             "https://discord.com/oauth2/authorize",
             prompt="consent",
             state=csrf.generate_csrf(token_key="oauth_state"))
@@ -118,7 +119,7 @@ class DiscordClient:
         unknown_role_id = current_app.config.get("DISCORD_UNKNOWN_ROLE_ID")
 
         if disconnect:
-            expected = set((unknown_role_id,))
+            expected = {unknown_role_id}
             try:
                 current = set(DiscordClient.get_current_roles(user.discord_user_id))
             except (requests.RequestException, KeyError):
@@ -130,12 +131,12 @@ class DiscordClient:
             expected = set(DiscordClient.get_expected_roles(user))
             current = set(DiscordClient.get_current_roles(user.discord_user_id))
 
-        managed = set(group.discord_role_id for group in models.Group
-                      .query
-                      # Only groups a Discord role id
-                      .filter(models.Group.discord_role_id.is_not(None))
-                      .order_by(models.Group.weight.desc())
-                      .all())
+        managed = {group.discord_role_id for group in models.Group
+                   .query
+                   # Only groups a Discord role id
+                   .filter(models.Group.discord_role_id.is_not(None))
+                   .order_by(models.Group.weight.desc())
+                   .all()}
         managed.add(active_role_id)
         managed.add(unknown_role_id)
 
@@ -150,7 +151,8 @@ class DiscordClient:
                 json={"roles": list(new_roles)},
                 headers={
                     "Authorization": f"Bot {bot_secret}",
-                    "X-Audit-Log-Reason": f"Syncing roles with Streque user #{user.id}: {user.full_name}",
+                    "X-Audit-Log-Reason":
+                        f"Syncing roles with Streque user #{user.id}: {user.full_name}",
                 },
                 timeout=REQUEST_TIMEOUT)
 

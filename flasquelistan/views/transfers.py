@@ -66,7 +66,7 @@ def credit_transfer():
                 )
             )
             if message:
-                notification_text += ": {}".format(message)
+                notification_text += f": {message}"
         payee_notification = models.Notification(
             text=notification_text,
             user_id=payee.id,
@@ -107,7 +107,8 @@ def credit_transfer_generate_link():
         message = form.message.data.strip()
         if message:
             args['message'] = message
-        generated_url = flask.url_for('transfers.transfer_standalone', user_id=payee.id, _external=True, **args)
+        generated_url = flask.url_for('transfers.transfer_standalone', user_id=payee.id,
+                                      _external=True, **args)
 
         flask.flash(
             _('Streque Pay-länk skapad: <a href="%(href)s">%(href)s',

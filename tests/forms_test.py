@@ -1,7 +1,6 @@
 from werkzeug.datastructures import MultiDict
 
 from flasquelistan import forms, models
-
 from tests.helpers import captcha_answer, make_user
 
 
