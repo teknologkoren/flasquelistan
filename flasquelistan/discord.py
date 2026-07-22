@@ -20,7 +20,7 @@ class DiscordClient:
 
     def get_authorization_url():
         client = DiscordClient._create_client()
-        authorization_url, state = client.authorization_url(
+        authorization_url, _state = client.authorization_url(
             "https://discord.com/oauth2/authorize",
             prompt="consent",
             state=csrf.generate_csrf(token_key="oauth_state"))

@@ -55,7 +55,18 @@ select = [
     "ISC",  # implicit string concatenation mistakes
     "PIE",  # flake8-pie: misc lints (duplicate class fields, useless spread, ...)
     "RET",  # flake8-return: consistent return statements
+    "PT",   # flake8-pytest-style: idiomatic pytest tests
+    "RUF",  # ruff-specific rules
 ]
+ignore = [
+    # Mutable class attributes are idiomatic as declarations in Flask config
+    # objects and SQLAlchemy models (e.g. __mapper_args__), which is nearly
+    # every class-level dict/list in this codebase.
+    "RUF012",
+]
+# Typographic characters that are intentional in our (mostly Swedish)
+# user-facing strings, not lookalike typos: en dash and curly apostrophe.
+allowed-confusables = ["–", "’"]
 
 [tool.ruff.lint.flake8-bugbear]
 # Lazy gettext strings are evaluated per-request, so they are safe (and

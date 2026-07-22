@@ -55,7 +55,8 @@ def test_poke_notification_formatting(app):
         # but we check for the structure.
         assert f"[{poker.displayname}]" in notification.formatted_markdown
         assert "puffade dig!" in notification.formatted_markdown
-        assert "(" in notification.formatted_markdown and ")" in notification.formatted_markdown
+        assert "(" in notification.formatted_markdown
+        assert ")" in notification.formatted_markdown
 
         # Verify fallback behavior
         models.db.session.delete(poke)
