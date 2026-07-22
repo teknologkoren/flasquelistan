@@ -62,7 +62,7 @@ class UniqueEdit:
 class Exists:
     """Validate that field is unique in model."""
     def __init__(self, model, field,
-                 message=_('Detta element existerar inte.')):
+                 message=_l('Detta element existerar inte.')):
         self.model = model
         self.field = field
         self.message = message
