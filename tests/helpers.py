@@ -57,9 +57,9 @@ def logged_in_admin(client):
 
 
 def login(client, email, password):
-    return client.post('/login', data=dict(
-        email=email, password=password
-    ))
+    return client.post('/login', data={
+        'email': email, 'password': password
+    })
 
 
 def logout(client):

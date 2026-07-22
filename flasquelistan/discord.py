@@ -119,7 +119,7 @@ class DiscordClient:
         unknown_role_id = current_app.config.get("DISCORD_UNKNOWN_ROLE_ID")
 
         if disconnect:
-            expected = set((unknown_role_id,))
+            expected = {unknown_role_id}
             try:
                 current = set(DiscordClient.get_current_roles(user.discord_user_id))
             except (requests.RequestException, KeyError):
@@ -131,12 +131,12 @@ class DiscordClient:
             expected = set(DiscordClient.get_expected_roles(user))
             current = set(DiscordClient.get_current_roles(user.discord_user_id))
 
-        managed = set(group.discord_role_id for group in models.Group
-                      .query
-                      # Only groups a Discord role id
-                      .filter(models.Group.discord_role_id.is_not(None))
-                      .order_by(models.Group.weight.desc())
-                      .all())
+        managed = {group.discord_role_id for group in models.Group
+                   .query
+                   # Only groups a Discord role id
+                   .filter(models.Group.discord_role_id.is_not(None))
+                   .order_by(models.Group.weight.desc())
+                   .all()}
         managed.add(active_role_id)
         managed.add(unknown_role_id)
 
