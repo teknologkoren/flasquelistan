@@ -24,12 +24,10 @@ def discord():
 
 @mod.route('/discord/connect')
 def discord_redirect():
-    # Redirect if the current user is in a group connected to Discord.
-    if current_user.group and current_user.group.discord_role_id:
-        return flask.redirect(DiscordClient.get_authorization_url())
-    # Otherwise, the user is not allowed to join.
-    else:
+    # Only users in a group connected to Discord are allowed to join.
+    if not (current_user.group and current_user.group.discord_role_id):
         abort(403)
+    return flask.redirect(DiscordClient.get_authorization_url())
 
 
 @mod.route('/discord/disconnect', methods=['POST'])

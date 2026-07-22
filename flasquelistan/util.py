@@ -24,8 +24,7 @@ profile_pictures = flask_uploads.UploadSet('profilepictures',
 def generate_secure_path_hash(expires, url, secret):
     data = f"{expires}{url}{flask.request.remote_addr} {secret}"
     binary_hash = hashlib.md5(data.encode()).digest()
-    nginx_hash = base64.urlsafe_b64encode(binary_hash).decode().rstrip('=')
-    return nginx_hash
+    return base64.urlsafe_b64encode(binary_hash).decode().rstrip('=')
 
 
 def url_for_image(filename, imagetype, width=None):
@@ -129,6 +128,8 @@ def get_redirect_target():
         if is_safe_url(target):
             return target
 
+    return None
+
 
 def rotate_jpeg(filename):
     img = Image.open(filename)
@@ -149,13 +150,11 @@ def format_phone_number(phone, e164=False):
             and phonenumbers.is_valid_number(parsed)):
         return False
 
-    formatted = phonenumbers.format_number(
+    return phonenumbers.format_number(
         parsed,
         phonenumbers.PhoneNumberFormat.E164 if e164
         else phonenumbers.PhoneNumberFormat.INTERNATIONAL
     )
-
-    return formatted
 
 
 def emit_balance_change_event(user, old_balance):

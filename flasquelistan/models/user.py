@@ -138,8 +138,7 @@ class User(flask_login.UserMixin, db.Model):
         name = self.nickname or self.full_name
         if self.has_birthday:
             return f"{name} 🎂"
-        else:
-            return name
+        return name
 
     @property
     def has_birthday(self):
@@ -350,35 +349,32 @@ class User(flask_login.UserMixin, db.Model):
         final_bac = 1000 * alcohol_in_body / (body_mass * body_mass_constant)
 
         # Round to 2 decimals ("#.## permille")
-        blood_alcohol_concentration = round(final_bac, 2)
-
-        return blood_alcohol_concentration
+        return round(final_bac, 2)
 
     @property
     def bac_emoji(self):
         bac = self.bac
         if bac < 0.1:
             return None
-        elif bac < 0.3:
+        if bac < 0.3:
             return '🍺'
-        elif bac < 0.5:
+        if bac < 0.5:
             return '🍻'
-        elif bac < 1:
+        if bac < 1:
             return '👌'
-        elif bac < 1.5:
+        if bac < 1.5:
             return '🕺'
-        elif bac < 2:
+        if bac < 2:
             return '😟'
-        elif bac < 2.5:
+        if bac < 2.5:
             return '🤢'
-        elif bac < 3:
+        if bac < 3:
             return '😵'
-        elif bac < 3.5:
+        if bac < 3.5:
             return '💀'
-        elif bac < 4:
+        if bac < 4:
             return '🇷🇺'
-        else:
-            return '🇫🇮'
+        return '🇫🇮'
 
     @property
     def emoji(self):

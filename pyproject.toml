@@ -54,6 +54,7 @@ select = [
     "A",    # flake8-builtins: don't shadow Python builtins
     "ISC",  # implicit string concatenation mistakes
     "PIE",  # flake8-pie: misc lints (duplicate class fields, useless spread, ...)
+    "RET",  # flake8-return: consistent return statements
 ]
 
 [tool.ruff.lint.flake8-bugbear]
