@@ -89,7 +89,7 @@ def change_nickname(user_id):
             flask.url_for('profile.user_nicknames', user_id=user_id)
         )
 
-    elif form.is_submitted():
+    if form.is_submitted():
         forms.flash_errors(form)
 
     return flask.redirect(
@@ -329,13 +329,12 @@ def edit_profile(user_id):
         return flask.redirect(flask.url_for('profile.show_profile',
                                             user_id=user.id))
 
+    if user.y_chromosome is True:
+        form.y_chromosome.data = 'yes'
+    elif user.y_chromosome is False:
+        form.y_chromosome.data = 'no'
     else:
-        if user.y_chromosome is True:
-            form.y_chromosome.data = 'yes'
-        elif user.y_chromosome is False:
-            form.y_chromosome.data = 'no'
-        else:
-            form.y_chromosome.data = 'n/a'
+        form.y_chromosome.data = 'n/a'
 
     return flask.render_template('edit_profile.html', form=form, user=user)
 

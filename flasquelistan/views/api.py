@@ -82,11 +82,10 @@ def filter_user_data(user_dict):
     privileges, otherwise return a subset of keys they are allowed to see."""
     if current_api_key().is_admin:
         return user_dict
-    else:
-        allowed = ('id', 'email', 'first_name', 'last_name', 'full_name',
-                   'nickname', 'birthday', 'active', 'lang', 'group', 'phone',
-                   'profile_picture', 'discord_user_id', 'discord_username')
-        return {k: v for (k, v) in user_dict.items() if k in allowed}
+    allowed = ('id', 'email', 'first_name', 'last_name', 'full_name',
+               'nickname', 'birthday', 'active', 'lang', 'group', 'phone',
+               'profile_picture', 'discord_user_id', 'discord_username')
+    return {k: v for (k, v) in user_dict.items() if k in allowed}
 
 
 @mod.route('/users', methods=['GET'])

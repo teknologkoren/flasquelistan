@@ -182,11 +182,10 @@ def add_streque():
 
         return flask.jsonify(response)
 
-    else:
-        flask.flash(_("%(text)s-streque på %(name)s tillagt.",
-                      text=streque.text, name=user.full_name),
-                    'success')
-        return flask.redirect(flask.url_for('strequelistan.index'))
+    flask.flash(_("%(text)s-streque på %(name)s tillagt.",
+                  text=streque.text, name=user.full_name),
+                'success')
+    return flask.redirect(flask.url_for('strequelistan.index'))
 
 
 @mod.route('/void', methods=['POST'])
@@ -250,12 +249,11 @@ def void_streque():
             balance=streque.user.balance
         )
 
-    else:
-        flask.flash(_("Ångrade %(text)s-streque på %(name)s.",
-                      text=streque.text,
-                      name=streque.user.full_name),
-                    'success')
-        return flask.redirect(flask.url_for('strequelistan.history'))
+    flask.flash(_("Ångrade %(text)s-streque på %(name)s.",
+                  text=streque.text,
+                  name=streque.user.full_name),
+                'success')
+    return flask.redirect(flask.url_for('strequelistan.history'))
 
 
 @mod.route('/articles')

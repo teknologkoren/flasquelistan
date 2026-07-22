@@ -91,8 +91,7 @@ class RedirectForm(flask_wtf.FlaskForm):
 def AreYouARobotFormFactory(*args, **kwargs):
     def make_hash(n):
         s = (flask.current_app.config['SECRET_KEY'] + str(n)).encode()
-        h = hashlib.sha256(s).hexdigest()
-        return h
+        return hashlib.sha256(s).hexdigest()
 
     class F(flask_wtf.FlaskForm):
         def validate(self, extra_validators=None):
@@ -221,6 +220,8 @@ class ChangeEmailOrPasswordForm(EmailForm, PasswordForm):
 
             self.password.errors.append(_l("Fel lösenord."))
             return False
+
+        return True
 
 
 class AddStrequeForm(flask_wtf.FlaskForm):

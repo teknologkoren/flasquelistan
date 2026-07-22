@@ -198,8 +198,7 @@ def setup_flask_admin(app, db):
                 flask.flash("Du måste vara admin för att komma åt den sidan.",
                             'error')
                 return flask.redirect(flask.url_for('strequelistan.index'))
-            else:
-                return auth.login_manager.unauthorized()
+            return auth.login_manager.unauthorized()
 
     class LoginIndexView(AdminLoginMixin, AdminIndexView):
         pass
@@ -251,11 +250,10 @@ def setup_flask_babel(app):
                 flask_babel.refresh()
             return current_user.lang
         # Check the session cookie if the user isn't logged in
-        else:
-            if request.args.get('lang'):
-                session['lang'] = request.args.get('lang')
-                flask_babel.refresh()
-            return session.get('lang', None)
+        if request.args.get('lang'):
+            session['lang'] = request.args.get('lang')
+            flask_babel.refresh()
+        return session.get('lang', None)
 
     def get_timezone():
         # Used to change the time zone.
