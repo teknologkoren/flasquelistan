@@ -26,7 +26,7 @@ class Quote(db.Model):
 
     @property
     def api_dict(self):
-        data = dict()
+        data = {}
         data['id'] = self.id
         data['text'] = self.cleaned()
         data['who'] = self.who

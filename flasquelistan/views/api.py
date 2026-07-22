@@ -20,7 +20,10 @@
 import flask
 from flask import jsonify, request
 from flask_httpauth import HTTPTokenAuth
-from flask_socketio import ConnectionRefusedError
+
+# flask_socketio's exception for rejecting a socket connection intentionally
+# reuses the builtin's name; keep the idiomatic import.
+from flask_socketio import ConnectionRefusedError  # noqa: A004
 from sqlalchemy import desc, func
 
 from flasquelistan import models, util

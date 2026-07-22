@@ -72,7 +72,7 @@ class User(flask_login.UserMixin, db.Model):
 
     @property
     def api_dict(self):
-        data = dict()
+        data = {}
         data['id'] = self.id
         data['email'] = self.email
         data['first_name'] = self.first_name
@@ -185,8 +185,8 @@ class User(flask_login.UserMixin, db.Model):
         else:
             rounds = 12
 
-        hash = bcrypt.hashpw(plaintext.encode(), bcrypt.gensalt(rounds))
-        self._password_hash = hash.decode()
+        pw_hash = bcrypt.hashpw(plaintext.encode(), bcrypt.gensalt(rounds))
+        self._password_hash = pw_hash.decode()
 
         # Save in UTC, password resets compare this to UTC time!
         self._password_timestamp = datetime.datetime.utcnow()
