@@ -171,22 +171,21 @@ def void_transaction():
             balance=transaction.user.balance
         )
 
-    else:
-        flask.flash(
-            _("Ångrade %(type)s \"%(text)s\", "
-              "%(value)s den %(date)s på %(user)s.",
-              type=transaction.type,
-              text=transaction.text,
-              value=transaction.formatted_value,
-              date=flask_babel.format_datetime(
-                  transaction.timestamp,
-                  "dd MMMM yyyy, HH:mm"
-              ),
-              user=transaction.user.full_name
-              ),
-            'success'
-        )
-        return flask.redirect(flask.url_for('strequeadmin.transactions'))
+    flask.flash(
+        _("Ångrade %(type)s \"%(text)s\", "
+          "%(value)s den %(date)s på %(user)s.",
+          type=transaction.type,
+          text=transaction.text,
+          value=transaction.formatted_value,
+          date=flask_babel.format_datetime(
+              transaction.timestamp,
+              "dd MMMM yyyy, HH:mm"
+          ),
+          user=transaction.user.full_name
+          ),
+        'success'
+    )
+    return flask.redirect(flask.url_for('strequeadmin.transactions'))
 
 
 @mod.route('/admin/transactions/bulk', methods=['GET', 'POST'])
@@ -218,9 +217,8 @@ def bulk_transactions():
             return flask.render_template(
                 'strequeadmin/confirm_bulk_transactions.html',
                 transactions=transactions)
-        else:
-            flask.flash(_l("Inga transaktioner utförda. "
-                        "Väl spenderade klockcykler, bra jobbat!"), 'info')
+        flask.flash(_l("Inga transaktioner utförda. "
+                    "Väl spenderade klockcykler, bra jobbat!"), 'info')
 
     return flask.render_template(
         'strequeadmin/bulk_transactions.html',
@@ -377,10 +375,9 @@ def add_user(request_id=None):
                         'success')
             return flask.redirect(flask.url_for('strequeadmin.requests'))
 
-        else:
-            flask.flash(_("%(user_name)s skapad!", user_name=user), 'success')
-            # Redirect to clear form
-            return flask.redirect(flask.url_for('strequeadmin.add_user'))
+        flask.flash(_("%(user_name)s skapad!", user_name=user), 'success')
+        # Redirect to clear form
+        return flask.redirect(flask.url_for('strequeadmin.add_user'))
 
     return flask.render_template('strequeadmin/add_user.html', form=form,
                                  is_request=bool(request_id))
@@ -512,7 +509,7 @@ def approve_pending_nickname(change_id):
 
     if change.status != models.NicknameChangeStatus.PENDING:
         abort(404)
-    
+
     change.user.nickname = change.nickname
     change.status = models.NicknameChangeStatus.APPROVED
     change.reviewer = current_user
@@ -529,7 +526,7 @@ def reject_pending_nickname(change_id):
 
     if change.status != models.NicknameChangeStatus.PENDING:
         abort(404)
-    
+
     change.status = models.NicknameChangeStatus.REJECTED
     change.reviewer = current_user
     change.reviewed_timestamp = datetime.datetime.utcnow()

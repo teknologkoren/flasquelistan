@@ -49,6 +49,7 @@ def create_app(config=None, instance_config=None):
 
 def setup_logging():
     from flask.logging import default_handler
+
     from flasquelistan import log
 
     default_handler.setFormatter(log.formatter)
@@ -57,6 +58,7 @@ def setup_logging():
 def setup_error_emails(app):
     import logging
     from logging.handlers import SMTPHandler
+
     from flasquelistan import log
 
     if 'ERROR_EMAIL_TOADDRS' not in app.config:
@@ -94,11 +96,22 @@ def setup_error_emails(app):
 
 
 def register_blueprints(app):
-    from flasquelistan.views import (auth, admin, api, quotes, serviceworker,
-                                     strequelistan, songbook, goofs,
-                                     discord_oauth, notifications, transfers,
-                                     gallery, profile)
     from flasquelistan import scripts
+    from flasquelistan.views import (
+        admin,
+        api,
+        auth,
+        discord_oauth,
+        gallery,
+        goofs,
+        notifications,
+        profile,
+        quotes,
+        serviceworker,
+        songbook,
+        strequelistan,
+        transfers,
+    )
     app.register_blueprint(auth.mod)
     app.register_blueprint(admin.mod)
     app.register_blueprint(api.mod)
@@ -170,6 +183,7 @@ def setup_flask_admin(app, db):
     from flask_admin import AdminIndexView
     from flask_admin.contrib.sqla import ModelView
     from flask_login import current_user
+
     from flasquelistan import models
     from flasquelistan.views import auth
 
@@ -184,8 +198,7 @@ def setup_flask_admin(app, db):
                 flask.flash("Du måste vara admin för att komma åt den sidan.",
                             'error')
                 return flask.redirect(flask.url_for('strequelistan.index'))
-            else:
-                return auth.login_manager.unauthorized()
+            return auth.login_manager.unauthorized()
 
     class LoginIndexView(AdminLoginMixin, AdminIndexView):
         pass
@@ -200,7 +213,8 @@ def setup_flask_admin(app, db):
             '_password_timestamp'
         ]
 
-    admin = flask_admin.Admin(app, name='Flasquelistan', index_view=LoginIndexView(url='/flask-admin'))
+    admin = flask_admin.Admin(app, name='Flasquelistan',
+                              index_view=LoginIndexView(url='/flask-admin'))
     admin.add_view(UserModelView(models.User, db, name='User'))
     admin.add_view(LoginModelView(models.Group, db, name='Group'))
     admin.add_view(LoginModelView(models.Quote, db, name='Quote'))
@@ -222,9 +236,9 @@ def setup_flask_admin(app, db):
 
 def setup_flask_babel(app):
     import flask_babel
-    from flask import request
-    from flask import session
+    from flask import request, session
     from flask_login import current_user
+
     from flasquelistan import models
 
     def get_locale():
@@ -236,11 +250,10 @@ def setup_flask_babel(app):
                 flask_babel.refresh()
             return current_user.lang
         # Check the session cookie if the user isn't logged in
-        else:
-            if request.args.get('lang'):
-                session['lang'] = request.args.get('lang')
-                flask_babel.refresh()
-            return session.get('lang', None)
+        if request.args.get('lang'):
+            session['lang'] = request.args.get('lang')
+            flask_babel.refresh()
+        return session.get('lang', None)
 
     def get_timezone():
         # Used to change the time zone.
@@ -268,6 +281,7 @@ def setup_flask_babel(app):
 
 def setup_flask_uploads(app):
     import flask_uploads
+
     from flasquelistan import util
     from flasquelistan.views import gallery
 

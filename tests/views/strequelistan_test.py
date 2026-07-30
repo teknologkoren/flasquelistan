@@ -1,18 +1,16 @@
 #!/usr/bin/env python3
 
 
+import datetime
+
 from flask import url_for
 from flask_login import current_user
 
-import datetime
-
 from flasquelistan import models
-
-from tests.helpers import logged_in
-from tests.helpers import logged_in_admin
+from tests.helpers import logged_in, logged_in_admin
 
 
-class TestIndexPage():
+class TestIndexPage:
     def test_name_on_index_page(self, client):
         """Test that users full name shows up on index page if no nickname is present"""
         with logged_in(client):
@@ -30,7 +28,7 @@ class TestIndexPage():
             assert 'Monty Python' not in text
             assert 'Black Knight' in text
 
-    class TestGroups():
+    class TestGroups:
         def test_group_show_up_on_index_page(self, client):
             """Tests that a group with members shows up on the index page"""
             group = models.Group(
@@ -100,7 +98,7 @@ class TestIndexPage():
                 text = response.get_data(as_text=True)
                 assert article.name not in text
 
-    class TestQuotes():
+    class TestQuotes:
 
         def test_index_no_quotes(self, client):
             """Test that the index page works without quotes"""
@@ -130,7 +128,7 @@ class TestIndexPage():
                 assert quote.who in text
 
 
-class TestStrequa():
+class TestStrequa:
     """Test views related to the strequa action"""
 
     def test_strequa_json(self, client):

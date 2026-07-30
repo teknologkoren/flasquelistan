@@ -160,10 +160,7 @@ def add_streque():
     streque = user.strequa(article, current_user)
 
     if user != current_user:
-        text = "{name} strequade en {article} på dig.".format(
-            name=current_user.displayname,
-            article=article.name
-        )
+        text = f"{current_user.displayname} strequade en {article.name} på dig."
         notification = models.Notification(
             text=text,
             user_id=user.id,
@@ -185,11 +182,10 @@ def add_streque():
 
         return flask.jsonify(response)
 
-    else:
-        flask.flash(_("%(text)s-streque på %(name)s tillagt.",
-                      text=streque.text, name=user.full_name),
-                    'success')
-        return flask.redirect(flask.url_for('strequelistan.index'))
+    flask.flash(_("%(text)s-streque på %(name)s tillagt.",
+                  text=streque.text, name=user.full_name),
+                'success')
+    return flask.redirect(flask.url_for('strequelistan.index'))
 
 
 @mod.route('/void', methods=['POST'])
@@ -232,10 +228,7 @@ def void_streque():
     elif streque.user_id != current_user.id:
         # The notification has been sent and potentially read, we must
         # send a new notification that the streque was voided.
-        text = "{name} ångrade ett av dina {article}-streque.".format(
-            name=current_user.displayname,
-            article=streque.text
-        )
+        text = f"{current_user.displayname} ångrade ett av dina {streque.text}-streque."
         void_notification = models.Notification(
             text=text,
             user_id=streque.user_id,
@@ -256,12 +249,11 @@ def void_streque():
             balance=streque.user.balance
         )
 
-    else:
-        flask.flash(_("Ångrade %(text)s-streque på %(name)s.",
-                      text=streque.text,
-                      name=streque.user.full_name),
-                    'success')
-        return flask.redirect(flask.url_for('strequelistan.history'))
+    flask.flash(_("Ångrade %(text)s-streque på %(name)s.",
+                  text=streque.text,
+                  name=streque.user.full_name),
+                'success')
+    return flask.redirect(flask.url_for('strequelistan.history'))
 
 
 @mod.route('/articles')

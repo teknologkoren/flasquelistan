@@ -72,7 +72,7 @@ class User(flask_login.UserMixin, db.Model):
 
     @property
     def api_dict(self):
-        data = dict()
+        data = {}
         data['id'] = self.id
         data['email'] = self.email
         data['first_name'] = self.first_name
@@ -138,8 +138,7 @@ class User(flask_login.UserMixin, db.Model):
         name = self.nickname or self.full_name
         if self.has_birthday:
             return f"{name} 🎂"
-        else:
-            return name
+        return name
 
     @property
     def has_birthday(self):
@@ -185,8 +184,8 @@ class User(flask_login.UserMixin, db.Model):
         else:
             rounds = 12
 
-        hash = bcrypt.hashpw(plaintext.encode(), bcrypt.gensalt(rounds))
-        self._password_hash = hash.decode()
+        pw_hash = bcrypt.hashpw(plaintext.encode(), bcrypt.gensalt(rounds))
+        self._password_hash = pw_hash.decode()
 
         # Save in UTC, password resets compare this to UTC time!
         self._password_timestamp = datetime.datetime.utcnow()
@@ -350,35 +349,32 @@ class User(flask_login.UserMixin, db.Model):
         final_bac = 1000 * alcohol_in_body / (body_mass * body_mass_constant)
 
         # Round to 2 decimals ("#.## permille")
-        blood_alcohol_concentration = round(final_bac, 2)
-
-        return blood_alcohol_concentration
+        return round(final_bac, 2)
 
     @property
     def bac_emoji(self):
         bac = self.bac
         if bac < 0.1:
             return None
-        elif bac < 0.3:
+        if bac < 0.3:
             return '🍺'
-        elif bac < 0.5:
+        if bac < 0.5:
             return '🍻'
-        elif bac < 1:
+        if bac < 1:
             return '👌'
-        elif bac < 1.5:
+        if bac < 1.5:
             return '🕺'
-        elif bac < 2:
+        if bac < 2:
             return '😟'
-        elif bac < 2.5:
+        if bac < 2.5:
             return '🤢'
-        elif bac < 3:
+        if bac < 3:
             return '😵'
-        elif bac < 3.5:
+        if bac < 3.5:
             return '💀'
-        elif bac < 4:
+        if bac < 4:
             return '🇷🇺'
-        else:
-            return '🇫🇮'
+        return '🇫🇮'
 
     @property
     def emoji(self):
@@ -393,10 +389,8 @@ class User(flask_login.UserMixin, db.Model):
         return (
             Poke.query
             .filter(
-                (
-                    ((Poke.poker_id == other_user.id) & (Poke.pokee_id == self.id)) |
-                    ((Poke.poker_id == self.id) & (Poke.pokee_id == other_user.id))
-                )
+                ((Poke.poker_id == other_user.id) & (Poke.pokee_id == self.id)) |
+                ((Poke.poker_id == self.id) & (Poke.pokee_id == other_user.id))
             )
             .order_by(Poke.timestamp.desc())
             .first()
@@ -404,7 +398,7 @@ class User(flask_login.UserMixin, db.Model):
 
     def poke(self, poker):
         last_poke = self.get_last_poke(poker)
-        
+
         # If the last poke was not made by the user that is trying to poke or
         # if the there hasn't been any pokes between these users, we allow the poke.
         if last_poke and last_poke.poker == poker:
@@ -479,7 +473,7 @@ class NicknameChange(db.Model):
     # The user who reviewed the change. If explicit approval was not required, this should
     # be null. For imported legacy nickname changes, this should also be null.
     reviewer_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True)
- 
+
     # Whenever the nickname change was created.
     created_timestamp = db.Column(db.DateTime)
 
@@ -489,7 +483,7 @@ class NicknameChange(db.Model):
 
     # This is the latest timestamp before `created_timestamp` when we know that the user
     # had a different nickname. This should only be set for legacy nickname changes,
-    # where we only have snapshots from (sometimes sparse) backups. 
+    # where we only have snapshots from (sometimes sparse) backups.
     lower_bound_timestamp = db.Column(db.DateTime, nullable=True)
 
     user = db.relationship('User', foreign_keys=user_id,

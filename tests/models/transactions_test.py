@@ -3,7 +3,6 @@
 import datetime
 
 from flasquelistan import models
-
 from tests.helpers import make_user
 
 

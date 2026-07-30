@@ -8,8 +8,8 @@ from flask_login import current_user, login_required
 from flask_uploads import UploadNotAllowed
 
 from flasquelistan import forms, models, util
-from flasquelistan.views import auth
 from flasquelistan.discord import DiscordClient
+from flasquelistan.views import auth
 
 mod = flask.Blueprint('profile', __name__)
 mod.before_request(login_required(lambda: None))
@@ -89,7 +89,7 @@ def change_nickname(user_id):
             flask.url_for('profile.user_nicknames', user_id=user_id)
         )
 
-    elif form.is_submitted():
+    if form.is_submitted():
         forms.flash_errors(form)
 
     return flask.redirect(
@@ -244,8 +244,7 @@ def user_vcard(user_id):
     response = flask.make_response(user.vcard)
     response.mimetype = 'text/vcard'
     response.headers['Content-Disposition'] = (
-        'attachment; filename="{}_{}.vcf"'
-        .format(user.first_name, user.last_name)
+        f'attachment; filename="{user.first_name}_{user.last_name}.vcf"'
     )
     return response
 
@@ -330,13 +329,12 @@ def edit_profile(user_id):
         return flask.redirect(flask.url_for('profile.show_profile',
                                             user_id=user.id))
 
+    if user.y_chromosome is True:
+        form.y_chromosome.data = 'yes'
+    elif user.y_chromosome is False:
+        form.y_chromosome.data = 'no'
     else:
-        if user.y_chromosome is True:
-            form.y_chromosome.data = 'yes'
-        elif user.y_chromosome is False:
-            form.y_chromosome.data = 'no'
-        else:
-            form.y_chromosome.data = 'n/a'
+        form.y_chromosome.data = 'n/a'
 
     return flask.render_template('edit_profile.html', form=form, user=user)
 

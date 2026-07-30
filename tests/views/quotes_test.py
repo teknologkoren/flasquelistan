@@ -4,11 +4,10 @@
 from flask import url_for
 
 from flasquelistan import models
-
 from tests.helpers import logged_in
 
 
-class TestQuotesPage():
+class TestQuotesPage:
 
     def test_status(self, client):
         with logged_in(client):

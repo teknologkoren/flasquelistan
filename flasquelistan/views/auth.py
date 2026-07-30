@@ -65,7 +65,7 @@ def login():
         user = models.User.authenticate(form.email.data, form.password.data)
         flask_login.login_user(user, remember=form.remember.data)
         return form.redirect('strequelistan.index')
-    elif form.is_submitted():
+    if form.is_submitted():
         flask.flash(
             _l("E-postadressen eller lösenordet du angav stämmer inte."),
             'error'
@@ -220,11 +220,11 @@ def reset():
         flask.flash(reset_flash.format(form.email.data), 'info')
         return flask.redirect(flask.url_for('.login'))
 
-    elif form.email.data:
+    if form.email.data:
         flask.flash(reset_flash.format(form.email.data), 'info')
         return flask.redirect(flask.url_for('.login'))
 
-    elif form.errors:
+    if form.errors:
         flask.flash(_l("Vänligen skriv in din e-epostaddress"), 'error')
 
     return flask.render_template('auth/reset.html', form=form)
