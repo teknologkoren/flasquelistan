@@ -17,8 +17,8 @@ git submodule update --init --remote songbook-viewer
 cd songbook-viewer
 
 # Install dependencies and build the project
-pnpm install
-pnpm build
+npm ci
+npm run build
 
 # Navigate back to the root
 cd ..

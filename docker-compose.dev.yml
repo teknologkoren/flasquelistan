@@ -1,7 +1,8 @@
-# Development override: run the production image but with the source tree
-# bind-mounted and gunicorn reloading on changes. Prod-parity testing
-# (websockets, gunicorn, pinned Python) — the fastest day-to-day loop is
-# still `flask run` outside Docker, see README.md.
+# Development override: run the Docker image with the source tree
+# bind-mounted and gunicorn reloading on changes. Useful for testing with
+# gunicorn and websockets on a pinned Python — the fastest day-to-day loop is
+# still `flask run` outside Docker, see README.md. Production does not use
+# Docker (see docs/DEPLOYMENT.md).
 #
 # Usage: docker compose -f docker-compose.yml -f docker-compose.dev.yml up --build
 #

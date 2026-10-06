@@ -42,11 +42,16 @@ Future (not started, roughly in order of value):
    been green for a while. Biggest known blockers: `db.create_all(app=app)`
    and `@babel.localeselector` use APIs removed in newer versions.
 
-## Track 2 — Deployment (Docker) — complete
+## Track 2 — Deployment (Docker) — reverted
 
 Goal, achieved 2026-07-18: `git pull && docker compose up --build -d` is the
 entire deploy, and the VPS's system packages (Node in particular) stop
 mattering.
+
+**Reverted 2026-09-03:** production runs the app directly again (see
+DEPLOYMENT.md), because Docker's own overhead cost more memory than the server
+could spare. The `Dockerfile` and compose files are kept for local
+development. The items below are the history of the Docker work.
 
 Done:
 
