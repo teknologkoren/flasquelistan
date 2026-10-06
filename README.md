@@ -47,15 +47,15 @@ created in `/instance`.
 
 ### Docker (optional)
 
-To run the app the same way production does (gunicorn, websockets, pinned
-Python), with the source tree mounted and auto-reload on changes:
+You can also run the app in Docker (gunicorn with websockets, pinned Python),
+with the source tree mounted and auto-reload on changes:
 
     $ docker compose -f docker-compose.yml -f docker-compose.dev.yml up --build
 
 The app is then live on [http://localhost:8000](http://localhost:8000). The
 `flask` commands above work inside the container via
-`docker compose exec app flask <command>`. See
-[docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) for details.
+`docker compose exec app flask <command>`. Docker is for development only;
+production does not use it (see [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md)).
 
 ## Testing
 [Pytest](https://docs.pytest.org/en/latest/) is used for testing, tests are
@@ -82,5 +82,5 @@ And then show the result with:
 
 ## Documentation
 
-- [Deploying to production](docs/DEPLOYMENT.md) — Docker-based deployment, including the songbook
+- [Deploying to production](docs/DEPLOYMENT.md) — requirements, deploying, translations and the songbook
 - [Maintainability roadmap](docs/ROADMAP.md) — completed and planned cleanup work
