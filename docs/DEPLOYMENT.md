@@ -47,6 +47,16 @@ The front-end server terminates TLS and proxies requests to gunicorn,
 including the websocket upgrade on `/socket.io`. In production the app
 expects it to also handle:
 
+- **Proxy headers:** the app trusts one proxy hop (werkzeug's `ProxyFix`
+  in `factory.py`), so the front-end server must set `X-Forwarded-For` to the
+  client's address and `X-Forwarded-Proto` to the original scheme. The client
+  address matters beyond logging: it is part of the signed image URLs below,
+  so if the app sees a different address than the front-end server, every
+  uploaded image returns 403.
+- **Upload size:** the app sets no `MAX_CONTENT_LENGTH`, so the front-end
+  server's request body limit (e.g. nginx's `client_max_body_size`) is the
+  only cap on upload size. Set it to something like 15 MB. Nothing limits
+  the pixel size of images either; see resizing below.
 - **Static files:** serve `/static/` from `flasquelistan/static/`. The app
   generates cache-busted URLs of the form `/static/c<hash>/<path>`
   (`cachebust.py`), which must map to `/static/<path>`.
@@ -61,6 +71,20 @@ expects it to also handle:
   unresized. Resizing decodes the whole original in memory (with libgd about
   4 bytes per pixel), so a single huge upload, such as a 108-megapixel phone
   photo, needs ~430 MB per resize. Cache the resized images.
+
+## Backups
+
+Everything the deployment needs that is not in git:
+
+- the SQLite database (`SQLALCHEMY_DATABASE_URI`; `db.sqlite` in the
+  checkout unless `instance/config.py` points it elsewhere),
+- `instance/config.py`, with all the secrets,
+- uploaded images in `flasquelistan/static/uploads/`,
+- the songbook's out-of-band files (see below).
+
+Back up the first three regularly. Copy the database with
+`sqlite3 <db> ".backup <file>"` rather than `cp`, so a write in progress
+doesn't leave a broken copy.
 
 ## Deploying a new version
 
