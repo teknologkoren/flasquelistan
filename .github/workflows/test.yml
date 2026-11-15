@@ -28,3 +28,11 @@ jobs:
 
       - name: Lint
         run: uv run ruff check .
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      # Unit tests for JavaScript (tests/js/), with Node's built-in runner.
+      - name: Run JavaScript tests
+        run: node --test 'tests/js/*.test.js'

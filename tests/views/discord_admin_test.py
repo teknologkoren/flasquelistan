@@ -27,12 +27,15 @@ def member(id, roles, username=None, nick=None):
 
 
 class Response:
-    def __init__(self, data=None, status_code=200, headers=None):
+    def __init__(self, data=None, status_code=200, headers=None, json_error=False):
         self.data = data
         self.status_code = status_code
         self.headers = headers or {}
+        self.json_error = json_error
 
     def json(self):
+        if self.json_error:
+            raise ValueError("not JSON")
         return self.data
 
     def raise_for_status(self):
@@ -69,6 +72,8 @@ class FakeDiscord:
         # Responses for the next writes, used before the default.
         self.write_responses = []
         self.fail_reads = False
+        # If set, returned for every GET instead of the real answer.
+        self.read_response = None
 
     def __call__(self, method, url, headers=None, timeout=None, params=None, json=None):
         assert timeout, "every Discord request needs a timeout"
@@ -76,6 +81,8 @@ class FakeDiscord:
         path = url[len(API):]
         if self.fail_reads and method == 'GET':
             return Response({'message': 'nope'}, 500)
+        if self.read_response and method == 'GET':
+            return self.read_response
         if method == 'GET' and path == '/guilds/guild1/roles':
             return Response(self.roles)
         if method == 'GET' and path == '/guilds/guild1/members':
@@ -414,6 +421,38 @@ class TestApply:
         assert rv.status_code == 502
 
 
+class TestApplyEdgeCases:
+    apply = TestApply.apply
+
+    def test_member_not_in_guild(self, client, view, fake_discord):
+        # David is linked to a Discord account that has left the server.
+        result = self.apply(client, view, [{'key': '105', 'add': ['role-sg1'], 'remove': []}])
+        assert result == {'results': [{'key': '105', 'status': 'not_in_guild'}],
+                          'remaining': [], 'retry_after': 0}
+        assert fake_discord.writes == []
+
+    def test_rate_limited_while_fetching_the_guild(self, client, view, fake_discord):
+        fake_discord.read_response = Response({'retry_after': 4}, 429)
+        result = self.apply(client, view, [
+            {'key': '101', 'add': ['role-sg2'], 'remove': []},
+            {'key': '103', 'add': [], 'remove': ['role-sg3']},
+        ])
+        assert result == {'results': [], 'remaining': ['101', '103'], 'retry_after': 4}
+        assert fake_discord.writes == []
+
+    def test_rate_limited_without_a_json_body(self, client, view, fake_discord):
+        fake_discord.write_responses = [Response(None, 429, json_error=True)]
+        result = self.apply(client, view, [{'key': '101', 'add': ['role-sg2'], 'remove': []}])
+        assert result['remaining'] == ['101']
+        assert result['retry_after'] == 1.0
+
+    def test_retry_after_zero_waits_a_little(self, client, view, fake_discord):
+        # Otherwise the browser would retry without pausing.
+        fake_discord.write_responses = [Response({'retry_after': 0}, 429)]
+        result = self.apply(client, view, [{'key': '101', 'add': ['role-sg2'], 'remove': []}])
+        assert result['retry_after'] == discord.MIN_RETRY_AFTER > 0
+
+
 class TestViewSettings:
     def test_index_lists_views(self, client, view):
         with logged_in_admin(client):
@@ -459,6 +498,22 @@ class TestViewSettings:
         assert view.name == 'SG'
         assert view.role_ids == {'role-sg1', 'role-sg2'}
         assert models.DiscordRoleViewRole.query.count() == 2
+
+    def test_save_drops_blocked_and_deleted_roles(self, client, view, fake_discord):
+        view.roles.append(models.DiscordRoleViewRole(role_id='role-admin'))
+        view.roles.append(models.DiscordRoleViewRole(role_id='role-deleted'))
+        models.db.session.commit()
+        with logged_in_admin(client):
+            rv = client.get(f'/admin/discord/views/{view.id}/settings')
+            html = rv.get_data(as_text=True)
+            # The page says what will be dropped.
+            assert 'Admins' in html and 'tas bort ur vyn' in html
+            rv = client.post(f'/admin/discord/views/{view.id}/settings', data={
+                'name': 'Sånggrupper', 'weight': 1, 'exclusive': 'y',
+                'roles': sorted(view.role_ids - {'role-admin', 'role-deleted'})})
+        assert rv.status_code == 302
+        view = models.db.session.get(models.DiscordRoleView, view.id)
+        assert view.role_ids == {'role-sg1', 'role-sg2', 'role-sg3'}
 
     def test_settings_when_discord_fails(self, client, view, fake_discord):
         fake_discord.fail_reads = True
