@@ -83,9 +83,9 @@ Done:
 3. **One-time server migration** (done 2026-07-18): Docker installed on the
    VPS, nginx `proxy_pass` switched from the unix socket to
    `http://127.0.0.1:8000` (both the `/` and `/socket.io` locations), the
-   gunicorn systemd unit retired. Production now deploys with
+   gunicorn systemd unit retired. Production then deployed with
    `git pull && git submodule update --init && docker compose up --build -d`
-   — see DEPLOYMENT.md.
+   until the revert above.
 
 Standing policy:
 
