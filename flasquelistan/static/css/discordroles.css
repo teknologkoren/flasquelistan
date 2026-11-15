@@ -515,6 +515,12 @@
   width: 100%;
   min-height: 16rem;
   font-family: monospace;
+  /* Keep rows pasted from a spreadsheet on one line each. */
+  white-space: pre;
+  overflow-wrap: normal;
+  word-break: normal;
+  overflow-x: auto;
+  tab-size: 2;
 }
 
 .dr-section td {

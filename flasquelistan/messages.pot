@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-11-15 21:46+0000\n"
+"POT-Creation-Date: 2026-11-15 22:16+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -395,7 +395,7 @@ msgstr ""
 #: templates/strequeadmin/confirm_bulk_transactions.html:59
 #: templates/strequeadmin/edit_article.html:30
 #: templates/strequeadmin/edit_group.html:27
-#: templates/strequeadmin/edit_quote.html:24 views/discord_admin.py:247
+#: templates/strequeadmin/edit_quote.html:24 views/discord_admin.py:250
 msgid "Avbryt"
 msgstr ""
 
@@ -1732,72 +1732,81 @@ msgstr ""
 
 #: views/discord_admin.py:230
 msgid ""
-"En person per rad eller kommaseparerat. Punkter, numrering och text inom "
-"parentes ignoreras. En rad med en rolls namn blir en rubrik för raderna "
-"under."
-msgstr ""
-
-#: views/discord_admin.py:233
-msgid "Rad"
+"En person per rad eller cell (t.ex. kopierat från ett kalkylark), eller "
+"kommaseparerat. Punkter, numrering och text inom parenteser eller "
+"hakparenteser ignoreras. En rad med en rolls namn blir en rubrik för "
+"raderna under."
 msgstr ""
 
 #: views/discord_admin.py:234
-msgid "Tolkning"
+msgid "Hoppa över rader utan säker träff"
 msgstr ""
 
 #: views/discord_admin.py:235
-#, python-format
-msgid "%(added)s läggs till, %(removed)s tas bort"
+msgid "Osäker träff, välj…"
 msgstr ""
 
 #: views/discord_admin.py:236
-msgid "Ingen roll: lägg en rubrik med rollens namn ovanför"
+msgid "Rad"
 msgstr ""
 
 #: views/discord_admin.py:237
-msgid "Okänd roll, raderna under hoppas över"
+msgid "Tolkning"
 msgstr ""
 
 #: views/discord_admin.py:238
 #, python-format
-msgid "Välj… (%(count)s träffar)"
+msgid "%(added)s läggs till, %(removed)s tas bort"
 msgstr ""
 
 #: views/discord_admin.py:239
-msgid "Hoppa över"
+msgid "Ingen roll: lägg en rubrik med rollens namn ovanför"
 msgstr ""
 
 #: views/discord_admin.py:240
-msgid "Hoppas över"
+msgid "Okänd roll, raderna under hoppas över"
 msgstr ""
 
 #: views/discord_admin.py:241
-msgid "Ingen träff, sök…"
+#, python-format
+msgid "Välj… (%(count)s träffar)"
 msgstr ""
 
 #: views/discord_admin.py:242
-msgid "ändra"
+msgid "Hoppa över"
 msgstr ""
 
 #: views/discord_admin.py:243
-#, python-format
-msgid "%(name)s igen, ignoreras"
+msgid "Hoppas över"
 msgstr ""
 
 #: views/discord_admin.py:244
-msgid "enda aktiva träffen"
+msgid "Ingen träff, sök…"
 msgstr ""
 
 #: views/discord_admin.py:245
-msgid "redan med"
+msgid "ändra"
 msgstr ""
 
 #: views/discord_admin.py:246
 #, python-format
-msgid "%(count)s rader behöver ett val"
+msgid "%(name)s igen, ignoreras"
+msgstr ""
+
+#: views/discord_admin.py:247
+msgid "enda aktiva träffen"
 msgstr ""
 
 #: views/discord_admin.py:248
+msgid "redan med"
+msgstr ""
+
+#: views/discord_admin.py:249
+#, python-format
+msgid "%(count)s rader behöver ett val"
+msgstr ""
+
+#: views/discord_admin.py:251
 msgid "Lägg in i vyn"
 msgstr ""
 

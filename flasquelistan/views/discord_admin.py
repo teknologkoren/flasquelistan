@@ -227,9 +227,12 @@ def editor_strings():
         "wholeView": _("Hela vyn (rubriker = roller)"),
         "replace": _("Ersätt medlemmar"),
         "addOnly": _("Lägg bara till"),
-        "pasteHelp": _("En person per rad eller kommaseparerat. Punkter, numrering och "
-                       "text inom parentes ignoreras. En rad med en rolls namn blir en "
+        "pasteHelp": _("En person per rad eller cell (t.ex. kopierat från ett kalkylark), "
+                       "eller kommaseparerat. Punkter, numrering och text inom parenteser "
+                       "eller hakparenteser ignoreras. En rad med en rolls namn blir en "
                        "rubrik för raderna under."),
+        "skipUnmatched": _("Hoppa över rader utan säker träff"),
+        "uncertain": _("Osäker träff, välj…"),
         "line": _("Rad"),
         "interpretation": _("Tolkning"),
         "sectionSummary": _("%(added)s läggs till, %(removed)s tas bort"),

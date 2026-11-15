@@ -87,9 +87,11 @@
   //
   // Shared by the autocomplete and paste import. Case and accents are
   // ignored. Tiers: 1 = the whole query is the full name, the first name or
-  // the nickname (what people are usually called), 2 = every word of the query starts a different word of the first name,
-  // last name or nickname, 3 = the query is part of the full name or
-  // nickname. 0 = no match.
+  // the nickname (what people are usually called), 2 = every word of the
+  // query starts a different word of the first name, last name or nickname,
+  // 3 = the query is part of the full name or nickname, 4 = all but one of
+  // at least three words match as in tier 2 (an extra middle name, a second
+  // surname, or a note after the name). 0 = no match.
 
   function normalize(s) {
     return (s || '').normalize('NFKD').replace(/[̀-ͯ]/g, '').toLowerCase()
@@ -109,14 +111,15 @@
     var tokens = q.split(/[\s-]+/).filter(Boolean)
       .sort(function (a, b) { return b.length - a.length; });
     var used = new Array(p._words.length).fill(false);
-    var all = tokens.every(function (t) {
+    var matched = tokens.filter(function (t) {
       for (var i = 0; i < p._words.length; i++) {
         if (!used[i] && p._words[i].startsWith(t)) { used[i] = true; return true; }
       }
       return false;
-    });
-    if (all) return 2;
+    }).length;
+    if (matched === tokens.length) return 2;
     if (p._full.includes(q) || (p._nick && p._nick.includes(q))) return 3;
+    if (tokens.length >= 3 && matched >= tokens.length - 1) return 4;
     return 0;
   }
 
@@ -730,10 +733,14 @@
     var entries = [];
     var section = target === '*' ? null : target;
     var headingSeen = target !== '*';
-    text.split(/\r?\n/).forEach(function (line) {
-      var clean = line.trim()
+    // Lines, and cells within them: lists copied from a spreadsheet are
+    // tab-separated, read row by row.
+    var cells = [];
+    text.split(/\r?\n/).forEach(function (line) { cells.push.apply(cells, line.split('\t')); });
+    cells.forEach(function (cell) {
+      var clean = cell.trim()
         .replace(/^(?:[-*•–—]|\d+[.)])\s*/, '')
-        .replace(/\([^)]*\)/g, '')
+        .replace(/\([^)]*\)|\[[^\]]*\]|\{[^}]*\}/g, '')
         .trim();
       if (!clean) return;
       if (target === '*') {
@@ -755,7 +762,9 @@
   }
 
   // Find the person a pasted line means. Prefers people in the chosen user
-  // list; picks automatically only when one person matches best.
+  // list; picks automatically only when one person matches best, and not
+  // when that match is only part of a name ("Alt" in "Walter"): that is
+  // offered as an uncertain match instead.
   function resolveLine(entry) {
     var pickKey = entry.role + '|' + normalize(entry.text);
     var picked = pastePicks.get(pickKey);
@@ -768,6 +777,9 @@
     if (!pool.length) return { status: 'none', pickKey: pickKey };
     var bestTier = Math.min.apply(null, pool.map(function (r) { return r.tier; }));
     var best = pool.filter(function (r) { return r.tier === bestTier; });
+    if (bestTier === 3) {
+      return { status: 'uncertain', candidates: best.map(function (r) { return r.person; }), pickKey: pickKey };
+    }
     if (best.length === 1) {
       var others = results.filter(function (r) { return r.tier <= bestTier && r.person !== best[0].person; });
       return { status: 'auto', person: best[0].person, pickKey: pickKey, note: others.length ? T.onlyActiveMatch : null };
@@ -822,6 +834,10 @@
     var table = h('tbody');
     var status = h('span', { class: 'dr-muted' });
     var applyButton = h('button', { type: 'button', class: 'dr-primary', onclick: doApply }, T.pasteApply);
+    var skipAllButton = h('button', { type: 'button', class: 'dr-link', hidden: true, onclick: function () {
+      current.forEach(function (e) { if (unsure(e)) pastePicks.set(e.pickKey, 'skip'); });
+      update();
+    } }, T.skipUnmatched);
     var current = [];
 
     d.appendChild(h('h3', {}, T.pasteTitle));
@@ -835,7 +851,7 @@
         h('thead', {}, h('tr', {}, h('th', {}), h('th', {}, T.line), h('th', {}, T.interpretation))),
         table))));
     d.appendChild(h('div', { class: 'dr-dialog-buttons' }, status,
-      h('button', { type: 'button', onclick: function () { d.close(); } }, T.cancel), applyButton));
+      skipAllButton, h('button', { type: 'button', onclick: function () { d.close(); } }, T.cancel), applyButton));
     textarea.focus();
 
     function pick(pickKey, key) {
@@ -902,10 +918,10 @@
             h('button', { type: 'button', class: 'dr-link', onclick: function () { pastePicks.delete(e.pickKey); update(); } }, T.undo)]));
           return;
         }
-        if (e.status === 'ambiguous') {
+        if (e.status === 'ambiguous' || e.status === 'uncertain') {
           unresolved++;
           var select = h('select', { onchange: function () { pick(e.pickKey, select.value); } },
-            h('option', { value: '' }, fmt(T.choose, { count: e.candidates.length })),
+            h('option', { value: '' }, e.status === 'uncertain' ? T.uncertain : fmt(T.choose, { count: e.candidates.length })),
             e.candidates.map(function (p) {
               var note = statusNote(p);
               return h('option', { value: p.key, disabled: !canAssign(p) }, p.name + (p.nickname ? ' "' + p.nickname + '"' : '') + (note ? ' (' + note + ')' : ''));
@@ -932,11 +948,17 @@
       });
 
       status.textContent = unresolved ? fmt(T.needsChoice, { count: unresolved }) : '';
+      skipAllButton.hidden = !entries.some(unsure);
       applyButton.disabled = unresolved > 0 || !entries.some(function (e) { return e.type === 'name'; });
     }
 
     function row(symbol, cls, text, content) {
       return h('tr', {}, h('td', { class: 'dr-symbol ' + cls }, symbol), h('td', { class: 'dr-line' }, text), h('td', {}, content));
+    }
+
+    // Lines with no match, or only an uncertain one.
+    function unsure(e) {
+      return e.status === 'none' || e.status === 'uncertain';
     }
 
     function changeButton(e) {
