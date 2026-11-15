@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-11-15 21:46+0000\n"
+"POT-Creation-Date: 2026-11-15 22:16+0000\n"
 "PO-Revision-Date: 2022-11-04 17:35+0100\n"
 "Last-Translator: \n"
 "Language: en\n"
@@ -409,7 +409,7 @@ msgstr "Add"
 #: templates/strequeadmin/confirm_bulk_transactions.html:59
 #: templates/strequeadmin/edit_article.html:30
 #: templates/strequeadmin/edit_group.html:27
-#: templates/strequeadmin/edit_quote.html:24 views/discord_admin.py:247
+#: templates/strequeadmin/edit_quote.html:24 views/discord_admin.py:250
 msgid "Avbryt"
 msgstr "Cancel"
 
@@ -1815,75 +1815,85 @@ msgstr "Only add"
 
 #: views/discord_admin.py:230
 msgid ""
-"En person per rad eller kommaseparerat. Punkter, numrering och text inom "
-"parentes ignoreras. En rad med en rolls namn blir en rubrik för raderna "
-"under."
+"En person per rad eller cell (t.ex. kopierat från ett kalkylark), eller "
+"kommaseparerat. Punkter, numrering och text inom parenteser eller "
+"hakparenteser ignoreras. En rad med en rolls namn blir en rubrik för "
+"raderna under."
 msgstr ""
-"One person per line, or comma-separated. Bullets, numbering and text in "
-"parentheses are ignored. A line with a role's name becomes a heading for "
-"the lines below it."
+"One person per line or cell (e.g. copied from a spreadsheet), or comma-"
+"separated. Bullets, numbering and text in parentheses or square brackets "
+"are ignored. A line with a role's name becomes a heading for the lines "
+"below it."
 
-#: views/discord_admin.py:233
+#: views/discord_admin.py:234
+msgid "Hoppa över rader utan säker träff"
+msgstr "Skip lines without a sure match"
+
+#: views/discord_admin.py:235
+msgid "Osäker träff, välj…"
+msgstr "Uncertain match, choose…"
+
+#: views/discord_admin.py:236
 msgid "Rad"
 msgstr "Line"
 
-#: views/discord_admin.py:234
+#: views/discord_admin.py:237
 msgid "Tolkning"
 msgstr "Interpretation"
 
-#: views/discord_admin.py:235
+#: views/discord_admin.py:238
 #, python-format
 msgid "%(added)s läggs till, %(removed)s tas bort"
 msgstr "%(added)s added, %(removed)s removed"
 
-#: views/discord_admin.py:236
+#: views/discord_admin.py:239
 msgid "Ingen roll: lägg en rubrik med rollens namn ovanför"
 msgstr "No role: add a heading with the role's name above"
 
-#: views/discord_admin.py:237
+#: views/discord_admin.py:240
 msgid "Okänd roll, raderna under hoppas över"
 msgstr "Unknown role, the lines below are skipped"
 
-#: views/discord_admin.py:238
+#: views/discord_admin.py:241
 #, python-format
 msgid "Välj… (%(count)s träffar)"
 msgstr "Choose… (%(count)s matches)"
 
-#: views/discord_admin.py:239
+#: views/discord_admin.py:242
 msgid "Hoppa över"
 msgstr "Skip"
 
-#: views/discord_admin.py:240
+#: views/discord_admin.py:243
 msgid "Hoppas över"
 msgstr "Skipped"
 
-#: views/discord_admin.py:241
+#: views/discord_admin.py:244
 msgid "Ingen träff, sök…"
 msgstr "No match, search…"
 
-#: views/discord_admin.py:242
+#: views/discord_admin.py:245
 msgid "ändra"
 msgstr "change"
 
-#: views/discord_admin.py:243
+#: views/discord_admin.py:246
 #, python-format
 msgid "%(name)s igen, ignoreras"
 msgstr "%(name)s again, ignored"
 
-#: views/discord_admin.py:244
+#: views/discord_admin.py:247
 msgid "enda aktiva träffen"
 msgstr "only active match"
 
-#: views/discord_admin.py:245
+#: views/discord_admin.py:248
 msgid "redan med"
 msgstr "already in"
 
-#: views/discord_admin.py:246
+#: views/discord_admin.py:249
 #, python-format
 msgid "%(count)s rader behöver ett val"
 msgstr "%(count)s lines need a choice"
 
-#: views/discord_admin.py:248
+#: views/discord_admin.py:251
 msgid "Lägg in i vyn"
 msgstr "Put in the view"
 
