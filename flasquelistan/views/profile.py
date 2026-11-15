@@ -6,6 +6,7 @@ from flask import abort
 from flask_babel import lazy_gettext as _l
 from flask_login import current_user, login_required
 from flask_uploads import UploadNotAllowed
+from wtforms.fields import SelectChoice
 
 from flasquelistan import forms, models, util
 from flasquelistan.views import auth
@@ -281,8 +282,8 @@ def edit_profile(user_id):
 
     if current_user.is_admin:
         form = forms.FullEditUserForm(obj=user)
-        form.group_id.choices = [(g.id, g.name) for g in models.Group.query]
-        form.group_id.choices.insert(0, (-1, 'Ingen'))
+        form.group_id.choices = [SelectChoice(-1, 'Ingen')] + [
+            SelectChoice(g.id, g.name) for g in models.Group.query]
     else:
         form = forms.EditUserForm(obj=user)
 
