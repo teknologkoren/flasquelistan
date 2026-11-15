@@ -7,6 +7,7 @@
 
 {% block scripts %}
 <script type="application/json" id="discord-roles-config">{{ config|tojson }}</script>
+<script defer src="{{ url_for('static', filename='js/discordRolesCore.js') }}"></script>
 <script defer src="{{ url_for('static', filename='js/discordRoles.js') }}"></script>
 {% endblock %}
 
