@@ -206,6 +206,14 @@ def setup_flask_admin(app, db):
         def handle_float(self, column, field_args, **extra):
             return self.handle_decimal_types(column, field_args, **extra)
 
+        # A relationship dropdown's blank choice has the value "__None" and an
+        # empty label, and WTForms 3.3 renders an empty label as the value.
+        # A one-space label renders as blank in every version.
+        def _model_select_field(self, prop, multiple, remote_model, **kwargs):
+            if not multiple:
+                kwargs.setdefault('blank_text', ' ')
+            return super()._model_select_field(prop, multiple, remote_model, **kwargs)
+
     class LoginModelView(AdminLoginMixin, ModelView):
         model_form_converter = ModelConverter
 
