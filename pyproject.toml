@@ -26,7 +26,10 @@ dependencies = [
     "requests",
     "requests-oauthlib",
     "sh",
-    "sqlalchemy>=2.0",
+    # Held below 2.1: Float no longer subclasses Numeric there, so Flask-Admin
+    # (which matches converters by class name in the MRO) silently drops Float
+    # columns such as Article.standardglas from its forms.
+    "sqlalchemy>=2.0,<2.1",
     "vobject",
     "werkzeug>=3.1",
     # Held below 3.3: its select widget renders an empty choice label as the
