@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-07-20 08:49+0000\n"
+"POT-Creation-Date: 2026-11-15 21:46+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,6 +16,31 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.18.0\n"
+
+#: discord_roles.py:83
+msgid "Rollen finns inte längre i Discord."
+msgstr ""
+
+#: discord_roles.py:85
+msgid "@everyone kan inte redigeras."
+msgstr ""
+
+#: discord_roles.py:87
+msgid "Rollen hanteras av en integration."
+msgstr ""
+
+#: discord_roles.py:89
+msgid "Rollen synkas automatiskt med en Streque-grupp."
+msgstr ""
+
+#: discord_roles.py:93
+#, python-format
+msgid "Rollen har behörigheten %(permissions)s."
+msgstr ""
+
+#: discord_roles.py:96
+msgid "Rollen ligger inte under botens högsta roll."
+msgstr ""
 
 #: forms.py:23
 #, python-format
@@ -75,7 +100,7 @@ msgstr ""
 msgid "Fel lösenord."
 msgstr ""
 
-#: forms.py:241 templates/strequeadmin/index.html:35
+#: forms.py:241 templates/strequeadmin/index.html:39
 #: templates/strequeadmin/nicknames.html:22
 #: templates/strequeadmin/nicknames.html:83
 msgid "Smeknamn"
@@ -125,13 +150,15 @@ msgstr ""
 msgid "Vill ej uppge"
 msgstr ""
 
-#: forms.py:280 templates/strequeadmin/groups.html:26
-#: templates/strequeadmin/groups.html:29 templates/strequeadmin/users.html:65
+#: forms.py:280 templates/discordadmin/index.html:20
+#: templates/strequeadmin/groups.html:26 templates/strequeadmin/groups.html:29
+#: templates/strequeadmin/users.html:65
 msgid "Ja"
 msgstr ""
 
-#: forms.py:281 templates/strequeadmin/groups.html:26
-#: templates/strequeadmin/groups.html:29 templates/strequeadmin/users.html:67
+#: forms.py:281 templates/discordadmin/index.html:20
+#: templates/strequeadmin/groups.html:26 templates/strequeadmin/groups.html:29
+#: templates/strequeadmin/users.html:67
 msgid "Nej"
 msgstr ""
 
@@ -177,17 +204,17 @@ msgstr ""
 msgid "Meddelande till QM"
 msgstr ""
 
-#: forms.py:356 forms.py:544 templates/layout.html:33 templates/quote.html:9
-#: templates/quotes.html:44 templates/strequeadmin/index.html:34
+#: forms.py:356 forms.py:569 templates/layout.html:33 templates/quote.html:9
+#: templates/quotes.html:44 templates/strequeadmin/index.html:38
 #: templates/strequeadmin/quotes.html:10 templates/strequeadmin/quotes.html:14
 msgid "Citat"
 msgstr ""
 
-#: forms.py:357 forms.py:545
+#: forms.py:357 forms.py:570
 msgid "Max 150 tecken."
 msgstr ""
 
-#: forms.py:363 forms.py:552 templates/strequeadmin/quotes.html:15
+#: forms.py:363 forms.py:577 templates/strequeadmin/quotes.html:15
 msgid "Upphovsman"
 msgstr ""
 
@@ -220,7 +247,7 @@ msgstr ""
 msgid "Transaktionsvärde"
 msgstr ""
 
-#: forms.py:419 forms.py:449 forms.py:529
+#: forms.py:419 forms.py:449 forms.py:554
 #: templates/strequeadmin/bulk_transactions.html:29
 #: templates/strequeadmin/confirm_bulk_transactions.html:22
 #: templates/strequeadmin/requests.html:19
@@ -228,7 +255,7 @@ msgstr ""
 msgid "Meddelande"
 msgstr ""
 
-#: forms.py:437 forms.py:463 forms.py:504 forms.py:569
+#: forms.py:437 forms.py:463 forms.py:504 forms.py:526 forms.py:594
 #: templates/api_keys.html:29 templates/paperlist.html:31
 #: templates/strequeadmin/articles.html:10
 #: templates/strequeadmin/groups.html:10
@@ -253,12 +280,13 @@ msgstr ""
 msgid "Vilka produkter som ingår och/eller beskrivning. Markdown."
 msgstr ""
 
-#: forms.py:490 forms.py:509 templates/strequeadmin/articles.html:14
+#: forms.py:490 forms.py:509 forms.py:537
+#: templates/strequeadmin/articles.html:14
 #: templates/strequeadmin/groups.html:11
 msgid "Sorteringsvikt"
 msgstr ""
 
-#: forms.py:491 forms.py:510
+#: forms.py:491 forms.py:510 forms.py:538
 msgid "Heltal. En högre vikt stiger."
 msgstr ""
 
@@ -282,58 +310,72 @@ msgstr ""
 msgid "Medlemmar i denna grupp får automatiskt en roll med samma namn i Discord."
 msgstr ""
 
-#: forms.py:534 templates/strequeadmin/stats.html:58
+#: forms.py:531 templates/discordadmin/index.html:13 views/discord_admin.py:170
+msgid "Ömsesidigt uteslutande"
+msgstr ""
+
+#: forms.py:532
+msgid ""
+"Den som läggs till i en av rollerna tas som standard bort från vyns "
+"övriga roller. Kan slås av tillfälligt vid redigering."
+msgstr ""
+
+#: forms.py:544 templates/discordadmin/index.html:12
+msgid "Roller"
+msgstr ""
+
+#: forms.py:559 templates/strequeadmin/stats.html:58
 msgid "Summa"
 msgstr ""
 
-#: forms.py:558 templates/strequeadmin/quotes.html:16
+#: forms.py:583 templates/strequeadmin/quotes.html:16
 msgid "Tid"
 msgstr ""
 
-#: forms.py:559
+#: forms.py:584
 msgid "Tidszon UTC."
 msgstr ""
 
-#: forms.py:570
+#: forms.py:595
 msgid "Max 50 tecken"
 msgstr ""
 
-#: forms.py:576
+#: forms.py:601
 msgid "Detta namn används redan."
 msgstr ""
 
-#: forms.py:579 templates/api_keys.html:30
+#: forms.py:604 templates/api_keys.html:30
 msgid "Kort namn"
 msgstr ""
 
-#: forms.py:580
+#: forms.py:605
 msgid ""
 "Max 10 tecken. Kommer att visas intill transaktioner gjorda med nyckeln. "
 "Om fältet lämnas tomt ser transaktionerna ut som vanligt. Ska helst vara "
 "en emoji. 🤩"
 msgstr ""
 
-#: forms.py:586
+#: forms.py:611
 msgid "Aktiverad?"
 msgstr ""
 
-#: forms.py:588
+#: forms.py:613
 msgid "Om du inaktiverar nyckeln så går den inte att använda."
 msgstr ""
 
-#: forms.py:589
+#: forms.py:614
 msgid "Adminprivilegier?"
 msgstr ""
 
-#: forms.py:590
+#: forms.py:615
 msgid "OBS: gäller endast så länge du själv är admin."
 msgstr ""
 
-#: forms.py:591
+#: forms.py:616
 msgid "Återställ nyckel"
 msgstr ""
 
-#: forms.py:592
+#: forms.py:617
 msgid ""
 "Kryssa i om du vill generera en ny nyckel. VARNING: din gamla nyckel "
 "kommer att sluta fungera."
@@ -347,12 +389,13 @@ msgstr ""
 msgid "Lägg till"
 msgstr ""
 
-#: templates/add_quote.html:15 templates/edit_api_key.html:44
-#: templates/edit_profile.html:43 templates/strequeadmin/add_user.html:20
+#: templates/add_quote.html:15 templates/discordadmin/edit_view.html:61
+#: templates/edit_api_key.html:44 templates/edit_profile.html:43
+#: templates/strequeadmin/add_user.html:20
 #: templates/strequeadmin/confirm_bulk_transactions.html:59
 #: templates/strequeadmin/edit_article.html:30
 #: templates/strequeadmin/edit_group.html:27
-#: templates/strequeadmin/edit_quote.html:24
+#: templates/strequeadmin/edit_quote.html:24 views/discord_admin.py:247
 msgid "Avbryt"
 msgstr ""
 
@@ -382,7 +425,7 @@ msgstr ""
 msgid "Ny API-nyckel"
 msgstr ""
 
-#: templates/api_keys.html:21
+#: templates/api_keys.html:21 views/discord_admin.py:217
 msgid "Tillbaka"
 msgstr ""
 
@@ -521,9 +564,10 @@ msgid ""
 "raderas."
 msgstr ""
 
-#: templates/edit_api_key.html:44 templates/edit_profile.html:43
-#: templates/show_profile.html:126 templates/show_profile.html:144
-#: templates/show_profile.html:216 templates/strequeadmin/add_user.html:19
+#: templates/discordadmin/edit_view.html:61 templates/edit_api_key.html:44
+#: templates/edit_profile.html:43 templates/show_profile.html:126
+#: templates/show_profile.html:144 templates/show_profile.html:215
+#: templates/strequeadmin/add_user.html:19
 #: templates/strequeadmin/edit_article.html:30
 #: templates/strequeadmin/edit_group.html:27
 #: templates/strequeadmin/edit_quote.html:24
@@ -542,13 +586,13 @@ msgstr ""
 msgid "Profilbilder genom tiderna"
 msgstr ""
 
-#: templates/history.html:20 templates/show_profile.html:243
+#: templates/history.html:20 templates/show_profile.html:245
 #: templates/user_history.html:39
 msgid "Streckat genom "
 msgstr ""
 
 #: templates/history.html:44 templates/layout.html:23
-#: templates/show_profile.html:222
+#: templates/show_profile.html:224
 msgid "Historik"
 msgstr ""
 
@@ -564,7 +608,7 @@ msgstr ""
 msgid "Galleri"
 msgstr ""
 
-#: templates/macros.html:6
+#: templates/discordadmin/edit_view.html:22 templates/macros.html:6
 msgid "Fel:"
 msgstr ""
 
@@ -717,23 +761,24 @@ msgid "Skapa länk"
 msgstr ""
 
 #: templates/show_profile.html:180
-#: templates/strequeadmin/bulk_transactions.html:47 views/admin.py:214
+#: templates/strequeadmin/bulk_transactions.html:47 views/admin.py:215
 msgid "Admintransaktion"
 msgstr ""
 
-#: templates/show_profile.html:198
+#: templates/show_profile.html:197
 msgid "Uppladdade profilbilder"
 msgstr ""
 
 #: templates/show_profile.html:217 templates/strequeadmin/requests.html:31
+#: views/discord_admin.py:185
 msgid "Ta bort"
 msgstr ""
 
-#: templates/show_profile.html:224
+#: templates/show_profile.html:226
 msgid "All historik"
 msgstr ""
 
-#: templates/show_profile.html:252
+#: templates/show_profile.html:254
 msgid "Det är tomt här, strequa mer!"
 msgstr ""
 
@@ -890,6 +935,72 @@ msgstr ""
 msgid "Begär återställningslänk"
 msgstr ""
 
+#: templates/discordadmin/edit_view.html:11
+msgid "Redigera vy"
+msgstr ""
+
+#: templates/discordadmin/edit_view.html:11
+#: templates/discordadmin/index.html:29
+msgid "Ny vy"
+msgstr ""
+
+#: templates/discordadmin/edit_view.html:27
+msgid "Det finns inga roller som kan redigeras härifrån."
+msgstr ""
+
+#: templates/discordadmin/edit_view.html:34
+msgid ""
+"Följande roller ingår i vyn men kan inte längre redigeras härifrån, och "
+"tas bort ur vyn när du sparar:"
+msgstr ""
+
+#: templates/discordadmin/edit_view.html:38
+#, python-format
+msgid ""
+"%(count)s av vyns roller finns inte längre i Discord och tas bort ur vyn "
+"när du sparar."
+msgstr ""
+
+#: templates/discordadmin/edit_view.html:45
+#, python-format
+msgid "Roller som inte kan redigeras härifrån (%(count)s)"
+msgstr ""
+
+#: templates/discordadmin/edit_view.html:56
+msgid "Ta bort vy"
+msgstr ""
+
+#: templates/discordadmin/editor.html:17
+msgid "Alla vyer"
+msgstr ""
+
+#: templates/discordadmin/editor.html:18 templates/discordadmin/index.html:21
+msgid "Inställningar"
+msgstr ""
+
+#: templates/discordadmin/editor.html:20
+msgid "Den här sidan behöver JavaScript."
+msgstr ""
+
+#: templates/discordadmin/index.html:5 templates/strequeadmin/index.html:34
+msgid "Discord-roller"
+msgstr ""
+
+#: templates/discordadmin/index.html:6
+msgid ""
+"Här kan du ändra vilka som har olika roller på Discord-servern, t.ex. "
+"sånggrupperna. En vy är en uppsättning roller som redigeras sida vid "
+"sida. Bara roller som ingår i en vy kan redigeras här."
+msgstr ""
+
+#: templates/discordadmin/index.html:11
+msgid "Vy"
+msgstr ""
+
+#: templates/discordadmin/index.html:27
+msgid "Inga vyer än."
+msgstr ""
+
 #: templates/strequeadmin/add_user.html:7 templates/strequeadmin/index.html:8
 msgid "Skapa användare"
 msgstr ""
@@ -1043,14 +1154,18 @@ msgid "Generera"
 msgstr ""
 
 #: templates/strequeadmin/index.html:32
-msgid "Annat"
+msgid "Discord"
 msgstr ""
 
 #: templates/strequeadmin/index.html:36
+msgid "Annat"
+msgstr ""
+
+#: templates/strequeadmin/index.html:40
 msgid "Statistik"
 msgstr ""
 
-#: templates/strequeadmin/index.html:37
+#: templates/strequeadmin/index.html:41
 msgid "Databas-admin"
 msgstr ""
 
@@ -1215,7 +1330,7 @@ msgstr ""
 msgid "Pay"
 msgstr ""
 
-#: templates/strequeadmin/transactions.html:105
+#: templates/strequeadmin/transactions.html:105 views/discord_admin.py:186
 msgid "Ångra"
 msgstr ""
 
@@ -1239,81 +1354,81 @@ msgstr ""
 msgid "Har Discord"
 msgstr ""
 
-#: views/admin.py:49 views/admin.py:98
+#: views/admin.py:50 views/admin.py:99
 msgid "Ogiltigt datumintervall!"
 msgstr ""
 
-#: views/admin.py:176
+#: views/admin.py:177
 #, python-format
 msgid "Ångrade %(type)s \"%(text)s\", %(value)s den %(date)s på %(user)s."
 msgstr ""
 
-#: views/admin.py:222
+#: views/admin.py:223
 msgid "Inga transaktioner utförda. Väl spenderade klockcykler, bra jobbat!"
 msgstr ""
 
-#: views/admin.py:260
+#: views/admin.py:261
 msgid "Transaktionerna utfördes!"
 msgstr ""
 
-#: views/admin.py:292
+#: views/admin.py:293
 #, python-brace-format
 msgid "Produkt \"{}\" skapad."
 msgstr ""
 
-#: views/admin.py:294
+#: views/admin.py:295
 #, python-brace-format
 msgid "Produkt \"{}\" ändrad."
 msgstr ""
 
-#: views/admin.py:323
+#: views/admin.py:324
 #, python-format
 msgid "Produkt \"%(name)s\" borttagen."
 msgstr ""
 
-#: views/admin.py:343
+#: views/admin.py:344
 #, python-format
 msgid "Skickade %(nr)i saldopåminnelser!"
 msgstr ""
 
-#: views/admin.py:376
+#: views/admin.py:377
 #, python-format
 msgid "%(user_name)s skapad och förfrågan borttagen!"
 msgstr ""
 
-#: views/admin.py:381
+#: views/admin.py:382
 #, python-format
 msgid "%(user_name)s skapad!"
 msgstr ""
 
-#: views/admin.py:416
+#: views/admin.py:417
 #, python-format
 msgid "Förfrågan från %(first)s %(last)s borttagen."
 msgstr ""
 
-#: views/admin.py:462
+#: views/admin.py:463
 #, python-format
 msgid "Grupp \"%(group_name)s\" skapad."
 msgstr ""
 
-#: views/admin.py:481
+#: views/admin.py:482
 #, python-format
 msgid "Grupp \"%(group_name)s\" borttagen."
 msgstr ""
 
-#: views/admin.py:522
+#: views/admin.py:523
 msgid "Smeknamnsbytet har godkänts."
 msgstr ""
 
-#: views/admin.py:538
+#: views/admin.py:539
 msgid "Smeknamnsbytet har nekats."
 msgstr ""
 
-#: views/admin.py:552
+#: views/admin.py:553
 msgid "Citat har ändrats!"
 msgstr ""
 
-#: views/admin.py:566
+#: views/admin.py:567
 msgid "Citat borttaget."
 msgstr ""
 
@@ -1359,6 +1474,333 @@ msgstr ""
 msgid "Ditt lösenord har återställts!"
 msgstr ""
 
+#: views/discord_admin.py:27
+#, python-format
+msgid "Discord ber oss vänta %(seconds)s s. Försök igen strax."
+msgstr ""
+
+#: views/discord_admin.py:31 views/discord_admin.py:163
+#, python-format
+msgid "Kunde inte hämta servern från Discord: %(error)s"
+msgstr ""
+
+#: views/discord_admin.py:82
+#, python-format
+msgid "Vyn \"%(name)s\" sparades."
+msgstr ""
+
+#: views/discord_admin.py:98
+#, python-format
+msgid "Vyn \"%(name)s\" togs bort."
+msgstr ""
+
+#: views/discord_admin.py:171
+msgid "Den som läggs till i en roll tas bort från vyns övriga roller."
+msgstr ""
+
+#: views/discord_admin.py:172
+msgid "Användare:"
+msgstr ""
+
+#: views/discord_admin.py:173
+msgid "Endast aktiva"
+msgstr ""
+
+#: views/discord_admin.py:174
+msgid "Alla"
+msgstr ""
+
+#: views/discord_admin.py:175
+msgid "Sök person…"
+msgstr ""
+
+#: views/discord_admin.py:176
+msgid "Klistra in lista…"
+msgstr ""
+
+#: views/discord_admin.py:177
+msgid "Töm alla"
+msgstr ""
+
+#: views/discord_admin.py:178
+msgid "Utan roll i vyn"
+msgstr ""
+
+#: views/discord_admin.py:179
+msgid "Alla har minst en roll i vyn."
+msgstr ""
+
+#: views/discord_admin.py:180
+msgid ""
+"Dra personer mellan rollerna. Håll ned Ctrl eller Alt för att kopiera i "
+"stället för att flytta."
+msgstr ""
+
+#: views/discord_admin.py:182
+msgid "Lägg till…"
+msgstr ""
+
+#: views/discord_admin.py:183
+msgid "Töm"
+msgstr ""
+
+#: views/discord_admin.py:184
+#, python-format
+msgid "Tas bort (%(count)s)"
+msgstr ""
+
+#: views/discord_admin.py:187
+#, python-format
+msgid "Flytta till %(role)s"
+msgstr ""
+
+#: views/discord_admin.py:188
+#, python-format
+msgid "Lägg även i %(role)s"
+msgstr ""
+
+#: views/discord_admin.py:189
+#, python-format
+msgid "Lägg i %(role)s"
+msgstr ""
+
+#: views/discord_admin.py:190
+msgid "Fler val"
+msgstr ""
+
+#: views/discord_admin.py:191
+msgid "ej kopplad till Discord"
+msgstr ""
+
+#: views/discord_admin.py:192
+msgid "inte med på servern"
+msgstr ""
+
+#: views/discord_admin.py:193
+msgid "Discord-medlem utan Streque-konto"
+msgstr ""
+
+#: views/discord_admin.py:194
+msgid "inte aktiv"
+msgstr ""
+
+#: views/discord_admin.py:195
+#, python-format
+msgid "i %(roles)s, flyttas"
+msgstr ""
+
+#: views/discord_admin.py:196
+msgid "Inga träffar"
+msgstr ""
+
+#: views/discord_admin.py:197
+#, python-format
+msgid "%(changes)s ändringar för %(people)s personer"
+msgstr ""
+
+#: views/discord_admin.py:198
+msgid "Inga ändringar"
+msgstr ""
+
+#: views/discord_admin.py:199
+msgid "sparat i webbläsaren"
+msgstr ""
+
+#: views/discord_admin.py:200
+msgid "Ångra alla"
+msgstr ""
+
+#: views/discord_admin.py:201
+msgid "Granska…"
+msgstr ""
+
+#: views/discord_admin.py:202
+msgid "Ångra alla ändringar?"
+msgstr ""
+
+#: views/discord_admin.py:203
+#, python-format
+msgid "Ta bort alla från %(role)s?"
+msgstr ""
+
+#: views/discord_admin.py:204
+msgid "Ta bort alla från alla roller i vyn?"
+msgstr ""
+
+#: views/discord_admin.py:205
+#, python-format
+msgid "Kan inte redigeras här: %(reason)s"
+msgstr ""
+
+#: views/discord_admin.py:206
+#, python-format
+msgid "%(count)s av vyns roller finns inte längre i Discord."
+msgstr ""
+
+#: views/discord_admin.py:207
+msgid "Vyn har inga roller. Välj roller under vyns inställningar."
+msgstr ""
+
+#: views/discord_admin.py:208
+msgid "Hämtar från Discord…"
+msgstr ""
+
+#: views/discord_admin.py:209
+#, python-format
+msgid "Något gick fel: %(error)s"
+msgstr ""
+
+#: views/discord_admin.py:210
+msgid "Granska ändringar"
+msgstr ""
+
+#: views/discord_admin.py:211
+#, python-format
+msgid "Hämtat från Discord %(time)s. En begäran per person som ändras."
+msgstr ""
+
+#: views/discord_admin.py:212
+msgid "Inget att göra: Discord stämmer redan."
+msgstr ""
+
+#: views/discord_admin.py:213
+msgid "Ändrat i Discord sedan sidan laddades (din vy är uppdaterad):"
+msgstr ""
+
+#: views/discord_admin.py:214
+msgid "Medlem"
+msgstr ""
+
+#: views/discord_admin.py:215
+msgid "Ändring"
+msgstr ""
+
+#: views/discord_admin.py:216
+msgid "redan gjort"
+msgstr ""
+
+#: views/discord_admin.py:218
+msgid "Bekräfta"
+msgstr ""
+
+#: views/discord_admin.py:219
+msgid "Stäng"
+msgstr ""
+
+#: views/discord_admin.py:220
+msgid "Försök igen"
+msgstr ""
+
+#: views/discord_admin.py:221
+#, python-format
+msgid "Tillämpar… %(done)s av %(total)s klara"
+msgstr ""
+
+#: views/discord_admin.py:222
+#, python-format
+msgid "väntar %(seconds)s s på Discords rate limit"
+msgstr ""
+
+#: views/discord_admin.py:223
+#, python-format
+msgid "Klart: %(done)s av %(total)s ändrade."
+msgstr ""
+
+#: views/discord_admin.py:224
+msgid "Misslyckades:"
+msgstr ""
+
+#: views/discord_admin.py:225
+msgid "Klistra in lista"
+msgstr ""
+
+#: views/discord_admin.py:226
+msgid "Mål:"
+msgstr ""
+
+#: views/discord_admin.py:227
+msgid "Hela vyn (rubriker = roller)"
+msgstr ""
+
+#: views/discord_admin.py:228
+msgid "Ersätt medlemmar"
+msgstr ""
+
+#: views/discord_admin.py:229
+msgid "Lägg bara till"
+msgstr ""
+
+#: views/discord_admin.py:230
+msgid ""
+"En person per rad eller kommaseparerat. Punkter, numrering och text inom "
+"parentes ignoreras. En rad med en rolls namn blir en rubrik för raderna "
+"under."
+msgstr ""
+
+#: views/discord_admin.py:233
+msgid "Rad"
+msgstr ""
+
+#: views/discord_admin.py:234
+msgid "Tolkning"
+msgstr ""
+
+#: views/discord_admin.py:235
+#, python-format
+msgid "%(added)s läggs till, %(removed)s tas bort"
+msgstr ""
+
+#: views/discord_admin.py:236
+msgid "Ingen roll: lägg en rubrik med rollens namn ovanför"
+msgstr ""
+
+#: views/discord_admin.py:237
+msgid "Okänd roll, raderna under hoppas över"
+msgstr ""
+
+#: views/discord_admin.py:238
+#, python-format
+msgid "Välj… (%(count)s träffar)"
+msgstr ""
+
+#: views/discord_admin.py:239
+msgid "Hoppa över"
+msgstr ""
+
+#: views/discord_admin.py:240
+msgid "Hoppas över"
+msgstr ""
+
+#: views/discord_admin.py:241
+msgid "Ingen träff, sök…"
+msgstr ""
+
+#: views/discord_admin.py:242
+msgid "ändra"
+msgstr ""
+
+#: views/discord_admin.py:243
+#, python-format
+msgid "%(name)s igen, ignoreras"
+msgstr ""
+
+#: views/discord_admin.py:244
+msgid "enda aktiva träffen"
+msgstr ""
+
+#: views/discord_admin.py:245
+msgid "redan med"
+msgstr ""
+
+#: views/discord_admin.py:246
+#, python-format
+msgid "%(count)s rader behöver ett val"
+msgstr ""
+
+#: views/discord_admin.py:248
+msgid "Lägg in i vyn"
+msgstr ""
+
 #: views/discord_oauth.py:46
 msgid "Ditt Discord-konto är inte längre kopplat till din Streque-profil."
 msgstr ""
@@ -1388,79 +1830,78 @@ msgstr ""
 msgid "Du är nu tillagd i vår Discord-server! %sKlicka här för att besöka den.%s"
 msgstr ""
 
-#: views/profile.py:84
+#: views/profile.py:85
 msgid "Din smeknamnsändring är sparad och väntar på att bli godkänd."
 msgstr ""
 
-#: views/profile.py:86
+#: views/profile.py:87
 msgid "Din smeknamnsändring är sparad."
 msgstr ""
 
-#: views/profile.py:111
+#: views/profile.py:112
 msgid "Kunde inte ladda upp bilden, försök med ett annat filnamn eller filformat."
 msgstr ""
 
-#: views/profile.py:132
+#: views/profile.py:133
 msgid "Profilbilden har ändrats!"
 msgstr ""
 
-#: views/profile.py:147 views/profile.py:172 views/profile.py:283
-#: views/profile.py:455
-msgid "Du får bara redigera din egen profil! ಠ_ಠ"
-msgstr ""
-
-#: views/profile.py:157
+#: views/profile.py:154
 msgid "Din profilbild har ändrats!"
 msgstr ""
 
-#: views/profile.py:180
+#: views/profile.py:169 views/profile.py:280 views/profile.py:452
+msgid "Du får bara redigera din egen profil! ಠ_ಠ"
+msgstr ""
+
+#: views/profile.py:177
 msgid ""
 "Du kan inte ta bort <a href=\"https://phys.org/news/2014-08-what-is-"
 "nothing.html\">ingenting</a>!"
 msgstr ""
 
-#: views/profile.py:194
+#: views/profile.py:191
 msgid "Profilbilden har tagits bort!"
 msgstr ""
 
-#: views/profile.py:260
+#: views/profile.py:257
 msgid "Du kan inte puffa dig själv, det är oanständigt."
 msgstr ""
 
-#: views/profile.py:268
+#: views/profile.py:265
 msgid "Du har redan puffat denna användare, du måste få en puff tillbaka först."
 msgstr ""
 
-#: views/profile.py:274
+#: views/profile.py:271
 msgid "Puffad!"
 msgstr ""
 
-#: views/profile.py:333
+#: views/profile.py:330
 msgid "Ändringarna har sparats!"
 msgstr ""
 
-#: views/profile.py:354 views/profile.py:367
+#: views/profile.py:351 views/profile.py:364
 msgid "Du får bara hantera din egna API-nycklar! ಠ_ಠ"
 msgstr ""
 
-#: views/profile.py:409
+#: views/profile.py:406
 #, python-format
 msgid ""
 "Din API-nyckel med namnet \"%(name)s\" är: \"%(secret)s\". Du kommer inte"
 " kunna se den igen, så se till att spara den nu."
 msgstr ""
 
-#: views/profile.py:441
+#: views/profile.py:438
 #, python-format
 msgid "Api-nyckeln \"%(name)s\" är borttagen."
 msgstr ""
 
-#: views/profile.py:466
+#: views/profile.py:463
 #, python-format
 msgid "En länk för att verifiera e-postadressen har skickats till %(email)s."
 msgstr ""
 
-#: views/profile.py:473
+#: views/profile.py:470
 msgid "Lösenordet har ändrats!"
 msgstr ""
 
