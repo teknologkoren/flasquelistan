@@ -29,6 +29,15 @@ jobs:
       - name: Lint
         run: uv run ruff check .
 
+      # Production installs without the dev group, so a runtime dependency
+      # that only arrives through a dev tool (gunicorn 27 needing packaging,
+      # which pytest also brings) passes the tests above but crashes the
+      # server. Install the way production does and load the gevent worker.
+      - name: Production install loads the gunicorn worker
+        run: |
+          uv sync --frozen --no-dev
+          uv run --no-sync python -c "import geventwebsocket.gunicorn.workers, flasquelistan.factory"
+
       - uses: actions/setup-node@v4
         with:
           node-version: 22
