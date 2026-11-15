@@ -1,0 +1,65 @@
+{% extends "strequeadmin/layout.html" %}
+
+{% from "macros.html" import form_entry %}
+
+{% block scripts %}
+<script defer src="{{ url_for("static", filename="js/confirmDialog.js") }}"></script>
+{% endblock %}
+
+{% block body %}
+<div class="discord-view-settings">
+  <h2>{% if view %}{{ _("Redigera vy") }}{% else %}{{ _("Ny vy") }}{% endif %}</h2>
+  <form method="POST">
+    {{ form.csrf_token }}
+
+    {{ form_entry(form.name) }}
+    {{ form_entry(form.exclusive) }}
+    {{ form_entry(form.weight) }}
+
+    <div class="form-entry">
+      <div>{{ form.roles.label }}</div>
+      {% for error in form.roles.errors %}
+      <div class="field-description error">{{ _("Fel:") }} {{ error }}</div>
+      {% endfor %}
+      {% if form.roles.choices %}
+      {{ form.roles(class="discord-role-choices") }}
+      {% else %}
+      <p>{{ _("Det finns inga roller som kan redigeras härifrån.") }}</p>
+      {% endif %}
+    </div>
+
+    {% if dropped or missing %}
+    <div class="form-entry field-description error">
+      {% if dropped %}
+      {{ _("Följande roller ingår i vyn men kan inte längre redigeras härifrån, och tas bort ur vyn när du sparar:") }}
+      {% for role in dropped %}<strong>{{ role.name }}</strong>{% if not loop.last %}, {% endif %}{% endfor %}.
+      {% endif %}
+      {% if missing %}
+      {{ _("%(count)s av vyns roller finns inte längre i Discord och tas bort ur vyn när du sparar.", count=missing) }}
+      {% endif %}
+    </div>
+    {% endif %}
+
+    {% if blocked %}
+    <details class="form-entry">
+      <summary>{{ _("Roller som inte kan redigeras härifrån (%(count)s)", count=blocked|length) }}</summary>
+      <ul>
+        {% for role, problem in blocked %}
+        <li><strong>{{ role.name }}</strong>: {{ problem }}</li>
+        {% endfor %}
+      </ul>
+    </details>
+    {% endif %}
+
+    {% if view %}
+    <div class="form-entry">
+      <button class="confirm" formaction="{{ url_for('discordadmin.remove_view', view_id=view.id) }}">{{ _("Ta bort vy") }}</button>
+    </div>
+    {% endif %}
+
+    <div class="form-entry">
+      <button>{{ _("Spara") }}</button> | <a href="{{ url_for('discordadmin.index') }}">{{ _("Avbryt") }}</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

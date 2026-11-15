@@ -91,3 +91,8 @@
 .nickname-info {
   max-width: 50rem;
 }
+
+.discord-role-choices {
+  list-style: none;
+  padding-left: 0;
+}

@@ -6,7 +6,7 @@ import flask_wtf
 from flask_babel import gettext as _
 from flask_babel import lazy_gettext as _l
 from flask_wtf.file import FileAllowed
-from wtforms import fields, validators
+from wtforms import fields, validators, widgets
 
 from flasquelistan import models, util
 
@@ -519,6 +519,31 @@ class EditGroupForm(flask_wtf.FlaskForm):
         _l('Synka med Discord?'),
         description=_l("Medlemmar i denna grupp får automatiskt en roll"
                        " med samma namn i Discord.")
+    )
+
+
+class DiscordRoleViewForm(flask_wtf.FlaskForm):
+    name = fields.StringField(_l('Namn'), validators=[
+        validators.InputRequired(),
+        validators.Length(max=50)
+    ])
+    exclusive = fields.BooleanField(
+        _l('Ömsesidigt uteslutande'),
+        description=_l("Den som läggs till i en av rollerna tas som standard bort "
+                       "från vyns övriga roller. Kan slås av tillfälligt vid "
+                       "redigering.")
+    )
+    weight = fields.IntegerField(
+        _l('Sorteringsvikt'),
+        description=_l("Heltal. En högre vikt stiger."),
+        default=0,
+        validators=[validators.InputRequired()]
+    )
+    # Choices are the guild's editable roles, fetched from Discord by the view.
+    roles = fields.SelectMultipleField(
+        _l('Roller'),
+        widget=widgets.ListWidget(prefix_label=False),
+        option_widget=widgets.CheckboxInput(),
     )
 
 

@@ -1,0 +1,23 @@
+{% extends "strequeadmin/layout.html" %}
+
+{% block head %}
+{{ super() }}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/discordroles.css') }}">
+{% endblock %}
+
+{% block scripts %}
+<script type="application/json" id="discord-roles-config">{{ config|tojson }}</script>
+<script defer src="{{ url_for('static', filename='js/discordRoles.js') }}"></script>
+{% endblock %}
+
+{% block body %}
+<div class="discord-roles-page">
+  <h2>{{ view.name }}</h2>
+  <p class="dr-links">
+    <a href="{{ url_for('discordadmin.index') }}">{{ _("Alla vyer") }}</a> ·
+    <a href="{{ url_for('discordadmin.edit_view', view_id=view.id) }}">{{ _("Inställningar") }}</a>
+  </p>
+  <noscript>{{ _("Den här sidan behöver JavaScript.") }}</noscript>
+  <div id="discord-roles" data-csrf-token="{{ csrf_token() }}"></div>
+</div>
+{% endblock %}

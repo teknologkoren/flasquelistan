@@ -96,8 +96,8 @@ def setup_error_emails(app):
 def register_blueprints(app):
     from flasquelistan.views import (auth, admin, api, quotes, serviceworker,
                                      strequelistan, songbook, goofs,
-                                     discord_oauth, notifications, transfers,
-                                     gallery, profile)
+                                     discord_oauth, discord_admin, notifications,
+                                     transfers, gallery, profile)
     from flasquelistan import scripts
     app.register_blueprint(auth.mod)
     app.register_blueprint(admin.mod)
@@ -105,6 +105,7 @@ def register_blueprints(app):
     app.register_blueprint(serviceworker.mod)
     app.register_blueprint(strequelistan.mod)
     app.register_blueprint(discord_oauth.mod)
+    app.register_blueprint(discord_admin.mod)
     app.register_blueprint(notifications.mod)
     app.register_blueprint(transfers.mod)
     app.register_blueprint(gallery.mod)
