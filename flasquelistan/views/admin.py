@@ -8,6 +8,7 @@ from flask import abort, current_app
 from flask_babel import gettext as _
 from flask_babel import lazy_gettext as _l
 from flask_login import current_user
+from wtforms.fields import SelectChoice
 
 from flasquelistan import forms, models, util
 from flasquelistan.discord import DiscordClient
@@ -354,8 +355,8 @@ def add_user(request_id=None):
 
     form = forms.AddUserForm(obj=request, group_id=-1)
 
-    form.group_id.choices = [(g.id, g.name) for g in models.Group.query]
-    form.group_id.choices.insert(0, (-1, _l('Ingen')))
+    form.group_id.choices = [SelectChoice(-1, _l('Ingen'))] + [
+        SelectChoice(g.id, g.name) for g in models.Group.query]
 
     if form.validate_on_submit():
         user = models.User(

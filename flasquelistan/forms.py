@@ -276,9 +276,9 @@ class EditUserForm(flask_wtf.FlaskForm):
         description=_l("Används för att mer precist räkna ut "
                        "alkoholkoncentrationen i blodet."),
         choices=[
-            ('n/a', _l('Vill ej uppge')),
-            ('yes', _l('Ja')),
-            ('no', _l('Nej'))
+            fields.SelectChoice('n/a', _l('Vill ej uppge')),
+            fields.SelectChoice('yes', _l('Ja')),
+            fields.SelectChoice('no', _l('Nej'))
         ],
         validators=[
             validators.Optional()
@@ -370,7 +370,7 @@ class QuoteForm(flask_wtf.FlaskForm):
 
 def ChangeProfilePictureFormFactory(user):
     class ChangeProfilePictureForm(flask_wtf.FlaskForm):
-        choices = [('none', _l('Ingen'))]
+        choices = [fields.SelectChoice('none', _l('Ingen'))]
         default = None
 
         pictures = (
@@ -385,7 +385,7 @@ def ChangeProfilePictureFormFactory(user):
             if pic == user.profile_picture:
                 default = str(pic.id)
 
-            choices.append((str(pic.id), pic.filename))
+            choices.append(fields.SelectChoice(str(pic.id), pic.filename))
 
         profile_picture = fields.RadioField(choices=choices,
                                             default=default or 'none')
