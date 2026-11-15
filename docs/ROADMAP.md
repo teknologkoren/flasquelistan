@@ -39,14 +39,16 @@ Future (not started, roughly in order of value):
 6. **Dependency upgrades.** Done in summer 2026: Flask 3.1, Werkzeug 3.1,
    Flask-Babel 4, SQLAlchemy 2.0 / Flask-SQLAlchemy 3.1, WTForms 3 /
    Flask-WTF 1.3, Flask-Admin 2.2, Python 3.13. Brought fully up to date
-   again in November 2026, except for two caps in `pyproject.toml`, each
-   guarded by a test in `tests/views/flask_admin_test.py`:
-   - **SQLAlchemy < 2.1:** Flask-Admin drops `Float` columns from its forms.
-   - **WTForms < 3.3:** Flask-Admin's blank dropdown choices read "__None".
-     Moving to 3.3 also means replacing our tuple `choices` with
+   again in November 2026 (SQLAlchemy 2.1, WTForms 3.3, Python ≥ 3.11).
+   What is left:
+   - **Workarounds** in `ModelConverter` (`factory.py`) for two Flask-Admin
+     incompatibilities: `Float` columns missing from forms on SQLAlchemy 2.1,
+     and blank dropdown choices reading "__None" on WTForms 3.3. Each is
+     guarded by a test in `tests/views/flask_admin_test.py`. Drop a
+     workaround once Flask-Admin (or WTForms) fixes the problem.
+   - **WTForms < 3.4:** 3.4 removes tuple choices, which Flask-Admin still
+     uses. Lift the cap once a Flask-Admin release has moved to
      `SelectChoice`.
-
-   Lift a cap once Flask-Admin fixes the problem and the guarding test passes.
 
 ## Track 2 — Deployment (Docker) — reverted
 
