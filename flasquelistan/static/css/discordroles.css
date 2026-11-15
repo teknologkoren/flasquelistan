@@ -150,12 +150,15 @@
 
 .dr-columns {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
+  /* auto-fit, not auto-fill: no empty tracks, so a few roles share the
+     whole width. .dr-column caps the width of a lone column. */
+  grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
   gap: .75rem;
   align-items: start;
 }
 
 .dr-column {
+  max-width: 30rem;
   border: 1px solid #ddd;
   border-radius: 7px;
   padding: .6rem;
@@ -531,6 +534,12 @@
 
 .dr-section.dr-bad td {
   color: #b00020;
+}
+
+.dr-removes {
+  font-weight: normal;
+  color: #b00020;
+  margin-top: .15rem;
 }
 
 .dr-symbol {

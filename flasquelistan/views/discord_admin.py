@@ -236,6 +236,7 @@ def editor_strings():
         "line": _("Rad"),
         "interpretation": _("Tolkning"),
         "sectionSummary": _("%(added)s läggs till, %(removed)s tas bort"),
+        "removesNames": _("Tas bort: %(names)s"),
         "noSection": _("Ingen roll: lägg en rubrik med rollens namn ovanför"),
         "unknownRole": _("Okänd roll, raderna under hoppas över"),
         "choose": _("Välj… (%(count)s träffar)"),

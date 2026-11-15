@@ -51,15 +51,16 @@
     </details>
     {% endif %}
 
+    {# Save comes first: pressing Enter in a field submits with the first button. #}
+    <div class="form-entry">
+      <button>{{ _("Spara") }}</button> | <a href="{{ url_for('discordadmin.index') }}">{{ _("Avbryt") }}</a>
+    </div>
+
     {% if view %}
     <div class="form-entry">
       <button class="confirm" formaction="{{ url_for('discordadmin.remove_view', view_id=view.id) }}">{{ _("Ta bort vy") }}</button>
     </div>
     {% endif %}
-
-    <div class="form-entry">
-      <button>{{ _("Spara") }}</button> | <a href="{{ url_for('discordadmin.index') }}">{{ _("Avbryt") }}</a>
-    </div>
   </form>
 </div>
 {% endblock %}

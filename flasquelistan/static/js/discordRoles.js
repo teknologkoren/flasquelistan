@@ -63,8 +63,10 @@
     try { localStorage.setItem(storageKey, JSON.stringify(value)); } catch (e) { /* private mode */ }
   }
 
+  // "Mutually exclusive" is not remembered: it always starts from the view's
+  // setting.
   function save() {
-    storageSet({ changes: changes(), settings: settings });
+    storageSet({ changes: changes(), settings: { source: settings.source, poolOpen: settings.poolOpen } });
   }
 
   function request(method, url, body) {
@@ -90,8 +92,10 @@
   // the nickname (what people are usually called), 2 = every word of the
   // query starts a different word of the first name, last name or nickname,
   // 3 = the query is part of the full name or nickname, 4 = all but one of
-  // at least three words match as in tier 2 (an extra middle name, a second
-  // surname, or a note after the name). 0 = no match.
+  // at least three words match as in tier 2, including the first word (an
+  // extra middle name, a second surname, or a note after the name), 5 = the
+  // same but the first word doesn't match ("Anna Karin Berg" for Karin
+  // Berg). 0 = no match.
 
   function normalize(s) {
     return (s || '').normalize('NFKD').replace(/[̀-ͯ]/g, '').toLowerCase()
@@ -103,13 +107,14 @@
     p._first = normalize(p.first_name);
     p._nick = normalize(p.nickname);
     p._words = (p._full + ' ' + p._nick).split(/[\s-]+/).filter(Boolean);
+    p._firstWords = (p._first + ' ' + p._nick).split(/[\s-]+/).filter(Boolean);
   }
 
   function matchTier(p, q) {
     if (!q) return 0;
     if (q === p._full || q === p._first || q === p._nick) return 1;
-    var tokens = q.split(/[\s-]+/).filter(Boolean)
-      .sort(function (a, b) { return b.length - a.length; });
+    var words = q.split(/[\s-]+/).filter(Boolean);
+    var tokens = words.slice().sort(function (a, b) { return b.length - a.length; });
     var used = new Array(p._words.length).fill(false);
     var matched = tokens.filter(function (t) {
       for (var i = 0; i < p._words.length; i++) {
@@ -119,7 +124,10 @@
     }).length;
     if (matched === tokens.length) return 2;
     if (p._full.includes(q) || (p._nick && p._nick.includes(q))) return 3;
-    if (tokens.length >= 3 && matched >= tokens.length - 1) return 4;
+    if (tokens.length >= 3 && matched >= tokens.length - 1) {
+      var firstMatches = p._firstWords.some(function (w) { return w.startsWith(words[0]); });
+      return firstMatches ? 4 : 5;
+    }
     return 0;
   }
 
@@ -311,6 +319,8 @@
         e.preventDefault();
         pick(items[active]);
       } else if (e.key === 'Escape') {
+        // Only close the dropdown, not a dialog around it.
+        e.preventDefault();
         close();
       }
     });
@@ -365,7 +375,9 @@
     var actions = [];
     if (!locked && state === 'removed') {
       actions.push(h('button', { type: 'button', class: 'dr-icon', title: T.undo, 'aria-label': T.undo,
-        onclick: function () { add(p.key, roleId); } }, '↶'));
+        // Just restore the role, even in exclusive mode: the person may
+        // really be in several roles.
+        onclick: function () { desired.get(p.key).add(roleId); commit(); } }, '↶'));
     } else if (!locked) {
       var targets = roles.filter(function (r) { return r.id !== roleId && editable.has(r.id) && !want.has(r.id); });
       if (targets.length) {
@@ -488,10 +500,10 @@
     });
     list.sort(byName);
 
-    var open = settings.poolOpen === null ? settings.exclusive : settings.poolOpen;
-    var details = h('details', { class: 'dr-pool', open: open,
+    function poolOpen() { return settings.poolOpen === null ? settings.exclusive : settings.poolOpen; }
+    var details = h('details', { class: 'dr-pool', open: poolOpen(),
       // Also fires for the initial state; only remember actual changes.
-      ontoggle: function () { if (details.open !== open) { settings.poolOpen = details.open; save(); } } },
+      ontoggle: function () { if (details.open !== poolOpen()) { settings.poolOpen = details.open; save(); } } },
       h('summary', {}, T.pool + ' ', h('span', { class: 'dr-count' }, '(' + list.length + ')')));
     if (!list.length) details.appendChild(h('p', { class: 'dr-muted' }, T.poolEmpty));
     details.appendChild(h('ul', { class: 'dr-chips' }, list.map(function (p) {
@@ -676,6 +688,13 @@
     var text = progress.querySelector('p');
     progress.hidden = false;
 
+    // Keep the dialog open while applying, so the view can't be edited
+    // underneath. If it is closed anyway, stop after the current request.
+    var applying = true;
+    var stopped = false;
+    d.addEventListener('cancel', function (e) { if (applying) e.preventDefault(); });
+    d.addEventListener('close', function () { if (applying) stopped = true; });
+
     function show(waitSeconds) {
       bar.style.width = (total ? 100 * (done + failed.length) / total : 100) + '%';
       var msg = fmt(T.applying, { done: done, total: total });
@@ -684,13 +703,24 @@
     }
 
     function step() {
+      if (stopped) return finish();
       show(0);
       if (!queue.length) return finish();
       request('POST', config.urls.apply, { changes: queue }).then(function (data) {
         data.results.forEach(function (r) {
-          if (r.status === 'error' || r.status === 'not_in_guild') failed.push({ key: r.key, message: r.message || T.notInGuild });
-          else done++;
+          if (r.status === 'error' || r.status === 'not_in_guild') {
+            failed.push({ key: r.key, message: r.message || T.notInGuild });
+          } else {
+            done++;
+            // Applied: no longer pending. Otherwise a later change in Discord
+            // could make it show up as pending again after the final reload.
+            var c = byKey.get(r.key);
+            var had = base.get(r.key);
+            c.add.forEach(function (role) { had.add(role); });
+            c.remove.forEach(function (role) { had.delete(role); });
+          }
         });
+        save();
         var remaining = new Set(data.remaining);
         queue = queue.filter(function (c) { return remaining.has(c.key); });
         if (queue.length && data.retry_after) {
@@ -707,6 +737,11 @@
     }
 
     function finish() {
+      applying = false;
+      if (stopped) {
+        load();
+        return;
+      }
       bar.style.width = '100%';
       text.textContent = fmt(T.applied, { done: done, total: total });
       if (failed.length) {
@@ -763,8 +798,8 @@
 
   // Find the person a pasted line means. Prefers people in the chosen user
   // list; picks automatically only when one person matches best, and not
-  // when that match is only part of a name ("Alt" in "Walter"): that is
-  // offered as an uncertain match instead.
+  // when that match is only part of a name ("Alt" in "Walter") or misses the
+  // first name: that is offered as an uncertain match instead.
   function resolveLine(entry) {
     var pickKey = entry.role + '|' + normalize(entry.text);
     var picked = pastePicks.get(pickKey);
@@ -777,7 +812,7 @@
     if (!pool.length) return { status: 'none', pickKey: pickKey };
     var bestTier = Math.min.apply(null, pool.map(function (r) { return r.tier; }));
     var best = pool.filter(function (r) { return r.tier === bestTier; });
-    if (bestTier === 3) {
+    if (bestTier === 3 || bestTier === 5) {
       return { status: 'uncertain', candidates: best.map(function (r) { return r.person; }), pickKey: pickKey };
     }
     if (best.length === 1) {
@@ -875,25 +910,30 @@
       current = entries;
       var after = simulatePaste(entries, target, replace);
 
+      // "SG1 · 2 added, 3 removed", and who would be removed: with "Replace
+      // members", that includes everyone the list doesn't match.
       function summary(roleId) {
-        var added = 0, removed = 0;
+        var added = 0, removed = [];
         desired.forEach(function (want, key) {
           var has = after.get(key).has(roleId);
           if (has && !want.has(roleId)) added++;
-          if (!has && want.has(roleId)) removed++;
+          if (!has && want.has(roleId)) removed.push(people.get(key));
         });
-        return fmt(T.sectionSummary, { added: added, removed: removed });
+        removed.sort(byName);
+        return [roleById.get(roleId).name + ' · ' + fmt(T.sectionSummary, { added: added, removed: removed.length }),
+          removed.length ? h('div', { class: 'dr-removes' }, fmt(T.removesNames, {
+            names: removed.map(function (p) { return p.name; }).join(', ') })) : null];
       }
 
       table.textContent = '';
       if (target !== '*' && entries.length) {
-        table.appendChild(h('tr', { class: 'dr-section' }, h('td', { colspan: 3 }, roleById.get(target).name + ' · ' + summary(target))));
+        table.appendChild(h('tr', { class: 'dr-section' }, h('td', { colspan: 3 }, summary(target))));
       }
       var unresolved = 0;
       entries.forEach(function (e) {
         if (e.type === 'heading') {
           table.appendChild(h('tr', { class: 'dr-section' + (e.role ? '' : ' dr-bad') },
-            h('td', { colspan: 3 }, e.role ? roleById.get(e.role).name + ' · ' + summary(e.role) : e.text + ': ' + T.unknownRole)));
+            h('td', { colspan: 3 }, e.role ? summary(e.role) : e.text + ': ' + T.unknownRole)));
           return;
         }
         if (!e.role) {
@@ -932,7 +972,7 @@
         }
         var p = e.person;
         if (e.status === 'duplicate') {
-          table.appendChild(row('=', 'dr-muted', e.text, fmt(T.duplicate, { name: p.name })));
+          table.appendChild(row('=', 'dr-muted', e.text, [fmt(T.duplicate, { name: p.name }) + ' ', changeButton(e)]));
           return;
         }
         if (!canAssign(p)) {
@@ -970,6 +1010,9 @@
     }
 
     function doApply() {
+      // The table updates shortly after typing; don't apply a stale version.
+      update();
+      if (applyButton.disabled) return;
       desired = simulatePaste(current, target, replace);
       d.close();
       commit();
@@ -988,7 +1031,10 @@
       var stored = storageGet();
       if (!loaded) {
         settings.exclusive = data.view.exclusive;
-        if (stored.settings) Object.assign(settings, stored.settings);
+        if (stored.settings) {
+          if (stored.settings.source) settings.source = stored.settings.source;
+          if (stored.settings.poolOpen !== undefined) settings.poolOpen = stored.settings.poolOpen;
+        }
       }
       var pending = loaded ? changes() : (stored.changes || []);
       setState(data, pending);

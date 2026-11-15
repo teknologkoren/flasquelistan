@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-11-15 22:16+0000\n"
+"POT-Creation-Date: 2026-11-15 22:46+0000\n"
 "PO-Revision-Date: 2022-11-04 17:35+0100\n"
 "Last-Translator: \n"
 "Language: en\n"
@@ -18,28 +18,28 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.18.0\n"
 
-#: discord_roles.py:83
+#: discord_roles.py:87
 msgid "Rollen finns inte längre i Discord."
 msgstr "The role no longer exists in Discord."
 
-#: discord_roles.py:85
+#: discord_roles.py:89
 msgid "@everyone kan inte redigeras."
 msgstr "@everyone can't be edited."
 
-#: discord_roles.py:87
+#: discord_roles.py:91
 msgid "Rollen hanteras av en integration."
 msgstr "The role is managed by an integration."
 
-#: discord_roles.py:89
+#: discord_roles.py:93
 msgid "Rollen synkas automatiskt med en Streque-grupp."
 msgstr "The role is synced automatically with a Streque group."
 
-#: discord_roles.py:93
+#: discord_roles.py:97
 #, python-format
 msgid "Rollen har behörigheten %(permissions)s."
 msgstr "The role has the permission %(permissions)s."
 
-#: discord_roles.py:96
+#: discord_roles.py:100
 msgid "Rollen ligger inte under botens högsta roll."
 msgstr "The role isn't below the bot's highest role."
 
@@ -403,13 +403,13 @@ msgstr "Add quote"
 msgid "Lägg till"
 msgstr "Add"
 
-#: templates/add_quote.html:15 templates/discordadmin/edit_view.html:61
+#: templates/add_quote.html:15 templates/discordadmin/edit_view.html:56
 #: templates/edit_api_key.html:44 templates/edit_profile.html:43
 #: templates/strequeadmin/add_user.html:20
 #: templates/strequeadmin/confirm_bulk_transactions.html:59
 #: templates/strequeadmin/edit_article.html:30
 #: templates/strequeadmin/edit_group.html:27
-#: templates/strequeadmin/edit_quote.html:24 views/discord_admin.py:250
+#: templates/strequeadmin/edit_quote.html:24 views/discord_admin.py:251
 msgid "Avbryt"
 msgstr "Cancel"
 
@@ -602,7 +602,7 @@ msgstr ""
 "This key cannot be deleted, as it has already been used to make "
 "transactions."
 
-#: templates/discordadmin/edit_view.html:61 templates/edit_api_key.html:44
+#: templates/discordadmin/edit_view.html:56 templates/edit_api_key.html:44
 #: templates/edit_profile.html:43 templates/show_profile.html:126
 #: templates/show_profile.html:144 templates/show_profile.html:215
 #: templates/strequeadmin/add_user.html:19
@@ -1030,7 +1030,7 @@ msgstr ""
 msgid "Roller som inte kan redigeras härifrån (%(count)s)"
 msgstr "Roles that can't be edited from here (%(count)s)"
 
-#: templates/discordadmin/edit_view.html:56
+#: templates/discordadmin/edit_view.html:61
 msgid "Ta bort vy"
 msgstr "Delete view"
 
@@ -1847,53 +1847,58 @@ msgid "%(added)s läggs till, %(removed)s tas bort"
 msgstr "%(added)s added, %(removed)s removed"
 
 #: views/discord_admin.py:239
+#, python-format
+msgid "Tas bort: %(names)s"
+msgstr "Removed: %(names)s"
+
+#: views/discord_admin.py:240
 msgid "Ingen roll: lägg en rubrik med rollens namn ovanför"
 msgstr "No role: add a heading with the role's name above"
 
-#: views/discord_admin.py:240
+#: views/discord_admin.py:241
 msgid "Okänd roll, raderna under hoppas över"
 msgstr "Unknown role, the lines below are skipped"
 
-#: views/discord_admin.py:241
+#: views/discord_admin.py:242
 #, python-format
 msgid "Välj… (%(count)s träffar)"
 msgstr "Choose… (%(count)s matches)"
 
-#: views/discord_admin.py:242
+#: views/discord_admin.py:243
 msgid "Hoppa över"
 msgstr "Skip"
 
-#: views/discord_admin.py:243
+#: views/discord_admin.py:244
 msgid "Hoppas över"
 msgstr "Skipped"
 
-#: views/discord_admin.py:244
+#: views/discord_admin.py:245
 msgid "Ingen träff, sök…"
 msgstr "No match, search…"
 
-#: views/discord_admin.py:245
+#: views/discord_admin.py:246
 msgid "ändra"
 msgstr "change"
 
-#: views/discord_admin.py:246
+#: views/discord_admin.py:247
 #, python-format
 msgid "%(name)s igen, ignoreras"
 msgstr "%(name)s again, ignored"
 
-#: views/discord_admin.py:247
+#: views/discord_admin.py:248
 msgid "enda aktiva träffen"
 msgstr "only active match"
 
-#: views/discord_admin.py:248
+#: views/discord_admin.py:249
 msgid "redan med"
 msgstr "already in"
 
-#: views/discord_admin.py:249
+#: views/discord_admin.py:250
 #, python-format
 msgid "%(count)s rader behöver ett val"
 msgstr "%(count)s lines need a choice"
 
-#: views/discord_admin.py:251
+#: views/discord_admin.py:252
 msgid "Lägg in i vyn"
 msgstr "Put in the view"
 
