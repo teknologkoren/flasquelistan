@@ -1,0 +1,31 @@
+{% extends "strequeadmin/layout.html" %}
+
+{% block body %}
+<div class="discord-views">
+  <h2>{{ _("Discord-roller") }}</h2>
+  <p>{{ _("Här kan du ändra vilka som har olika roller på Discord-servern, t.ex. sånggrupperna. En vy är en uppsättning roller som redigeras sida vid sida. Bara roller som ingår i en vy kan redigeras här.") }}</p>
+  {% if views %}
+  <div class="table-wrap">
+    <table>
+      <tr>
+        <th>{{ _("Vy") }}</th>
+        <th>{{ _("Roller") }}</th>
+        <th>{{ _("Ömsesidigt uteslutande") }}</th>
+        <th></th>
+      </tr>
+      {% for view in views %}
+      <tr>
+        <td><a href="{{ url_for('discordadmin.editor', view_id=view.id) }}">{{ view.name }}</a></td>
+        <td>{{ view.roles|length }}</td>
+        <td>{{ _("Ja") if view.exclusive else _("Nej") }}</td>
+        <td><a href="{{ url_for('discordadmin.edit_view', view_id=view.id) }}">{{ _("Inställningar") }}</a></td>
+      </tr>
+      {% endfor %}
+    </table>
+  </div>
+  {% else %}
+  <p>{{ _("Inga vyer än.") }}</p>
+  {% endif %}
+  <p><a href="{{ url_for('discordadmin.edit_view') }}">{{ _("Ny vy") }}</a></p>
+</div>
+{% endblock %}

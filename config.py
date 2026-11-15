@@ -46,6 +46,11 @@ DISCORD_CLIENT_SECRET = "another super secret secret"
 DISCORD_BOT_SECRET = "yet another super secret secret"
 DISCORD_ACTIVE_ROLE_ID = "0000000000000000000"
 DISCORD_UNKNOWN_ROLE_ID = "0000000000000000000"
+# The role editor at /admin/discord/ needs the bot to have the Manage Roles
+# permission and the Server Members privileged intent (Discord developer
+# portal → Bot), and can only hand out roles below the bot's highest role.
+# Its API calls go to DISCORD_API_BASE_URL, which defaults to
+# "https://discord.com/api/v10"; point it elsewhere to use a fake Discord.
 
 # Goof configuration - set enabled=False or remove entry to disable
 GOOFS_CONFIG = {

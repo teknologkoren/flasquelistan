@@ -1,3 +1,5 @@
+from urllib.parse import quote
+
 import requests
 from requests_oauthlib import OAuth2Session
 from flask import current_app
@@ -7,6 +9,13 @@ from flasquelistan import models
 # Timeout for calls to the Discord API. The site runs on a single gunicorn
 # worker, so a hanging request here would freeze the whole site.
 REQUEST_TIMEOUT = 10
+
+# Base URL for the bot API calls below. Overridable so that a fake Discord can
+# stand in during local development.
+DEFAULT_API_BASE_URL = "https://discord.com/api/v10"
+
+# Discord's maximum page size when listing guild members.
+MEMBERS_PAGE_SIZE = 1000
 
 
 class DiscordClient:
@@ -156,3 +165,81 @@ class DiscordClient:
 
     def sync_roles_on_disconnect(user):
         DiscordClient.sync_roles(user, True)
+
+
+class RateLimited(Exception):
+    """Discord answered 429 Too Many Requests.
+
+    retry_after is the number of seconds to wait before trying again.
+    """
+
+    def __init__(self, retry_after):
+        super().__init__(f"Rate limited by Discord, retry after {retry_after} s")
+        self.retry_after = retry_after
+
+
+def bot_request(method, path, reason=None, **kwargs):
+    """Make a request to the Discord API as the bot.
+
+    Raises RateLimited on 429, and requests.HTTPError on other errors.
+    reason is shown in the guild's audit log.
+    """
+    base_url = current_app.config.get("DISCORD_API_BASE_URL", DEFAULT_API_BASE_URL)
+    headers = {"Authorization": f"Bot {current_app.config.get('DISCORD_BOT_SECRET')}"}
+    if reason:
+        # The header must be URL-encoded UTF-8, at most 512 characters.
+        headers["X-Audit-Log-Reason"] = quote(reason)[:512]
+
+    r = requests.request(method, base_url + path, headers=headers,
+                         timeout=REQUEST_TIMEOUT, **kwargs)
+    if r.status_code == 429:
+        try:
+            retry_after = float(r.json()["retry_after"])
+        except (ValueError, KeyError, TypeError):
+            retry_after = 1.0
+        raise RateLimited(retry_after)
+    r.raise_for_status()
+    return r
+
+
+def rate_limit_wait(response):
+    """Seconds to wait before the next request in the same rate limit bucket,
+    or 0 if the bucket still has requests left."""
+    if response.headers.get("X-RateLimit-Remaining") != "0":
+        return 0
+    try:
+        return float(response.headers.get("X-RateLimit-Reset-After", 0))
+    except ValueError:
+        return 0
+
+
+def _guild_path(path=""):
+    return f"/guilds/{current_app.config.get('DISCORD_GUILD_ID')}{path}"
+
+
+def get_guild_roles():
+    return bot_request("GET", _guild_path("/roles")).json()
+
+
+def get_guild_members():
+    """All members of the guild. Needs the Server Members privileged intent."""
+    members = []
+    after = "0"
+    while True:
+        page = bot_request("GET", _guild_path("/members"),
+                           params={"limit": MEMBERS_PAGE_SIZE, "after": after}).json()
+        members.extend(page)
+        if len(page) < MEMBERS_PAGE_SIZE:
+            return members
+        after = max((m["user"]["id"] for m in page), key=int)
+
+
+def get_bot_user_id():
+    return bot_request("GET", "/users/@me").json()["id"]
+
+
+def set_member_roles(user_id, role_ids, reason):
+    """Replace a member's roles with role_ids. Returns the response, whose
+    headers tell how much of the rate limit is left."""
+    return bot_request("PATCH", _guild_path(f"/members/{user_id}"),
+                       json={"roles": sorted(role_ids)}, reason=reason)

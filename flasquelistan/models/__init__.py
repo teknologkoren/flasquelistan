@@ -21,6 +21,7 @@ from flasquelistan.models.social import (
     Quote,
 )
 from flasquelistan.models.apikey import ApiKey
+from flasquelistan.models.discord import DiscordRoleView, DiscordRoleViewRole
 
 # Mutated by the app factory when the app is created with TESTING enabled
 # (models.TESTING = True); read by User.password via the package attribute.
@@ -45,4 +46,6 @@ __all__ = [
     'Poke',
     'Notification',
     'ApiKey',
+    'DiscordRoleView',
+    'DiscordRoleViewRole',
 ]

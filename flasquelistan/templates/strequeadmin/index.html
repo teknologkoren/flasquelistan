@@ -29,6 +29,10 @@
       <li><input type="submit" value="{{ _("Generera") }}"></li>
     </ul>
   </form>
+  <h3>{{ _("Discord") }}</h3>
+  <ul>
+    <li><a href="{{ url_for("discordadmin.index") }}">{{ _("Discord-roller") }}</a></li>
+  </ul>
   <h3>{{ _("Annat") }}</h3>
   <ul>
     <li><a href="{{ url_for("strequeadmin.show_quotes") }}">{{ _("Citat") }}</a></li>

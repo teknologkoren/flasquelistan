@@ -1,0 +1,549 @@
+/* Discord role editor: templates/discordadmin/editor.html, js/discordRoles.js */
+
+.discord-roles-page {
+  width: 100%;
+  max-width: 75rem;
+}
+
+.dr-links {
+  margin-top: -.5rem;
+}
+
+.dr-muted {
+  color: #777;
+}
+
+.dr-hint {
+  font-size: .85rem;
+  margin: .25rem 0 .75rem;
+}
+
+.dr-notice,
+.dr-warning {
+  background: #fff4d6;
+  border: 1px solid #f0d27a;
+  border-radius: 7px;
+  padding: .5rem .75rem;
+}
+
+.dr-error {
+  color: #b00020;
+}
+
+.discord-roles-page button,
+.dr-dialog button {
+  font: inherit;
+  cursor: pointer;
+}
+
+.dr-primary {
+  background: #436cb3;
+  color: #fff;
+  border: 1px solid #436cb3;
+  border-radius: 5px;
+  padding: .3rem .8rem;
+}
+
+.dr-primary:disabled {
+  opacity: .5;
+  cursor: default;
+}
+
+.dr-danger {
+  color: #b00020;
+}
+
+.dr-link {
+  background: none;
+  border: none;
+  padding: 0;
+  color: #436cb3;
+  font-size: .8rem;
+}
+
+.dr-link:disabled {
+  color: #aaa;
+  cursor: default;
+}
+
+.dr-link.dr-danger {
+  color: #b00020;
+}
+
+.dr-icon {
+  background: none;
+  border: none;
+  padding: 0 .25rem;
+  color: #888;
+  font-size: 1rem;
+  line-height: 1;
+}
+
+.dr-icon:hover {
+  color: #000;
+}
+
+/* Toolbar */
+
+.dr-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem;
+  align-items: center;
+  margin-bottom: .25rem;
+}
+
+.dr-option {
+  display: inline-flex;
+  align-items: center;
+  gap: .25rem;
+  padding: .2rem .5rem;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+.dr-filter {
+  flex: 1;
+  min-width: 10rem;
+}
+
+/* Pool of people without a role in the view */
+
+.dr-pool {
+  border: 1px dashed #ccc;
+  border-radius: 7px;
+  padding: .5rem .75rem;
+  margin-bottom: .75rem;
+}
+
+.dr-pool summary {
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.dr-chips {
+  list-style: none;
+  padding: 0;
+  margin: .5rem 0 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: .35rem;
+}
+
+.dr-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: .3rem;
+  padding: .1rem .3rem .1rem .15rem;
+  border: 1px solid #ddd;
+  border-radius: 999px;
+  background: #fff;
+  cursor: grab;
+}
+
+.dr-chip.dr-disabled {
+  opacity: .55;
+  cursor: default;
+}
+
+/* Columns, one per role. They wrap into a grid when there are many. */
+
+.dr-columns {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
+  gap: .75rem;
+  align-items: start;
+}
+
+.dr-column {
+  border: 1px solid #ddd;
+  border-radius: 7px;
+  padding: .6rem;
+  background: #fafafa;
+}
+
+.dr-column h3 {
+  margin: 0;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: .35rem;
+}
+
+.dr-dot {
+  width: .7rem;
+  height: .7rem;
+  border-radius: 50%;
+  background: #99aab5;
+  flex: none;
+}
+
+.dr-count {
+  color: #777;
+  font-weight: normal;
+  font-size: .85rem;
+}
+
+.dr-column-actions {
+  margin-left: auto;
+  display: inline-flex;
+  gap: .6rem;
+  font-weight: normal;
+}
+
+.dr-locked {
+  background: #f2f2f2;
+}
+
+.dr-locked-note {
+  font-size: .8rem;
+  color: #777;
+  margin: .4rem 0;
+}
+
+.dr-dragover {
+  outline: 2px dashed #436cb3;
+  outline-offset: 2px;
+}
+
+.dr-add {
+  position: relative;
+  display: block;
+  margin: .5rem 0;
+}
+
+.dr-add input {
+  width: 100%;
+}
+
+.dr-members {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.dr-member {
+  display: flex;
+  align-items: center;
+  gap: .35rem;
+  padding: .15rem .3rem;
+  margin: .1rem 0;
+  border-radius: 5px;
+  border: 1px solid transparent;
+}
+
+.dr-member[draggable="true"] {
+  cursor: grab;
+}
+
+.dr-name {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.dr-avatar {
+  width: 1.4rem;
+  height: 1.4rem;
+  border-radius: 50%;
+  object-fit: cover;
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: .85rem;
+  background: #e8e8e8;
+}
+
+.dr-added {
+  background: #e3f6e9;
+  border-color: #9fd8b1;
+}
+
+.dr-added .dr-name::before {
+  content: "+ ";
+  color: #1d7a3e;
+  font-weight: bold;
+}
+
+.dr-removed-section {
+  margin-top: .5rem;
+  padding-top: .4rem;
+  border-top: 1px dashed #ccc;
+}
+
+.dr-removed-label {
+  font-size: .75rem;
+  color: #b00020;
+}
+
+.dr-removed {
+  background: #fcecee;
+}
+
+.dr-removed .dr-name {
+  text-decoration: line-through;
+  opacity: .6;
+}
+
+.dr-external .dr-name {
+  font-style: italic;
+}
+
+.dr-match {
+  outline: 2px solid #436cb3;
+}
+
+.dr-flag {
+  font-size: .7rem;
+  padding: 0 .3rem;
+  border-radius: 4px;
+  background: #fff1c2;
+  color: #6b5200;
+  white-space: nowrap;
+  max-width: 7rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.dr-flag-bad {
+  background: #fcecee;
+  color: #b00020;
+}
+
+/* Autocomplete and popover menus */
+
+.dr-autocomplete {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 100%;
+  z-index: 10;
+  list-style: none;
+  margin: 2px 0 0;
+  padding: 0;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, .15);
+  min-width: 14rem;
+}
+
+.dr-autocomplete li {
+  display: flex;
+  justify-content: space-between;
+  gap: .5rem;
+  padding: .3rem .5rem;
+  cursor: pointer;
+}
+
+.dr-autocomplete li small {
+  color: #777;
+  text-align: right;
+}
+
+.dr-autocomplete li.active {
+  background: #e6edf8;
+}
+
+.dr-autocomplete li.disabled {
+  color: #999;
+  cursor: default;
+}
+
+.dr-menu {
+  position: absolute;
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, .15);
+  padding: .2rem 0;
+}
+
+.dr-menu button {
+  background: none;
+  border: none;
+  text-align: left;
+  padding: .3rem .8rem;
+}
+
+.dr-menu button:hover,
+.dr-menu button:focus {
+  background: #e6edf8;
+}
+
+/* Sticky footer with the pending changes */
+
+.dr-footer {
+  position: sticky;
+  bottom: 3.5rem; /* above the bottom navigation */
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .5rem;
+  margin-top: .75rem;
+  padding: .5rem .75rem;
+  border-radius: 7px;
+  background: #eee;
+  border: 1px solid #ddd;
+}
+
+.dr-footer.dr-dirty {
+  background: #e6edf8;
+  border-color: #b5c7e6;
+}
+
+.dr-summary {
+  flex: 1;
+}
+
+/* Dialogs */
+
+.dr-dialog {
+  width: min(48rem, calc(100vw - 2rem));
+  max-height: calc(100vh - 2rem);
+  border: 1px solid #ccc;
+  border-radius: 7px;
+  padding: 1rem;
+}
+
+.dr-dialog h3 {
+  margin-top: 0;
+}
+
+.dr-dialog::backdrop {
+  background: rgba(0, 0, 0, .35);
+}
+
+.dr-dialog-buttons {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: .5rem;
+  margin-top: 1rem;
+}
+
+.dr-dialog-buttons > span {
+  flex: 1;
+}
+
+.dr-table-wrap {
+  overflow: auto;
+}
+
+.dr-dialog table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.dr-dialog td,
+.dr-dialog th {
+  text-align: left;
+  padding: .25rem .4rem;
+  border-bottom: 1px solid #eee;
+  vertical-align: middle;
+}
+
+.dr-dialog th {
+  font-weight: normal;
+  font-size: .8rem;
+  color: #777;
+}
+
+.dr-role-chip {
+  display: inline-block;
+  padding: 0 .35rem;
+  border-radius: 4px;
+  margin: .05rem .1rem;
+  font-size: .85rem;
+}
+
+.dr-role-chip.dr-plus {
+  background: #d5f0de;
+}
+
+.dr-role-chip.dr-minus {
+  background: #f8d7dc;
+  text-decoration: line-through;
+}
+
+.dr-status {
+  color: #777;
+  font-size: .85rem;
+}
+
+.dr-progress-bar {
+  height: .4rem;
+  border-radius: .2rem;
+  background: #eee;
+  overflow: hidden;
+  margin-top: 1rem;
+}
+
+.dr-progress-bar i {
+  display: block;
+  height: 100%;
+  width: 0;
+  background: #436cb3;
+  transition: width .2s;
+}
+
+.dr-paste-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.6fr);
+  gap: .75rem;
+}
+
+.dr-paste-grid textarea {
+  width: 100%;
+  min-height: 16rem;
+  font-family: monospace;
+}
+
+.dr-section td {
+  background: #f2f2f2;
+  font-weight: bold;
+  font-size: .85rem;
+}
+
+.dr-section.dr-bad td {
+  color: #b00020;
+}
+
+.dr-symbol {
+  font-weight: bold;
+  width: 1rem;
+}
+
+.dr-good {
+  color: #1d7a3e;
+}
+
+.dr-unsure {
+  color: #a66d00;
+}
+
+.dr-bad {
+  color: #b00020;
+}
+
+.dr-line {
+  font-family: monospace;
+  color: #555;
+  white-space: nowrap;
+}
+
+@media (max-width: 40rem) {
+  .dr-paste-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .dr-paste-grid textarea {
+    min-height: 8rem;
+  }
+}
