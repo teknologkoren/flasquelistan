@@ -19,7 +19,8 @@ dependencies = [
     "flask-wtf>=1.2",
     "gevent",
     "gevent-websocket",
-    "gunicorn",
+    # The gevent extra brings packaging, which the gevent worker imports.
+    "gunicorn[gevent]",
     "markdown",
     "phonenumbers",
     "pillow",
