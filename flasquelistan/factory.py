@@ -169,6 +169,8 @@ def setup_flask_admin(app, db):
     import flask_admin
     from flask_admin import AdminIndexView
     from flask_admin.contrib.sqla import ModelView
+    from flask_admin.contrib.sqla.form import AdminModelConverter
+    from flask_admin.model.form import converts
     from flask_login import current_user
     from flasquelistan import models
     from flasquelistan.views import auth
@@ -190,8 +192,22 @@ def setup_flask_admin(app, db):
     class LoginIndexView(AdminLoginMixin, AdminIndexView):
         pass
 
+    class ModelConverter(AdminModelConverter):
+        """Flask-Admin's form field converter, with workarounds for
+        incompatibilities with newer dependencies. Each is guarded by a test
+        in tests/views/flask_admin_test.py; drop it once Flask-Admin handles
+        the case itself."""
+
+        # Flask-Admin picks a converter by the class names in the column
+        # type's MRO and registers only "Numeric" for floats. Since
+        # SQLAlchemy 2.1, Float is not a Numeric subclass, so without this
+        # Float columns (e.g. Article.standardglas) are left out of forms.
+        @converts("Float")
+        def handle_float(self, column, field_args, **extra):
+            return self.handle_decimal_types(column, field_args, **extra)
+
     class LoginModelView(AdminLoginMixin, ModelView):
-        pass
+        model_form_converter = ModelConverter
 
     class UserModelView(LoginModelView):
         form_excluded_columns = ['transactions']
