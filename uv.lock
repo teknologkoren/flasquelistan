@@ -655,7 +655,7 @@ requires-dist = [
     { name = "requests" },
     { name = "requests-oauthlib" },
     { name = "sh" },
-    { name = "sqlalchemy", specifier = ">=2.0" },
+    { name = "sqlalchemy", specifier = ">=2.0,<2.1" },
     { name = "vobject" },
     { name = "werkzeug", specifier = ">=3.1" },
     { name = "wtforms", extras = ["email"], specifier = ">=3.1,<3.3" },
