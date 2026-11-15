@@ -36,11 +36,17 @@ Future (not started, roughly in order of value):
    schema-versioning tool) so schema changes become small, reviewable,
    checked-in scripts. Requires a careful one-time "adopt the existing prod
    database" step — take a backup first.
-6. **Dependency upgrades.** The stack is pinned to ~2022 versions (Flask 2.2,
-   SQLAlchemy 1.4, WTForms 2, Python <3.11). Upgrading is a coordinated
-   effort (some pinned pairs must move together) and should wait until CI has
-   been green for a while. Biggest known blockers: `db.create_all(app=app)`
-   and `@babel.localeselector` use APIs removed in newer versions.
+6. **Dependency upgrades.** Done in summer 2026: Flask 3.1, Werkzeug 3.1,
+   Flask-Babel 4, SQLAlchemy 2.0 / Flask-SQLAlchemy 3.1, WTForms 3 /
+   Flask-WTF 1.3, Flask-Admin 2.2, Python 3.13. Brought fully up to date
+   again in November 2026, except for two caps in `pyproject.toml`, each
+   guarded by a test in `tests/views/flask_admin_test.py`:
+   - **SQLAlchemy < 2.1:** Flask-Admin drops `Float` columns from its forms.
+   - **WTForms < 3.3:** Flask-Admin's blank dropdown choices read "__None".
+     Moving to 3.3 also means replacing our tuple `choices` with
+     `SelectChoice`.
+
+   Lift a cap once Flask-Admin fixes the problem and the guarding test passes.
 
 ## Track 2 — Deployment (Docker) — reverted
 
