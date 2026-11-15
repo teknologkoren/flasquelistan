@@ -383,6 +383,13 @@
         onclick: function () { remove(p.key, roleId); } }, '×'));
     }
 
+    var flags = [];
+    // In an exclusive view, being in several roles is worth pointing out.
+    if (settings.exclusive && state !== 'removed' && others.length) {
+      flags.push(h('span', { class: 'dr-flag', title: roleNames(others) }, '+' + roleNames(others)));
+    }
+    if (p.discord === 'not_in_guild') flags.push(h('span', { class: 'dr-flag dr-flag-bad' }, T.notInGuild));
+
     return h('li', {
       class: 'dr-member' + (state ? ' dr-' + state : '') + (p.discord === 'external' ? ' dr-external' : '') + (matches ? ' dr-match' : ''),
       draggable: !locked && state !== 'removed' ? 'true' : null,
@@ -390,10 +397,10 @@
       ondragstart: !locked && state !== 'removed' ? function (e) { dragData(e, p.key, roleId); } : null,
     },
       avatar(p),
-      h('span', { class: 'dr-name' }, p.name),
-      // In an exclusive view, being in several roles is worth pointing out.
-      settings.exclusive && state !== 'removed' && others.length ? h('span', { class: 'dr-flag', title: roleNames(others) }, '+' + roleNames(others)) : null,
-      p.discord === 'not_in_guild' ? h('span', { class: 'dr-flag dr-flag-bad' }, T.notInGuild) : null,
+      // Badges go below the name, so that they never squeeze it.
+      h('span', { class: 'dr-name-block' },
+        h('span', { class: 'dr-name' }, p.name),
+        flags.length ? h('span', { class: 'dr-flags' }, flags) : null),
       actions);
   }
 

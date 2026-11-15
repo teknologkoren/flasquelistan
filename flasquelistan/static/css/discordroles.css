@@ -237,11 +237,23 @@
   cursor: grab;
 }
 
-.dr-name {
+.dr-name-block {
   flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.dr-name {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.dr-flags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .2rem;
 }
 
 .dr-avatar {
@@ -303,7 +315,7 @@
   background: #fff1c2;
   color: #6b5200;
   white-space: nowrap;
-  max-width: 7rem;
+  max-width: 100%;
   overflow: hidden;
   text-overflow: ellipsis;
 }
