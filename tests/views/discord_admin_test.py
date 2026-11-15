@@ -64,9 +64,10 @@ class FakeDiscord:
             member('103', ['role-sg3'], username='ext', nick='Old bass'),
             member('104', ['role-active']),
         ]
-        self.patches = []
-        # Responses for the next PATCH requests, used before the default.
-        self.patch_responses = []
+        # Role changes made: {'method', 'user', 'role' or 'roles', 'reason'}
+        self.writes = []
+        # Responses for the next writes, used before the default.
+        self.write_responses = []
         self.fail_reads = False
 
     def __call__(self, method, url, headers=None, timeout=None, params=None, json=None):
@@ -83,12 +84,32 @@ class FakeDiscord:
             return Response(members[:params['limit']])
         if method == 'GET' and path == '/users/@me':
             return Response({'id': '900'})
-        if method == 'PATCH' and path.startswith('/guilds/guild1/members/'):
-            self.patches.append({'user': path.rsplit('/', 1)[1], 'roles': json['roles'],
-                                 'reason': headers.get('X-Audit-Log-Reason')})
-            if self.patch_responses:
-                return self.patch_responses.pop(0)
-            return Response({})
+        parts = path.split('/')  # ['', 'guilds', 'guild1', 'members', user, ...]
+        if method in ('PATCH', 'PUT', 'DELETE') and parts[:4] == ['', 'guilds', 'guild1', 'members']:
+            write = {'method': method, 'user': parts[4],
+                     'reason': headers.get('X-Audit-Log-Reason')}
+            if method == 'PATCH':
+                assert len(parts) == 5
+                write['roles'] = json['roles']
+            else:
+                assert len(parts) == 7 and parts[5] == 'roles'
+                write['role'] = parts[6]
+            self.writes.append(write)
+            if self.write_responses:
+                response = self.write_responses.pop(0)
+                if response.status_code >= 400:
+                    return response
+            else:
+                response = Response({})
+            # Change the member like Discord would.
+            roles = next(m for m in self.members if m['user']['id'] == parts[4])['roles']
+            if method == 'PATCH':
+                roles[:] = json['roles']
+            elif method == 'PUT' and parts[6] not in roles:
+                roles.append(parts[6])
+            elif method == 'DELETE' and parts[6] in roles:
+                roles.remove(parts[6])
+            return response
         raise AssertionError(f"unexpected request {method} {url}")
 
 
@@ -231,7 +252,7 @@ class TestAccess:
             rv = post_json(client, f'/admin/discord/views/{view.id}/apply', {'changes': [
                 {'key': '101', 'add': ['role-sg2'], 'remove': []}]})
         assert rv.status_code in (302, 403)
-        assert fake_discord.patches == []
+        assert fake_discord.writes == []
 
 
 class TestPreview:
@@ -297,7 +318,7 @@ class TestApply:
         assert rv.status_code == 200
         return rv.get_json()
 
-    def test_patches_full_role_list_with_audit_reason(self, client, view, fake_discord):
+    def test_move_patches_full_role_list_with_audit_reason(self, client, view, fake_discord):
         result = self.apply(client, view, [
             {'key': '101', 'add': ['role-sg2'], 'remove': ['role-sg1']},
             {'key': '102', 'add': ['role-sg2'], 'remove': []},
@@ -306,29 +327,43 @@ class TestApply:
         assert result == {'results': [{'key': '101', 'status': 'done'},
                                       {'key': '102', 'status': 'noop'}],
                           'remaining': [], 'retry_after': 0}
-        assert len(fake_discord.patches) == 1
-        patch = fake_discord.patches[0]
-        assert patch['user'] == '101'
-        assert patch['roles'] == ['role-active', 'role-sg2']
-        assert unquote(patch['reason']) == 'Streque, av Åsa Python'
+        assert fake_discord.writes == [{
+            'method': 'PATCH', 'user': '101', 'roles': ['role-active', 'role-sg2'],
+            'reason': fake_discord.writes[0]['reason']}]
+        assert unquote(fake_discord.writes[0]['reason']) == 'Streque, av Åsa Python'
+
+    def test_single_changes_use_per_role_requests(self, client, view, fake_discord):
+        # One role to add or remove: Discord's per-role calls can't touch the
+        # member's other roles, even if they change in Discord meanwhile.
+        result = self.apply(client, view, [
+            {'key': '101', 'add': ['role-sg2'], 'remove': []},
+            {'key': '103', 'add': [], 'remove': ['role-sg3']},
+        ])
+        assert [r['status'] for r in result['results']] == ['done', 'done']
+        assert [(w['method'], w['user'], w['role']) for w in fake_discord.writes] == [
+            ('PUT', '101', 'role-sg2'), ('DELETE', '103', 'role-sg3')]
+        assert all(unquote(w['reason']) == 'Streque, av Åsa Python'
+                   for w in fake_discord.writes)
+        assert fake_discord.members[1]['roles'] == ['role-sg1', 'role-active', 'role-sg2']
+        assert fake_discord.members[3]['roles'] == []
 
     def test_roles_changed_in_discord_meanwhile_are_kept(self, client, view, fake_discord):
         # Someone gave Anna SG3 in Discord after the page loaded.
         fake_discord.members[1]['roles'].append('role-sg3')
         self.apply(client, view, [{'key': '101', 'add': ['role-sg2'], 'remove': ['role-sg1']}])
-        assert fake_discord.patches[0]['roles'] == ['role-active', 'role-sg2', 'role-sg3']
+        assert fake_discord.writes[0]['roles'] == ['role-active', 'role-sg2', 'role-sg3']
 
     def test_stops_when_rate_limited(self, client, view, fake_discord):
-        fake_discord.patch_responses = [Response({'retry_after': 2.5}, 429)]
+        fake_discord.write_responses = [Response({'retry_after': 2.5}, 429)]
         result = self.apply(client, view, [
             {'key': '101', 'add': ['role-sg2'], 'remove': []},
             {'key': '103', 'add': [], 'remove': ['role-sg3']},
         ])
         assert result == {'results': [], 'remaining': ['101', '103'], 'retry_after': 2.5}
-        assert len(fake_discord.patches) == 1
+        assert len(fake_discord.writes) == 1
 
     def test_stops_when_bucket_is_empty(self, client, view, fake_discord):
-        fake_discord.patch_responses = [Response({}, 200, {
+        fake_discord.write_responses = [Response({}, 200, {
             'X-RateLimit-Remaining': '0', 'X-RateLimit-Reset-After': '1.5'})]
         result = self.apply(client, view, [
             {'key': '101', 'add': ['role-sg2'], 'remove': []},
@@ -346,10 +381,23 @@ class TestApply:
         ])
         assert result['remaining'] == ['103']
         assert result['retry_after'] == 0
-        assert len(fake_discord.patches) == 1
+        assert len(fake_discord.writes) == 1
+
+    def test_time_budget(self, client, view, fake_discord, monkeypatch):
+        # Out of time after the first request: hand the rest back to the
+        # browser, so slow responses can't make the request long.
+        monkeypatch.setattr(discord_roles, 'APPLY_TIME_BUDGET', -1)
+        result = self.apply(client, view, [
+            {'key': '101', 'add': ['role-sg2'], 'remove': []},
+            {'key': '103', 'add': [], 'remove': ['role-sg3']},
+        ])
+        assert result['results'] == [{'key': '101', 'status': 'done'}]
+        assert result['remaining'] == ['103']
+        assert result['retry_after'] == 0
+        assert len(fake_discord.writes) == 1
 
     def test_failure_for_one_member_continues(self, client, view, fake_discord):
-        fake_discord.patch_responses = [Response({'message': 'Missing Permissions'}, 403)]
+        fake_discord.write_responses = [Response({'message': 'Missing Permissions'}, 403)]
         result = self.apply(client, view, [
             {'key': '101', 'add': ['role-sg2'], 'remove': []},
             {'key': '103', 'add': [], 'remove': ['role-sg3']},

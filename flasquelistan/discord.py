@@ -17,6 +17,10 @@ DEFAULT_API_BASE_URL = "https://discord.com/api/v10"
 # Discord's maximum page size when listing guild members.
 MEMBERS_PAGE_SIZE = 1000
 
+# The shortest wait we pass on after a 429, so that a "retry after 0" can't
+# make the browser retry without pausing.
+MIN_RETRY_AFTER = 0.5
+
 
 class DiscordClient:
 
@@ -197,7 +201,7 @@ def bot_request(method, path, reason=None, **kwargs):
             retry_after = float(r.json()["retry_after"])
         except (ValueError, KeyError, TypeError):
             retry_after = 1.0
-        raise RateLimited(retry_after)
+        raise RateLimited(max(retry_after, MIN_RETRY_AFTER))
     r.raise_for_status()
     return r
 
@@ -243,3 +247,15 @@ def set_member_roles(user_id, role_ids, reason):
     headers tell how much of the rate limit is left."""
     return bot_request("PATCH", _guild_path(f"/members/{user_id}"),
                        json={"roles": sorted(role_ids)}, reason=reason)
+
+
+def add_member_role(user_id, role_id, reason):
+    """Give a member one role, leaving their other roles alone."""
+    return bot_request("PUT", _guild_path(f"/members/{user_id}/roles/{role_id}"),
+                       reason=reason)
+
+
+def remove_member_role(user_id, role_id, reason):
+    """Take one role from a member, leaving their other roles alone."""
+    return bot_request("DELETE", _guild_path(f"/members/{user_id}/roles/{role_id}"),
+                       reason=reason)

@@ -5,11 +5,15 @@ who has which role in the browser, preview the changes and apply them. The
 browser sends changes as additions and removals rather than the desired end
 state, so that role changes made in Discord in the meantime are kept.
 
-Discord has no bulk endpoint for role changes. Each changed member gets one
-PATCH with their complete new role list, so moving someone between two roles
-costs one request instead of two.
+Discord has no bulk endpoint for role changes. A member with one role to add
+or remove gets Discord's per-role call, which can't affect their other roles.
+A member with several (typically a move between two roles) gets one PATCH with
+their complete new role list instead of one request per role. That list is
+built from the roles fetched at the start of the request, so a change made in
+Discord to that member within the same moment could be undone.
 """
 import dataclasses
+import time
 
 import requests
 from flask import current_app
@@ -245,9 +249,11 @@ def plan_changes(view, guild, changes):
     return plan
 
 
-# How many members one apply request changes at most. The site runs a single
-# gunicorn worker, so every request must finish quickly.
+# How many members one apply request changes at most, and roughly how long it
+# may spend before handing the rest back to the browser. Keeps every request
+# short, however many members change.
 APPLY_BATCH_SIZE = 5
+APPLY_TIME_BUDGET = 3  # seconds
 
 
 def apply_changes(view, changes, reason):
@@ -260,6 +266,7 @@ def apply_changes(view, changes, reason):
     def stop(results, remaining, retry_after):
         return {"results": results, "remaining": remaining, "retry_after": retry_after}
 
+    started = time.monotonic()
     try:
         guild = Guild.fetch()
     except discord.RateLimited as e:
@@ -272,12 +279,13 @@ def apply_changes(view, changes, reason):
         if item["status"] != "change":
             results.append({"key": item["key"], "status": item["status"]})
             continue
-        if requests_made == APPLY_BATCH_SIZE:
+        out_of_time = time.monotonic() - started > APPLY_TIME_BUDGET
+        if requests_made == APPLY_BATCH_SIZE or (requests_made and out_of_time):
             return stop(results, [p["key"] for p in plan[i:]], 0)
         requests_made += 1
 
         try:
-            response = discord.set_member_roles(item["key"], item["roles"], reason)
+            response = _write_member(item, reason)
         except discord.RateLimited as e:
             return stop(results, [p["key"] for p in plan[i:]], e.retry_after)
         except requests.RequestException as e:
@@ -292,3 +300,12 @@ def apply_changes(view, changes, reason):
             return stop(results, [p["key"] for p in plan[i + 1:]], wait)
 
     return stop(results, [], 0)
+
+
+def _write_member(item, reason):
+    """Make the planned change to one member with a single request."""
+    if len(item["add"]) + len(item["remove"]) == 1:
+        if item["add"]:
+            return discord.add_member_role(item["key"], item["add"][0], reason)
+        return discord.remove_member_role(item["key"], item["remove"][0], reason)
+    return discord.set_member_roles(item["key"], item["roles"], reason)
