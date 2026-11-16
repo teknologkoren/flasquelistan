@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-11-15 22:46+0000\n"
+"POT-Creation-Date: 2026-11-16 00:45+0000\n"
 "PO-Revision-Date: 2019-06-24 08:18+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: sv\n"
@@ -206,7 +206,7 @@ msgid "Meddelande till QM"
 msgstr ""
 
 #: forms.py:356 forms.py:569 templates/layout.html:33 templates/quote.html:9
-#: templates/quotes.html:44 templates/strequeadmin/index.html:38
+#: templates/quotes.html:51 templates/strequeadmin/index.html:38
 #: templates/strequeadmin/quotes.html:10 templates/strequeadmin/quotes.html:14
 msgid "Citat"
 msgstr ""
@@ -382,7 +382,7 @@ msgid ""
 "kommer att sluta fungera."
 msgstr ""
 
-#: templates/add_quote.html:9 templates/quotes.html:45
+#: templates/add_quote.html:9 templates/quotes.html:52
 msgid "Lägg till citat"
 msgstr "Lägg till ett citat"
 
@@ -649,8 +649,29 @@ msgstr ""
 msgid "redigera"
 msgstr ""
 
-#: templates/quotes.html:47
+#: templates/quotes.html:54
 msgid "No quotes yet!"
+msgstr ""
+
+#: templates/quotes.html:58
+msgid "Sök citat"
+msgstr ""
+
+#: templates/quotes.html:61
+msgid "Text, person, datum eller #nummer"
+msgstr ""
+
+#: templates/quotes.html:62 templates/strequelistan.html:140
+msgid "Rensa"
+msgstr ""
+
+#: templates/quotes.html:65
+#, python-format
+msgid "Visar %(shown)s av %(total)s citat"
+msgstr ""
+
+#: templates/quotes.html:67
+msgid "Inga citat matchar sökningen."
 msgstr ""
 
 #: templates/show_profile.html:18
@@ -829,10 +850,6 @@ msgstr ""
 msgid "Du kan söka på namn, smeknamn och telefonnummer."
 msgstr ""
 
-#: templates/strequelistan.html:140
-msgid "Rensa"
-msgstr ""
-
 #: templates/strequelistan.html:155
 msgid "Gå till toppen"
 msgstr ""
@@ -972,15 +989,15 @@ msgstr ""
 msgid "Ta bort vy"
 msgstr ""
 
-#: templates/discordadmin/editor.html:17
+#: templates/discordadmin/editor.html:18
 msgid "Alla vyer"
 msgstr ""
 
-#: templates/discordadmin/editor.html:18 templates/discordadmin/index.html:21
+#: templates/discordadmin/editor.html:19 templates/discordadmin/index.html:21
 msgid "Inställningar"
 msgstr ""
 
-#: templates/discordadmin/editor.html:20
+#: templates/discordadmin/editor.html:21
 msgid "Den här sidan behöver JavaScript."
 msgstr ""
 
