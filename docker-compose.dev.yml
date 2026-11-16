@@ -14,6 +14,12 @@ services:
     volumes:
       - .:/app  # safe: the virtualenv lives in /opt/venv
     environment:
+      # Only for `flask` CLI commands run in the container (`docker compose
+      # exec app flask ...`). The gunicorn server below takes its debug mode
+      # from DEBUG in config.py and instance/config.py instead, which this
+      # does not override. Keep DEBUG = True there: outside debug mode the
+      # app links to resized images that only the production front-end
+      # server serves, so uploaded pictures won't load.
       FLASK_DEBUG: "1"
     command: >
       gunicorn -k geventwebsocket.gunicorn.workers.GeventWebSocketWorker

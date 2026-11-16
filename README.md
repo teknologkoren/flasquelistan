@@ -40,6 +40,11 @@ Run the development server with helpful debug pages when exceptions occur:
 
 The server is now live on [http://localhost:5000](http://localhost:5000).
 
+Keep `FLASK_DEBUG=1` for local development: outside debug mode the app links
+to resized images (`.../img<width>/<filename>`) that only the production
+front-end server serves (see [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md)), so
+profile pictures and gallery images won't load.
+
 If you haven't already created `/instance/config.py`, one is generated for you
 with some sane defaults. The config in `/instance` overrides the default config
 and is not checked in to git. The generated config sets the database file to be
