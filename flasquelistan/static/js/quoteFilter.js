@@ -3,6 +3,10 @@
 // quoteFilterCore.js. The query is mirrored to ?q= so searches can be
 // shared and survive reloads.
 
+// How long typing must pause before the URL is updated. Safari throws if
+// history.replaceState is called too often (about 100 times in 30 s).
+var URL_UPDATE_DELAY_MS = 300;
+
 function quoteFilter() {
   var core = QuoteFilterCore;
   var box = document.getElementById("quote-filter-box");
@@ -14,6 +18,7 @@ function quoteFilter() {
   var clear = document.getElementById("clear-quote-filter");
   var status = document.getElementById("quote-filter-status");
   var empty = document.getElementById("quote-filter-empty");
+  var urlTimer = null;
 
   // Index each card once, not on every keystroke.
   var entries = Array.prototype.map.call(
@@ -54,6 +59,8 @@ function quoteFilter() {
   }
 
   function updateUrl() {
+    clearTimeout(urlTimer);
+    urlTimer = null;
     var url = new URL(window.location.href);
     if (input.value.trim()) {
       url.searchParams.set("q", input.value);
@@ -65,36 +72,30 @@ function quoteFilter() {
     window.history.replaceState(null, "", url);
   }
 
+  // Set the input from ?q= and filter. On load this overrides whatever the
+  // browser restored into the input; on Back/Forward the script doesn't run
+  // again, so it has to be done here too.
+  function readUrl() {
+    clearTimeout(urlTimer);
+    urlTimer = null;
+    input.value = new URL(window.location.href).searchParams.get("q") || "";
+    apply();
+  }
+
   function reset() {
     input.value = "";
     apply();
     updateUrl();
   }
 
-  // Make a permalink (/quotes/#quote-N) land on its quote: if the filter
-  // hides that quote, show everything instead. With alwaysScroll, scroll even
-  // when it was visible, since revealing the search box moves the page down.
-  function revealHashTarget(alwaysScroll) {
-    var target = window.location.hash && document.getElementById(
-      decodeURIComponent(window.location.hash.slice(1)));
-    if (!target) {
-      return;
-    }
-    if (target.hidden) {
-      reset();
-    } else if (alwaysScroll !== true) {
-      return;
-    }
-    target.scrollIntoView();
-  }
-
   input.addEventListener("input", function () {
     apply();
-    updateUrl();
+    clearTimeout(urlTimer);
+    urlTimer = setTimeout(updateUrl, URL_UPDATE_DELAY_MS);
   });
 
   input.addEventListener("keydown", function (e) {
-    if (e.key === "Escape") {
+    if (e.key === "Escape" && input.value) {
       e.preventDefault();
       reset();
     }
@@ -105,14 +106,26 @@ function quoteFilter() {
     input.focus();
   });
 
-  window.addEventListener("hashchange", revealHashTarget);
+  window.addEventListener("popstate", readUrl);
 
-  // ?q= is the source of truth on load, overriding whatever the browser
-  // restored into the input.
-  input.value = new URL(window.location.href).searchParams.get("q") || "";
-  apply();
+  // Leaving within the delay: write the URL now, or Back would bring the
+  // page back from the browser's cache, filtered, under a URL without ?q=.
+  window.addEventListener("pagehide", function () {
+    if (urlTimer !== null) {
+      updateUrl();
+    }
+  });
+
+  readUrl();
   box.hidden = false;
-  revealHashTarget(true);
+
+  // Revealing the box moved the page down, so a permalink (/quotes/#quote-N)
+  // the browser already scrolled to is now off by the box's height.
+  var target = /^#quote-\d+$/.test(window.location.hash) &&
+    document.getElementById(window.location.hash.slice(1));
+  if (target && !target.hidden) {
+    target.scrollIntoView();
+  }
 }
 
 quoteFilter();

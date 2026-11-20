@@ -58,6 +58,8 @@
 .quote-filter-row input {
   flex: 1;
   min-width: 0;
+  /* Under 16px, iOS Safari zooms in when the box is tapped. */
+  font-size: 1rem;
 }
 
 .quote-filter-status {
@@ -67,7 +69,6 @@
 }
 
 /* .card sets display: flex, which beats the browser's own [hidden] rule. */
-.quote.card[hidden],
-.quote-filter[hidden] {
+.quote.card[hidden] {
   display: none;
 }
