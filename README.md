@@ -76,8 +76,9 @@ If you want to only run a certain set of tests you can use the -k flag to filter
 
     $ pytest -k quote
 
-The JavaScript logic of the Discord role editor has unit tests in `tests/js/`,
-run with Node's built-in test runner (Node 22, no dependencies):
+The JavaScript logic of the Discord role editor and the quote search has unit
+tests in `tests/js/`, run with Node's built-in test runner (Node 22, no
+dependencies):
 
     $ node --test 'tests/js/*.test.js'
 

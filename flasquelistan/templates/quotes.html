@@ -39,12 +39,32 @@
 </div>
 {% endmacro %}
 
+{% block head %}
+{% if quotes %}
+<script defer src="{{ url_for('static', filename='js/quoteFilterCore.js') }}"></script>
+<script defer src="{{ url_for('static', filename='js/quoteFilter.js') }}"></script>
+{% endif %}
+{% endblock %}
+
 {% block body %}
 <div class="cards">
   <h2>{{ _("Citat") }}</h2>
   <p><a href="{{ url_for('quotes.add_quote') }}">{{ _("Lägg till citat") }}</a></p>
   {% if not quotes %}
   <p>{{ _("No quotes yet!") }}</p>
+  {% else %}
+  {# Hidden until quoteFilter.js runs, so there's no dead box without JS. #}
+  <div id="quote-filter-box" class="quote-filter" hidden>
+    <label for="quote-filter">{{ _("Sök citat") }}</label>
+    <div class="quote-filter-row">
+      <input type="text" id="quote-filter" autocomplete="off"
+             placeholder="{{ _('Text, person, datum eller #nummer') }}">
+      <button id="clear-quote-filter" type="button">{{ _("Rensa") }}</button>
+    </div>
+    <p id="quote-filter-status" class="quote-filter-status" aria-live="polite"
+       data-template="{{ _('Visar %(shown)s av %(total)s citat', shown='{shown}', total='{total}') }}"></p>
+  </div>
+  <p id="quote-filter-empty" hidden>{{ _("Inga citat matchar sökningen.") }}</p>
   {% endif %}
   {% for quote in quotes %}
   {{ quote_card(quote, edit_link=current_user.is_admin) }}

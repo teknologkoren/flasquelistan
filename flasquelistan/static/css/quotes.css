@@ -38,3 +38,37 @@
 .quote-when a {
   color: #000;
 }
+
+/* Live search on the quote list, see js/quoteFilter.js */
+.quote-filter {
+  margin: 1rem 0 .5rem;
+}
+
+.quote-filter label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: .3rem;
+}
+
+.quote-filter-row {
+  display: flex;
+  gap: .5rem;
+}
+
+.quote-filter-row input {
+  flex: 1;
+  min-width: 0;
+  /* Under 16px, iOS Safari zooms in when the box is tapped. */
+  font-size: 1rem;
+}
+
+.quote-filter-status {
+  margin: .3rem 0 0;
+  font-size: small;
+  font-style: italic;
+}
+
+/* .card sets display: flex, which beats the browser's own [hidden] rule. */
+.quote.card[hidden] {
+  display: none;
+}
